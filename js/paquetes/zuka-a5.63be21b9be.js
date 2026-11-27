@@ -1,121 +1,370 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/euclidiana-construcciones.js
-// Geometría Euclidiana · mundo 8 «euc-construcciones» Regla y Compás (spec 2026-11-26-curso-euclidiana). Números y contextos propios.
-EUC_MUNDOS.push((() => {
-  const { leccion, mundo, x, sol, err, opc, guion } = EUC;
-
-  const l1 = leccion('euc-construcciones-1', 'Construcciones elementales', guion(
-    ['Dos instrumentos', 'La regla no tiene marcas: solo une dos puntos. El compás traza arcos y lleva una distancia de un lugar a otro.'],
-    ['Mediatriz', 'Dos arcos del mismo radio desde A y desde B, con radio mayor que la mitad de AB, se cortan en dos puntos: la recta que los une es la mediatriz.'],
-    ['Bisectriz', 'Un arco desde el vértice marca D y E; dos arcos iguales desde D y E se cortan en F. El rayo que va del vértice a F parte el ángulo en dos congruentes.'],
-    ['Por qué funciona', 'Cada construcción arma dos triángulos con tres pares de lados iguales: son congruentes por L-L-L.'],
-    ['Copiar y repartir', 'Copiando un ángulo se traza una paralela; con marcas iguales en una auxiliar y paralelas, un segmento queda en partes iguales.']), [
-    x('compas-mediatriz', 'El segmento AB mide **6**. Abre el compás para que los dos arcos del mismo radio, uno desde A y otro desde B, se corten en **M** y **N**, a **4** del segmento.', { L: 6, h: 4 },
-      'La mitad de AB es 3 y la altura es 4: el radio es la hipotenusa, $\\sqrt{3^2 + 4^2} = 5$. Con el mismo radio, M y N equidistan de A y de B.', 'De A al cruce M hay un triángulo rectángulo: un cateto es la mitad de AB y el otro, la altura que se pide.'),
-    x('radios-sin-cruce', 'Para trazar la mediatriz de AB se hacen dos arcos del **mismo radio**, uno desde A y otro desde B. Toca **todos** los radios con los que NO salen dos puntos de cruce.', { L: 10, radios: [3, 5, 6, 8, 4] },
-      'La mitad de AB es 5. Con 3 y con 4 los arcos no se alcanzan, y con 5 apenas se tocan en un punto: hace falta un radio mayor que la mitad.', 'Imagina los dos arcos acercándose desde los extremos: ¿hasta dónde tiene que llegar cada uno para pasar por encima del otro?'),
-    x('razon-del-paso', 'Con el mismo radio se trazaron arcos desde A y desde B, que se cortan en M y N. Pon la **razón** de cada afirmación.', {
-      et: ['AM = BM', 'AN = BN', 'MN = MN', '△AMN ≅ △BMN'], metas: ['mismo radio', 'mismo radio', 'lado común', 'L-L-L'], fichas: ['mismo radio', 'mismo radio', 'lado común', 'L-L-L', 'L-A-L', 'ángulo recto'],
-      mira: ['Los dos arcos que se cortan en M se trazaron con la misma abertura.', 'También N salió del cruce de dos arcos de igual radio.', 'Ese segmento es el mismo en los dos triángulos.', 'Ya hay tres pares de lados congruentes y ningún ángulo conocido.'],
-      trampas: { '3:L-A-L': 'Todavía no se conoce ningún ángulo: solo hay tres pares de lados.', '2:mismo radio': 'MN no se trazó con el compás: es un lado que comparten los dos triángulos.', '3:ángulo recto': 'El ángulo recto es lo que se quiere probar: no se puede usar como razón.' },
-      ok: 'Tres pares de lados: congruentes por L-L-L. Por eso MN parte a AB en dos mitades y en ángulo recto.' },
-      'AM = BM y AN = BN porque el radio es el mismo; MN es común. Por L-L-L los triángulos AMN y BMN son congruentes, y de ahí sale que MN es la mediatriz.', 'Mira de dónde salió cada segmento: unos los trazó el compás con la misma abertura y otro está en los dos triángulos.'),
-    x('bisectriz-cruce', 'Un arco de centro B y radio **5** marcó D y E en los lados del ángulo. Con ese mismo radio se trazan un arco desde D y otro desde E. Lleva **F** al punto donde se cortan.', { B: [2, 1], d: [3, 4], ini: [9, 3] },
-      'F queda a 5 de D y a 5 de E. Como BD = BE, DF = EF y BF es común, los triángulos BDF y BEF son congruentes por L-L-L: el rayo BF parte el ángulo en dos iguales.', 'Busca un punto de la cuadrícula que esté a 5 de D y también a 5 de E: piensa en la familia 3-4-5. El vértice B no cuenta.'),
-    x('pasos-construccion', 'Para trazar la **bisectriz** del ángulo B solo hay regla sin marcas y compás. Pon los pasos en orden.', {
-      fig: 'bisectriz', metas: ['arco desde B', 'arcos desde D y E', 'marcar el cruce F', 'trazar el rayo BF'], fichas: ['arco desde B', 'arcos desde D y E', 'marcar el cruce F', 'trazar el rayo BF', 'medir el ángulo', 'unir D con E'],
-      mira: ['Lo primero es marcar D y E en los lados, a la misma distancia de B.', 'Con D y E ya marcados se trazan dos arcos del mismo radio.', 'Los dos arcos se cortan en un punto: ese es F.', 'Al final la regla une B con F: ese rayo es la bisectriz.'],
-      trampas: { '0:medir el ángulo': 'Ni la regla ni el compás miden ángulos: se empieza con un arco desde el vértice.', '1:unir D con E': 'Unir D con E no da ningún punto nuevo: hacen falta dos arcos que se corten.', '1:medir el ángulo': 'Ni la regla ni el compás miden ángulos: aquí van dos arcos iguales.' },
-      ok: 'Un arco, dos arcos iguales, su cruce y el rayo.' },
-      'El arco desde B deja D y E a igual distancia; los arcos iguales desde D y E se cortan en F, y el rayo BF es la bisectriz.', 'Cada paso usa puntos que ya existen: D y E no aparecen hasta que se traza el arco con centro en el vértice.'),
-    x('divide-tales', 'AB mide **10** y se quiere partir en **4** partes iguales. En una semirrecta auxiliar se llevaron 4 marcas iguales con el compás y la última se unió con B. Pon **X** donde cae la paralela que sale de la marca **3**.', { L: 10, n: 4, k: 3 },
-      'Las paralelas cortan segmentos proporcionales: como las marcas son iguales, AB queda en 4 partes de 2.5, y la tercera cae a $3 \\cdot 2.5 = 7.5$ de A.', 'Las marcas de la auxiliar son iguales entre sí, así que las partes de AB también lo son: ¿cuánto mide cada una?'),
-    x('lanza-compas', 'El compás traza un arco desde A y otro igual desde B. Dale el radio que se pide y suéltalo. Puedes fallar **una** vez.', { tiros: [
-      { q: 'AB mide **12**. El **menor** radio entero con el que los arcos se cortan en dos puntos', L: 12, r: 7, c: '\\tfrac{12}{2} + 1', e: { 6: 'Con 6 los arcos apenas se tocan en el punto medio: hay que pasar de la mitad.' } },
-      { q: 'AB mide **16**. Los arcos deben cortarse a **6** del segmento', L: 16, h: 6, r: 10, c: '\\sqrt{8^2 + 6^2}', e: { 6: 'Con radio 6 los arcos no llegan a la mitad de AB, que es 8.', 14: 'Sumaste 8 y 6: el radio va en diagonal, es una hipotenusa.' } },
-      { q: 'AB mide **10**. Los arcos deben cortarse a **12** del segmento', L: 10, h: 12, r: 13, c: '\\sqrt{5^2 + 12^2}', e: { 12: 'El radio no es la altura: es la hipotenusa de catetos 5 y 12.' } }] },
-      'Más que la mitad: $6 + 1 = 7$. Después, hipotenusas: $\\sqrt{64 + 36} = 10$ y $\\sqrt{25 + 144} = 13$.', 'El radio siempre debe pasar de la mitad de AB; si se pide una altura, el radio es la hipotenusa de la mitad y esa altura.'),
-    sol('Por un punto P exterior a una recta m se trazó una transversal que corta a m en Q. Con el compás se copió en P el ángulo que la transversal forma con m, en la misma posición. ¿Por qué la recta que resulta es paralela a m?',
-      ['El ángulo en P se copió con el compás: es [[congruente]] con el ángulo en Q', 'Los dos quedan del mismo lado de la transversal y en la misma posición: son [[correspondientes]]', 'Dos rectas que forman con una transversal ángulos correspondientes congruentes son [[paralelas]]'], ['suplementario', 'perpendiculares', 'opuestos por el vértice'],
-      'Copiar el ángulo deja dos correspondientes congruentes, y eso obliga a que las rectas sean paralelas.', 'Piensa en qué pareja de ángulos forman una transversal y dos rectas cuando los ángulos quedan en la misma esquina.'),
-    err('Se quiere levantar la perpendicular a una recta por un punto P que está sobre ella.',
-      ['Con centro en P y un mismo radio se marcan R y S sobre la recta, a lado y lado de P', 'Con centro en R y en S se trazan dos arcos de radio igual a PR, que se cortan en M', 'Se traza la recta PM, que es perpendicular a la recta dada'], 1,
-      ['Con centro en R y en S se trazan dos arcos de un mismo radio mayor que PR, que se cortan en M', 'Con centro en P se traza otro arco de radio mayor, que corta a la recta en M', 'Con centro en R se traza un solo arco de radio PR y se toma en él un punto M cualquiera'],
-      'P es el punto medio de RS: con radio PR los arcos solo se tocan en P. Con un radio mayor se cortan en M, y PM es la mediatriz de RS.', 'PM debe ser la mediatriz de RS: recuerda qué radio hace falta para que los dos arcos se corten fuera del segmento.'),
-    opc('En las construcciones, la regla no tiene marcas y el compás traza arcos y conserva su abertura. ¿Cuál de estas tareas NO se puede hacer directamente con esos instrumentos?',
-      ['Unir dos puntos con una recta', 'Trazar una circunferencia con centro y radio dados', 'Marcar un segmento de 5 cm leyendo la regla', 'Llevar la longitud de un segmento a otra recta'], 2,
-      'La regla solo une puntos: no mide. Las longitudes se llevan con la abertura del compás.', 'Piensa en lo único que hace cada instrumento: uno traza rectas por dos puntos y el otro, arcos con un centro y una abertura.'),
+//#archivo js/courses/vectorial-base.js
+// Geometría Vectorial y Analítica rehecha con escenas (spec 2026-11-27-curso-geometria-vectorial). El curso sigue en
+// js/courses/geometria.js; cada lección rehecha vive en js/courses/vectorial-geo-N.js y hace GVA.leccion(…). Después de data.js,
+// js/courses/vectorial.js pone lo rehecho en COURSE_GEO y arma la evaluación de cada mundo completo. Va después de
+// preicfes-base.js: los ejercicios se escriben con los mismos ayudantes (x, sol, err, opc, guion).
+const GVA_LEC = {};
+const GVA_HECHOS = [];
+// Temario: [mundo, nombre en el mapa, [ids de las lecciones]], en el orden del cronograma.
+const GVA_TEMARIO = [
+  ['sistemas', 'Álgebra Matricial', ['geo-1', 'geo-2', 'geo-3', 'geo-4']],
+  ['determinantes', 'Inversión y Determinante', ['geo-5', 'geo-6', 'geo-7', 'geo-8']],
+  ['vectores', 'Geometría Vectorial', ['geo-9', 'geo-10', 'geo-11', 'geo-12', 'geo-13']],
+  ['productos', 'Productos Vectoriales', ['geo-14', 'geo-15', 'geo-16', 'geo-17', 'geo-18']],
+  ['mecanica', 'Fuerza, Trabajo y Momento', ['geo-19', 'geo-20', 'geo-21']],
+  ['conicas', 'Secciones Cónicas', ['geo-22', 'geo-23']],
+];
+const GVA = (() => {
+  const KIND = 'Geometría Vectorial';
+  // scenes: escenas de respaldo (guion); ex: ejercicios; items: [[nota de repaso, ejercicio]] para la evaluación del mundo.
+  const leccion = (id, scenes, ex, items) => { GVA_LEC[id] = { scenes, ex, items }; };
+  return { ...ICF, leccion, KIND };
+})();
+;
+//#archivo js/courses/vectorial-geo-1.js
+// Geometría Vectorial · lección geo-1 «Sistemas 2×2 y 3×3 y su geometría» rehecha (spec 2026-11-27-curso-geometria-vectorial).
+// Juegos en js/games/gva-escena-1.js; explicación en js/explora-gva-1.js. Enunciados, números y contextos propios.
+(() => {
+  const { leccion, x, sol, err, opc, guion } = GVA;
+  leccion('geo-1', guion(
+    ['Una ecuación, una recta', 'Los pares (x, y) que cumplen $ax + by = c$ quedan todos en fila: forman una recta del plano.'],
+    ['El punto común', 'Resolver un sistema 2×2 es buscar el punto que está en las dos rectas: cumple las dos ecuaciones a la vez.'],
+    ['Tres casos', 'Las rectas se cortan en un punto, son paralelas (ninguna solución) o son la misma (infinitas). Lo dicen las proporciones de los coeficientes.'],
+    ['Eliminar', 'Sumar a una ecuación un múltiplo de la otra da otra recta que pasa por el mismo punto; con el múltiplo justo desaparece una incógnita.'],
+    ['Tres incógnitas', 'Una ecuación en x, y, z es un plano. Un sistema escalonado se resuelve de abajo hacia arriba; tres planos comparten un punto, una recta, un plano entero (si son el mismo) o nada.']), [
+    x('corta-ejes', 'Los puntos que cumplen $4x + 3y = 24$ forman una recta. Arrastra la **x** y la **y** hasta los puntos donde esa recta **corta los ejes**.',
+      { a: 4, b: 3, c: 24, mira: ['En el corte con el eje x la y vale 0: ¿qué x hace que $4x$ dé 24?', 'En el corte con el eje y la x vale 0: ¿qué y hace que $3y$ dé 24?'],
+        trampa: 'Quedaron al revés: en el eje x se divide 24 entre el coeficiente de la x, y en el eje y, entre el de la y.', ok: 'Dos puntos bastan para trazar la recta: la ecuación y la recta son lo mismo.' },
+      'En el eje x, $y = 0$: $4x = 24$ y $x = 6$. En el eje y, $x = 0$: $3y = 24$ e $y = 8$. La recta pasa por $(6, 0)$ y $(0, 8)$.',
+      'Sobre el eje x todo punto tiene $y = 0$; sobre el eje y, $x = 0$. Pon ese cero en la ecuación y mira qué queda.'),
+    x('gira-segunda-recta', 'La recta fija es $x - 2y = -2$. La segunda pasa por **A** y por **B**. Mueve **B** para que el sistema de las dos rectas **no tenga solución**.',
+      { L: [1, -2, -2], A: [2, -2], B0: [2, 2], B: [4, -1], caso: 'paralela',
+        mira: 'Tus rectas todavía se cruzan. Para que nunca se toquen, la tuya debe subir lo mismo que la fija por cada paso a la derecha.',
+        pega: 'B quedó encima de A: con un solo punto no se arma una recta.', ok: 'Misma inclinación y otro lugar: las rectas son paralelas y el sistema no tiene solución.' },
+      'Sin solución quiere decir rectas paralelas y distintas. La fija sube 1 por cada 2 a la derecha; desde $A = (2, -2)$, por ejemplo $B = (4, -1)$, y queda $x - 2y = 6$: misma razón $1 : -2$ y otro término.',
+      'Mira cuánto sube la recta fija al avanzar dos cuadros a la derecha. La tuya tiene que hacer lo mismo desde A.'),
+    x('cruce-de-rectas', 'Una familia compró **9** boletas: $x$ de adulto a 5 mil e $y$ de niño a 2 mil, y pagó **33** mil. Cada condición es una recta. Arrastra el punto a la **solución**.',
+      { E: [[1, 1, 9], [5, 2, 33]], et: ['boletas', 'dinero'], sol: [5, 4], ini: [1, 1],
+        mira: ['Ese punto suma 9 boletas, pero no da 33 mil: síguelo por la recta de las boletas.', 'Ese punto da 33 mil, pero no son 9 boletas: síguelo por la recta del dinero.', 'Ese punto no cumple ninguna de las dos: llévalo a una recta y recórrela.'],
+        ok: 'El punto común cumple las dos condiciones a la vez: 5 de adulto y 4 de niño.' },
+      'El cruce es $(5, 4)$: $5 + 4 = 9$ boletas y $5 \\cdot 5 + 2 \\cdot 4 = 33$ mil. Cumple las dos ecuaciones, por eso está en las dos rectas.',
+      'Un punto sobre una de las rectas cumple solo esa condición. La solución tiene que estar en las dos a la vez.'),
+    x('coeficientes-proporcion', 'Sin dibujar: ¿cuántas soluciones tiene cada sistema? Compara los **coeficientes** de cada pareja de ecuaciones y arrastra la respuesta.',
+      { sis: [[[3, 1, 4], [6, 2, 8]], [[1, 4, 6], [2, 3, 7]], [[2, -3, 5], [4, -6, 7]]], metas: ['infinitas', 'un punto', 'ninguna'], fichas: ['un punto', 'ninguna', 'infinitas', 'dos puntos'],
+        mira: ['La segunda es la primera multiplicada por 2, también el número de la derecha: es la misma recta.', 'Los coeficientes no son proporcionales ($1/2$ no es $4/3$): las rectas tienen distinta inclinación y se cruzan.', 'La x y la y van en la misma proporción, pero el término de la derecha no: rectas paralelas que no coinciden.'],
+        trampas: { '0:dos puntos': 'Dos rectas no se cortan en dos puntos: o en uno, o en ninguno, o son la misma.', '1:dos puntos': 'Dos rectas no se cortan en dos puntos: o en uno, o en ninguno, o son la misma.', '2:dos puntos': 'Dos rectas no se cortan en dos puntos: o en uno, o en ninguno, o son la misma.' },
+        ok: 'Proporción en x e y decide si son paralelas; el término de la derecha decide si además coinciden.' },
+      'Primero: $3/6 = 1/2 = 4/8$, la misma recta. Segundo: $1/2 \\neq 4/3$, se cortan en un punto. Tercero: $2/4 = -3/-6$ pero $\\neq 5/7$: paralelas, ninguna solución.',
+      'Divide coeficiente entre coeficiente: si x e y no van en la misma proporción, hay un cruce. Si sí, mira el número de la derecha.'),
+    x('multiplo-elimina', 'Sistema $x - y = 1$ ($E_1$) y $3x + 2y = 13$ ($E_2$). Elige el múltiplo $k$ de $E_1$ que, sumado a $E_2$, hace **desaparecer la x**. Mira cómo gira la recta nueva.',
+      { E: [[1, -1, 1], [3, 2, 13]], s: 0, elim: 'x', P: [3, 2], k0: 0, mira: 'La x todavía no desaparece: el múltiplo tiene que cancelar su coeficiente.',
+        trampa: 'Así desapareció la y, no la x: la recta nueva quedó vertical. La pedida queda horizontal.', ok: 'Sin la x queda $5y = 10$: la recta nueva es horizontal y pasa por el mismo punto.' },
+      'Con $k = -3$: $3x + 2y - 3(x - y) = 13 - 3$, es decir $5y = 10$ e $y = 2$. Toda recta $E_2 + kE_1$ pasa por el punto común $(3, 2)$.',
+      'El coeficiente de x en $E_2$ es 3 y en $E_1$ es 1. ¿Cuántas veces hay que sumar $E_1$ para que esos 3 se vuelvan 0?'),
+    x('escalon-regresivo', 'El sistema ya está **escalonado**: cada renglón tiene una incógnita menos. Arrastra el valor de cada incógnita, empezando por **abajo**.',
+      { E: [[2, -1, 1, 11], [0, 1, 2, 3], [0, 0, 3, 6]], metas: ['2', '−1', '4'], fichas: ['2', '−1', '4', '6', '7', '5'],
+        subs: ['2x − (−1) + 2 = 11, luego 2x = 8', 'y + 2·2 = 3, luego y = 3 − 4', '3z = 6, luego z = 6 ÷ 3'],
+        mira: ['z sale del último renglón: allí no hay ni x ni y.', 'Pon el valor de z en el segundo renglón y despeja y.', 'Con y y z ya conocidas, el primer renglón deja sola a la x.'],
+        trampas: { '0:6': '6 es lo que vale 3z: z es su tercera parte.', '1:7': 'Al pasar $2z = 4$ al otro lado se resta: $3 - 4$.', '2:5': 'Cuidado con $-y$: si $y = -1$, entonces $-y$ vale $+1$.' },
+        ok: 'Sustitución hacia atrás: cada valor nuevo abre el renglón de arriba.' },
+      '$3z = 6$ da $z = 2$; $y + 4 = 3$ da $y = -1$; $2x + 1 + 2 = 11$ da $2x = 8$ y $x = 4$. La solución es $(4, -1, 2)$.',
+      'Empieza por el renglón que tiene una sola incógnita. Cada valor que encuentres, ponlo en el renglón de arriba.'),
+    x('tercer-plano', 'Los planos $x + y + z = 6$ y $x - y + z = 2$ se cortan en una recta que pasa por $(4, 2, 0)$. Elige $d$ para que $x + 3y + z = d$ **contenga esa recta**.',
+      { pl: [[1, 1, 6], [1, -1, 2]], t3: [1, 3], d: 10, d0: 0, pt: [4, 2, 0],
+        mira: 'Pon un punto de la recta común en la tercera ecuación: lo que da es el d que sirve.', ok: 'Con $d = 10$ el tercer plano contiene la recta común: el sistema tiene infinitas soluciones.' },
+      'La recta común pasa por $(4, 2, 0)$. Para que el tercer plano la contenga basta que pase por ese punto: $4 + 3 \\cdot 2 + 0 = 10$, así que $d = 10$. Con otro $d$ los tres planos forman un túnel y no hay solución.',
+      'Un plano que contiene la recta común pasa por todos sus puntos. Prueba con el punto que te dan.'),
+    x('lanza-reparto', 'Cada reparto da dos ecuaciones: cuántos hay y cuánto suman. Fija cuántos son de la primera clase y suelta. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Se vendieron **36** boletas, de adulto a 8 mil y de niño a 5 mil, y se recaudaron **225** mil. ¿Cuántas de adulto?', n: 36, p1: 8, p2: 5, T: 225, r: 15, u1: 'de adulto', u2: 'de niño', din: 'mil', et: 'Boletas de adulto' },
+      { q: 'Una mezcla de **20** kg lleva café caro a 14 mil el kilo y suave a 9 mil, y vale **230** mil. ¿Cuántos kilos del caro?', n: 20, p1: 14, p2: 9, T: 230, r: 10, u1: 'kg del caro', u2: 'kg del suave', din: 'mil', et: 'Kilos del café caro' },
+      { q: 'En una alcancía hay **30** monedas de 500 y de 200 pesos que suman **10 800** pesos. ¿Cuántas son de 500?', n: 30, p1: 500, p2: 200, T: 10800, r: 16, u1: 'de 500', u2: 'de 200', din: 'pesos', et: 'Monedas de 500' }] },
+      'Con $y = n - x$: $8x + 5(36 - x) = 225$ da $3x = 45$ y $x = 15$; $14x + 9(20 - x) = 230$ da $5x = 50$ y $x = 10$; $500x + 200(30 - x) = 10\\,800$ da $300x = 4\\,800$ y $x = 16$.',
+      'Escribe la segunda clase como «el total menos la primera» y reemplázala en la ecuación del dinero: queda una sola incógnita.'),
+    sol('Resuelve por eliminación el sistema $2x + y = 7$ y $x - y = 2$, y di dónde se cortan sus rectas.',
+      ['Se suman las dos ecuaciones y desaparece la [[y]]', 'Queda $3x = 9$, así que $x =$ [[3]]', 'En la segunda: $3 - y = 2$, luego $y =$ [[1]]', 'Las rectas se cortan en el punto [[(3, 1)]]'], ['x', '−1', '(1, 3)'],
+      'Sumar elimina la $y$ porque sus coeficientes son $1$ y $-1$: $3x = 9$, $x = 3$, $y = 1$. Se comprueba: $2 \\cdot 3 + 1 = 7$ y $3 - 1 = 2$.',
+      'Mira qué incógnita tiene coeficientes opuestos en las dos ecuaciones: al sumar, esa se va.'),
+    err('Se resuelve el sistema escalonado $x - y + 2z = 5$, $y + z = 4$, $3z = 9$ con sustitución hacia atrás. Uno de los pasos está mal.',
+      ['$3z = 9$, así que $z = 3$', '$y + 3 = 4$, así que $y = 1$', '$x - 1 + 6 = 5$, así que $x = 2$', 'Se comprueba en la segunda: $1 + 3 = 4$'], 2,
+      ['$x - 1 + 6 = 5$, así que $x = 0$', '$x - 1 + 6 = 5$, así que $x = 12$', '$x + 1 + 6 = 5$, así que $x = -2$'],
+      'Con $y = 1$ y $z = 3$ la primera queda $x - 1 + 6 = 5$, es decir $x + 5 = 5$ y $x = 0$. La solución es $(0, 1, 3)$.',
+      'Repite cada cuenta tú mismo: pon los valores ya hallados en el renglón y despeja la que falta.'),
+    opc('El sistema $3x - 6y = 4$ y $x - 2y = k$ **no tiene solución**:', ['exactamente cuando $k \\neq \\tfrac{4}{3}$', 'solo si $k = \\tfrac{4}{3}$', 'solo si $k = 0$', 'para ningún valor de $k$'], 0,
+      'Dividiendo la primera entre 3 queda $x - 2y = \\tfrac{4}{3}$: las dos rectas tienen la misma inclinación. Si $k = \\tfrac{4}{3}$ son la misma (infinitas); si no, son paralelas y no hay solución.',
+      'Divide la primera ecuación para que su x tenga coeficiente 1 y compárala con la segunda.'),
+  ], [
+    ['Una paralela que pasa por un punto de la recta fija es la misma recta: el sistema tiene infinitas soluciones.',
+      x('gira-segunda-recta', 'La recta fija es $2x + y = 3$ y la segunda pasa por **A**, que está sobre ella. Mueve **B** para que el sistema tenga **infinitas soluciones**.',
+        { L: [2, 1, 3], A: [1, 1], B0: [4, 2], B: [2, -1], caso: 'misma',
+          mira: 'Tu recta corta a la fija solo en A: para infinitas soluciones, B también tiene que cumplir la ecuación fija.',
+          pega: 'B quedó encima de A: con un solo punto no se arma una recta.', ok: 'B también cumple $2x + y = 3$: las dos rectas son la misma.' },
+        'Infinitas soluciones: las dos ecuaciones son la misma recta. B tiene que cumplir $2x + y = 3$, por ejemplo $B = (2, -1)$: $4 - 1 = 3$.',
+        'Para que coincidan, B tiene que estar sobre la recta fija. Prueba puntos que cumplan su ecuación.')],
+    ['Se elige el múltiplo que cancela el coeficiente de la incógnita; la recta nueva pasa por el mismo punto.',
+      x('multiplo-elimina', 'Sistema $x + 2y = 4$ ($E_1$) y $3x - y = 5$ ($E_2$). Elige el múltiplo $k$ de $E_2$ que, sumado a $E_1$, hace **desaparecer la y**.',
+        { E: [[1, 2, 4], [3, -1, 5]], s: 1, elim: 'y', P: [2, 1], k0: 0, mira: 'La y todavía no desaparece: el múltiplo tiene que cancelar su coeficiente.',
+          trampa: 'Así desapareció la x, no la y.', ok: 'Sin la y queda $7x = 14$: la recta nueva es vertical y pasa por el mismo punto.' },
+        'Con $k = 2$: $x + 2y + 2(3x - y) = 4 + 10$, es decir $7x = 14$ y $x = 2$; luego $y = 1$.',
+        'La y vale 2 en $E_1$ y $-1$ en $E_2$. ¿Cuántas veces $E_2$ cancela esos 2?')],
+    ['Dos planos paralelos y distintos bastan para que tres planos no tengan ningún punto común.',
+      opc('El sistema $x + y + z = 3$, $2x + 2y + 2z = 5$, $x - y + z = 1$:', ['tiene una sola solución', 'tiene infinitas soluciones, una recta', 'no tiene solución', 'tiene infinitas soluciones, un plano'], 2,
+        'La segunda dividida entre 2 es $x + y + z = 2.5$: un plano paralelo al primero, que tiene término 3. Nunca se tocan, así que ningún punto cumple las tres.',
+        'Compara la segunda ecuación con la primera: divide todo entre 2.')],
   ]);
-
-  const l2 = leccion('euc-construcciones-2', 'Lugares geométricos y construcción de triángulos', guion(
-    ['Lugar geométrico', 'Es el conjunto de todos los puntos que cumplen una condición: a una distancia fija de un punto, una circunferencia; equidistantes de dos puntos, la mediatriz.'],
-    ['Más lugares', 'A una distancia fija de una recta: dos paralelas. Equidistantes de dos rectas que se cortan: las bisectrices. Los puntos que ven un segmento bajo el mismo ángulo: el arco capaz.'],
-    ['Cruzar lugares', 'Un punto que debe cumplir dos condiciones está donde se cortan los dos lugares.'],
-    ['Triángulos', 'Con tres lados se cruzan dos arcos (si cada lado es menor que la suma de los otros); también basta con dos lados y el ángulo comprendido, o un lado y sus dos ángulos.'],
-    ['Dos circunferencias', 'Las mediatrices se cortan en el circuncentro, centro de la que pasa por los vértices; las bisectrices, en el incentro, centro de la inscrita.']), [
-    x('lugar-distancias', 'Lleva **P** a un punto que esté a **5** de A y a **3** de la recta r.', { pts: { A: [5, 7] }, recta: 1, conds: [['d', 'A', 5], ['r', 3]], ini: [7, 2],
-      txt: 'sobre la paralela a 3 de $r$, donde la corta la circunferencia de centro $A$ y radio 5', ok: 'Está en la circunferencia de centro A y radio 5 y en la paralela a 3 de r.' },
-      'Los puntos a 3 de r forman una paralela; los que están a 5 de A, una circunferencia. Se cortan donde A queda 3 arriba y 4 a un lado: $\\sqrt{3^2 + 4^2} = 5$.', 'Primero ubica todos los puntos que están a 3 de la recta: forman una línea. Sobre ella busca el que queda a 5 de A.'),
-    x('lugar-equidista', 'La circunferencia tiene centro O y radio 5. Lleva **P** a un punto de ella que **equidiste** de A y de B.', { pts: { O: [7, 5], A: [6, 8], B: [9, 5] }, conds: [['d', 'O', 5, true], ['eq', 'A', 'B']], ini: [12, 5],
-      txt: 'donde la mediatriz de $AB$ corta a la circunferencia', ok: 'Está sobre la circunferencia y sobre la mediatriz de AB.' },
-      'Los puntos que equidistan de A y B forman la mediatriz de AB. Esa recta corta a la circunferencia en dos puntos, y cualquiera de los dos cumple las dos condiciones.', 'Equidistar de A y de B es estar en la mediatriz de AB: pasa por su punto medio y es perpendicular a él. Síguela hasta la circunferencia.'),
-    x('tercer-lado', 'Se va a construir un triángulo con dos lados de **9** y **5**. ¿Entre qué enteros puede medir el tercero para que los dos arcos se corten?', { a: 9, b: 5, max: 15 },
-      'Más que la resta, 4, y menos que la suma, 14: de 5 a 13. Con 4 o con 14 los arcos apenas se tocan y queda una línea.', 'Traza la base de 9 y piensa en el arco de radio 5 desde un extremo: ¿qué radios del otro arco alcanzan a cortarlo?'),
-    x('datos-determinan', 'Toca **todos** los datos con los que se puede construir un triángulo, y solo uno (sin contar su posición).', { casos: [
-      { t: 'Lados de 4, 6 y 9', si: true },
-      { t: 'Lados de 3, 5 y 9', no: 'Con 3, 5 y 9 los arcos no se cortan: 3 + 5 no alcanza a 9.' },
-      { t: 'Lados de 5 y 7 con 40° entre ellos', si: true },
-      { t: 'Ángulos de 50°, 60° y 70°', no: 'Con solo los ángulos salen triángulos de muchos tamaños: semejantes, no uno solo.' },
-      { t: 'Un lado de 6 con 50° y 60° en sus extremos', si: true },
-      { t: 'Un lado de 6 con 100° y 90° en sus extremos', no: 'Dos ángulos que suman 190° no dejan que los otros dos lados se encuentren.' }],
-      falta: 'Falta alguno: tres lados que cierran, L-A-L y A-L-A fijan un solo triángulo.', ok: 'L-L-L (si cierra), L-A-L y A-L-A: los mismos criterios de congruencia.' },
-      'Tres lados que cumplen la desigualdad triangular, dos lados con el ángulo comprendido, o un lado con sus dos ángulos (que sumen menos de 180°) dan un único triángulo.', 'Para cada dato imagina la construcción: ¿los trazos se encuentran en un punto, y en uno solo a cada lado de la base?'),
-    x('triangulo-tres-lados', 'La base AB mide **14**. Lleva **C** al cruce de los dos arcos para que AC mida **13** y BC mida **15**.', { A: 0, ab: 14, ac: 13, bc: 15, ini: [7, 4] },
-      'Con altura 12: $5^2 + 12^2 = 13^2$ desde A y $9^2 + 12^2 = 15^2$ desde B, y $5 + 9 = 14$. C queda 5 a la derecha de A y 12 arriba.', 'El arco de centro A y radio 13 pasa por pocos puntos de la cuadrícula (familia 5-12-13). Busca el que además queda a 15 de B.'),
-    x('pasos-construccion', 'Se quiere trazar la circunferencia que pasa por los **tres vértices** del triángulo ABC. Pon los pasos en orden.', {
-      fig: 'circun', metas: ['dos mediatrices', 'marcar el cruce O', 'abrir de O hasta A', 'girar el compás'], fichas: ['dos mediatrices', 'marcar el cruce O', 'abrir de O hasta A', 'girar el compás', 'dos bisectrices', 'abrir de A hasta B'],
-      mira: ['El centro equidista de los vértices: se empieza por las mediatrices de dos lados.', 'Donde se cortan las dos mediatrices está el centro O.', 'El radio va del centro O a un vértice.', 'Con esa abertura y centro en O se traza la circunferencia.'],
-      trampas: { '0:dos bisectrices': 'Las bisectrices dan el centro de la inscrita; para pasar por los vértices van las mediatrices.', '2:abrir de A hasta B': 'El radio va del centro a un vértice, no de un vértice a otro.' },
-      ok: 'El circuncentro equidista de A, B y C.' },
-      'Las mediatrices de dos lados se cortan en O, que equidista de los tres vértices; con radio OA la circunferencia pasa por A, B y C.', 'El centro debe estar a la misma distancia de A, de B y de C: ¿qué lugar geométrico equidista de dos puntos?'),
-    x('centro-inscrita', 'El triángulo tiene catetos de 8 y 6. Lleva **I** al centro de la circunferencia **inscrita**: el punto que está a la misma distancia de los **tres lados**.', { Q: [3, 1], a: 8, b: 6, ini: [8, 2] },
-      'Equidistar de dos lados es estar en la bisectriz de su ángulo. Sobre la bisectriz del ángulo recto, el punto que está a 2 de los catetos también queda a 2 de la hipotenusa: es el incentro.', 'Empieza por la bisectriz del ángulo recto: ahí cada punto está a lo mismo de los dos catetos. Avanza por ella hasta igualar la distancia a la hipotenusa.'),
-    x('cuenta-cruces', 'Se trazan los dos lugares geométricos. ¿Cuántos puntos cumplen las **dos** condiciones a la vez? Puedes fallar **una** vez.', { tiros: [
-      { q: 'A está a **2** de la recta r. Puntos a **5** de A y a **3** de r', k: 'cp', a: 2, R: 5, d: 3, r: 3, c: '2 + 1 = 3', e: { 4: 'La paralela de abajo queda justo a 5 de A: la circunferencia solo la toca.', 2: 'Hay dos paralelas a 3 de r, una a cada lado, y la de abajo también cuenta.' } },
-      { q: 'A y B están a **10**. Puntos a **6** de A y a **8** de B', k: 'cc', D: 10, r1: 6, r2: 8, r: 2, c: '8 - 6 < 10 < 8 + 6 \\Rightarrow 2', e: { 1: 'Las circunferencias se cortan a los dos lados de AB: uno arriba y otro abajo.' } },
-      { q: 'A y B están a **12**. Puntos a **5** de A y a **7** de B', k: 'cc', D: 12, r1: 5, r2: 7, r: 1, c: '5 + 7 = 12 \\Rightarrow 1', e: { 2: 'Como 5 + 7 = 12, las circunferencias apenas se tocan sobre AB: ahí no hay triángulo.' } }] },
-      'La paralela de arriba corta dos veces y la de abajo es tangente: 3. Con $2 < 10 < 14$ hay 2 cruces. Con $5 + 7 = 12$ las circunferencias se tocan en 1.', 'Dibuja cada lugar: una circunferencia, dos paralelas o dos circunferencias, y mira si se cortan, se tocan o no se alcanzan.'),
-    sol('Tres veredas A, B y C no están en línea recta. ¿Dónde se instala una antena que quede a la misma distancia de las tres?',
-      ['Los puntos que equidistan de A y de B forman la [[mediatriz]] de AB', 'Los que equidistan de B y de C forman la mediatriz de [[BC]]', 'La antena va donde se cortan: es el [[circuncentro]] del triángulo ABC'], ['bisectriz', 'incentro', 'AC'],
-      'Cada mediatriz reúne los puntos que equidistan de dos veredas; su cruce equidista de las tres: el circuncentro.', 'Cada condición «a la misma distancia de dos puntos» es un lugar geométrico: nombra cuál y cruza dos de ellos.'),
-    err('Se pide construir el triángulo ABC con AB = 7, el ángulo A de 50° y AC = 4.',
-      ['Se traza el segmento AB de 7', 'En A se copia el ángulo de 50°, con un lado sobre AB', 'Con centro en B y radio 4 se marca C sobre el otro lado del ángulo', 'Se une C con B'], 2,
-      ['Con centro en A y radio 4 se marca C sobre el otro lado del ángulo', 'Con centro en B y radio 7 se marca C sobre el otro lado del ángulo', 'Con centro en A y radio 7 se marca C sobre el segmento AB'],
-      'AC sale de A: el compás se apoya en A con abertura 4. Así el ángulo de 50° queda comprendido entre los lados de 7 y 4 (L-A-L).', '¿Desde cuál extremo se mide el lado AC? Ahí va la punta fija del compás.'),
-    opc('Se quiere construir un triángulo con dos lados de 4 cm y 5 cm. ¿Con cuál de estas medidas del tercer lado NO se puede construir?',
-      ['9 cm', '8 cm', '2 cm', '6 cm'], 0,
-      'Como $4 + 5 = 9$, con 9 cm los dos arcos apenas se tocan sobre la base: queda una línea, no un triángulo.', 'Cada lado debe ser menor que la suma de los otros dos y mayor que su diferencia.'),
+})();
+;
+//#archivo js/courses/vectorial-geo-2.js
+// Geometría Vectorial · lección geo-2 «El conjunto Rⁿ y el álgebra matricial» rehecha (spec 2026-11-27-curso-geometria-vectorial).
+// Juegos en js/games/gva-escena-2.js. Enunciados, números y contextos propios.
+(() => {
+  const { leccion, x, sol, err, opc, guion } = GVA;
+  leccion('geo-2', guion(
+    ['Listas de números', '$\\mathbb{R}^n$ son las listas de $n$ números reales. En $\\mathbb{R}^2$ son puntos o flechas del plano; en $\\mathbb{R}^3$, del espacio.'],
+    ['Sumar y estirar', 'Se suma **componente a componente**: $(3, 2) + (1, -3) = (4, -1)$. Un escalar multiplica cada componente: $2(3, 2) = (6, 4)$.'],
+    ['Combinaciones lineales', '$a\\vec u + b\\vec v$ estira dos flechas y las pone en fila. Llegar a un punto así es resolver un sistema en $a$ y $b$.'],
+    ['Matriz por vector', 'Una matriz $m \\times n$ tiene $m$ filas y $n$ columnas. $A\\vec x$ combina las columnas de $A$ con los números de $\\vec x$; también es cada fila por $\\vec x$.'],
+    ['El producto AB', 'La casilla $(i, j)$ de $AB$ es la fila $i$ de $A$ por la columna $j$ de $B$: $(m \\times n)(n \\times p) = m \\times p$. En general $AB \\neq BA$; la identidad no cambia nada, y un sistema es $A\\vec x = \\vec b$.']), [
+    x('suma-a-flechas', 'Un dron de reparto tiene dos mandos: $\\vec u = (1, 2)$ y $\\vec v = (3, 1)$. Para llegar al pedido aplica $\\vec w = 2\\vec u - \\vec v$. Arrastra la punta de $\\vec w$ hasta donde llega.',
+      { u: [1, 2], v: [3, 1], a: 2, b: -1, ini: [1, 1] },
+      '$2\\vec u = (2, 4)$ y $\\vec w = (2 - 3,\\; 4 - 1) = (-1, 3)$: cada componente se opera por separado.',
+      'Primero estira u al doble, componente a componente; después quítale v, también componente por componente.'),
+    x('rieles-combinacion', 'Un robot de bodega solo rueda por dos rieles: $\\vec u = (2, 1)$ y $\\vec v = (-1, 1)$ (un número negativo es ir hacia atrás). Ajusta $a$ y $b$ para que $a\\vec u + b\\vec v$ llegue a la caja en $(-1, 4)$.',
+      { u: [2, 1], v: [-1, 1], T: [-1, 4], ini: [1, 1] },
+      '$1 \\cdot (2, 1) + 3 \\cdot (-1, 1) = (2 - 3,\\; 1 + 3) = (-1, 4)$. Por componentes es el sistema $2a - b = -1$, $a + b = 4$, que da $a = 1$ y $b = 3$.',
+      'Escribe las dos componentes por separado: la primera da una ecuación con a y b, y la segunda da otra.'),
+    x('columnas-del-pedido', 'Una fábrica hace mesas y sillas. Cada **columna** de $A$ dice lo que gasta un mueble: tablas de madera y paquetes de tornillos. Llega el pedido $\\vec x = (4, 5)$: 4 mesas y 5 sillas. Arma $A\\vec x$ como combinación de las columnas.',
+      { A: [[3, 1], [8, 6]], x: [4, 5], filas: ['madera', 'tornillos'], cols: ['mesa', 'silla'], extra: ['52', '34'] },
+      '$A\\vec x = 4\\begin{pmatrix} 3 \\\\ 8 \\end{pmatrix} + 5\\begin{pmatrix} 1 \\\\ 6 \\end{pmatrix} = \\begin{pmatrix} 17 \\\\ 62 \\end{pmatrix}$: hacen falta 17 tablas y 62 paquetes.',
+      'El primer número del pedido dice cuántas veces se toma la columna de la mesa; el segundo, cuántas la de la silla.'),
+    x('domino-dimensiones', 'Tres matrices de una cadena de producción: $A$ es $3 \\times 4$, $B$ es $2 \\times 3$ y $C$ es $4 \\times 1$. Encájalas como fichas de dominó para que el producto de las tres exista, y pon su tamaño.',
+      { piezas: [['A', 3, 4], ['B', 2, 3], ['C', 4, 1]], orden: [1, 0, 2], extra: ['3×1', '2×4'] },
+      '$(2 \\times 3)(3 \\times 4)(4 \\times 1)$: las medidas de adentro coinciden (3 con 3 y 4 con 4) y las de afuera dan $2 \\times 1$. El producto que existe es $BAC$.',
+      'Cada pieza debe tener tantas columnas como filas tiene la que sigue; busca primero con cuál puede terminar la cadena.'),
+    x('fila-por-columna', 'Ana compra 2 cuadernos y 3 lápices; Beto, 1 cuaderno y 4 lápices (matriz $P$). En la tienda 1 (T1) el cuaderno vale 5 y el lápiz 1; en la T2, 4 y 2, en miles (matriz $Q$). Arma $PQ$: lo que paga cada uno en cada tienda.',
+      { P: [[2, 3], [1, 4]], Q: [[5, 4], [1, 2]], fp: ['Ana', 'Beto'], mid: ['cuad.', 'lápiz'], cq: ['T1', 'T2'], extra: ['10', '31', '11'] },
+      'Cada casilla es fila por columna. Ana: $2 \\cdot 5 + 3 \\cdot 1 = 13$ en T1 y $2 \\cdot 4 + 3 \\cdot 2 = 14$ en T2. Beto: $1 \\cdot 5 + 4 \\cdot 1 = 9$ y $1 \\cdot 4 + 4 \\cdot 2 = 12$.',
+      'La casilla de una persona en una tienda usa la fila de esa persona en P y la columna de esa tienda en Q.'),
+    x('conmutan-o-no', 'En general $AB \\neq BA$. Con $A = \\begin{pmatrix} 1 & 2 \\\\ 0 & 1 \\end{pmatrix}$ y $B = \\begin{pmatrix} k & 2 \\\\ 0 & 3 \\end{pmatrix}$, mueve $k$ hasta el único valor con el que $AB = BA$.',
+      { A: [[1, 2], [0, 1]], B: [[null, 2], [0, 3]], min: -3, max: 5, ini: 0 },
+      'Arriba a la derecha, $AB$ da $1 \\cdot 2 + 2 \\cdot 3 = 8$ y $BA$ da $k \\cdot 2 + 2 \\cdot 1 = 2k + 2$. Son iguales solo si $2k + 2 = 8$, es decir $k = 3$; las otras casillas ya coinciden.',
+      'Calcula la casilla de arriba a la derecha de AB y la de BA dejando k como letra, e iguálalas.'),
+    x('escribe-ax-b', 'Un sistema de dos ecuaciones se guarda en la forma $A\\vec x = \\vec b$, con $\\vec x = (x_1, x_2)$. Pon en su casilla cada coeficiente de $A$ y cada número de $\\vec b$.',
+      { A: [[3, 2], [1, -4]], b: [17, -13], x: [3, 4], extra: ['4', '0', '13'] },
+      'La fila $i$ de $A$ son los números delante de $x_1$ y $x_2$ en la ecuación $i$: $(3, 2)$ y $(1, -4)$; $\\vec b = (17, -13)$. Por ejemplo, $\\vec x = (3, 4)$ la cumple.',
+      'Lee cada ecuación de izquierda a derecha: si una incógnita no tiene número delante, su coeficiente es 1, y un menos va con el número.'),
+    x('lanza-producto', 'Cada total es una **fila por una columna**: multiplica pareja por pareja y suma. Fija el total y suelta. Puedes fallar **una** vez.', { max: 40, tiros: [
+      { q: '**Proteína** de un desayuno: huevo 6 g, queso 7 g y arepa 2 g por porción; se comen 2, 1 y 3 porciones.', n: ['huevo', 'queso', 'arepa'], fila: [6, 7, 2], col: [2, 1, 3], u: 'g', e: { 15: 'Sumaste solo la fila: cada número va por sus porciones.', 21: 'Sumaste todo junto: se multiplica pareja por pareja y luego se suma.' } },
+      { q: '**Horas de corte** de un taller: mesa 2 h, silla 1 h, estante 3 h. El pedido es de 3 mesas, 4 sillas y 2 estantes.', n: ['mesa', 'silla', 'estante'], fila: [2, 1, 3], col: [3, 4, 2], u: 'h', e: { 6: 'Esas son las horas de un mueble de cada clase: falta multiplicar por el pedido.', 9: 'Contaste los muebles, no las horas.' } },
+      { q: '**Cuenta** de un mercado: arroz a 5, pan a 2 y leche a 4 (miles); se llevan 3, 5 y 2 unidades.', n: ['arroz', 'pan', 'leche'], fila: [5, 2, 4], col: [3, 5, 2], u: 'mil', e: { 11: 'Sumaste los precios: cada uno va por sus unidades.', 10: 'Contaste las unidades, no lo que cuestan.' } }] },
+      '$6 \\cdot 2 + 7 \\cdot 1 + 2 \\cdot 3 = 25$; $2 \\cdot 3 + 1 \\cdot 4 + 3 \\cdot 2 = 16$; $5 \\cdot 3 + 2 \\cdot 5 + 4 \\cdot 2 = 33$.',
+      'Junta cada número de la fila con el de su misma posición en la columna, multiplícalos y suma los tres resultados.'),
+    sol('Con $A = \\begin{pmatrix} 1 & 0 & 2 \\\\ 3 & -1 & 1 \\end{pmatrix}$ y $\\vec x = (2, 5, 1)$, completa el cálculo de $A\\vec x$.',
+      ['$A$ es $2 \\times 3$ y $\\vec x$ es $3 \\times 1$: el producto mide [[2 × 1]]', 'Primera componente: $1 \\cdot 2 + 0 \\cdot 5 + 2 \\cdot 1 =$ [[4]]', 'Segunda componente: $3 \\cdot 2 + (-1) \\cdot 5 + 1 \\cdot 1 =$ [[2]]', 'Es la combinación $2\\vec c_1 + 5\\vec c_2 + 1\\vec c_3$ de las [[columnas]] de $A$'],
+      ['3 × 2', '12', 'filas'],
+      '$(2 \\times 3)(3 \\times 1) = 2 \\times 1$; fila 1 por $\\vec x$ da $2 + 0 + 2 = 4$ y fila 2 da $6 - 5 + 1 = 2$. Lo mismo sale tomando 2, 5 y 1 veces las columnas.',
+      'Cada componente es una fila de A por x, pareja por pareja; el tamaño sale de las medidas de afuera.'),
+    err('Se calcula $AB$ con $A = \\begin{pmatrix} 2 & 1 \\\\ 0 & 3 \\end{pmatrix}$ y $B = \\begin{pmatrix} 1 & 4 \\\\ 2 & -1 \\end{pmatrix}$. Un paso está mal.',
+      ['Casilla $(1, 1)$: $2 \\cdot 1 + 1 \\cdot 2 = 4$', 'Casilla $(1, 2)$: $2 \\cdot 4 + 1 \\cdot (-1) = 7$', 'Casilla $(2, 1)$: $0 \\cdot 1 + 3 \\cdot 4 = 12$', 'Casilla $(2, 2)$: $0 \\cdot 4 + 3 \\cdot (-1) = -3$'], 2,
+      ['Casilla $(2, 1)$: $0 \\cdot 1 + 3 \\cdot 2 = 6$', 'Casilla $(2, 1)$: $0 \\cdot 2 + 3 \\cdot 1 = 3$', 'Casilla $(2, 1)$: $0 \\cdot 1 \\cdot 3 \\cdot 2 = 0$'],
+      'La casilla $(2, 1)$ es la fila 2 de $A$, $(0, 3)$, por la **columna** 1 de $B$, $(1, 2)$: $0 + 6 = 6$. El paso malo tomó la fila 1 de $B$.',
+      'Para cada casilla, mira qué fila de A y qué columna de B le tocan, y revisa que se usaron esas.'),
+    opc('Si $A$ es $3 \\times 2$ y $B$ es $2 \\times 4$, ¿qué se puede afirmar?',
+      ['$AB$ existe y es $3 \\times 4$; $BA$ no existe', '$AB$ y $BA$ existen y son iguales', '$AB$ no existe porque $3 \\neq 4$', '$AB$ existe y es $2 \\times 2$'], 0,
+      '$(3 \\times 2)(2 \\times 4)$: las de adentro coinciden y $AB$ es $3 \\times 4$. En $BA$ quedan $(2 \\times 4)(3 \\times 2)$ y $4 \\neq 3$: no existe.',
+      'Para AB compara las columnas de A con las filas de B; para BA, al revés.'),
+  ], [
+    ['Un sistema es $A\\vec x = \\vec b$: cada fila de $A$ son los coeficientes de una ecuación, en orden y con su signo.',
+      opc('El sistema $2x_1 - x_2 = 7$, $x_1 + 3x_2 = 0$ se escribe $A\\vec x = \\vec b$. ¿Cuál es $A$?',
+        ['$\\begin{pmatrix} 2 & 1 \\\\ -1 & 3 \\end{pmatrix}$', '$\\begin{pmatrix} 2 & 7 \\\\ 1 & 0 \\end{pmatrix}$', '$\\begin{pmatrix} 2 & 1 \\\\ 1 & 3 \\end{pmatrix}$', '$\\begin{pmatrix} 2 & -1 \\\\ 1 & 3 \\end{pmatrix}$'], 3,
+        'La fila 1 son los coeficientes de la primera ecuación, $(2, -1)$, y la fila 2 los de la segunda, $(1, 3)$. Los números 7 y 0 van en $\\vec b$.',
+        'Cada fila de A sale de una ecuación: los números delante de x₁ y x₂, con su signo.')],
+    ['Combinación lineal: $a\\vec u + b\\vec v$ por componentes es un sistema en $a$ y $b$.',
+      x('rieles-combinacion', 'Una grúa de puerto se mueve con dos brazos: $\\vec u = (1, 2)$ y $\\vec v = (2, -1)$. Ajusta $a$ y $b$ para que $a\\vec u + b\\vec v$ llegue al contenedor en $(0, 5)$.',
+        { u: [1, 2], v: [2, -1], T: [0, 5], ini: [1, 1] },
+        '$2 \\cdot (1, 2) - 1 \\cdot (2, -1) = (2 - 2,\\; 4 + 1) = (0, 5)$: $a = 2$ y $b = -1$.',
+        'Plantea $a + 2b = 0$ con la primera componente y $2a - b = 5$ con la segunda.')],
+    ['Producto de matrices: la casilla $(i, j)$ es la fila $i$ de la primera por la columna $j$ de la segunda.',
+      x('fila-por-columna', 'Dos menús llevan porciones de pollo y de fríjol (matriz $P$): el menú 1, 1 y 3; el menú 2, 2 y 2. Cada porción aporta proteína y energía (matriz $Q$): pollo 4 y 2, fríjol 1 y 5. Arma $PQ$.',
+        { P: [[1, 3], [2, 2]], Q: [[4, 2], [1, 5]], fp: ['menú 1', 'menú 2'], mid: ['pollo', 'fríjol'], cq: ['prot.', 'energ.'], extra: ['16', '4', '13'] },
+        'Menú 1: $1 \\cdot 4 + 3 \\cdot 1 = 7$ y $1 \\cdot 2 + 3 \\cdot 5 = 17$. Menú 2: $2 \\cdot 4 + 2 \\cdot 1 = 10$ y $2 \\cdot 2 + 2 \\cdot 5 = 14$.',
+        'Cada casilla junta la fila de un menú con la columna de un nutriente: porciones por aporte, y se suma.')],
   ]);
+})();
+;
+//#archivo js/courses/vectorial-geo-3.js
+// Geometría Vectorial · lección geo-3 «Transpuesta, sistemas m×n y tipos de solución» rehecha (spec
+// 2026-11-27-curso-geometria-vectorial). Juegos en js/games/gva-escena-3.js; explicación en js/explora-gva-3.js.
+(() => {
+  const { leccion, x, sol, err, opc, guion } = GVA;
+  const fila = (a, b) => `$\\left[\\begin{array}{ccc|c} 0 & 0 & ${a} & ${b} \\end{array}\\right]$`;
 
-  return mundo('euc-construcciones', [l1, l2], [
-    ['euc-construcciones-1', 'Mediatriz: dos arcos del mismo radio, mayor que la mitad del segmento.', x('compas-mediatriz', 'AB mide **8**. Abre el compás para que los arcos del mismo radio desde A y desde B se corten a **3** del segmento.', { L: 8, h: 3 },
-      'La mitad de AB es 4 y la altura 3: el radio es $\\sqrt{4^2 + 3^2} = 5$.', 'El radio es una hipotenusa: un cateto es la mitad de AB y el otro, la altura.')],
-    ['euc-construcciones-1', 'Marcas iguales en una auxiliar y paralelas: partes iguales.', x('divide-tales', 'AB mide **12** y se parte en **8** partes iguales con marcas en una semirrecta auxiliar. Pon **X** donde cae la paralela que sale de la marca **3**.', { L: 12, n: 8, k: 3 },
-      'Cada parte mide $12 \\div 8 = 1.5$, y la tercera paralela cae a $3 \\cdot 1.5 = 4.5$ de A.', 'Las partes de AB son iguales entre sí: halla primero cuánto mide una.')],
-    ['euc-construcciones-1', 'Perpendicular por un punto: es la mediatriz de un segmento auxiliar.', opc('Para bajar la perpendicular a una recta desde un punto P exterior, un arco de centro P corta a la recta en R y S; luego dos arcos iguales desde R y S se cortan en M. La recta PM es perpendicular porque:',
-      ['P y M están a la misma distancia de la recta', 'P y M equidistan de R y de S: PM es la mediatriz de RS', 'El triángulo PRS siempre es equilátero', 'Los arcos desde R y S tienen el mismo radio que el de centro P'], 1,
-      'P equidista de R y S (mismo arco) y M también (arcos iguales): los dos están en la mediatriz de RS.', '¿Qué recta reúne a todos los puntos que equidistan de R y de S?')],
-    ['euc-construcciones-2', 'Tres lados: el tercer vértice es el cruce de dos arcos.', x('triangulo-tres-lados', 'La base AB mide **4**. Lleva **C** al cruce de los dos arcos para que AC mida **15** y BC mida **13**.', { A: 0, ab: 4, ac: 15, bc: 13, ini: [6, 5] },
-      'Con altura 12: $9^2 + 12^2 = 15^2$ y $5^2 + 12^2 = 13^2$, con $9 - 5 = 4$. C queda más allá de B: el triángulo es obtusángulo.', 'Busca una altura común a las familias 9-12-15 y 5-12-13; los pies no tienen que caer entre A y B.')],
-    ['euc-construcciones-2', 'Circuncentro: cruce de las mediatrices, equidista de los vértices.', x('centro-tres-puntos', 'Lleva **P** al centro de la circunferencia que pasa por A, B y C: el punto que **equidista** de los tres.', { pts: { A: [3, 2], B: [11, 2], C: [10, 9] }, conds: [['eq', 'A', 'B'], ['eq', 'B', 'C']], circ: 'A', ini: [5, 6],
-      txt: 'el circuncentro: donde se cortan las mediatrices de $AB$ y de $BC$', ok: 'Equidista de A, B y C: es el circuncentro.' },
-      'La mediatriz de AB es vertical y pasa por su punto medio; sobre ella, el punto que queda a 5 de B y de C es el circuncentro.', 'Empieza por la mediatriz de AB: todos sus puntos equidistan de A y de B. Sobre ella iguala la distancia a C.')],
-    ['euc-construcciones-2', 'Incentro: cruce de las bisectrices, centro de la inscrita.', opc('El punto donde se cortan las bisectrices de los tres ángulos de un triángulo es el centro de:',
-      ['la circunferencia que pasa por los tres vértices', 'la mediatriz del lado mayor', 'el arco capaz del lado mayor', 'la circunferencia tangente a los tres lados'], 3,
-      'Cada bisectriz reúne los puntos que equidistan de dos lados: su cruce equidista de los tres y es el centro de la inscrita.', 'Los puntos de una bisectriz están a la misma distancia de los dos lados del ángulo.')],
+  leccion('geo-3', guion(
+    ['Voltear la matriz', 'La transpuesta $A^T$ cambia filas por columnas: la entrada $(i, j)$ pasa al lugar $(j, i)$. Si $A$ es $m \\times n$, $A^T$ es $n \\times m$.'],
+    ['Simétricas y propiedades', 'Si $A^T = A$, la matriz es simétrica: cada número es igual a su reflejo en la diagonal. Además $(A^T)^T = A$, $(A + B)^T = A^T + B^T$ y $(AB)^T = B^T A^T$.'],
+    ['Matriz aumentada', 'Un sistema de $m$ ecuaciones con $n$ incógnitas se escribe como una matriz: una fila por ecuación y, tras la raya, las constantes.'],
+    ['Operaciones de fila', 'Intercambiar dos filas, multiplicar una por $k \\neq 0$ y sumarle a una $k$ veces otra no cambian las soluciones. Con ellas se llega a la forma escalonada y a la reducida.'],
+    ['Leer la escalonada', 'Una fila $0 \\cdots 0 \\mid c$ con $c \\neq 0$: no hay solución. Una columna sin pivote: variable libre e infinitas soluciones. Un pivote por incógnita: solución única.']), [
+    x('filas-a-columnas', 'La tabla $A$ guarda las ventas de dos tiendas (filas T1 y T2) en tres días (columnas d1, d2, d3). Arma su **transpuesta** $A^T$: arrastra cada número a su casilla.',
+      { A: [[12, 5, 9], [7, 3, 10]], extra: ['0', '15'] },
+      'La fila 1 de $A$, $(12, 5, 9)$, baja como columna 1 de $A^T$, y la fila 2, $(7, 3, 10)$, como columna 2: $(A^T)_{ij} = a_{ji}$.',
+      'Toma la fila de la tienda T1 completa y escríbela de arriba abajo en la primera columna de la nueva tabla.'),
+    x('simetrica-espejo', 'La tabla dice cuántos cables unen cada par de salas $S_1, S_2, S_3$: un cable entre $S_i$ y $S_j$ cuenta en las dos casillas. Completa las dos que faltan para que la tabla sea **simétrica**, $A^T = A$.',
+      { M: [[0, 4, null], [null, 0, 2], [6, 2, 0]], et: 'S' },
+      '$a_{21}$ debe igualar a $a_{12} = 4$ y $a_{13}$ a $a_{31} = 6$: en una matriz simétrica cada entrada es igual a su reflejo en la diagonal.',
+      'Busca la pareja de cada casilla vacía: cambia el número de fila por el de columna y mira qué hay ahí.'),
+    x('tallas-transpuesta', '$A$ ($2 \\times 3$) da los gramos de 3 ingredientes en 2 recetas y $B$ ($3 \\times 4$), el precio de cada ingrediente en 4 tiendas. Arrastra la **talla** de cada matriz, o «no existe».',
+      { m: 2, n: 3, r: 4 },
+      '$A^T$ es $3 \\times 2$ y $B^T$ es $4 \\times 3$. $AB$ es $2 \\times 4$, así que $(AB)^T$ es $4 \\times 2$, igual que $B^T A^T$ ($4 \\times 3$ por $3 \\times 2$). $A^T B^T$ pide que $2$ y $4$ coincidan: no existe.',
+      'Para multiplicar, la primera matriz debe tener tantas columnas como filas tiene la segunda; el producto toma las de afuera.'),
+    x('nombra-operacion', 'El sistema se escalonó en tres pasos. Pon en cada flecha la **operación de fila** que se hizo.',
+      { Ms: [[[0, 2, 4, 6], [1, 1, -1, 2], [3, 1, 0, 5]], [[1, 1, -1, 2], [0, 2, 4, 6], [3, 1, 0, 5]], [[1, 1, -1, 2], [0, 1, 2, 3], [3, 1, 0, 5]], [[1, 1, -1, 2], [0, 1, 2, 3], [0, -2, 3, -1]]],
+        ops: ['F₁ ↔ F₂', 'F₂ → ½F₂', 'F₃ → F₃ − 3F₁'], extra: ['F₃ → F₃ + 3F₁', 'F₂ → 2F₂', 'F₁ ↔ F₃'],
+        mira: ['Mira qué fila subió al primer lugar: estaba en el segundo.', 'La segunda fila pasó de (0, 2, 4 | 6) a (0, 1, 2 | 3): todo quedó a la mitad.', 'Solo cambió la tercera fila, y su primer número pasó de 3 a 0.'],
+        trampas: { '0:F₁ ↔ F₃': 'La fila de arriba llegó desde la segunda, no desde la tercera.', '1:F₂ → 2F₂': 'Los números se achicaron: se multiplicó por ½, no por 2.', '2:F₃ → F₃ + 3F₁': 'Sumar 3F₁ daría 3 + 3 = 6 en la esquina; para llegar a 0 hay que restar.' } },
+      'Primero se intercambian $F_1$ y $F_2$ para tener un 1 arriba; luego $F_2$ se multiplica por $\\tfrac{1}{2}$; y $F_3 - 3F_1$ deja un 0 debajo del pivote.',
+      'Compara cada matriz con la siguiente: ¿qué filas cambiaron de lugar o de valor, y cómo?'),
+    x('anula-bajo-pivote', 'Para escalonar hay que dejar **ceros debajo del pivote 2**. Elige $k_2$ y $k_3$ en las operaciones $F_2 + k_2F_1$ y $F_3 + k_3F_1$.',
+      { F: [[2, 1, -1, 3], [4, 5, 0, 2], [-6, 1, 2, -4]] },
+      '$4 + 2k_2 = 0$ da $k_2 = -2$, y $-6 + 2k_3 = 0$ da $k_3 = 3$. Las filas nuevas son $(0, 3, 2 \\mid -4)$ y $(0, 4, -1 \\mid 5)$.',
+      'Pregúntate cuántas veces hace falta el 2 para cancelar el número de abajo, y con qué signo.'),
+    x('pivote-o-libre', 'Esta es la escalonada reducida de un sistema con cuatro incógnitas (la última columna son las constantes). Rotula cada columna como **pivote** o **libre** y di cuántas soluciones hay.',
+      { M: [[1, 2, 0, -1, 4], [0, 0, 1, 3, -2], [0, 0, 0, 0, 0]], extra: ['única', 'ninguna'] },
+      'Los pivotes están en $x_1$ y $x_3$; $x_2 = s$ y $x_4 = t$ quedan libres. La fila de ceros dice $0 = 0$: infinitas soluciones, $x_1 = 4 - 2s + t$ y $x_3 = -2 - 3t$.',
+      'El pivote es el primer número distinto de cero de cada fila: recorre cada fila de izquierda a derecha.'),
+    x('red-de-flujo', 'A las esquinas A, B, C y D entran o salen carros por hora (números grises). Al escalonar queda $x_4 = t$ libre, $x_1 = t + 30$, $x_2 = t - 20$ y $x_3 = t + 20$. ¿Cuál es el **menor** $t$ que deja **todas** las calles en su sentido?',
+      { e: [30, -50, 40, -20] },
+      '$x_2 = t - 20 \\ge 0$ pide $t \\ge 20$; las otras ya son positivas. Con $t = 20$: $x_1 = 50$, $x_2 = 0$, $x_3 = 40$ y $x_4 = 20$.',
+      'Busca la calle que primero queda negativa cuando t es pequeño: esa decide el menor valor posible.'),
+    x('cae-en-tipo', 'La escalonada de cada sistema termina en la fila que se ve. Fija $k$ y suelta: la bola cae en la caja del tipo de solución. Puedes fallar **una** vez.', { tiros: [
+      { q: `Última fila ${fila('k-3', 'k+1')}: que **no tenga solución**.`, a: [0, 1, -3], b: [1, 1], sa: 'k − 3', sb: 'k + 1', pide: 'ninguna', r: 3, c: '$0 = 4$, imposible' },
+      { q: `Última fila ${fila('k^2-4', 'k-2')}: que tenga **infinitas** soluciones.`, a: [1, 0, -4], b: [1, -2], sa: 'k² − 4', sb: 'k − 2', pide: 'infinitas', r: 2, c: '$0 = 0$ y $x_3$ queda libre', e: { '-2': 'Con k = −2 queda 0 = −4: eso es ninguna, no infinitas.' } },
+      { q: `Última fila ${fila('k^2-1', 'k+1')}: que **no tenga solución**.`, a: [1, 0, -1], b: [1, 1], sa: 'k² − 1', sb: 'k + 1', pide: 'ninguna', r: 1, c: '$0 = 2$, imposible', e: { '-1': 'Con k = −1 queda 0 = 0: eso da infinitas, no ninguna.' } }] },
+      '$k = 3$ deja $0 = 4$ (ninguna); $k = 2$ anula $k^2 - 4$ y $k - 2$ y deja $0 = 0$ (infinitas); $k = 1$ deja $0 = 2$ (ninguna).',
+      'Primero busca los k que anulan el número antes de la raya; luego mira qué queda después de la raya.'),
+    sol('Una aumentada ya escalonada es $\\begin{pmatrix} 1 & 1 & 1 & 6 \\\\ 0 & 1 & -1 & 1 \\\\ 0 & 0 & 0 & 0 \\end{pmatrix}$ (la última columna son las constantes). Completa la solución.',
+      ['La última fila dice $0 = 0$: el sistema es [[consistente]]', 'La columna de $z$ no tiene pivote: $z$ es [[libre]] y se escribe $z = t$', 'De la fila 2, $y - z = 1$: $y =$ [[1 + t]]', 'De la fila 1, $x = 6 - y - z =$ [[5 − 2t]]'],
+      ['inconsistente', 'pivote', '5 + 2t', '1 − t'],
+      'La fila de ceros no estorba ($0 = 0$). Con $z = t$: $y = 1 + t$ y $x = 6 - (1 + t) - t = 5 - 2t$. Hay infinitas soluciones, una por cada $t$.',
+      'Despeja de abajo hacia arriba: primero la variable libre, luego la fila 2 y al final la fila 1.'),
+    err('Al escalonar un sistema de tres ecuaciones con tres incógnitas quedó $\\begin{pmatrix} 1 & -1 & 2 & 3 \\\\ 0 & 1 & 4 & 1 \\\\ 0 & 0 & 0 & 5 \\end{pmatrix}$. Un paso del razonamiento está mal.',
+      ['Las filas 1 y 2 tienen pivote en las columnas de $x$ y de $y$', 'La fila 3 dice $0x + 0y + 0z = 5$, es decir, $0 = 5$', 'Como $z$ no tiene pivote, hay infinitas soluciones'], 2,
+      ['Como $0 = 5$ es imposible, el sistema no tiene solución', 'Como $z$ no tiene pivote, la solución es única', 'Como hay una fila de ceros, se borra y $z$ queda libre'],
+      'Una fila $0 \\cdots 0 \\mid c$ con $c \\neq 0$ manda sobre todo lo demás: ningún $x, y, z$ cumple $0 = 5$, así que el sistema es inconsistente.',
+      'Antes de contar variables libres, revisa si alguna fila dice algo imposible.'),
+    opc('Al escalonar un sistema queda $\\begin{pmatrix} 1 & 2 & -1 & 3 \\\\ 0 & 1 & 4 & 2 \\\\ 0 & 0 & k - 5 & k + 1 \\end{pmatrix}$. El sistema **no** tiene solución cuando:',
+      ['$k = -1$', '$k \\neq 5$', 'ningún valor de $k$', '$k = 5$'], 3,
+      'Con $k = 5$ la última fila es $0 \\ 0 \\ 0 \\mid 6$, es decir, $0 = 6$: imposible. Con cualquier otro $k$ hay pivote en la tercera columna y la solución es única.',
+      'Busca el $k$ que anula el número antes de la raya y mira qué queda después.'),
+  ], [
+    ['Una matriz es simétrica cuando $A^T = A$: cada casilla $(i, j)$ vale lo mismo que la $(j, i)$.',
+      x('simetrica-espejo', 'La tabla cuenta los partidos jugados entre cada par de equipos $E_1, E_2, E_3$. Completa las dos casillas vacías para que sea **simétrica**.',
+        { M: [[0, null, 3], [5, 0, 1], [null, 1, 0]], et: 'E' },
+        '$a_{12}$ copia a $a_{21} = 5$ y $a_{31}$ copia a $a_{13} = 3$: los partidos de $E_i$ con $E_j$ son los mismos que los de $E_j$ con $E_i$.',
+        'A cada casilla vacía le corresponde la del otro lado de la diagonal, con fila y columna cambiadas.')],
+    ['Pivote: primer número distinto de cero de una fila. Columna sin pivote, variable libre; una fila 0 … 0 | c con c ≠ 0 deja el sistema sin solución.',
+      x('pivote-o-libre', 'Esta es la escalonada de un sistema con cuatro incógnitas (la última columna son las constantes). Rotula cada columna como **pivote** o **libre** y di cuántas soluciones hay.',
+        { M: [[1, 3, 0, 2, 1], [0, 0, 1, -1, 4], [0, 0, 0, 0, 6]], extra: ['única', 'infinitas'] },
+        'Los pivotes están en $x_1$ y $x_3$; $x_2$ y $x_4$ no tienen pivote. Pero la última fila dice $0 = 6$: el sistema no tiene solución.',
+        'Rotula las columnas fila por fila y, antes de decidir el tipo, mira si alguna fila dice algo imposible.')],
+    ['Al transponer un producto se invierte el orden: $(AB)^T = B^T A^T$, y las tallas se voltean.',
+      opc('Si $A$ es $2 \\times 3$ y $B$ es $3 \\times 5$, ¿cuál matriz es igual a $(AB)^T$?',
+        ['$A^T B^T$, de tamaño $3 \\times 3$', '$B^T A^T$, de tamaño $5 \\times 2$', '$B^T A^T$, de tamaño $2 \\times 5$', '$A^T B^T$, de tamaño $5 \\times 2$'], 1,
+        '$AB$ es $2 \\times 5$ y su transpuesta, $5 \\times 2$. Es $B^T A^T$: $5 \\times 3$ por $3 \\times 2$. $A^T B^T$ ni siquiera existe ($3 \\times 2$ por $5 \\times 3$).',
+        'Al voltear un producto, el orden se invierte; revisa además que las tallas del medio coincidan.')],
   ]);
-})());
+})();
+;
+//#archivo js/courses/vectorial-geo-4.js
+// Geometría Vectorial · lección geo-4 «Matrices invertibles y matrices elementales» (spec 2026-11-27-curso-geometria-vectorial).
+// Enunciados, números y contextos propios. Juegos en js/games/gva-escena-4.js.
+(() => {
+  const { leccion, x, sol, err, opc, guion } = GVA;
+  leccion('geo-4', guion(
+    ['Deshacer lo que hace A', 'Una matriz A mueve el plano. Su inversa $A^{-1}$ lo devuelve todo a su sitio: $AA^{-1} = A^{-1}A = I$, como $2 \\cdot \\tfrac{1}{2} = 1$.'],
+    ['El número $ad - bc$', 'Las columnas de A forman un paralelogramo de área $|ad - bc|$. Si ese número es 0, el plano se aplasta en una recta y A no tiene inversa.'],
+    ['La fórmula 2 × 2', 'Se intercambian a y d, se cambia el signo de b y c, y todo se divide entre $ad - bc$. Se comprueba multiplicando: debe salir I.'],
+    ['Matrices elementales', 'Una elemental es I con una sola operación de fila; E·A hace esa operación sobre A, y la inversa de E es la operación que la deshace.'],
+    ['Deshacer en orden contrario', 'Primero las medias, luego los zapatos; para quitarlos, al revés: $(AB)^{-1} = B^{-1}A^{-1}$ y $(A^T)^{-1} = (A^{-1})^T$.']), [
+    x('deshaz-transformacion', 'Un programa de dibujo aplica $A = \\begin{pmatrix} 2 & 1 \\\\ 1 & 1 \\end{pmatrix}$ a un cuadrado y lo deforma. Arrastra las columnas de **B** para que B deshaga a A: que $BA = I$.',
+      { A: [[2, 1], [1, 1]], ok: 'BA = I: el paralelogramo volvió a ser el cuadrado. B es la inversa de A.' },
+      'Aquí $ad - bc = 2 - 1 = 1$, así que $A^{-1} = \\begin{pmatrix} 1 & -1 \\\\ -1 & 2 \\end{pmatrix}$; sus columnas son $(1, -1)$ y $(-1, 2)$, y $A^{-1}A = I$.',
+      'Deshacer no es volver a aplicar A. Intercambia las entradas de la diagonal, cambia el signo de las otras dos y divide entre $ad - bc$.'),
+    x('aplasta-paralelogramo', 'Una clave de cifrado es la matriz $A = \\begin{pmatrix} 4 & 2 \\\\ c & 1 \\end{pmatrix}$. Desliza **c** hasta el valor que la arruina: aquel con el que A **no** tiene inversa.',
+      { a: 4, b: 2, d: 1, min: -3, max: 5, ini: 0, ok: 'Con c = 2 las columnas (4, 2) y (2, 1) quedan en la misma recta: el plano se aplasta y nadie puede descifrar.' },
+      'A no tiene inversa cuando $ad - bc = 0$: $4 \\cdot 1 - 2c = 0$, es decir, $c = 2$. Entonces la primera columna, $(4, 2)$, es el doble de la segunda, $(2, 1)$.',
+      'Busca el valor que anula $ad - bc$ y mira que las dos columnas queden paralelas, una múltiplo de la otra.'),
+    x('formula-inversa', 'Arma la inversa de $A = \\begin{pmatrix} 4 & 3 \\\\ 2 & 2 \\end{pmatrix}$ con la fórmula: el número de afuera y las cuatro entradas de adentro.',
+      { A: [[4, 3], [2, 2]], extra: ['3', '1/14', '−4'],
+        mira: ['Afuera va 1 dividido entre ad − bc, con ad − bc = 4·2 − 3·2.', 'Arriba a la izquierda va d: a y d cambian de lugar.', 'La b se queda en su sitio, pero con el signo cambiado.', 'La c se queda en su sitio, pero con el signo cambiado.', 'Abajo a la derecha va a: a y d cambian de lugar.'],
+        trampas: { '0:1/14': 'Sumaste: el número es ad − bc = 8 − 6, no ad + bc.', '1:4': 'Dejaste la a en su sitio: a y d se intercambian.', '2:3': 'Falta cambiarle el signo a b.', '4:−4': 'La a cambia de lugar, pero no de signo.' },
+        ok: 'A⁻¹ = ½ · [2 −3; −2 4]: y al multiplicar por A sale I.' },
+      '$ad - bc = 8 - 6 = 2$, así que $A^{-1} = \\tfrac{1}{2}\\begin{pmatrix} 2 & -3 \\\\ -2 & 4 \\end{pmatrix}$. Comprobación: la primera fila de $AA^{-1}$ es $\\tfrac{1}{2}(8 - 6,\\ -12 + 12) = (1, 0)$.',
+      'Primero calcula $ad - bc$. Después: la diagonal se intercambia y las otras dos entradas solo cambian de signo.'),
+    x('combos-inversa', 'Un combo X trae 3 jugos y 2 panes; un combo Y, 1 jugo y 1 pan. Un pedido gastó 13 jugos y 10 panes: $A\\vec x = \\vec b$ con $A = \\begin{pmatrix} 3 & 1 \\\\ 2 & 1 \\end{pmatrix}$. Con $A^{-1}$, ubica cuántos combos de cada uno se vendieron.',
+      { A: [[3, 1], [2, 1]], b: [13, 10], et: ['combos X', 'combos Y'], u: ['jugos', 'panes'], ok: '3 combos X y 4 combos Y: 13 jugos y 10 panes, justo el pedido.' },
+      '$\\vec x = A^{-1}\\vec b = \\begin{pmatrix} 1 & -1 \\\\ -2 & 3 \\end{pmatrix}\\begin{pmatrix} 13 \\\\ 10 \\end{pmatrix} = \\begin{pmatrix} 3 \\\\ 4 \\end{pmatrix}$. Se comprueba: $3 \\cdot 3 + 4 = 13$ y $2 \\cdot 3 + 4 = 10$.',
+      'Multiplica $A^{-1}$ por $\\vec b$ fila por columna: la primera fila da los combos X y la segunda, los combos Y.'),
+    x('filas-elemental', 'Arma la matriz elemental **E** de la operación $R_2 \\to R_2 - 3R_1$ en la identidad 3 × 3. Al comprobar verás qué le hace E a la matriz A.',
+      { op: 'R₂ → R₂ − 3R₁', E: [[1, 0, 0], [-3, 1, 0], [0, 0, 1]], A: [[1, 2, 0], [3, 5, 1], [0, 4, 2]], extra: ['(3, 1, 0)', '(1, −3, 0)', '(0, 1, −3)'],
+        mira: ['La fila 1 no cambia: queda como en I.', 'La fila 2 de I es (0, 1, 0); réstale 3 veces la fila 1, que es (1, 0, 0).', 'La fila 3 no se toca: queda como en I.'],
+        trampas: { '1:(3, 1, 0)': 'Es restar: va −3 veces la fila 1, no +3.', '1:(1, −3, 0)': 'El −3 va en la columna 1: la columna dice de qué fila se toma.', '1:(0, 1, −3)': 'Esa resta la fila 3; la operación usa la fila 1.' },
+        ok: 'E es I con la fila 2 cambiada, y E·A le resta a la fila 2 de A tres veces su fila 1.' },
+      'Se parte de I y solo cambia la fila 2: $(0, 1, 0) - 3(1, 0, 0) = (-3, 1, 0)$. Así, la fila 2 de $EA$ es $(3, 5, 1) - 3(1, 2, 0) = (0, -1, 1)$.',
+      'Haz la operación sobre las filas de la identidad, no sobre A. Las filas que la operación no nombra se quedan como en I.'),
+    x('deshaz-fila', 'Cada E es una matriz elemental. Pon al lado de cada una la operación de fila que la **deshace** (la que da $E^{-1}$).',
+      { E: [[[0, 1], [1, 0]], [[1, 0], [0, 5]], [[1, 4], [0, 1]]], metas: ['R₁ ↔ R₂', 'R₂ → ⅕R₂', 'R₁ → R₁ − 4R₂'], extra: ['R₂ → 5R₂', 'R₁ → R₁ + 4R₂', 'R₂ → −5R₂'],
+        mira: ['E₁ intercambia las dos filas: se deshace intercambiándolas otra vez.', 'E₂ multiplica la fila 2 por 5: se deshace dividiéndola entre 5.', 'E₃ le suma a la fila 1 cuatro veces la fila 2: se deshace restándolas.'],
+        trampas: { '1:R₂ → 5R₂': 'Esa es la misma operación de E₂: la repite, no la deshace.', '1:R₂ → −5R₂': 'Cambiar el signo no deshace multiplicar por 5: hay que dividir.', '2:R₁ → R₁ + 4R₂': 'Esa es la misma operación de E₃: sumar otra vez la aleja más.' },
+        ok: 'Cada operación tiene su contraria: el intercambio se repite, multiplicar se divide y sumar se resta.' },
+      'E₁ cambia R₁ y R₂ (su inversa es ella misma), E₂ hace $R_2 \\to 5R_2$ (se deshace con $\\tfrac{1}{5}$) y E₃ hace $R_1 \\to R_1 + 4R_2$ (se deshace restando $4R_2$).',
+      'Primero lee qué operación hace cada E comparándola con I; después piensa qué operación devuelve todo a como estaba.'),
+    x('quita-capas', 'Un mensaje m se cifra en dos capas: primero se multiplica por A y después por $B^T$, así que $c = B^TA\\,m$. Pon las inversas que recuperan m a partir de c.',
+      { capas: ['A', 'Bᵀ'], metas: ['A⁻¹', '(B⁻¹)ᵀ'], extra: ['B⁻¹', '(A⁻¹)ᵀ', 'Bᵀ'],
+        mira: ['Lo más lejos de c es lo último que se quita: la capa de adentro, A.', 'Pegada a c va la inversa de la última capa, Bᵀ; y la inversa de una transpuesta es la transpuesta de la inversa.'],
+        trampas: { '0:(B⁻¹)ᵀ': 'Ese orden es el de ponerse las capas: para quitarlas, la última capa sale primero, pegada a c.', '1:B⁻¹': 'La capa fue Bᵀ, no B: su inversa es (Bᵀ)⁻¹ = (B⁻¹)ᵀ.', '0:(A⁻¹)ᵀ': 'A no estaba transpuesta: su inversa es A⁻¹ a secas.' },
+        ok: 'm = A⁻¹(B⁻¹)ᵀc: se quita primero la capa de afuera y después la de adentro.' },
+      '$(B^TA)^{-1} = A^{-1}(B^T)^{-1} = A^{-1}(B^{-1})^T$: se deshace en orden contrario, como quitarse primero los zapatos y luego las medias.',
+      'Piensa en ponerse medias y zapatos: lo que se puso de último se quita primero, y queda junto a c.'),
+    x('descifra-pares', 'Un mensaje se pasó a números (A = 1, B = 2, …), se partió en pares m y se envió $c = A\\,m$ con $A = \\begin{pmatrix} 1 & 1 \\\\ 1 & 2 \\end{pmatrix}$. Descífralo con $A^{-1}$, letra por letra. Puedes fallar **una** vez.',
+      { A: [[1, 1], [1, 2]], tiros: [
+        { q: 'Par cifrado $c = (34, 49)$. ¿Cuál es su **primera** letra?', c: [34, 49], i: 0, r: 19, k: 'm_1 = 2 \\cdot 34 - 49 = 19 \\to \\text{S}', e: { 15: 'Esa es la segunda letra del par: usaste la otra fila de A⁻¹.' } },
+        { q: 'El mismo par $c = (34, 49)$. ¿Cuál es su **segunda** letra?', c: [34, 49], i: 1, r: 15, k: 'm_2 = -34 + 49 = 15 \\to \\text{O}', e: { 19: 'Esa es la primera letra del par: usa la segunda fila de A⁻¹.' } },
+        { q: 'Otro par: $c = (13, 14)$. ¿Cuál es su **primera** letra?', c: [13, 14], i: 0, r: 12, k: 'm_1 = 2 \\cdot 13 - 14 = 12 \\to \\text{L}', e: { 13: 'Ese es el número cifrado: falta multiplicar por A⁻¹.', 1: 'Esa es la segunda letra del par: usaste la otra fila de A⁻¹.' } }] },
+      'Con $ad - bc = 1$, $A^{-1} = \\begin{pmatrix} 2 & -1 \\\\ -1 & 1 \\end{pmatrix}$ y $m = A^{-1}c$: $(34, 49) \\to (19, 15) = $ S, O y $(13, 14) \\to (12, 1) = $ L, A. Dice SOLA.',
+      'Primero arma $A^{-1}$ con la fórmula 2 × 2. La primera fila de $A^{-1}$ por c da la primera letra; la segunda fila, la segunda.'),
+    sol('Resuelve $5x + 3y = 19$, $3x + 2y = 12$ con la inversa de $A = \\begin{pmatrix} 5 & 3 \\\\ 3 & 2 \\end{pmatrix}$.',
+      ['$ad - bc = 5 \\cdot 2 - 3 \\cdot 3 =$ [[1]], así que A tiene inversa', 'En $A^{-1}$ se intercambian el 5 y el 2, y cada 3 se vuelve [[−3]]', '$x = 2 \\cdot 19 - 3 \\cdot 12 =$ [[2]]', '$y = -3 \\cdot 19 + 5 \\cdot 12 =$ [[3]]'], ['−1', '−2', '12'],
+      '$A^{-1} = \\begin{pmatrix} 2 & -3 \\\\ -3 & 5 \\end{pmatrix}$ y $\\vec x = A^{-1}\\vec b = (2, 3)$. Se comprueba: $10 + 9 = 19$ y $6 + 6 = 12$.',
+      'Calcula $ad - bc$, arma $A^{-1}$ con la fórmula y multiplícala por el vector de los resultados, $(19, 12)$.'),
+    err('Se quiere la inversa de un producto $AB$, con A y B invertibles. Un paso está mal.',
+      ['$A$ y $B$ son invertibles y del mismo orden', 'Se prueba con $B^{-1}A^{-1}$: $(AB)(B^{-1}A^{-1}) = A(BB^{-1})A^{-1}$', '$A(BB^{-1})A^{-1} = AIA^{-1} = AA^{-1} = I$', 'Luego $(AB)^{-1} = A^{-1}B^{-1}$'], 3,
+      ['Luego $(AB)^{-1} = B^{-1}A^{-1}$', 'Luego $(AB)^{-1} = AB$', 'Luego $(AB)^{-1} = (BA)^{-1}$'],
+      'La cuenta probó que $B^{-1}A^{-1}$ deshace a $AB$: la inversa de un producto va en orden contrario, $(AB)^{-1} = B^{-1}A^{-1}$.',
+      'Mira qué matriz se probó en los pasos 2 y 3 y compárala con la que se escribió al final.'),
+    opc('¿Cuál de estas matrices **no** tiene inversa?',
+      ['$\\begin{pmatrix} 2 & 3 \\\\ 1 & 2 \\end{pmatrix}$', '$\\begin{pmatrix} 3 & 1 \\\\ 6 & 4 \\end{pmatrix}$', '$\\begin{pmatrix} 4 & 6 \\\\ 2 & 3 \\end{pmatrix}$', '$\\begin{pmatrix} 1 & 2 \\\\ 2 & 1 \\end{pmatrix}$'], 2,
+      'Para $\\begin{pmatrix} 4 & 6 \\\\ 2 & 3 \\end{pmatrix}$, $ad - bc = 12 - 12 = 0$: la columna $(6, 3)$ es una vez y media $(4, 2)$. Las otras dan 1, 6 y −3.',
+      'Calcula $ad - bc$ en cada una: la que no tiene inversa es la que da 0.'),
+  ], [
+    ['Para deshacer A se busca B con BA = I: la inversa devuelve el cuadrado a su sitio.', x('deshaz-transformacion', 'Una lente deforma las imágenes con $A = \\begin{pmatrix} 3 & 2 \\\\ 1 & 1 \\end{pmatrix}$. Arrastra las columnas de **B** para que B corrija la imagen: que $BA = I$.',
+      { A: [[3, 2], [1, 1]], ok: 'BA = I: la imagen corregida es otra vez el cuadrado.' },
+      'Con $ad - bc = 3 - 2 = 1$, $A^{-1} = \\begin{pmatrix} 1 & -2 \\\\ -1 & 3 \\end{pmatrix}$: columnas $(1, -1)$ y $(-2, 3)$.',
+      'Usa la fórmula 2 × 2: intercambia la diagonal, cambia el signo de las otras dos y divide entre $ad - bc$.')],
+    ['Una elemental es I con una sola operación de fila, y E·A hace esa operación sobre A.', x('filas-elemental', 'Arma la matriz elemental **E** de la operación $R_3 \\to R_3 + 2R_1$ en la identidad 3 × 3.',
+      { op: 'R₃ → R₃ + 2R₁', E: [[1, 0, 0], [0, 1, 0], [2, 0, 1]], A: [[1, 0, 3], [2, 1, 0], [-2, 1, 1]], extra: ['(1, 0, 2)', '(0, 2, 1)', '(−2, 0, 1)'],
+        mira: ['La fila 1 no cambia: queda como en I.', 'La fila 2 no se toca: queda como en I.', 'La fila 3 de I es (0, 0, 1); súmale 2 veces la fila 1, (1, 0, 0).'],
+        trampas: { '2:(−2, 0, 1)': 'Es sumar: va +2 veces la fila 1.', '2:(0, 2, 1)': 'El 2 va en la columna 1: se toma la fila 1.' },
+        ok: 'E es I con la fila 3 cambiada: E·A le suma a la fila 3 de A dos veces su fila 1.' },
+      'Solo cambia la fila 3: $(0, 0, 1) + 2(1, 0, 0) = (2, 0, 1)$. La fila 3 de $EA$ es $(-2, 1, 1) + 2(1, 0, 3) = (0, 1, 7)$.',
+      'La operación se hace sobre la identidad; la columna del número nuevo dice de qué fila se toma.')],
+    ['La inversa de una transpuesta es la transpuesta de la inversa: $(A^T)^{-1} = (A^{-1})^T$.', opc('Si $A^{-1} = \\begin{pmatrix} 3 & -1 \\\\ -5 & 2 \\end{pmatrix}$, ¿cuál es $(A^T)^{-1}$?',
+      ['$\\begin{pmatrix} 3 & -5 \\\\ -1 & 2 \\end{pmatrix}$', '$\\begin{pmatrix} 3 & -1 \\\\ -5 & 2 \\end{pmatrix}$', '$\\begin{pmatrix} 2 & 1 \\\\ 5 & 3 \\end{pmatrix}$', '$\\begin{pmatrix} -3 & 5 \\\\ 1 & -2 \\end{pmatrix}$'], 0,
+      '$(A^T)^{-1} = (A^{-1})^T$: se transpone $A^{-1}$, es decir, sus filas pasan a ser columnas.',
+      'No hace falta hallar A: basta con transponer la inversa que te dan.')],
+  ]);
+})();
 ;
 //#archivo js/data.js
 // Contenido de Zuka: cursos → unidades → lecciones. Cada lección = 1 clip vertical + ejercicios.
@@ -330,6 +579,27 @@ const COURSE_EUC = {
 };
 COURSES.splice(COURSES.findIndex(c => c.id === 'geo') + 1, 0, COURSE_EUC);
 ;
+//#archivo js/courses/vectorial.js
+// Geometría Vectorial y Analítica (spec 2026-11-27-curso-geometria-vectorial): pone en COURSE_GEO las lecciones rehechas
+// (GVA_LEC, de js/courses/vectorial-geo-N.js) y, cuando un mundo tiene todas sus lecciones rehechas, le arma su evaluación.
+// Va después de data.js y antes de sin-escribir.js. El curso sigue en borrador hasta la revisión docente.
+(() => {
+  for (const u of COURSE_GEO.units) {
+    for (const l of u.lessons) {
+      const n = GVA_LEC[l.id];
+      if (!n) continue;
+      l.clip = { ...l.clip, scenes: n.scenes };
+      l.ex = n.ex;
+    }
+    if (!u.lessons.every(l => GVA_LEC[l.id])) continue;
+    const items = u.lessons.flatMap(l => GVA_LEC[l.id].items.map(([review, ex]) => ({ lesson: l.id, review,
+      ex: { ...ex, kind: ex.kind || GVA.KIND, canvasGuide: true, exam: true, params: { ...ex.params, autoDemo: false } } })));
+    const fila = GVA_TEMARIO.find(t => t[0] === u.world);
+    u.exam = { id: `exam-geo-${u.world}`, title: `Evaluación · ${fila ? fila[1] : u.title}`, minutes: Math.max(8, Math.ceil(items.length * 1.5)), items };
+    GVA_HECHOS.push(u.world);
+  }
+})();
+;
 //#archivo js/courses/sin-escribir.js
 // Sin escribir (spec 2026-11-17-sin-escribir): ningún ejercicio pide teclear un número. Cada ejercicio `num(...)` de los
 // cursos se cambia aquí, al cargar, por un juego: «Arma la cuenta» (el estudiante plantea la operación con fichas y el
@@ -413,17 +683,6 @@ const SIN_ESCRIBIR = (() => {
     'calc-4#1': C('6 * 1 + 2', ['3']),
     'calc-5#1': C('6 / 2', ['-6', '1']),
     // ---------- Geometría vectorial ----------
-    'geo-1#1': E(['Suma las dos: 4x = 8', 'Suma las dos: 4x = 16', 'Resta las dos: 2x = 8'], ['x = 2', 'x = 4', 'x = 8']),
-    'geo-1#3': E(['z = −1', 'z = 1'], ['2y + 1 = 5, y = 2', '2y − 1 = 5, y = 3'], ['x = 2 − 2 + 1 = 1', 'x = 2 − 2 − 1 = −1', 'x = 2 − 3 + 1 = 0']),
-    'geo-2#2': C('1 * 1 + 2 * 4', ['3', '0', '-1']),
-    'geo-2#3': C('2 * 4', ['3']),
-    'geo-2#4': C('1 * 4 + 3 * 1', ['2', '-1']),
-    'geo-3#2': C('-3 + 5', ['8']),
-    'geo-3#3': E(['Aᵀ es 2 × 3', 'Aᵀ es 3 × 2'], ['AᵀA: (2 × 3)(3 × 2) = 2 × 2', 'AᵀA: (3 × 2)(2 × 3) = 3 × 3'], ['2 filas', '3 filas']),
-    'geo-3#4': E(['(AB)ᵀ(2, 1) = AB(1, 2)', '(AB)ᵀ(2, 1) = AB(2, 1)'], ['fila 1 de A · columna 2 de B', 'fila 2 de A · columna 1 de B'], ['1 · 1 + 2 · 0 = 1', '3 · 0 + 4 · 1 = 4']),
-    'geo-4#1': C('-1 * -3', ['1/3', '0']),
-    'geo-4#2': C('-1 * 3 / ( 5 * 2 - 3 * 3 )'),
-    'geo-4#3': E(['(AB)⁻¹ = B⁻¹A⁻¹', '(AB)⁻¹ = A⁻¹B⁻¹'], ['fila 2 de B⁻¹ · columna 2 de A⁻¹', 'fila 2 de A⁻¹ · columna 2 de B⁻¹'], ['3 · 2 + 1 · 1 = 7', '0 · 0 + 1 · 1 = 1']),
     'geo-5#1': C('-1 * 5 / ( 2 * 3 - 5 * 1 )'),
     'geo-5#3': C('3 * 1 + -5 * 1', ['-1', '2']),
     'geo-6#1': E(['Desarrolla por la fila 1', 'Multiplica la diagonal'], ['2 · (3 − 2) − 0 + 1 · (1 − 0)', '2 · (3 + 2) − 0 + 1 · (1 + 0)', '2 · 3 · 1'], ['3', '11', '6']),
@@ -6204,6 +6463,13 @@ const GUIDE_EUC = {
   ],
 };
 for (const [k, l] of Object.entries(GUIDE_EUC)) for (const id of l) GUIDES[id] = GUIDE_ARMAZON[k];
+// Geometría Vectorial y Analítica rehecha (spec 2026-11-27-curso-geometria-vectorial): un juego nuevo del curso se añade aquí.
+const GUIDE_GVA = {
+  figura: ['anula-bajo-pivote', 'aplasta-paralelogramo', 'combos-inversa', 'conmutan-o-no', 'corta-ejes', 'cruce-de-rectas', 'deshaz-transformacion', 'gira-segunda-recta', 'multiplo-elimina', 'red-de-flujo', 'rieles-combinacion', 'simetrica-espejo', 'suma-a-flechas', 'tercer-plano'],
+  rotula: ['coeficientes-proporcion', 'columnas-del-pedido', 'deshaz-fila', 'domino-dimensiones', 'escalon-regresivo', 'escribe-ax-b', 'fila-por-columna', 'filas-a-columnas', 'filas-elemental', 'formula-inversa', 'nombra-operacion', 'pivote-o-libre', 'quita-capas', 'tallas-transpuesta'],
+  tiros: ['cae-en-tipo', 'descifra-pares', 'lanza-producto', 'lanza-reparto'],
+};
+for (const [k, l] of Object.entries(GUIDE_GVA)) for (const id of l) GUIDES[id] = GUIDE_ARMAZON[k];
 
 const guideKey = ex => (ex?.type === 'play' ? ex.game : ex?.type);
 const practiceGuideLines = ex => (ex?.type === 'play' ? GUIDES[ex.game] : GUIDE_TYPES[ex?.type])?.map(([, text]) => text) ?? [];

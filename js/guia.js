@@ -1720,6 +1720,13 @@ const GUIDE_EUC = {
   ],
 };
 for (const [k, l] of Object.entries(GUIDE_EUC)) for (const id of l) GUIDES[id] = GUIDE_ARMAZON[k];
+// Geometría Vectorial y Analítica rehecha (spec 2026-11-27-curso-geometria-vectorial): un juego nuevo del curso se añade aquí.
+const GUIDE_GVA = {
+  figura: ['anula-bajo-pivote', 'aplasta-paralelogramo', 'combos-inversa', 'conmutan-o-no', 'corta-ejes', 'cruce-de-rectas', 'deshaz-transformacion', 'gira-segunda-recta', 'multiplo-elimina', 'red-de-flujo', 'rieles-combinacion', 'simetrica-espejo', 'suma-a-flechas', 'tercer-plano'],
+  rotula: ['coeficientes-proporcion', 'columnas-del-pedido', 'deshaz-fila', 'domino-dimensiones', 'escalon-regresivo', 'escribe-ax-b', 'fila-por-columna', 'filas-a-columnas', 'filas-elemental', 'formula-inversa', 'nombra-operacion', 'pivote-o-libre', 'quita-capas', 'tallas-transpuesta'],
+  tiros: ['cae-en-tipo', 'descifra-pares', 'lanza-producto', 'lanza-reparto'],
+};
+for (const [k, l] of Object.entries(GUIDE_GVA)) for (const id of l) GUIDES[id] = GUIDE_ARMAZON[k];
 
 const guideKey = ex => (ex?.type === 'play' ? ex.game : ex?.type);
 const practiceGuideLines = ex => (ex?.type === 'play' ? GUIDES[ex.game] : GUIDE_TYPES[ex?.type])?.map(([, text]) => text) ?? [];

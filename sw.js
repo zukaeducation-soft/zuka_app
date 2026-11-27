@@ -8,15 +8,15 @@
 // justo al instalar una versión nueva la app no se queda sin juegos ni fórmulas.
 // Spec: docs/superpowers/specs/2026-11-24-configuracion-rapida-segura.md
 
-const VERSION = 'zuka-v421';
+const VERSION = 'zuka-v422';
 // Los scripts van en paquetes (js/paquetes, los arma tools/empaquetar.js con la lista de index.html). El nombre de cada
 // uno lleva la huella de su contenido, así que nunca cambia: se guardan en su propia caché (PAQUETES), que no se borra
 // al cambiar de versión, y una versión nueva solo baja los que no estaban. ARRANQUE es lo que la página pide al abrir;
 // DIFERIDOS, los juegos y explicaciones de cada curso (js/carga.js los pide al abrir una lección): se guardan también al
 // instalar, para que todo funcione sin conexión, pero si uno falla no detiene la instalación.
 // <paquetes> Generado por tools/empaquetar.js: no editar a mano.
-const ARRANQUE = ["js/paquetes/zuka-a1.07318a5149.js","js/paquetes/zuka-a2.4c948e2de9.js","js/paquetes/zuka-a3.41a60ce7f4.js","js/paquetes/zuka-a4.c761f4a53d.js","js/paquetes/zuka-a5.50fd6b2780.js","js/paquetes/zuka-a6.516e1355f9.js"];
-const DIFERIDOS = ["js/paquetes/zuka-comun.eac03cf57a.js","js/paquetes/zuka-algebra.e79a197add.js","js/paquetes/zuka-trig.ef6189aba1.js","js/paquetes/zuka-calc.9c117ef5fd.js","js/paquetes/zuka-geo.f8e61ed0aa.js","js/paquetes/zuka-euc.66840feb17.js","js/paquetes/zuka-preuda.41f33ad8b5.js","js/paquetes/zuka-preicfes.99180240e5.js"];
+const ARRANQUE = ["js/paquetes/zuka-a1.d0f929169d.js","js/paquetes/zuka-a2.3863d59ffd.js","js/paquetes/zuka-a3.2a21a3ab67.js","js/paquetes/zuka-a4.29044fee1e.js","js/paquetes/zuka-a5.63be21b9be.js","js/paquetes/zuka-a6.516e1355f9.js"];
+const DIFERIDOS = ["js/paquetes/zuka-comun.eac03cf57a.js","js/paquetes/zuka-algebra.e79a197add.js","js/paquetes/zuka-trig.ef6189aba1.js","js/paquetes/zuka-calc.9c117ef5fd.js","js/paquetes/zuka-geo.dd89d7b1e0.js","js/paquetes/zuka-euc.66840feb17.js","js/paquetes/zuka-preuda.41f33ad8b5.js","js/paquetes/zuka-preicfes.99180240e5.js"];
 // </paquetes>
 const PAQUETES = 'zuka-paquetes-v1';
 const esPaquete = ruta => /\/js\/paquetes\/zuka-[\w-]+\.[0-9a-f]{10}\.js$/.test(ruta);

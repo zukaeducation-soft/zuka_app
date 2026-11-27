@@ -1,160 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preicfes-sc-fuentes.js
-// Preicfes · Sociales y Ciudadanas · mundo 4 «Fuentes y Argumentos» (spec 2026-11-25-preicfes-estructura). Fuentes inventadas para Zuka.
-PI_MUNDOS.push((() => {
-  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
-
-  const CARTA = {
-    id: 'icf-carta-tren', title: 'Una carta, un mapa y un recibo',
-    ficha: { autor: 'Taller de historia local', fuente: 'Cuaderno de una casa de la cultura', fecha: 'Marzo de 2026' },
-    paras: [
-      'En el desván de una casa de Puerto Sereno apareció una caja con tres papeles. El primero es una carta de 1926 en la que Clementina Rojas le cuenta a su hermana la llegada del tren: «Trajeron música y discursos. El gobernador dijo que desde hoy seremos ricos. Yo vi bajar a los peones por el lado donde no había música». El segundo es un mapa de la compañía del ferrocarril. El tercero, un recibo por la venta de un lote.',
-      'Los tres son fuentes primarias: se hicieron en la época de los hechos, por gente que los vivió. Un libro escrito hoy sobre ese tren sería una fuente secundaria, porque estudia el pasado a partir de otras fuentes. Que una fuente sea primaria no la vuelve verdadera; la vuelve cercana. Clementina estuvo allí, pero miró desde un lugar.',
-      'Para leerla hay que ponerla en su contexto. En aquellos años, el país recibió una indemnización por la pérdida de Panamá y muchos préstamos de bancos extranjeros. Con ese dinero se construyeron vías férreas y puertos para sacar el café. Los discursos de riqueza no eran una ocurrencia del gobernador: los repetían los periódicos de medio país.',
-      'También hay que preguntar quién escribe, para quién y con qué fin. Clementina le escribe a su hermana, en privado; no tiene que quedar bien con nadie. El mapa, en cambio, lo hizo la compañía para atraer compradores: dibuja calles que nunca existieron. El recibo no opina. Solo dice que un campesino vendió por doce pesos un lote que, según otro papel, la compañía revendió por noventa al año siguiente.',
-      'Ninguno de los tres cuenta la historia completa. La carta muestra que no todos celebraron; el mapa, lo que se prometía; el recibo, quién ganó. Juntos dicen más que cada uno por separado, y además se corrigen: los discursos prometen riqueza para todos y el recibo muestra quién se quedó con ella.',
-      'La caja no tiene la voz de los peones. No sabían escribir o nadie guardó lo que escribieron. Ese silencio también es un dato. Un buen lector de fuentes no solo pregunta qué dicen los papeles, sino quién falta en ellos.',
-    ],
-  };
-  const l1 = leccion('icf-sc-fuentes-1', 'Leer una fuente en su contexto', guion(
-    ['Primaria o secundaria', 'Primaria: de la época, de quien lo vivió. Secundaria: un estudio posterior.'],
-    ['Quién, para quién, para qué', 'Una carta privada y un aviso comercial no se leen igual.'],
-    ['El contexto', 'Qué pasaba entonces en la economía, la política o la cultura.'],
-    ['El silencio', 'También importa quién no aparece.']), [
-    x('genero-o-cita', '¿Es fuente **primaria** o **secundaria** sobre el tren de 1926?', { doc: CARTA, rot: ['primaria', 'secundaria'],
-      ...F(['La carta de Clementina', 0, '¿Es de la época y de quien lo vivió?'], ['Un libro de historia escrito hoy', 1, '¿Es de la época o la estudia después?'], ['El mapa de la compañía', 0, '¿Es de la época?'], ['Un documental de este año', 1, '¿Es de la época o la estudia después?'], ['El recibo del lote', 0, '¿Es de la época?']), bien: 'De la época o sobre la época.' },
-      'La carta, el mapa y el recibo son de entonces; el libro y el documental estudian ese pasado.', 'Pregunta cuándo se hizo y si quien la hizo estuvo allí.'),
-    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: CARTA,
-      ...F(['presenta los tres papeles', 0, 'Busca la caja.'], ['define los tipos de fuente', 1, 'Busca «primarias» y «secundaria».'], ['da el contexto de la época', 2, 'Busca los préstamos.'], ['pregunta quién y para qué', 3, 'Busca con qué fin se hicieron.'], ['compara lo que aporta cada una', 4, 'Busca «juntos dicen más».'], ['señala quién falta', 5, 'Busca el silencio.'], ['describe un viaje en tren', null, 'Nadie cuenta un viaje.']),
-      luz: [[1, 'una caja con tres papeles'], [2, 'fuentes primarias'], [3, 'ponerla en su contexto'], [4, 'quién escribe'], [5, 'Juntos dicen más'], [6, 'Ese silencio']], bien: 'Papeles, tipos, contexto, propósito, comparación y silencio.' },
-      'El texto enseña a leer una fuente paso a paso, con tres papeles de ejemplo.', 'Lee el comienzo de cada párrafo y di qué pregunta responde.'),
-    x('voz-de-la-fuente', 'Ata cada propósito a su fuente.', { ayuda: 'Tira un hilo desde cada propósito hasta su fuente.', doc: CARTA, portadas: [['La carta', 'fuente'], ['El mapa', 'fuente'], ['El recibo', 'fuente'], ['Un libro actual', 'fuente']],
-      ...T(['contarle algo a alguien querido', 0, '¿Cuál es privada?'], ['atraer compradores', 1, '¿Cuál dibuja calles que no existieron?'], ['dejar constancia de una venta', 2, '¿Cuál no opina?'], ['explicar el pasado con otras fuentes', 3, '¿Cuál se hace mucho después?']), bien: 'Contar, vender, constar y explicar.' },
-      'La carta cuenta en privado, el mapa vende, el recibo deja constancia y el libro explica.', 'Pregunta qué ganaba cada autor con su documento.'),
-    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CARTA, nums: [2, 4, 5], pregunta: 'Queda en pie', queda: 'Las fuentes se corrigen unas a otras.',
-      ...T(['Toda fuente primaria es verdadera.', 2, 'Busca qué la vuelve ser primaria.'], ['El mapa muestra las calles reales.', 6, 'Busca qué dibuja la compañía.'], ['Con la carta basta para saberlo todo.', [9, 11], 'Busca si alguno cuenta la historia completa.']), bien: 'Cercana no es verdadera.' },
-      'Ser primaria la vuelve cercana, el mapa dibuja calles que no existieron y ninguno cuenta todo.', 'Saca la palabra clave: verdadera, calles, todo.'),
-    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CARTA, nums: [1, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
-      ...F(['El lote se vendió por doce pesos.', 0, 'Léela junto a lo que dice el recibo.'], ['La compañía ganó mucho con la reventa.', 1, 'Compara doce con noventa.'], ['Clementina desconfiaba de los discursos.', 1, '¿Qué vio ella mientras sonaba la música?'], ['Los peones hicieron una huelga.', 2, '¿Alguna oración la nombra?']),
-      luz: [[4, 'vendió por doce pesos'], [1, 'por el lado donde no había música']], bien: 'Una imagen puede ser una crítica.' },
-      'Los doce pesos están escritos; la ganancia y la desconfianza se deducen; la huelga no aparece.', 'Compara los números y piensa qué contrasta la carta.'),
-    x('comprueba-apuesta', 'Subraya en el párrafo 3 la oración que explica que esos discursos eran **propios de la época**, no solo del gobernador.', { doc: CARTA, nums: [3], apuesta: 'La idea de riqueza circulaba en todo el país.', ...S(['3.3'], { '3.0': 'Dice qué hay que hacer con la fuente.', '3.1': 'Da el origen del dinero.', '3.2': 'Dice en qué se gastó el dinero.' }), bien: 'Eso es poner una fuente en contexto.' },
-      'La última oración dice que los repetían los periódicos de medio país.', 'Busca la oración que compara al gobernador con otros.'),
-    x('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: CARTA, texto: '|La carta| se escribió en privado y |el mapa|, para vender. Este dibuja calles que no existieron; aquella no tiene que quedar bien con |nadie|.',
-      ...T(['«Este»', 1, 'Pon en su lugar lo que ataste: ¿qué dibuja calles?'], ['«aquella»', 0, 'Pon en su lugar lo que ataste: ¿cuál es privada?']), bien: 'Este, el cercano; aquella, la lejana.' },
-      'El que dibuja es el mapa; la que no tiene que quedar bien es la carta.', 'Comprueba con lo que cada documento hace.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: CARTA, lineas: ['Una fuente primaria es cercana, no siempre verdadera.', 'La caja estaba en un desván.', 'Hay que preguntar quién, para quién y para qué.', 'El contexto ayuda a entenderla.', 'La hermana recibió la carta.', 'También importa quién no aparece.'], ...S([1, 4], { 0: 'Es la idea sobre el tipo de fuente.', 2: 'Es la pregunta por el propósito.', 3: 'Es el contexto.', 5: 'Es el silencio.' }), bien: 'Tipo, propósito, contexto y silencio.' },
-      'El desván y la hermana son del caso; lo demás sirve para leer cualquier fuente.', 'Deja lo que usarías para leer otro documento.'),
-  ]);
-
-  const CIFRA = {
-    id: 'icf-cifras-colegio', title: '¿Subió o bajó la violencia?',
-    ficha: { autor: 'Equipo de periodismo de datos', fuente: 'Portal de verificación', fecha: 'Abril de 2026' },
-    paras: [
-      'Dos candidatos a la alcaldía de una misma ciudad publicaron, el mismo día, dos frases opuestas. «Los robos bajaron 20 %», dijo uno. «La inseguridad está peor que nunca», dijo la otra. Ambos citaron una fuente. Ninguno mintió en el dato que citó. ¿Cómo es posible?',
-      'El primero usó las denuncias que recibe la Policía: pasaron de 5 000 a 4 000 en un año. Es una fuente oficial, completa y fácil de comparar. Pero solo cuenta lo que se denuncia. Ese año cerraron dos estaciones y denunciar por internet exigía llenar once páginas. Puede que hubiera menos robos; puede que hubiera menos denuncias. Con esa fuente sola es imposible distinguir una cosa de la otra.',
-      'La segunda usó una encuesta: siete de cada diez personas dijeron sentirse inseguras. Las encuestas captan lo que no se denuncia, pero preguntan por una sensación, y la sensación cambia con las noticias. Además, esta se hizo por teléfono fijo, un aparato que ya casi solo conservan los mayores. Nadie preguntó a los jóvenes, que usan el transporte de noche, ni a quienes viven en arriendo.',
-      'Una tercera fuente, menos citada, ayuda a decidir: las atenciones por heridas en robos en los hospitales. No dependen de que alguien quiera denunciar ni de cómo se sienta. Subieron 4 %. No sirven para contar robos sin heridos, que son la mayoría, pero indican que una caída del 20 % es poco probable.',
-      'De esto no se concluye que las cifras no sirvan. Se concluye que cada fuente prueba unas cosas y no otras. Las denuncias prueban cuánto se denuncia; la encuesta, cómo se siente un grupo; los hospitales, los robos con heridos. Usar una para afirmar lo que no mide es un argumento débil, aunque el número sea exacto.',
-      'Lo honesto habría sido decir: «Se denuncia menos, la gente se siente insegura y los robos con heridos subieron un poco; no sabemos si hubo más o menos robos». No cabe en un afiche. Pero gobernar no es hacer afiches, y votar bien exige preguntar de dónde sale cada número.',
-    ],
-  };
-  const l2 = leccion('icf-sc-fuentes-2', 'Qué prueba y qué no una fuente', guion(
-    ['Cada fuente mide algo', 'Las denuncias miden lo denunciado; una encuesta, lo que la gente dice.'],
-    ['Límites', 'Toda fuente deja algo por fuera: hay que decirlo.'],
-    ['Comparar', 'Dos fuentes independientes que coinciden pesan más.'],
-    ['No decir de más', 'Un dato exacto puede sostener una conclusión equivocada.']), [
-    x('voz-de-la-fuente', 'Ata cada cosa a la fuente que la puede probar.', { ayuda: 'Tira un hilo desde cada cosa hasta su fuente.', doc: CIFRA, portadas: [['Denuncias', 'fuente'], ['Encuesta', 'fuente'], ['Hospitales', 'fuente']],
-      ...T(['Cuánta gente acudió a la Policía', 0, '¿Cuál cuenta lo que se reporta?'], ['Cuánta gente dice sentirse insegura', 1, '¿Cuál pregunta por una sensación?'], ['Cuántos robos dejaron heridos', 2, '¿Cuál atiende heridas?']), bien: 'Reportar, sentir y atender.' },
-      'La Policía cuenta denuncias, la encuesta sensaciones y los hospitales, heridos.', 'Pregunta qué cosas se cuentan en cada lugar.'),
-    x('genero-o-cita', '¿La conclusión **sale** de su fuente o **dice de más**?', { doc: CIFRA, rot: ['sale de la fuente', 'dice de más'],
-      ...F(['Se recibieron 1 000 denuncias menos', 0, '¿Es justo lo que se contó?'], ['Hubo 20 % menos robos', 1, '¿Las denuncias cuentan todos los robos?'], ['Siete de cada diez encuestados se sienten inseguros', 0, '¿Es justo lo que se preguntó?'], ['La ciudad es más peligrosa que nunca', 1, '¿La encuesta compara con todos los años?']), bien: 'Contar no es lo mismo que concluir.' },
-      'Las denuncias y las respuestas se contaron; los robos totales y el «nunca» van más allá.', 'Compara cada conclusión con lo que la fuente mide de verdad.'),
-    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: CIFRA,
-      ...F(['¿Por qué pudo bajar la cifra de denuncias?', 1, 'Busca el comienzo que nombra a la Policía.'], ['¿A quiénes se llamó en la encuesta?', 2, 'Busca el comienzo que nombra la encuesta.'], ['¿Qué habría sido honesto decir?', 5, 'Busca el comienzo que habla de honestidad.']),
-      luz: [[2, 'cerraron dos estaciones'], [3, 'por teléfono fijo'], [6, 'Lo honesto habría sido']], bien: 'Policía, encuesta y honestidad.' },
-      'Las denuncias están en el 2, la encuesta en el 3 y lo honesto en el 6.', 'Busca en los comienzos la fuente o la palabra clave.'),
-    x('balanza-tesis', 'Tesis: «los robos bajaron 20 %». ¿Qué hace cada dato?', { doc: CIFRA, tesis: 'Los robos bajaron 20 %',
-      ...F(['Las denuncias bajaron de 5 000 a 4 000.', 0, '¿La apoya o la pone en duda?'], ['Cerraron dos estaciones donde se denunciaba.', 1, '¿Podría explicar la baja de otra manera?'], ['Las heridas por robo subieron 4 %.', 1, '¿Va en la misma dirección que la tesis?'], ['El afiche era amarillo.', 2, '¿Eso mide cuántos robos hubo?']), bien: 'Otra explicación y otra fuente la debilitan.' },
-      'Las denuncias la apoyan; el cierre ofrece otra causa y los hospitales van al contrario; el afiche no pesa.', 'Supón cierto cada dato: ¿creerías más o menos en la caída?'),
-    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CIFRA, filas: [{ antes: 'Los candidatos, en el dato que citaron,', topes: ['mintieron', 'no mintieron', 'copiaron mal'], va: 1 }, { antes: 'Los hospitales cuentan', topes: ['todos los robos', 'ningún robo', 'robos con heridos'], va: 2 }, { antes: 'De los robos totales', topes: ['no se sabe', 'bajaron', 'subieron'], va: 0 }], mira: ['Relee el final del párrafo 1.', 'Relee para qué no sirven en el párrafo 4.', 'Relee la frase honesta del párrafo 6.'], luz: [[1, 'Ninguno mintió'], [5, 'los robos con heridos'], [6, 'no sabemos si hubo más o menos robos']], bien: 'Dato exacto, conclusión dudosa.' },
-      'Ninguno mintió en el dato, los hospitales cuentan robos con heridos y del total no se sabe.', 'Busca la oración exacta que pone el límite.'),
-    x('pinta-tipos', 'Pinta cada límite con su fuente.', { doc: CIFRA, plumas: ['denuncias', 'encuesta', 'hospitales'],
-      ...P(['Deja por fuera lo que nadie reporta.', 0, '¿A cuál le falta lo que no se cuenta a la Policía?'], ['Depende de cómo se siente la gente.', 1, '¿A cuál la mueven las noticias?'], ['No ve los robos sin golpes.', 2, '¿A cuál llegan solo los lastimados?'], ['Llamó casi solo a personas mayores.', 1, '¿Cuál usó teléfono fijo?'], ['Baja si denunciar se vuelve difícil.', 0, '¿Cuál depende de un trámite?']), bien: 'Toda fuente tiene su límite.' },
-      'Lo no reportado y el trámite limitan las denuncias; la sensación y el teléfono, la encuesta; los golpes, los hospitales.', 'Pregunta qué casos se le escapan a cada fuente.'),
-    x('bisagras', 'Pon en cada hueco la palabra que une. Sobran dos.', { doc: CIFRA, pares: [['Es una fuente oficial y completa.', 'solo cuenta lo que se denuncia.'], ['No dependen de que alguien denuncie;', 'sirven para comparar.'], ['La sensación cambia', 'las noticias la mueven.']],
-      ...F(['Pero', 0, 'Limita: ¿dónde se reconoce algo y luego se le pone un tope?'], ['por eso', 1, 'Trae el resultado: ¿dónde lo segundo sale de lo primero?'], ['porque', 2, 'Trae la causa: ¿dónde lo segundo explica lo primero?'], ['Es decir,', null, 'Repetiría lo mismo: ninguna pareja repite.'], ['para que', null, 'Anunciaría un propósito: aquí nadie lo busca.']), bien: 'Tope, resultado y causa.' },
-      'A la fuente se le pone un tope, su independencia trae una utilidad y las noticias explican la sensación.', 'Di qué hace la segunda idea: limita, resulta o explica.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: CIFRA, lineas: ['Dos candidatos usan datos ciertos para decir lo contrario.', 'Había once páginas.', 'Cada fuente mide una cosa y deja otra por fuera.', 'Comparar fuentes ayuda a decidir.', 'El teléfono era fijo.', 'Concluir más de lo que se mide es un argumento débil.'], ...S([1, 4], { 0: 'Es el problema.', 2: 'Es la idea central.', 3: 'Es lo que hace la tercera fuente.', 5: 'Es la conclusión.' }), bien: 'Problema, idea, comparación y conclusión.' },
-      'Las páginas y el teléfono son detalles; lo demás sirve para evaluar cualquier cifra.', 'Deja lo que ayudaría a revisar otra noticia.'),
-  ]);
-
-  const DISCURSO = {
-    id: 'icf-dibujo', title: 'El dibujo del balcón',
-    ficha: { autor: 'Curso de medios y sociedad', fuente: 'Guía de lectura crítica de imágenes', fecha: 'Mayo de 2026' },
-    paras: [
-      'La caricatura apareció en un periódico regional el día en que el gobierno anunció que bajaría el precio de la gasolina. En ella, un funcionario sonriente lanza desde un balcón un billete diminuto atado a un globo. Abajo, una multitud salta para alcanzarlo. Detrás del balcón se ve una habitación llena de bolsas marcadas con la palabra «impuestos». Al pie dice: «¡Cójanlo entre todos!».',
-      'Una caricatura es un argumento con dibujos. No busca informar, sino hacer ver. Para eso exagera: el billete no es pequeño, es ridículo; la multitud no es grande, es inmensa. Con esa desproporción, el dibujante opina que el alivio es mínimo frente a lo que la gente paga.',
-      'También usa símbolos. El balcón es el poder, que está arriba y lejos. El globo recuerda las promesas, que se inflan y se van. La frase es irónica: suena generosa y dice lo contrario. Quien no conozca el anuncio sobre la gasolina verá una escena graciosa, pero no entenderá de qué se ríe: sin contexto no hay caricatura.',
-      'Ese mismo día, el funcionario pronunció un discurso. Dijo: «Hoy empieza una nueva era. Los que nos critican son los de siempre, los que nunca han hecho nada por este país. El pueblo sabe quién está con él». El discurso también es un argumento, aunque no tenga dibujos. Promete una era, divide el mundo entre «los de siempre» y «el pueblo», y en lugar de responder a una crítica descalifica a quienes la hacen.',
-      'Ni la caricatura ni el discurso son neutrales, y no tienen por qué serlo. La pregunta no es si opinan, sino cómo. El dibujante exagera un dato que se puede revisar: cuánto baja el precio y cuánto se paga en impuestos. El funcionario no da ninguno. Uno invita a comparar; el otro, a escoger un bando.',
-      'Leer imágenes y discursos exige las mismas preguntas: ¿qué muestra?, ¿qué exagera?, ¿a quién deja mal parado?, ¿qué tendría que ser cierto para que tenga razón? Quien las hace no deja de reírse ni de emocionarse. Solo lo hace sabiendo por qué.',
-    ],
-  };
-  const l3 = leccion('icf-sc-fuentes-3', 'Caricaturas y discursos', guion(
-    ['Exagerar para opinar', 'Una caricatura agranda o encoge lo que quiere criticar.'],
-    ['Símbolos', 'Un balcón puede ser el poder; un globo, una promesa.'],
-    ['Ironía', 'Dice una cosa para que se entienda la contraria.'],
-    ['Discursos', 'Mira qué promete, a quién divide y si responde con razones o ataca a la persona.']), [
-    x('voz-de-la-fuente', 'Ata cada idea al elemento que la representa.', { ayuda: 'Tira un hilo desde cada idea hasta el elemento del dibujo.', doc: DISCURSO, portadas: [['El balcón', 'elemento'], ['El globo', 'elemento'], ['El billete diminuto', 'elemento'], ['Las bolsas', 'elemento']],
-      ...T(['el poder, lejos de la gente', 0, '¿Qué está arriba?'], ['las promesas que se van', 1, '¿Qué se infla?'], ['un alivio mínimo', 2, '¿Qué es ridículamente pequeño?'], ['lo que la gente paga', 3, '¿Qué está detrás y marcado?']), bien: 'Cada objeto opina.' },
-      'El balcón es el poder, el globo la promesa, el billete el alivio y las bolsas, los impuestos.', 'Pregunta qué tiene de particular cada objeto: su lugar, su tamaño o su rótulo.'),
-    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: DISCURSO,
-      ...F(['describe el dibujo', 0, 'Busca lo que se ve.'], ['explica la exageración', 1, 'Busca la desproporción.'], ['explica símbolos e ironía', 2, 'Busca el globo y la frase.'], ['analiza un discurso', 3, 'Busca lo que dijo el funcionario.'], ['compara los dos', 4, 'Busca «Ni… ni…».'], ['deja preguntas para leer', 5, 'Busca los signos de interrogación.'], ['cuenta la vida del dibujante', null, 'No se cuenta su vida.']),
-      luz: [[1, 'un funcionario sonriente'], [2, 'exagera'], [3, 'usa símbolos'], [4, 'pronunció un discurso'], [5, 'Ni la caricatura ni el discurso'], [6, '¿qué exagera?']], bien: 'Describir, exagerar, simbolizar, analizar, comparar y preguntar.' },
-      'El texto describe el dibujo, explica sus recursos, analiza el discurso, los compara y deja preguntas.', 'Di qué hace cada párrafo con el dibujo o el discurso.'),
-    x('genero-o-cita', 'Si un discurso dijera esto, ¿**daría razones** o **descalificaría** a alguien?', { doc: DISCURSO, rot: ['da razones', 'descalifica'],
-      ...F(['Los que critican son los de siempre', 1, '¿Responde a la crítica o habla de quien la hace?'], ['El precio baja doscientos pesos por galón', 0, '¿Da un dato o habla de alguien?'], ['Nunca han hecho nada por el país', 1, '¿Responde a la crítica o habla de quien la hace?'], ['El costo se cubrirá con otro ahorro', 0, '¿Explica algo o habla de alguien?']), bien: 'Contestar la idea o atacar a quien la dice.' },
-      'El precio y el costo son razones; «los de siempre» y «nunca han hecho nada» atacan a las personas.', 'Pregunta si la frase habla del tema o de quien opina.'),
-    x('pinta-tipos', 'Pinta cada parte con el recurso que usa.', { doc: DISCURSO, plumas: ['exageración', 'símbolo', 'ironía'],
-      ...P(['Una multitud inmensa tras un billete.', 0, '¿Agranda, representa otra cosa o dice lo contrario?'], ['Un globo que se va por el aire.', 1, '¿Agranda, representa otra cosa o dice lo contrario?'], ['«¡Cójanlo entre todos!»', 2, '¿Agranda, representa otra cosa o dice lo contrario?'], ['Un balcón muy arriba.', 1, '¿Agranda, representa otra cosa o dice lo contrario?']), bien: 'Tamaño, objeto y frase.' },
-      'La multitud exagera, el globo y el balcón simbolizan y la frase generosa es irónica.', 'Mira si cambia el tamaño, si el objeto significa algo más o si la frase se burla.'),
-    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: DISCURSO, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
-      ...F(['Sin contexto no se entiende la caricatura.', 0, 'Léela junto al final del párrafo 3.'], ['El discurso no ayuda a saber si el alivio es suficiente.', 1, '¿Qué datos da, según la comparación?'], ['El dibujante fue despedido.', 2, '¿Se dice qué pasó con él?'], ['Con las cifras de la gasolina se sabría si la caricatura es justa.', 1, '¿Qué se puede revisar de ella?']),
-      luz: [[3, 'sin contexto no hay caricatura'], [5, 'un dato que se puede revisar'], [5, 'El funcionario no da ninguno']], bien: 'Opinar con algo que se pueda revisar.' },
-      'El contexto está escrito; lo que aclaran las cifras y lo que le falta al discurso se deducen; el despido se inventa.', 'Junta lo que se dice de cada uno en el párrafo 5.'),
-    x('comprueba-apuesta', 'Subraya en el párrafo 2 la oración que dice **qué opina** el dibujante.', { doc: DISCURSO, nums: [2], apuesta: 'El alivio es muy poco frente a lo que se paga.', ...S(['2.3'], { '2.0': 'Define qué es una caricatura.', '2.1': 'Dice qué busca una caricatura.', '2.2': 'Muestra cómo exagera.' }), bien: 'La desproporción opina.' },
-      'La última oración une la desproporción con la opinión: el alivio es mínimo.', 'Busca la oración que pasa de lo que se ve a lo que piensa el autor.'),
-    x('balanza-tesis', 'Lo que opina la caricatura: el alivio es mínimo. ¿Qué hace cada dato?', { doc: DISCURSO, tesis: 'El alivio es mínimo frente a lo que se paga',
-      ...F(['La gasolina bajó 1 % y los impuestos son el 30 %.', 0, '¿Es poco o mucho?'], ['Con la baja, el pasaje de bus se redujo a la mitad.', 1, '¿El alivio fue pequeño?'], ['El dibujo es en blanco y negro.', 2, '¿Cambia el alivio?']), bien: 'Se revisa con datos.' },
-      'Un 1 % apoya; que el pasaje bajara a la mitad debilita; el color no pesa.', 'Compara el tamaño del alivio con lo que se paga.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: DISCURSO, lineas: ['Una caricatura opina exagerando y con símbolos.', 'El periódico era regional.', 'La ironía dice lo contrario.', 'Un discurso puede descalificar en vez de responder.', 'El funcionario sonríe.', 'Conviene preguntar qué tendría que ser cierto.'], ...S([1, 4], { 0: 'Es la idea sobre la caricatura.', 2: 'Es otro recurso.', 3: 'Es la idea sobre el discurso.', 5: 'Es la pregunta para leerlos.' }), bien: 'Recursos, discurso y pregunta.' },
-      'El periódico y la sonrisa son detalles; lo demás sirve para cualquier caricatura o discurso.', 'Deja lo que usarías para leer otra imagen.'),
-  ]);
-
-  const PLAZA = {
-    id: 'icf-fuentes-mina', title: 'Tres voces sobre una mina',
-    paras: [
-      'En 1974 abrió una mina de carbón en el municipio de Las Lajas y en 2001 cerró. Un grupo de estudiantes reunió fuentes para contar qué cambió en el pueblo. La primera fue un folleto de la empresa, impreso en 1975: «Llegó el progreso. Cada familia tendrá empleo, escuela y hospital». Lo acompañan fotos a color de niños con uniforme nuevo.',
-      'La segunda fue una entrevista a Hermelinda Ortiz, de ochenta y un años, hecha este año. Recuerda que hubo empleo para los hombres, que su marido murió de los pulmones a los cuarenta y cuatro y que el hospital «fue un consultorio con una cama». También dijo que nunca volvió a ver el pueblo tan alegre como en aquellos años.',
-      'La tercera fue un libro publicado en 2010 por una economista. Con archivos de la alcaldía muestra que los ingresos del municipio se multiplicaron por seis, que la mitad de los obreros venía de otras regiones y que, dos años después del cierre, la población se había reducido a la tercera parte.',
-      'Los estudiantes pegaron además una caricatura de 1979, sacada de un periódico sindical: un hombre gordo, con el casco de la empresa, sopla un pastel que dice «cinco años»; los invitados, de cara tiznada, tosen en lugar de cantar.',
-      'En clase discutieron cuál fuente era «la verdadera». Una estudiante sostuvo que el libro, porque trae cifras. Otro, que la entrevista, porque la señora lo vivió. La profesora preguntó qué podía probar cada una y qué no. Hicieron una tabla. El folleto probaba lo que la empresa quería que se creyera; la entrevista, cómo lo vivió una mujer; el libro, cómo cambiaron las cuentas y la población; la caricatura, qué reclamaban los obreros.',
-      'Al final escribieron un texto de una página. La última línea decía: «La mina trajo dinero y se llevó gente; según a quién se le pregunte, fue las dos cosas o solo una de ellas».',
-    ],
-  };
-  const Q = preg(PLAZA, 'sociales');
-  return mundo('icf-sc-fuentes', 'Fuentes y Argumentos', 'sociales', [l1, l2, l3], [
-    ['icf-sc-fuentes-1', 'Secundaria: estudia el pasado a partir de otras fuentes.', Q('De las fuentes reunidas, es secundaria:', ['El folleto de 1975', 'La caricatura de 1979', 'El libro de 2010', 'Ninguna de ellas'], 2, 'El libro estudia lo ocurrido con archivos; el folleto y la caricatura son de la época.', '¿Cuál se hizo después, a partir de otros documentos?')],
-    ['icf-sc-fuentes-1', 'Pregunta quién hizo la fuente y para qué.', Q('El folleto de la empresa debe leerse con cuidado principalmente porque:', ['Tiene fotos a color', 'Su propósito era mostrar el proyecto de forma favorable', 'Es muy antiguo', 'No habla de niños'], 1, 'La empresa quería que se creyera en el progreso que prometía.', 'Piensa qué ganaba la empresa con el folleto.')],
-    ['icf-sc-fuentes-2', 'Cada fuente prueba unas cosas y no otras.', Q('El libro de la economista NO permite saber:', ['Cómo cambiaron los ingresos del municipio', 'De dónde venían los obreros', 'Cuánto se redujo la población', 'Cómo se sintió una familia al perder a alguien'], 3, 'El libro trabaja con cuentas y población; lo vivido por una familia lo da la entrevista.', 'Busca la opción que no se puede contar con archivos.')],
-    ['icf-sc-fuentes-2', 'Un solo testimonio no permite generalizar.', Q('A partir de la entrevista, sería un error concluir que:', ['El marido de Hermelinda murió joven', 'Todas las familias del pueblo lo vivieron igual', 'Hermelinda recuerda alegría y pérdida', 'El hospital prometido fue pequeño, según ella'], 1, 'Es la voz de una persona: no prueba lo que vivieron todas.', 'Cuidado con la palabra «todas».')],
-    ['icf-sc-fuentes-3', 'La caricatura opina con contraste y exageración.', Q('En la caricatura, que los invitados tosan en lugar de cantar critica:', ['La falta de música en las fiestas', 'El daño a la salud de los obreros mientras la empresa celebra', 'El precio de los pasteles', 'La edad de los invitados'], 1, 'Las caras tiznadas y la tos señalan el daño de la mina; la empresa celebra su aniversario.', 'Une la tos, las caras tiznadas y el pastel.')],
-    ['icf-sc-fuentes-3', 'Un texto que reúne voces no las borra: las muestra.', Q('La última línea del texto de los estudiantes expresa que:', ['La mina fue mala para todos', 'La mina fue buena para todos', 'La valoración depende de la perspectiva de cada fuente', 'No se puede saber nada del pasado'], 2, '«Según a quién se le pregunte»: las fuentes miran desde lugares distintos.', 'Fíjate en la expresión «según a quién».')],
-  ]);
-})());
-;
 //#archivo js/courses/preicfes-sc-sistemico.js
 // Preicfes · Sociales y Ciudadanas · mundo 5 «Problemas Complejos» (spec 2026-11-25-preicfes-estructura). Casos inventados para Zuka.
 PI_MUNDOS.push((() => {
@@ -4846,5 +4691,122 @@ EUC_MUNDOS.push((() => {
       'Los cuatro cuartos hacen un círculo de radio $r$: $\\pi r^2 = 16\\pi$ da $r = 4$.', 'Las cuatro esquinas juntas forman un círculo.')],
     ['euc-areas-3', 'Corona circular: se restan las áreas, no los radios.', opc('Dos circunferencias concéntricas tienen radios 9 cm y 6 cm. El área de la corona circular que determinan es:', ['9π cm²', '15π cm²', '45π cm²', '117π cm²'], 2,
       'Se restan las áreas: $81\\pi - 36\\pi = 45\\pi$ cm².', 'Calcula cada círculo y resta el chico al grande.')],
+  ]);
+})());
+;
+//#archivo js/courses/euclidiana-construcciones.js
+// Geometría Euclidiana · mundo 8 «euc-construcciones» Regla y Compás (spec 2026-11-26-curso-euclidiana). Números y contextos propios.
+EUC_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = EUC;
+
+  const l1 = leccion('euc-construcciones-1', 'Construcciones elementales', guion(
+    ['Dos instrumentos', 'La regla no tiene marcas: solo une dos puntos. El compás traza arcos y lleva una distancia de un lugar a otro.'],
+    ['Mediatriz', 'Dos arcos del mismo radio desde A y desde B, con radio mayor que la mitad de AB, se cortan en dos puntos: la recta que los une es la mediatriz.'],
+    ['Bisectriz', 'Un arco desde el vértice marca D y E; dos arcos iguales desde D y E se cortan en F. El rayo que va del vértice a F parte el ángulo en dos congruentes.'],
+    ['Por qué funciona', 'Cada construcción arma dos triángulos con tres pares de lados iguales: son congruentes por L-L-L.'],
+    ['Copiar y repartir', 'Copiando un ángulo se traza una paralela; con marcas iguales en una auxiliar y paralelas, un segmento queda en partes iguales.']), [
+    x('compas-mediatriz', 'El segmento AB mide **6**. Abre el compás para que los dos arcos del mismo radio, uno desde A y otro desde B, se corten en **M** y **N**, a **4** del segmento.', { L: 6, h: 4 },
+      'La mitad de AB es 3 y la altura es 4: el radio es la hipotenusa, $\\sqrt{3^2 + 4^2} = 5$. Con el mismo radio, M y N equidistan de A y de B.', 'De A al cruce M hay un triángulo rectángulo: un cateto es la mitad de AB y el otro, la altura que se pide.'),
+    x('radios-sin-cruce', 'Para trazar la mediatriz de AB se hacen dos arcos del **mismo radio**, uno desde A y otro desde B. Toca **todos** los radios con los que NO salen dos puntos de cruce.', { L: 10, radios: [3, 5, 6, 8, 4] },
+      'La mitad de AB es 5. Con 3 y con 4 los arcos no se alcanzan, y con 5 apenas se tocan en un punto: hace falta un radio mayor que la mitad.', 'Imagina los dos arcos acercándose desde los extremos: ¿hasta dónde tiene que llegar cada uno para pasar por encima del otro?'),
+    x('razon-del-paso', 'Con el mismo radio se trazaron arcos desde A y desde B, que se cortan en M y N. Pon la **razón** de cada afirmación.', {
+      et: ['AM = BM', 'AN = BN', 'MN = MN', '△AMN ≅ △BMN'], metas: ['mismo radio', 'mismo radio', 'lado común', 'L-L-L'], fichas: ['mismo radio', 'mismo radio', 'lado común', 'L-L-L', 'L-A-L', 'ángulo recto'],
+      mira: ['Los dos arcos que se cortan en M se trazaron con la misma abertura.', 'También N salió del cruce de dos arcos de igual radio.', 'Ese segmento es el mismo en los dos triángulos.', 'Ya hay tres pares de lados congruentes y ningún ángulo conocido.'],
+      trampas: { '3:L-A-L': 'Todavía no se conoce ningún ángulo: solo hay tres pares de lados.', '2:mismo radio': 'MN no se trazó con el compás: es un lado que comparten los dos triángulos.', '3:ángulo recto': 'El ángulo recto es lo que se quiere probar: no se puede usar como razón.' },
+      ok: 'Tres pares de lados: congruentes por L-L-L. Por eso MN parte a AB en dos mitades y en ángulo recto.' },
+      'AM = BM y AN = BN porque el radio es el mismo; MN es común. Por L-L-L los triángulos AMN y BMN son congruentes, y de ahí sale que MN es la mediatriz.', 'Mira de dónde salió cada segmento: unos los trazó el compás con la misma abertura y otro está en los dos triángulos.'),
+    x('bisectriz-cruce', 'Un arco de centro B y radio **5** marcó D y E en los lados del ángulo. Con ese mismo radio se trazan un arco desde D y otro desde E. Lleva **F** al punto donde se cortan.', { B: [2, 1], d: [3, 4], ini: [9, 3] },
+      'F queda a 5 de D y a 5 de E. Como BD = BE, DF = EF y BF es común, los triángulos BDF y BEF son congruentes por L-L-L: el rayo BF parte el ángulo en dos iguales.', 'Busca un punto de la cuadrícula que esté a 5 de D y también a 5 de E: piensa en la familia 3-4-5. El vértice B no cuenta.'),
+    x('pasos-construccion', 'Para trazar la **bisectriz** del ángulo B solo hay regla sin marcas y compás. Pon los pasos en orden.', {
+      fig: 'bisectriz', metas: ['arco desde B', 'arcos desde D y E', 'marcar el cruce F', 'trazar el rayo BF'], fichas: ['arco desde B', 'arcos desde D y E', 'marcar el cruce F', 'trazar el rayo BF', 'medir el ángulo', 'unir D con E'],
+      mira: ['Lo primero es marcar D y E en los lados, a la misma distancia de B.', 'Con D y E ya marcados se trazan dos arcos del mismo radio.', 'Los dos arcos se cortan en un punto: ese es F.', 'Al final la regla une B con F: ese rayo es la bisectriz.'],
+      trampas: { '0:medir el ángulo': 'Ni la regla ni el compás miden ángulos: se empieza con un arco desde el vértice.', '1:unir D con E': 'Unir D con E no da ningún punto nuevo: hacen falta dos arcos que se corten.', '1:medir el ángulo': 'Ni la regla ni el compás miden ángulos: aquí van dos arcos iguales.' },
+      ok: 'Un arco, dos arcos iguales, su cruce y el rayo.' },
+      'El arco desde B deja D y E a igual distancia; los arcos iguales desde D y E se cortan en F, y el rayo BF es la bisectriz.', 'Cada paso usa puntos que ya existen: D y E no aparecen hasta que se traza el arco con centro en el vértice.'),
+    x('divide-tales', 'AB mide **10** y se quiere partir en **4** partes iguales. En una semirrecta auxiliar se llevaron 4 marcas iguales con el compás y la última se unió con B. Pon **X** donde cae la paralela que sale de la marca **3**.', { L: 10, n: 4, k: 3 },
+      'Las paralelas cortan segmentos proporcionales: como las marcas son iguales, AB queda en 4 partes de 2.5, y la tercera cae a $3 \\cdot 2.5 = 7.5$ de A.', 'Las marcas de la auxiliar son iguales entre sí, así que las partes de AB también lo son: ¿cuánto mide cada una?'),
+    x('lanza-compas', 'El compás traza un arco desde A y otro igual desde B. Dale el radio que se pide y suéltalo. Puedes fallar **una** vez.', { tiros: [
+      { q: 'AB mide **12**. El **menor** radio entero con el que los arcos se cortan en dos puntos', L: 12, r: 7, c: '\\tfrac{12}{2} + 1', e: { 6: 'Con 6 los arcos apenas se tocan en el punto medio: hay que pasar de la mitad.' } },
+      { q: 'AB mide **16**. Los arcos deben cortarse a **6** del segmento', L: 16, h: 6, r: 10, c: '\\sqrt{8^2 + 6^2}', e: { 6: 'Con radio 6 los arcos no llegan a la mitad de AB, que es 8.', 14: 'Sumaste 8 y 6: el radio va en diagonal, es una hipotenusa.' } },
+      { q: 'AB mide **10**. Los arcos deben cortarse a **12** del segmento', L: 10, h: 12, r: 13, c: '\\sqrt{5^2 + 12^2}', e: { 12: 'El radio no es la altura: es la hipotenusa de catetos 5 y 12.' } }] },
+      'Más que la mitad: $6 + 1 = 7$. Después, hipotenusas: $\\sqrt{64 + 36} = 10$ y $\\sqrt{25 + 144} = 13$.', 'El radio siempre debe pasar de la mitad de AB; si se pide una altura, el radio es la hipotenusa de la mitad y esa altura.'),
+    sol('Por un punto P exterior a una recta m se trazó una transversal que corta a m en Q. Con el compás se copió en P el ángulo que la transversal forma con m, en la misma posición. ¿Por qué la recta que resulta es paralela a m?',
+      ['El ángulo en P se copió con el compás: es [[congruente]] con el ángulo en Q', 'Los dos quedan del mismo lado de la transversal y en la misma posición: son [[correspondientes]]', 'Dos rectas que forman con una transversal ángulos correspondientes congruentes son [[paralelas]]'], ['suplementario', 'perpendiculares', 'opuestos por el vértice'],
+      'Copiar el ángulo deja dos correspondientes congruentes, y eso obliga a que las rectas sean paralelas.', 'Piensa en qué pareja de ángulos forman una transversal y dos rectas cuando los ángulos quedan en la misma esquina.'),
+    err('Se quiere levantar la perpendicular a una recta por un punto P que está sobre ella.',
+      ['Con centro en P y un mismo radio se marcan R y S sobre la recta, a lado y lado de P', 'Con centro en R y en S se trazan dos arcos de radio igual a PR, que se cortan en M', 'Se traza la recta PM, que es perpendicular a la recta dada'], 1,
+      ['Con centro en R y en S se trazan dos arcos de un mismo radio mayor que PR, que se cortan en M', 'Con centro en P se traza otro arco de radio mayor, que corta a la recta en M', 'Con centro en R se traza un solo arco de radio PR y se toma en él un punto M cualquiera'],
+      'P es el punto medio de RS: con radio PR los arcos solo se tocan en P. Con un radio mayor se cortan en M, y PM es la mediatriz de RS.', 'PM debe ser la mediatriz de RS: recuerda qué radio hace falta para que los dos arcos se corten fuera del segmento.'),
+    opc('En las construcciones, la regla no tiene marcas y el compás traza arcos y conserva su abertura. ¿Cuál de estas tareas NO se puede hacer directamente con esos instrumentos?',
+      ['Unir dos puntos con una recta', 'Trazar una circunferencia con centro y radio dados', 'Marcar un segmento de 5 cm leyendo la regla', 'Llevar la longitud de un segmento a otra recta'], 2,
+      'La regla solo une puntos: no mide. Las longitudes se llevan con la abertura del compás.', 'Piensa en lo único que hace cada instrumento: uno traza rectas por dos puntos y el otro, arcos con un centro y una abertura.'),
+  ]);
+
+  const l2 = leccion('euc-construcciones-2', 'Lugares geométricos y construcción de triángulos', guion(
+    ['Lugar geométrico', 'Es el conjunto de todos los puntos que cumplen una condición: a una distancia fija de un punto, una circunferencia; equidistantes de dos puntos, la mediatriz.'],
+    ['Más lugares', 'A una distancia fija de una recta: dos paralelas. Equidistantes de dos rectas que se cortan: las bisectrices. Los puntos que ven un segmento bajo el mismo ángulo: el arco capaz.'],
+    ['Cruzar lugares', 'Un punto que debe cumplir dos condiciones está donde se cortan los dos lugares.'],
+    ['Triángulos', 'Con tres lados se cruzan dos arcos (si cada lado es menor que la suma de los otros); también basta con dos lados y el ángulo comprendido, o un lado y sus dos ángulos.'],
+    ['Dos circunferencias', 'Las mediatrices se cortan en el circuncentro, centro de la que pasa por los vértices; las bisectrices, en el incentro, centro de la inscrita.']), [
+    x('lugar-distancias', 'Lleva **P** a un punto que esté a **5** de A y a **3** de la recta r.', { pts: { A: [5, 7] }, recta: 1, conds: [['d', 'A', 5], ['r', 3]], ini: [7, 2],
+      txt: 'sobre la paralela a 3 de $r$, donde la corta la circunferencia de centro $A$ y radio 5', ok: 'Está en la circunferencia de centro A y radio 5 y en la paralela a 3 de r.' },
+      'Los puntos a 3 de r forman una paralela; los que están a 5 de A, una circunferencia. Se cortan donde A queda 3 arriba y 4 a un lado: $\\sqrt{3^2 + 4^2} = 5$.', 'Primero ubica todos los puntos que están a 3 de la recta: forman una línea. Sobre ella busca el que queda a 5 de A.'),
+    x('lugar-equidista', 'La circunferencia tiene centro O y radio 5. Lleva **P** a un punto de ella que **equidiste** de A y de B.', { pts: { O: [7, 5], A: [6, 8], B: [9, 5] }, conds: [['d', 'O', 5, true], ['eq', 'A', 'B']], ini: [12, 5],
+      txt: 'donde la mediatriz de $AB$ corta a la circunferencia', ok: 'Está sobre la circunferencia y sobre la mediatriz de AB.' },
+      'Los puntos que equidistan de A y B forman la mediatriz de AB. Esa recta corta a la circunferencia en dos puntos, y cualquiera de los dos cumple las dos condiciones.', 'Equidistar de A y de B es estar en la mediatriz de AB: pasa por su punto medio y es perpendicular a él. Síguela hasta la circunferencia.'),
+    x('tercer-lado', 'Se va a construir un triángulo con dos lados de **9** y **5**. ¿Entre qué enteros puede medir el tercero para que los dos arcos se corten?', { a: 9, b: 5, max: 15 },
+      'Más que la resta, 4, y menos que la suma, 14: de 5 a 13. Con 4 o con 14 los arcos apenas se tocan y queda una línea.', 'Traza la base de 9 y piensa en el arco de radio 5 desde un extremo: ¿qué radios del otro arco alcanzan a cortarlo?'),
+    x('datos-determinan', 'Toca **todos** los datos con los que se puede construir un triángulo, y solo uno (sin contar su posición).', { casos: [
+      { t: 'Lados de 4, 6 y 9', si: true },
+      { t: 'Lados de 3, 5 y 9', no: 'Con 3, 5 y 9 los arcos no se cortan: 3 + 5 no alcanza a 9.' },
+      { t: 'Lados de 5 y 7 con 40° entre ellos', si: true },
+      { t: 'Ángulos de 50°, 60° y 70°', no: 'Con solo los ángulos salen triángulos de muchos tamaños: semejantes, no uno solo.' },
+      { t: 'Un lado de 6 con 50° y 60° en sus extremos', si: true },
+      { t: 'Un lado de 6 con 100° y 90° en sus extremos', no: 'Dos ángulos que suman 190° no dejan que los otros dos lados se encuentren.' }],
+      falta: 'Falta alguno: tres lados que cierran, L-A-L y A-L-A fijan un solo triángulo.', ok: 'L-L-L (si cierra), L-A-L y A-L-A: los mismos criterios de congruencia.' },
+      'Tres lados que cumplen la desigualdad triangular, dos lados con el ángulo comprendido, o un lado con sus dos ángulos (que sumen menos de 180°) dan un único triángulo.', 'Para cada dato imagina la construcción: ¿los trazos se encuentran en un punto, y en uno solo a cada lado de la base?'),
+    x('triangulo-tres-lados', 'La base AB mide **14**. Lleva **C** al cruce de los dos arcos para que AC mida **13** y BC mida **15**.', { A: 0, ab: 14, ac: 13, bc: 15, ini: [7, 4] },
+      'Con altura 12: $5^2 + 12^2 = 13^2$ desde A y $9^2 + 12^2 = 15^2$ desde B, y $5 + 9 = 14$. C queda 5 a la derecha de A y 12 arriba.', 'El arco de centro A y radio 13 pasa por pocos puntos de la cuadrícula (familia 5-12-13). Busca el que además queda a 15 de B.'),
+    x('pasos-construccion', 'Se quiere trazar la circunferencia que pasa por los **tres vértices** del triángulo ABC. Pon los pasos en orden.', {
+      fig: 'circun', metas: ['dos mediatrices', 'marcar el cruce O', 'abrir de O hasta A', 'girar el compás'], fichas: ['dos mediatrices', 'marcar el cruce O', 'abrir de O hasta A', 'girar el compás', 'dos bisectrices', 'abrir de A hasta B'],
+      mira: ['El centro equidista de los vértices: se empieza por las mediatrices de dos lados.', 'Donde se cortan las dos mediatrices está el centro O.', 'El radio va del centro O a un vértice.', 'Con esa abertura y centro en O se traza la circunferencia.'],
+      trampas: { '0:dos bisectrices': 'Las bisectrices dan el centro de la inscrita; para pasar por los vértices van las mediatrices.', '2:abrir de A hasta B': 'El radio va del centro a un vértice, no de un vértice a otro.' },
+      ok: 'El circuncentro equidista de A, B y C.' },
+      'Las mediatrices de dos lados se cortan en O, que equidista de los tres vértices; con radio OA la circunferencia pasa por A, B y C.', 'El centro debe estar a la misma distancia de A, de B y de C: ¿qué lugar geométrico equidista de dos puntos?'),
+    x('centro-inscrita', 'El triángulo tiene catetos de 8 y 6. Lleva **I** al centro de la circunferencia **inscrita**: el punto que está a la misma distancia de los **tres lados**.', { Q: [3, 1], a: 8, b: 6, ini: [8, 2] },
+      'Equidistar de dos lados es estar en la bisectriz de su ángulo. Sobre la bisectriz del ángulo recto, el punto que está a 2 de los catetos también queda a 2 de la hipotenusa: es el incentro.', 'Empieza por la bisectriz del ángulo recto: ahí cada punto está a lo mismo de los dos catetos. Avanza por ella hasta igualar la distancia a la hipotenusa.'),
+    x('cuenta-cruces', 'Se trazan los dos lugares geométricos. ¿Cuántos puntos cumplen las **dos** condiciones a la vez? Puedes fallar **una** vez.', { tiros: [
+      { q: 'A está a **2** de la recta r. Puntos a **5** de A y a **3** de r', k: 'cp', a: 2, R: 5, d: 3, r: 3, c: '2 + 1 = 3', e: { 4: 'La paralela de abajo queda justo a 5 de A: la circunferencia solo la toca.', 2: 'Hay dos paralelas a 3 de r, una a cada lado, y la de abajo también cuenta.' } },
+      { q: 'A y B están a **10**. Puntos a **6** de A y a **8** de B', k: 'cc', D: 10, r1: 6, r2: 8, r: 2, c: '8 - 6 < 10 < 8 + 6 \\Rightarrow 2', e: { 1: 'Las circunferencias se cortan a los dos lados de AB: uno arriba y otro abajo.' } },
+      { q: 'A y B están a **12**. Puntos a **5** de A y a **7** de B', k: 'cc', D: 12, r1: 5, r2: 7, r: 1, c: '5 + 7 = 12 \\Rightarrow 1', e: { 2: 'Como 5 + 7 = 12, las circunferencias apenas se tocan sobre AB: ahí no hay triángulo.' } }] },
+      'La paralela de arriba corta dos veces y la de abajo es tangente: 3. Con $2 < 10 < 14$ hay 2 cruces. Con $5 + 7 = 12$ las circunferencias se tocan en 1.', 'Dibuja cada lugar: una circunferencia, dos paralelas o dos circunferencias, y mira si se cortan, se tocan o no se alcanzan.'),
+    sol('Tres veredas A, B y C no están en línea recta. ¿Dónde se instala una antena que quede a la misma distancia de las tres?',
+      ['Los puntos que equidistan de A y de B forman la [[mediatriz]] de AB', 'Los que equidistan de B y de C forman la mediatriz de [[BC]]', 'La antena va donde se cortan: es el [[circuncentro]] del triángulo ABC'], ['bisectriz', 'incentro', 'AC'],
+      'Cada mediatriz reúne los puntos que equidistan de dos veredas; su cruce equidista de las tres: el circuncentro.', 'Cada condición «a la misma distancia de dos puntos» es un lugar geométrico: nombra cuál y cruza dos de ellos.'),
+    err('Se pide construir el triángulo ABC con AB = 7, el ángulo A de 50° y AC = 4.',
+      ['Se traza el segmento AB de 7', 'En A se copia el ángulo de 50°, con un lado sobre AB', 'Con centro en B y radio 4 se marca C sobre el otro lado del ángulo', 'Se une C con B'], 2,
+      ['Con centro en A y radio 4 se marca C sobre el otro lado del ángulo', 'Con centro en B y radio 7 se marca C sobre el otro lado del ángulo', 'Con centro en A y radio 7 se marca C sobre el segmento AB'],
+      'AC sale de A: el compás se apoya en A con abertura 4. Así el ángulo de 50° queda comprendido entre los lados de 7 y 4 (L-A-L).', '¿Desde cuál extremo se mide el lado AC? Ahí va la punta fija del compás.'),
+    opc('Se quiere construir un triángulo con dos lados de 4 cm y 5 cm. ¿Con cuál de estas medidas del tercer lado NO se puede construir?',
+      ['9 cm', '8 cm', '2 cm', '6 cm'], 0,
+      'Como $4 + 5 = 9$, con 9 cm los dos arcos apenas se tocan sobre la base: queda una línea, no un triángulo.', 'Cada lado debe ser menor que la suma de los otros dos y mayor que su diferencia.'),
+  ]);
+
+  return mundo('euc-construcciones', [l1, l2], [
+    ['euc-construcciones-1', 'Mediatriz: dos arcos del mismo radio, mayor que la mitad del segmento.', x('compas-mediatriz', 'AB mide **8**. Abre el compás para que los arcos del mismo radio desde A y desde B se corten a **3** del segmento.', { L: 8, h: 3 },
+      'La mitad de AB es 4 y la altura 3: el radio es $\\sqrt{4^2 + 3^2} = 5$.', 'El radio es una hipotenusa: un cateto es la mitad de AB y el otro, la altura.')],
+    ['euc-construcciones-1', 'Marcas iguales en una auxiliar y paralelas: partes iguales.', x('divide-tales', 'AB mide **12** y se parte en **8** partes iguales con marcas en una semirrecta auxiliar. Pon **X** donde cae la paralela que sale de la marca **3**.', { L: 12, n: 8, k: 3 },
+      'Cada parte mide $12 \\div 8 = 1.5$, y la tercera paralela cae a $3 \\cdot 1.5 = 4.5$ de A.', 'Las partes de AB son iguales entre sí: halla primero cuánto mide una.')],
+    ['euc-construcciones-1', 'Perpendicular por un punto: es la mediatriz de un segmento auxiliar.', opc('Para bajar la perpendicular a una recta desde un punto P exterior, un arco de centro P corta a la recta en R y S; luego dos arcos iguales desde R y S se cortan en M. La recta PM es perpendicular porque:',
+      ['P y M están a la misma distancia de la recta', 'P y M equidistan de R y de S: PM es la mediatriz de RS', 'El triángulo PRS siempre es equilátero', 'Los arcos desde R y S tienen el mismo radio que el de centro P'], 1,
+      'P equidista de R y S (mismo arco) y M también (arcos iguales): los dos están en la mediatriz de RS.', '¿Qué recta reúne a todos los puntos que equidistan de R y de S?')],
+    ['euc-construcciones-2', 'Tres lados: el tercer vértice es el cruce de dos arcos.', x('triangulo-tres-lados', 'La base AB mide **4**. Lleva **C** al cruce de los dos arcos para que AC mida **15** y BC mida **13**.', { A: 0, ab: 4, ac: 15, bc: 13, ini: [6, 5] },
+      'Con altura 12: $9^2 + 12^2 = 15^2$ y $5^2 + 12^2 = 13^2$, con $9 - 5 = 4$. C queda más allá de B: el triángulo es obtusángulo.', 'Busca una altura común a las familias 9-12-15 y 5-12-13; los pies no tienen que caer entre A y B.')],
+    ['euc-construcciones-2', 'Circuncentro: cruce de las mediatrices, equidista de los vértices.', x('centro-tres-puntos', 'Lleva **P** al centro de la circunferencia que pasa por A, B y C: el punto que **equidista** de los tres.', { pts: { A: [3, 2], B: [11, 2], C: [10, 9] }, conds: [['eq', 'A', 'B'], ['eq', 'B', 'C']], circ: 'A', ini: [5, 6],
+      txt: 'el circuncentro: donde se cortan las mediatrices de $AB$ y de $BC$', ok: 'Equidista de A, B y C: es el circuncentro.' },
+      'La mediatriz de AB es vertical y pasa por su punto medio; sobre ella, el punto que queda a 5 de B y de C es el circuncentro.', 'Empieza por la mediatriz de AB: todos sus puntos equidistan de A y de B. Sobre ella iguala la distancia a C.')],
+    ['euc-construcciones-2', 'Incentro: cruce de las bisectrices, centro de la inscrita.', opc('El punto donde se cortan las bisectrices de los tres ángulos de un triángulo es el centro de:',
+      ['la circunferencia que pasa por los tres vértices', 'la mediatriz del lado mayor', 'el arco capaz del lado mayor', 'la circunferencia tangente a los tres lados'], 3,
+      'Cada bisectriz reúne los puntos que equidistan de dos lados: su cruce equidista de los tres y es el centro de la inscrita.', 'Los puntos de una bisectriz están a la misma distancia de los dos lados del ángulo.')],
   ]);
 })());
