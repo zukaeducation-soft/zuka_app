@@ -221,33 +221,16 @@ async function entrar() {
     $('button', view).onclick = entrar; return;
   }
   $('.pn-user').hidden = false; $('.pn-mail').textContent = session.user.email;
-  if (!es) { view.innerHTML = '<p class="pn-state bad">Esta cuenta no tiene permiso de administración.<br>Cierra sesión y entra con la cuenta administradora.</p>'; return; }
+  if (!es) { view.innerHTML = '<div class="pn-state bad"><p>Esta cuenta no tiene permiso de administración.</p><button class="btn ghost" type="button">Entrar con otra cuenta</button></div>'; $('button', view).onclick = () => login(true); return; }
   document.body.classList.add('dentro');
   $('.pn-nav').hidden = false;
   if (!ruta.lista) { ruta.lista = true; $$('[data-ico]').forEach(a => a.insertAdjacentHTML('afterbegin', ico(a.dataset.ico))); }
   addEventListener('hashchange', ruta);
   ruta(); tiendaConteo(); instConteo();
 }
-function login() {
-  document.body.classList.remove('dentro');
-  $('.pn-nav').hidden = true; $('.pn-user').hidden = true;
-  view.innerHTML = `<form class="pn-card pn-login acct-form" novalidate><h1>Entrar al panel</h1>
-    <label class="fld"><span>Correo</span><input name="correo" type="email" autocomplete="email" required></label>
-    <label class="fld"><span>Contraseña</span><input name="clave" type="password" autocomplete="current-password" required></label>
-    <p class="form-msg bad" role="alert" hidden></p>
-    <button class="btn main" type="submit">Entrar</button></form>`;
-  const f = $('form', view), msg = $('.form-msg', view);
-  f.onsubmit = e => {
-    e.preventDefault();
-    ocupado($('button', f), async () => {
-      msg.hidden = true;
-      const { error } = await sb.auth.signInWithPassword({ email: f.correo.value.trim(), password: f.clave.value });
-      if (error) { msg.textContent = authError(error); msg.hidden = false; return; }
-      entrar();
-    });
-  };
-}
-$('[data-salir]').onclick = async () => { await sb.auth.signOut({ scope: 'local' }); Object.assign(TB, { D: null, x: null, f: { dias: 30 } }); removeEventListener('hashchange', ruta); login(); };
+// Sin formulario propio (spec 2026-11-26-entrada-unica): se entra por la entrada única de la app, que trae de vuelta a la administración.
+async function login(salir) { if (salir) await sb.auth.signOut({ scope: 'local' }); location.replace('/?admin'); }
+$('[data-salir]').onclick = async () => { await sb.auth.signOut({ scope: 'local' }); location.replace('/'); };
 function ruta() {
   const [h, qs] = location.hash.slice(1).split('?'), [name, arg] = (h || 'inicio').split('/');
   filtrosDeUrl(name, qs);

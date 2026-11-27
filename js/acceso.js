@@ -154,3 +154,21 @@ function fechaCorta(iso) {
 }
 const cop = n => `$ ${String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
 const diasTexto = n => (n === 1 ? '1 día' : `${n} días`);
+
+// Entrada única (spec 2026-11-26-entrada-unica): qué cuenta acaba de entrar y adónde va. La institución entra con el código
+// de su gestor. inst = lo que trae mi_institucion (nombres de los colegios del estudiante y el equipo donde enseña).
+function tipoCuenta(perfil, inst) {
+  if (!perfil) return null;
+  if (perfil.rol === 'admin') return { tipo: 'admin', destino: 'admin' };
+  const eq = (inst && inst.equipo) || [], g = eq.find(e => e.papel === 'gestor'), nom = x => (typeof x === 'string' ? x : (x && (x.institucion || x.nombre)) || '');
+  if (g) return { tipo: 'gestor', destino: 'portal', inst: nom(g) };
+  if (eq.length) return { tipo: 'docente', destino: 'portal', inst: nom(eq[0]) };
+  if (perfil.rol === 'gestor') return { tipo: 'gestor', destino: 'portal' };
+  const n = (inst && inst.nombres) || [];
+  return n.length ? { tipo: 'colegio', destino: 'app', inst: nom(n[0]) } : { tipo: 'independiente', destino: 'app' };
+}
+function bienvenidaCuenta(t) {
+  if (!t) return '';
+  const de = t.inst ? ` de ${t.inst}` : '';
+  return { gestor: `Entraste como gestor${de}`, docente: `Entraste como docente${de}`, colegio: t.inst ? `Entraste con ${t.inst}` : '' }[t.tipo] || '';
+}

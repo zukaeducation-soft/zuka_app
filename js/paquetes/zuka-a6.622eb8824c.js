@@ -1540,6 +1540,24 @@ function fechaCorta(iso) {
 }
 const cop = n => `$ ${String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
 const diasTexto = n => (n === 1 ? '1 día' : `${n} días`);
+
+// Entrada única (spec 2026-11-26-entrada-unica): qué cuenta acaba de entrar y adónde va. La institución entra con el código
+// de su gestor. inst = lo que trae mi_institucion (nombres de los colegios del estudiante y el equipo donde enseña).
+function tipoCuenta(perfil, inst) {
+  if (!perfil) return null;
+  if (perfil.rol === 'admin') return { tipo: 'admin', destino: 'admin' };
+  const eq = (inst && inst.equipo) || [], g = eq.find(e => e.papel === 'gestor'), nom = x => (typeof x === 'string' ? x : (x && (x.institucion || x.nombre)) || '');
+  if (g) return { tipo: 'gestor', destino: 'portal', inst: nom(g) };
+  if (eq.length) return { tipo: 'docente', destino: 'portal', inst: nom(eq[0]) };
+  if (perfil.rol === 'gestor') return { tipo: 'gestor', destino: 'portal' };
+  const n = (inst && inst.nombres) || [];
+  return n.length ? { tipo: 'colegio', destino: 'app', inst: nom(n[0]) } : { tipo: 'independiente', destino: 'app' };
+}
+function bienvenidaCuenta(t) {
+  if (!t) return '';
+  const de = t.inst ? ` de ${t.inst}` : '';
+  return { gestor: `Entraste como gestor${de}`, docente: `Entraste como docente${de}`, colegio: t.inst ? `Entraste con ${t.inst}` : '' }[t.tipo] || '';
+}
 ;
 //#archivo js/estado.js
 // Avance completo en la nube (tabla `estado_app`, spec 2026-11-24-acceso-por-codigo): XP, racha, evaluaciones, gimnasio,
@@ -1711,9 +1729,9 @@ const Cuenta = {
 };
 
 // En el computador de desarrollo no hay candados (para revisar contenido y correr los robots);
-// con ?candados en la dirección sí se ven.
+// con ?candados en la dirección sí se ven, y también al pedir la entrada (?entrar, ?admin, ?portal: spec 2026-11-26-entrada-unica).
 const SIN_CANDADOS = typeof location !== 'undefined' && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
-  && !/[?&]candados\b/.test(location.search);
+  && !/[?&](candados|entrar|admin|portal)\b/.test(location.search);
 
 // Motivo por el que algo está cerrado para quien usa la app ahora (null = abierto).
 function planMotivo(id) {
@@ -1763,6 +1781,12 @@ function cuentaRol() {
 // ---------- pantalla de entrada ----------
 // Sale al abrir la app sin sesión (y al cerrar sesión): se entra con el código de acceso. El correo queda para la
 // administración y para cuentas creadas antes de los códigos.
+// Se llegó desde /admin (sin sesión de administración): al entrar como administración, de vuelta al panel.
+let entradaAdmin = typeof location !== 'undefined' && /[?&]admin\b/.test(location.search || '');
+// ?admin=/instituciones/portal/?i=… vuelve ahí; cualquier otra cosa, al panel.
+const entradaVuelta = (q => { const m = /[?&]admin=([^&]+)/.exec(q || ''); let v = ''; try { v = m ? decodeURIComponent(m[1]) : ''; } catch (e) { /* mal escrita */ }
+  return /^\/(admin|instituciones\/portal)\/[^\\]*$/.test(v) && !v.startsWith('//') ? v : '/admin/'; })(typeof location !== 'undefined' ? location.search : '');
+let entrando = false;   // se envió la pantalla de entrada: la sesión que llegue es una entrada nueva
 function cuentaPideEntrar() {
   if (!Cuenta.sb || Cuenta.user || SIN_CANDADOS) return false;
   authScreen();
@@ -1778,31 +1802,35 @@ const waBoton = (texto, rotulo, cls = 'ghost') => {
   const u = waLink(Cuenta.ajustes.whatsapp, texto);
   return u ? `<a class="btn ${cls} wa" href="${esc(u)}" target="_blank" rel="noopener">${rotulo}</a>` : '';
 };
+// Entrada única (spec 2026-11-26-entrada-unica): estudiantes, colegios, docentes, gestores y administración entran aquí. Un
+// solo campo: un código entra con entrar-codigo; un correo (lleva «@») abre la contraseña en el mismo formulario. Al entrar,
+// tipoCuenta decide adónde va cada uno (cuentaSesion). modo 'correo' abre la contraseña desde el principio.
 function authScreen(modo = 'codigo', aviso = '') {
   let el = $('#auth');
   if (!el) { el = document.createElement('div'); el.id = 'auth'; document.body.appendChild(el); }
-  const cod = modo !== 'correo';
   const volver = typeof pzDesde !== 'undefined' && pzDesde;   // se llegó desde la presentación: se puede volver a ella
   const pedir = waBoton(WA.prueba(), 'Pedir un código de prueba');
   el.innerHTML = `<div class="auth-in">
     ${volver ? `<button class="link-btn auth-volver" type="button" data-pz-volver>${ICON.back} Conocer Zuka</button>` : ''}
     <div class="auth-brand">${zukaWord()}</div>
-    <h1>${cod ? 'Entra con tu código' : 'Entra con tu correo'}</h1>
-    <p class="muted">${cod ? 'Es el que recibiste por WhatsApp. Con el mismo código entras siempre y sigues donde ibas.' : 'Para administración y cuentas creadas con correo.'}</p>
+    <h1>Entra a Zuka</h1>
+    <p class="muted">Con tu código entras siempre y la app te lleva a lo tuyo: tus cursos, el portal de tu institución o el panel.</p>
     <form class="acct-form" novalidate>
-      ${cod ? CAMPO_CODIGO : campo('correo', 'Correo', 'email', 'autocomplete="email" inputmode="email" required')
-    + campo('clave', 'Contraseña', 'password', 'autocomplete="current-password" required')}
+      ${campo('codigo', 'Código o correo', 'text', 'autocomplete="username" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="ABCDE-FGH23" required')}
+      <div class="auth-clave"${modo === 'correo' ? '' : ' hidden'}>${campo('clave', 'Contraseña', 'password', 'autocomplete="current-password"')}
+        <button class="link-btn" type="button" data-olvide>Olvidé mi contraseña</button></div>
       <p class="form-msg${aviso ? ' bad' : ''}" role="alert"${aviso ? '' : ' hidden'}>${aviso}</p>
       <button class="btn main" type="submit">Entrar</button>
     </form>
-    ${cod ? '' : '<button class="link-btn" type="button" data-olvide>Olvidé mi contraseña</button>'}
-    <div class="auth-guest">${cod ? `${pedir || '<p class="muted">Si aún no tienes código, pídelo por el WhatsApp de Zuka.</p>'}
-      <button class="link-btn auth-otro" type="button" data-modo="correo">Entrar con correo</button>`
-    : '<button class="btn ghost" type="button" data-modo="codigo">Entrar con código</button>'}</div>
+    <div class="auth-guest">${pedir || '<p class="muted">Si aún no tienes código, pídelo por el WhatsApp de Zuka.</p>'}</div>
   </div>`;
-  const f = $('form', el), msg = $('.form-msg', el), b = $('button[type=submit]', el);
-  $('[data-modo]', el).onclick = e => authScreen(e.currentTarget.dataset.modo);
-  $('[data-olvide]', el)?.addEventListener('click', openOlvide);
+  const f = $('form', el), msg = $('.form-msg', el), b = $('button[type=submit]', el), clave = $('.auth-clave', el), quien = f.codigo;
+  const esCorreo = () => quien.value.includes('@');
+  quien.oninput = () => {
+    quien.classList.toggle('es-correo', esCorreo());   // un correo se ve como se escribe (el código va en mayúsculas)
+    if (esCorreo() && clave.hidden) clave.hidden = false; else if (!esCorreo() && modo !== 'correo') clave.hidden = true;
+  };
+  $('[data-olvide]', el).addEventListener('click', openOlvide);
   $('[data-pz-volver]', el)?.addEventListener('click', () => pzVolver());
   // En el computador es una ventana sobre la presentación: tocar afuera la cierra y vuelve a ella.
   el.onclick = e => { if (e.target === el && $('#landing')) pzVolver(); };
@@ -1810,13 +1838,15 @@ function authScreen(modo = 'codigo', aviso = '') {
   f.onsubmit = async e => {
     e.preventDefault();
     if (b.disabled) return;
-    const d = Object.fromEntries(new FormData(f));
+    const d = Object.fromEntries(new FormData(f)), cod = !esCorreo();
+    d.correo = d.codigo;
     if (sinRed()) return error(sinRed());
     if (cod && !codigoValido(limpiaCodigo(d.codigo))) return error(canjeError('formato'));
-    if (!cod && (!/^\S+@\S+\.\S+$/.test(d.correo.trim()) || !d.clave)) return error('Escribe tu correo y tu contraseña.');
+    if (!cod && (!/^\S+@\S+\.\S+$/.test(d.correo.trim()) || !d.clave)) { clave.hidden = false; return error('Escribe tu correo y tu contraseña.'); }
     msg.hidden = true; b.disabled = true; b.textContent = 'Un momento…';
     let mal = null;
     try {
+      entrando = true;
       if (cod) mal = await entrarConCodigo(limpiaCodigo(d.codigo));
       else {
         const r = await Cuenta.sb.auth.signInWithPassword({ email: d.correo.trim(), password: d.clave });
@@ -1825,7 +1855,7 @@ function authScreen(modo = 'codigo', aviso = '') {
     } catch (x) { mal = authError(x); }
     if (!f.isConnected) return;
     b.disabled = false; b.textContent = 'Entrar';
-    if (mal) error(mal);   // con sesión, la pantalla la cierra cuentaSesion
+    if (mal) { entrando = false; error(mal); }   // con sesión, la pantalla la cierra cuentaSesion
   };
 }
 // Este navegador, para el límite de dispositivos por código.
@@ -1941,8 +1971,20 @@ async function cuentaSesion(ev, session) {
   Cuenta.user = session.user;
   if (ev === 'PASSWORD_RECOVERY') claveRecupera();   // js/clave.js
   if (antes === session.user.id && ev === 'TOKEN_REFRESHED') return;
+  const recien = entrando && !Clave.vista;   // acaba de entrar con la pantalla de entrada (no al abrir con una sesión guardada)
+  entrando = false;
   await cuentaPerfil();
   cuentaRol();
+  // Entrada única: cada cuenta va a lo suyo (tipoCuenta, js/acceso.js). La administración, a su panel; gestores y docentes, al portal.
+  const quien = tipoCuenta(Cuenta.perfil, Cuenta.inst);
+  if (quien && quien.destino === 'admin' && (recien || entradaAdmin)) { location.replace(entradaVuelta); return; }
+  entradaAdmin = false;
+  if (recien && quien && quien.destino === 'portal') portalPend = true;
+  if (portalPend && quien && quien.destino === 'app') {   // llegó por «Entrar al portal» con una cuenta de estudiante
+    portalPend = false; try { history.replaceState(history.state, '', location.pathname); } catch (e) { /* da igual */ }
+    toast('Esta cuenta no tiene portal. Para entrar como docente o gestor, cierra sesión en Tú y escribe tu código.');
+  }
+  if (recien && bienvenidaCuenta(quien)) toast(bienvenidaCuenta(quien));
   if (datosAbierta) { /* los datos personales se quedan a la vista */ } else if (!Clave.vista) authCerrar(); else if (typeof presentacionCerrar === 'function') presentacionCerrar();   // la contraseña nueva se queda a la vista
   // Supabase repite el aviso de sesión cada vez que se vuelve a la pestaña: solo se repinta si algo cambió.
   if (antes === session.user.id) { if (cuentaHuella() !== perfilPrevio) cuentaRepinta(); datosPide(); return; }
@@ -1991,7 +2033,6 @@ async function cuentaPerfil() {
   if (!cod.error) Cuenta.codigo = cod.data || '';
   if (data) {
     Cuenta.perfil = data;
-    if (data.rol === 'gestor' && $('#auth') && !datosAbierta && !Clave.vista) portalPend = true;   // acaba de entrar con su código: va a su portal (js/portal.js)
     if (!S.name) S.name = primerNombre(data);
     if (cuentaFija()) { const n = nombreFijo(); if (n && n !== S.name) { S.name = n; save(); } }   // el que puso su institución
     cuentaCache(); colegioMarca();
@@ -2389,7 +2430,7 @@ function claveScreen(vista, correo = '') {
 
 // «Olvidé mi contraseña» (desde la pantalla de entrada o la hoja de iniciar sesión).
 function openOlvide() {
-  const correo = ($('#sheet.open input[name="correo"]') || $('#auth input[name="correo"]'))?.value.trim() || '';
+  const escrito = ($('#sheet.open input[name="correo"]') || $('#auth input[name="codigo"]'))?.value.trim() || '', correo = escrito.includes('@') ? escrito : '';
   closeSheet(false);
   claveScreen('pedir', correo);
 }
@@ -3123,7 +3164,7 @@ async function openLector(id) {
 function presentacionToca({ standalone, user, query = '' }) {
   const q = k => new RegExp(`[?&]${k}(=|&|$)`).test(query);
   if (q('presentacion')) return true;
-  if (q('app')) return false;
+  if (q('app') || q('entrar') || q('admin') || q('portal')) return false;   // piden la entrada (spec 2026-11-26-entrada-unica)
   return !standalone && !user;
 }
 
@@ -3437,7 +3478,7 @@ function pzInstHTML(cursos) {
     <div class="pz-inst-g pz-rev"><div class="pz-inst-c"><p class="pz-inst-n"><output>60</output> estudiantes</p><input class="pz-inst-r" type="range" min="0" max="100" value="36" aria-label="Número de estudiantes">
         <div class="pz-inst-cs" role="group" aria-label="Cursos">${cursos.map((c, i) => `<button type="button" data-ic="${c.id}" aria-pressed="${!i}" style="--c:${c.color}">${pzEsc(c.name)}</button>`).join('')}</div>
         <div class="pz-inst-cs" role="group" aria-label="Duración"><button type="button" data-im="6" aria-pressed="true">6 meses</button><button type="button" data-im="12" aria-pressed="false">1 año</button></div>
-        <div class="pz-inst-p" aria-live="polite"></div><div class="pz-ctas"><a class="btn main brand pz-inst-go" href="instituciones/">Pedir cotización</a><a class="btn ghost" href="instituciones/portal/">Entrar al portal</a></div></div>
+        <div class="pz-inst-p" aria-live="polite"></div><div class="pz-ctas"><a class="btn main brand pz-inst-go" href="instituciones/">Pedir cotización</a><a class="btn ghost" href="?portal">Entrar al portal</a></div></div>
       <div class="pz-inst-v">${pzInstMini()}<ul>${PZ_INST.map(([k, h, p]) => `<li><svg class="pz-i" viewBox="0 0 24 24" aria-hidden="true">${PZ_INST_I[k]}</svg><span><b>${h}</b>${p}</span></li>`).join('')}</ul></div></div></section>`;
 }
 // La barra va de 10 a 1000 estudiantes sin ser lineal: los números chicos tienen más sitio.

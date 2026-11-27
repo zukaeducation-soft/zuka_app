@@ -6,7 +6,7 @@
 function presentacionToca({ standalone, user, query = '' }) {
   const q = k => new RegExp(`[?&]${k}(=|&|$)`).test(query);
   if (q('presentacion')) return true;
-  if (q('app')) return false;
+  if (q('app') || q('entrar') || q('admin') || q('portal')) return false;   // piden la entrada (spec 2026-11-26-entrada-unica)
   return !standalone && !user;
 }
 
@@ -320,7 +320,7 @@ function pzInstHTML(cursos) {
     <div class="pz-inst-g pz-rev"><div class="pz-inst-c"><p class="pz-inst-n"><output>60</output> estudiantes</p><input class="pz-inst-r" type="range" min="0" max="100" value="36" aria-label="Número de estudiantes">
         <div class="pz-inst-cs" role="group" aria-label="Cursos">${cursos.map((c, i) => `<button type="button" data-ic="${c.id}" aria-pressed="${!i}" style="--c:${c.color}">${pzEsc(c.name)}</button>`).join('')}</div>
         <div class="pz-inst-cs" role="group" aria-label="Duración"><button type="button" data-im="6" aria-pressed="true">6 meses</button><button type="button" data-im="12" aria-pressed="false">1 año</button></div>
-        <div class="pz-inst-p" aria-live="polite"></div><div class="pz-ctas"><a class="btn main brand pz-inst-go" href="instituciones/">Pedir cotización</a><a class="btn ghost" href="instituciones/portal/">Entrar al portal</a></div></div>
+        <div class="pz-inst-p" aria-live="polite"></div><div class="pz-ctas"><a class="btn main brand pz-inst-go" href="instituciones/">Pedir cotización</a><a class="btn ghost" href="?portal">Entrar al portal</a></div></div>
       <div class="pz-inst-v">${pzInstMini()}<ul>${PZ_INST.map(([k, h, p]) => `<li><svg class="pz-i" viewBox="0 0 24 24" aria-hidden="true">${PZ_INST_I[k]}</svg><span><b>${h}</b>${p}</span></li>`).join('')}</ul></div></div></section>`;
 }
 // La barra va de 10 a 1000 estudiantes sin ser lineal: los números chicos tienen más sitio.

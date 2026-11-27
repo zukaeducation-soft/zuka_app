@@ -122,7 +122,7 @@ function claveScreen(vista, correo = '') {
 
 // «Olvidé mi contraseña» (desde la pantalla de entrada o la hoja de iniciar sesión).
 function openOlvide() {
-  const correo = ($('#sheet.open input[name="correo"]') || $('#auth input[name="correo"]'))?.value.trim() || '';
+  const escrito = ($('#sheet.open input[name="correo"]') || $('#auth input[name="codigo"]'))?.value.trim() || '', correo = escrito.includes('@') ? escrito : '';
   closeSheet(false);
   claveScreen('pedir', correo);
 }

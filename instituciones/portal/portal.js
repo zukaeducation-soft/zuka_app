@@ -45,38 +45,20 @@ async function cambia(a, p, dice) { const r = await api(a, p); await carga(); ma
 async function entrar() {
   if (!DEMO && !sb && MARCO) return falla('No se pudo cargar el portal. Revisa tu conexión.');
   if (!DEMO && !sb) { view.innerHTML = '<p class="pn-state bad">No se pudo cargar el portal. Revisa tu conexión y recarga.</p>'; return; }
+  if (!MARCO && !DEMO && !INST) { location.replace('/?portal'); return; }   // entrada única (spec 2026-11-26-entrada-unica): el portal vive en la app
   if (!DEMO) { const { data: { session } } = await sb.auth.getSession(); if (!session) return MARCO ? falla('Tu sesión se cerró. Vuelve a entrar desde Tú.') : login(); }
   try { await carga(); } catch (e) {
     const sin = e.code === '42501';
     if (MARCO) return falla(sin ? 'Tu acceso al portal no está activo. Habla con tu institución.' : errT(e));
-    view.innerHTML = `<div class="pn-state bad"><p>${sin ? 'Esta cuenta no administra una institución.' : esc(errT(e))}</p><button class="btn ghost" type="button">${sin ? 'Entrar con otro código' : 'Reintentar'}</button></div>`;
+    view.innerHTML = `<div class="pn-state bad"><p>${sin ? 'Esta cuenta no administra una institución.' : esc(errT(e))}</p><button class="btn ghost" type="button">${sin ? 'Entrar con otra cuenta' : 'Reintentar'}</button></div>`;
     $('button', view).onclick = async () => { if (sin) { await sb.auth.signOut({ scope: 'local' }); login(); } else entrar(); }; return;
   }
-  if (!MARCO && !DEMO && !INST && appNueva()) { location.replace('/?portal'); return; }   // vive dentro de la app
   document.body.classList.add('dentro'); marco();
   removeEventListener('hashchange', ruta); addEventListener('hashchange', ruta); ruta(); anota();
   if (MARCO) { try { parent.zukaListo(); } catch (e) { /* nada */ } }
 }
-function login() {
-  if (MARCO) return irApp('home');
-  document.body.classList.remove('dentro'); $('.pn-nav').hidden = true; $('.pn-user').hidden = true;
-  view.innerHTML = `<form class="pn-card pn-login acct-form po-login" novalidate><h1>Portal de instituciones</h1><p>Escribe tu código de gestor o docente.</p><label class="fld"><span>Código</span><input name="codigo" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14" placeholder="ABCDE-FGHJK" required></label>
-    <p class="form-msg bad" role="alert" hidden></p><button class="btn main" type="submit">Entrar</button><a class="btn ghost" href="?demo">Ver el portal de ejemplo</a></form>`;
-  const f = $('form', view), msg = $('.form-msg', view);
-  f.onsubmit = e => {
-    e.preventDefault(); const c = limpiaCodigo(f.codigo.value), mal = t => { msg.textContent = t; msg.hidden = false; f.codigo.focus(); };
-    if (!codigoValido(c)) return mal(CANJE_ERRORES.formato);
-    ocupado($('button', f), async () => {
-      msg.hidden = true;
-      let id = null; try { id = localStorage.getItem('zuka-dispositivo'); if (!id) { id = [...crypto.getRandomValues(new Uint8Array(16))].map(x => x.toString(16).padStart(2, '0')).join(''); localStorage.setItem('zuka-dispositivo', id); } } catch (x) { id = id || crypto.randomUUID(); }
-      const { data, error } = await sb.functions.invoke('entrar-codigo', { body: { codigo: c, dispositivo: id, nombre: 'Portal de instituciones' } });
-      if (error || !data?.ok) return mal((data && CANJE_ERRORES[data.error]) || 'No se pudo entrar. Revisa el código y tu conexión.');
-      const v = await sb.auth.verifyOtp({ token_hash: data.token_hash, type: 'magiclink' });
-      if (v.error) return mal('No se pudo entrar. Inténtalo de nuevo.');
-      await entrar();
-    });
-  };
-}
+// Sin formulario propio: se entra por la entrada única de la app (con ?i= lo abre la administración desde su panel).
+function login() { if (MARCO) return irApp('home'); location.replace(INST ? `/?admin=${encodeURIComponent(location.pathname + location.search)}` : '/?portal'); }
 $('[data-salir]').onclick = async () => { if (DEMO) return location.assign('/instituciones/'); await sb.auth.signOut({ scope: 'local' }); location.replace(location.pathname); };   // recarga: nada de una cuenta queda para la otra
 function marco() {
   $('[data-inst]').textContent = D.institucion.nombre; $('.pn-user').hidden = false; $('.pn-mail').textContent = `${D.yo.nombre}${gestor() ? '' : ` · ${X && X.asignaciones.length ? compsMios().map(c => c.nombre).join(', ') : 'Docente'}`}`;

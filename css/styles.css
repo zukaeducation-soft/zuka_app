@@ -1603,3 +1603,7 @@ body:not([data-tab=learn]):not([data-tab=gym]) #view { padding-top: env(safe-are
 @media (max-width: 719px) { .sk-tarjetas { display: flex; overflow: hidden; gap: 14px; } .sk .sk-tarjeta { flex: 0 0 min(292px, 84%); height: 260px; } }
 @keyframes sk-late { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .sk i { animation: none; } }
+/* Entrada única (2026-11-26): la contraseña aparece en el mismo formulario al escribir un correo. */
+.auth-clave { display: grid; gap: 8px; } .auth-clave .link-btn { justify-self: start; }
+.auth-clave[hidden] { display: none; }
+.fld input[name="codigo"].es-correo { text-transform: none; letter-spacing: normal; font-family: inherit; }

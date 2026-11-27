@@ -17,5 +17,5 @@ test('piezas: pestaña, marco permitido y orden de carga', () => {
   const idx = read('index.html'), po = read('instituciones/portal/index.html');
   assert.match(idx, /data-tab="cursos">[^<]+<\/button>\s*<button data-tab="portal" hidden>/); assert.ok(idx.indexOf('js/portal.js') < idx.indexOf('js/app.js'));
   assert.match(read('vercel.json'), /frame-src 'self' /); assert.ok(po.indexOf('portal/vivo.js') < po.indexOf('portal/portal.js'));
-  assert.match(read('instituciones/portal/portal.js'), /!MARCO && !DEMO && !INST && appNueva\(\)\) \{ location\.replace\('\/\?portal'\)/);
+  assert.match(read('instituciones/portal/portal.js'), /!MARCO && !DEMO && !INST\) \{ location\.replace\('\/\?portal'\)/);
 });
