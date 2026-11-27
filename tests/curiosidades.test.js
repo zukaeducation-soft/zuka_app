@@ -83,7 +83,7 @@ test('si el video no carga, el feed cambia a las escenas de respaldo', () => {
 });
 
 test('en pausa, el pie del clip sube por encima de la barra de adelantar', () => {
-  assert.match(read('css/styles.css'), /\.feed-item:has\(\.clip\.paused\) \.feed-cap \{ opacity: 1; bottom: calc\(var\(--tabbar-h/);
+  assert.match(read('css/styles.css'), /\.feed-item:has\(\.clip\.paused\) \.feed-cap \{ opacity: 1; transform: translateY\(calc\(38px - var\(--tabbar-h/);
   assert.match(read('css/styles.css'), /\.feed-cap \{[^}]*opacity: 0/, 'mientras el clip corre, el pie no tapa el video');
 });
 

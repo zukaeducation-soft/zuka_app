@@ -5914,7 +5914,7 @@ function startLesson(c, l) {
 
   const revPos = $('.rev-pos', ov);
   const updateBar = () => {
-    bar.style.width = (solved / total) * 100 + '%'; hearts.textContent = S.hearts;
+    bar.style.setProperty('--p', (solved / total) * 100); hearts.textContent = S.hearts;
     if (revPos) revPos.textContent = `${Math.min(pos + 1, queue.length)}/${queue.length}`;
   };
   const teardown = () => { clearTimeout(clipTimer); clipTimer = null; player?.destroy(); player = null; handle?.destroy?.(); handle = null; };
@@ -6086,7 +6086,7 @@ function startLesson(c, l) {
     const newStreak = markStreak();
     const exN = l.ex.length, acc = Math.round((100 * exN) / (exN + mistakes));
     const secs = Math.round((Date.now() - t0) / 1000);
-    bar.style.width = '100%';
+    bar.style.setProperty('--p', 100);
     body.className = 'lesson-body';
     body.innerHTML = `<div class="done-screen"><canvas class="confetti"></canvas>
       ${mascotSVG('cheer', 'm-win')}

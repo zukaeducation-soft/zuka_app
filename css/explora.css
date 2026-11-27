@@ -241,7 +241,7 @@
 .lesson.xp-lesson { --play-bg: var(--bg); }
 .lesson.xp-lesson .lesson-top { gap: 10px; }
 .lesson.xp-lesson .pbar { height: 5px; border-radius: 3px; background: var(--track); }
-.lesson.xp-lesson .pbar i { background: var(--c-ink); border-radius: 3px; transition: width .45s cubic-bezier(.2,.8,.2,1); }
+.lesson.xp-lesson .pbar i { background: var(--c-ink); border-radius: 3px; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
 .lesson.xp-lesson .lesson-foot { border-top: 0; padding: 10px 20px calc(env(safe-area-inset-bottom) + 8px); }
 /* Enunciado: la letra, el tamaño y el color de la frase de la explicación (entra palabra a palabra) */
 .lesson.xp-lesson .ex-head, .lesson.xp-lesson .practice .ex-head { padding-left: 0; margin-bottom: 12px; }

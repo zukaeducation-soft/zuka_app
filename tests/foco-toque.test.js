@@ -34,3 +34,38 @@ test('las hojas y tarjetas que se desplazan no arrastran la página de atrás', 
     assert.match(bodyOf(sel), /overscroll-behavior:\s*contain/, `${sel} sin overscroll-behavior: contain`);
   }
 });
+
+// Lo que se mueve seguido se anima con transform (no vuelve a calcular el diseño en cada cuadro).
+const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
+
+test('la barra de avance de la lección se llena con transform, no con el ancho', () => {
+  for (const [file, sel] of [['css/styles.css', '.pbar i'], ['css/explora.css', '.lesson.xp-lesson .pbar i']]) {
+    const m = read(file).match(new RegExp(sel.replace(/[.]/g, '[.]') + ' [{]([^}]*)[}]'));
+    assert.ok(m, `${file}: falta ${sel}`);
+    assert.doesNotMatch(m[1], /transition:[^;]*width/, `${file}: ${sel} anima el ancho`);
+    assert.match(m[1], /transition:[^;]*transform/, `${file}: ${sel}`);
+  }
+  assert.match(bodyOf('.pbar i'), /transform:\s*translateX\(calc\(var\(--p, 0\) \* 1% - 100%\)\)/);
+  const app = read('js/app.js');
+  assert.doesNotMatch(app, /bar\.style\.width/);
+  assert.match(app, /bar\.style\.setProperty\('--p'/);
+});
+
+test('el hueco y la tarjeta del recorrido se colocan con transform', () => {
+  const tour = read('js/tour.js');
+  assert.doesNotMatch(tour, /(hole|tip)\.style, \{ left:/);
+  assert.match(tour, /hole\.style, \{ transform: `translate\(/);
+  assert.match(tour, /tip\.style, \{ transform: `translate\(/);
+  for (const sel of ['.tour-hole', '.tour-tip']) {
+    const t = (bodyOf('.tour.open ' + sel).match(/transition:([^;]*)/) || [])[1] || '';
+    assert.doesNotMatch(t, /\b(left|top)\b/, `${sel} anima left o top`);
+    assert.match(t, /transform/, sel);
+    assert.match(bodyOf(sel), /left:\s*0;\s*top:\s*0/, `${sel} parte de la esquina`);
+  }
+});
+
+test('en Clips, los controles de abajo suben con transform al pausar', () => {
+  assert.doesNotMatch(css, /transition:[^;}]*\bbottom\b/, 'queda una transición de bottom');
+  assert.match(bodyOf('body[data-tab=clips] .clip.in-feed.paused .seek'), /transform:\s*translateY/);
+  assert.match(bodyOf('.feed-item:has(.clip.paused) .feed-cap'), /transform:\s*translateY/);
+});

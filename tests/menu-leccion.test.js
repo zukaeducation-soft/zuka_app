@@ -40,5 +40,5 @@ test('CSS: en Clips, con un clip reproduciéndose, el menú se esconde', () => {
 });
 
 test('CSS: en Clips, en pausa, la barra de adelantar queda sobre el menú', () => {
-  assert.match(rule('body[data-tab=clips] .clip.in-feed.paused .seek'), /bottom:\s*calc\(var\(--tabbar-h/);
+  assert.match(rule('body[data-tab=clips] .clip.in-feed.paused .seek'), /transform:\s*translateY\(calc\(-1 \* var\(--tabbar-h/);
 });

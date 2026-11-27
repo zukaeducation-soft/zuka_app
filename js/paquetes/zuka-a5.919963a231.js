@@ -6423,11 +6423,11 @@ function startTour() {
       const br = getComputedStyle(el).borderTopLeftRadius;
       radius = br.endsWith('%') ? br : `${Math.max(14, (parseFloat(br) || 0) + 6)}px`;
     }
-    Object.assign(hole.style, { left: `${h.left}px`, top: `${h.top}px`, width: `${h.width}px`, height: `${h.height}px`, borderRadius: radius });
+    Object.assign(hole.style, { transform: `translate(${h.left}px, ${h.top}px)`, width: `${h.width}px`, height: `${h.height}px`, borderRadius: radius });
     const app = $('#app').getBoundingClientRect();
     const p = tourTipPos(h, tip.offsetWidth, tip.offsetHeight, innerWidth, innerHeight, { left: app.left, right: app.right });
     tip.dataset.side = p.side;
-    Object.assign(tip.style, { left: `${p.left}px`, top: `${p.top}px` });
+    Object.assign(tip.style, { transform: `translate(${p.left}px, ${p.top}px)` });
     tip.style.setProperty('--arrow', `${p.arrow}px`);
     // ¿La tarjeta quedó sin tapar el hueco?
     return centered || (p.side === 'below' ? p.top >= h.top + h.height : p.top + tip.offsetHeight <= h.top);

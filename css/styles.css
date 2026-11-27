@@ -483,9 +483,9 @@ body[data-tab=clips] #tabbar button.on .i { color: #fff; background: rgba(255, 2
 .clip.paused .seek-skip button { pointer-events: auto; }
 .clip.is-video.in-feed .seek-time { bottom: 32px; }
 /* En Clips, al pausar vuelve el menú: los controles de abajo suben para quedar sobre él. */
-body[data-tab=clips] .clip.in-feed.paused .seek { bottom: calc(var(--tabbar-h, 0px) + 2px); }
-body[data-tab=clips] .clip.is-video.in-feed.paused .seek-time { bottom: calc(var(--tabbar-h, 0px) + 32px); }
-body[data-tab=clips] .clip.in-feed .seek, body[data-tab=clips] .clip.in-feed .seek-time { transition: bottom .25s; }
+body[data-tab=clips] .clip.in-feed.paused .seek { transform: translateY(calc(-1 * var(--tabbar-h, 0px))); }
+body[data-tab=clips] .clip.is-video.in-feed.paused .seek-time { transform: translateY(calc(-1 * var(--tabbar-h, 0px))); }
+body[data-tab=clips] .clip.in-feed .seek, body[data-tab=clips] .clip.in-feed .seek-time { transition: transform .25s; }
 
 /* ---------- lección: clip a pantalla completa ---------- */
 .clip-close, .clip-skip { display: none; }
@@ -546,9 +546,9 @@ body[data-tab=clips] .clip.in-feed .seek, body[data-tab=clips] .clip.in-feed .se
 .rail-btn.like.on .i { fill: #ff3d68; transform: scale(1.15); }
 .rail-btn.save.on .i { fill: var(--gold); stroke: var(--gold); }
 /* El pie (tema, título y dato) solo se ve en pausa: mientras el clip corre taparía lo escrito en el video. */
-.feed-cap { position: absolute; left: 14px; right: 76px; bottom: 96px; z-index: 3; opacity: 0; transition: opacity .2s, bottom .25s; display: flex; flex-direction: column; gap: 3px; color: #fff; text-shadow: 0 1px 4px #000, 0 0 12px rgba(0,0,0,.6); pointer-events: none; }
+.feed-cap { position: absolute; left: 14px; right: 76px; bottom: 96px; z-index: 3; opacity: 0; transition: opacity .2s, transform .25s; display: flex; flex-direction: column; gap: 3px; color: #fff; text-shadow: 0 1px 4px #000, 0 0 12px rgba(0,0,0,.6); pointer-events: none; }
 /* En pausa aparecen la barra de adelantar y el tiempo abajo a la izquierda: el pie sube para no quedar debajo. */
-.feed-item:has(.clip.paused) .feed-cap { opacity: 1; bottom: calc(var(--tabbar-h, 60px) + 58px); }
+.feed-item:has(.clip.paused) .feed-cap { opacity: 1; transform: translateY(calc(38px - var(--tabbar-h, 60px))); }   /* queda a 58 px sobre el menú */
 .feed-cap small { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--c); }
 .feed-cap b { font-size: 16px; line-height: 1.2; }
 .feed-cap span { font-size: 13px; line-height: 1.35; color: rgba(255,255,255,.88); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
@@ -582,7 +582,8 @@ body.in-lesson .lesson-foot { padding-bottom: max(16px, calc(env(safe-area-inset
 .rev-nav button:active { background: var(--line); }
 .rev-nav .rev-pos { min-width: 34px; text-align: center; font-size: 12px; color: var(--mute); font-variant-numeric: tabular-nums; }
 .pbar { flex: 1; height: 8px; border-radius: 8px; background: var(--card2); overflow: hidden; }
-.pbar i { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--c, var(--ok)); box-shadow: none; transition: width .4s cubic-bezier(.2,.8,.2,1); }
+/* El avance (--p, de 0 a 100) corre la barra llena desde fuera de la pista: se anima con transform, sin recalcular el diseño. */
+.pbar i { display: block; height: 100%; width: 100%; border-radius: inherit; background: var(--c, var(--ok)); box-shadow: none; transform: translateX(calc(var(--p, 0) * 1% - 100%)); transition: transform .4s cubic-bezier(.2,.8,.2,1); }
 .lesson-body { flex: 1; min-height: 0; overflow: auto; padding: 8px 20px 24px; }
 .lesson-body.is-clip { display: flex; justify-content: center; padding: 4px 16px 12px; overflow: hidden; }
 .lesson-body.is-clip .clip { height: 100%; width: 100%; max-width: calc((calc(100 * var(--dvh)) - var(--tabbar-h, 0px) - 170px) * 9 / 16); border-radius: 20px; }
@@ -1096,19 +1097,20 @@ img.logo { display: block; width: auto; }   /* panel de administración: brand/l
 .tour:not(.open) { pointer-events: none; }
 .tour.open { opacity: 1; }
 .tour-hole {
-  position: absolute; border-radius: 16px; box-shadow: 0 0 0 200vmax rgba(4, 6, 18, .74); cursor: pointer;
-  transition: left .35s cubic-bezier(.2,.8,.2,1), top .35s cubic-bezier(.2,.8,.2,1), width .35s cubic-bezier(.2,.8,.2,1), height .35s cubic-bezier(.2,.8,.2,1);
+  position: absolute; left: 0; top: 0; border-radius: 16px; box-shadow: 0 0 0 200vmax rgba(4, 6, 18, .74); cursor: pointer;
 }
 .tour-hole::after { content: ''; position: absolute; inset: -3px; border-radius: inherit; border: 2px solid #fff; animation: tour-ring 1.6s ease-in-out infinite; }
 .tour.center .tour-hole { cursor: default; }
 .tour.center .tour-hole::after { display: none; }
 @keyframes tour-ring { 50% { inset: -8px; opacity: .45; } }
 .tour-tip {
-  position: absolute; width: min(340px, calc(calc(100 * var(--dvw)) - 24px)); padding: 18px 16px 16px; border-radius: 18px; text-align: left;
+  position: absolute; left: 0; top: 0; width: min(340px, calc(calc(100 * var(--dvw)) - 24px)); padding: 18px 16px 16px; border-radius: 18px; text-align: left;
   max-height: calc(calc(100 * var(--dvh)) - 16px); overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y pinch-zoom;   /* pantalla baja: la tarjeta se desplaza */
   background: var(--bg2); color: var(--ink); border: 1px solid var(--line); box-shadow: var(--shadow);
-  transition: left .35s cubic-bezier(.2,.8,.2,1), top .35s cubic-bezier(.2,.8,.2,1);
 }
+/* La posición va en transform (js/tour.js). Solo se anima con el recorrido ya abierto: la primera vez aparece en su sitio. */
+.tour.open .tour-hole { transition: transform .35s cubic-bezier(.2,.8,.2,1), width .35s cubic-bezier(.2,.8,.2,1), height .35s cubic-bezier(.2,.8,.2,1); }
+.tour.open .tour-tip { transition: transform .35s cubic-bezier(.2,.8,.2,1); }
 .tour-tip[data-side="center"] { text-align: center; }
 .tour-x { position: absolute; top: 8px; right: 8px; }
 .tour-art:not(:empty) { display: grid; place-items: center; margin-bottom: 12px; }
@@ -1154,7 +1156,7 @@ img.logo { display: block; width: auto; }   /* panel de administración: brand/l
 .te-hint .i { width: 14px; height: 14px; color: var(--gold); }
 .te-check { padding: 7px 10px; border-radius: 10px; background: var(--ok); color: #0b0d1a; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
 @media (max-height: 480px) { .tour-art:not(:empty) { display: none; } }
-@media (prefers-reduced-motion: reduce) { .tour, .tour-hole, .tour-tip { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .tour, .tour.open .tour-hole, .tour.open .tour-tip { transition: none; } }
 
 /* ---------- pestaña Tutorías (js/tutorias.js) ---------- */
 .tutorias { padding: 20px 16px 48px; display: grid; gap: 16px; }
