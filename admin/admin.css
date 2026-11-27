@@ -1,5 +1,8 @@
 /* Panel de administración de Zuka. Usa las variables de tema y los botones de css/styles.css. */
-body.admin { overflow: auto; background: var(--bg); min-height: 100%; }
+/* Desplaza la ventana, no el body (2026-11-26): con overflow en el body, el navegador lo pasaba a la ventana y el menú
+   lateral (sticky) no tenía contra qué quedarse quieto; bajaba con el contenido. Así el menú se queda y se desplaza aparte. */
+:root:has(> body.admin) { overflow-y: auto; }
+body.admin { overflow: visible; height: auto; background: var(--bg); min-height: 100%; }
 .admin .btn { width: auto; padding: 11px 16px; font-size: 14.5px; }
 .admin .btn.main { --c: var(--brand); color: var(--on-brand); }
 .admin .btn.small { padding: 7px 11px; font-size: 13px; border-radius: 10px; }
