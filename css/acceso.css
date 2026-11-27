@@ -1,7 +1,59 @@
 /* Entrada con código, compra, «Mi plan» y datos personales (js/cuenta.js, js/datos.js; spec 2026-11-24-acceso-por-codigo). */
 .auth-in a.btn, .acct-form a.btn { text-align: center; text-decoration: none; }
 .auth-otro { justify-self: center; align-self: center; }
-.auth-in .fld input[name="codigo"] { padding: 16px; font-size: 20px; text-align: center; }
+.auth-in.auth-acceso {
+  --margen-acceso: clamp(20px, 4vw, 32px);
+  width: min(100%, 460px); min-height: 0; padding: 0; gap: 0; margin: auto;
+  background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+}
+.auth-cabecera {
+  position: relative; isolation: isolate; overflow: hidden; display: grid; align-content: space-between;
+  gap: 30px; padding: 22px var(--margen-acceso); border-radius: 21px 21px 0 0;
+  background: linear-gradient(108deg, #0c1529 15%, #102943 70%, #153955); color: #edf5ff;
+}
+.auth-cabecera .auth-brand { padding: 0; }
+.auth-cabecera .logo { color: inherit; height: 26px; gap: 7px; }
+.auth-in .auth-cabecera h1 { font: 500 clamp(30px, 5vw, 38px)/1.04 var(--display); letter-spacing: -.035em; color: inherit; outline: 0; }
+.auth-esfera { position: absolute; z-index: -1; right: 2%; top: 22%; height: 112%; color: #719bb6; stroke-width: .85; pointer-events: none; }
+.auth-orbita { stroke: #8ddfff; stroke-width: 1.5; }
+.auth-nodo { fill: #a1e4ff; stroke: none; }
+.auth-acceso:focus-within .auth-orbita { stroke: #b6edff; }
+@media (prefers-reduced-motion: no-preference) {
+  .auth-esfera { transition: transform .45s ease-out; }
+  .auth-acceso:has(form :focus) .auth-esfera { transform: rotate(9deg); }
+}
+.auth-cerrar { position: absolute; top: 6px; right: 7px; width: 44px; height: 44px; display: grid; place-items: center; color: #edf5ff; }
+.auth-cerrar .i { width: 18px; height: 18px; }
+.auth-cerrar:hover { color: #a1e4ff; }
+.auth-cerrar:focus-visible { outline-color: #a1e4ff; outline-offset: -5px; }
+.auth-cuerpo { display: grid; gap: 20px; padding: 24px var(--margen-acceso); }
+.auth-intro { color: var(--mute); font-size: 15px; line-height: 1.5; }
+.auth-acceso .acct-form { gap: 14px; padding: 0; }
+.auth-acceso .fld { color: var(--ink); font-size: 14px; gap: 7px; }
+.auth-acceso .fld input, .auth-secreto input {
+  width: 100%; min-width: 0; min-height: 50px; padding: 12px 14px; background: var(--bg);
+  border: 1px solid var(--line); border-radius: 11px; color: var(--ink); font-size: 16px;
+}
+.auth-acceso input::placeholder { color: var(--mute); opacity: 1; }
+.auth-acceso input:focus { border-color: var(--brand); outline: 2px solid var(--brand); outline-offset: 1px; }
+.auth-acceso input[aria-invalid="true"] { border-color: var(--bad-ink); }
+.auth-secreto { position: relative; }
+.auth-secreto input { padding-right: 76px; font: inherit; }
+.auth-secreto button { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); padding-inline: 8px; min-width: 44px; min-height: 44px; color: var(--brand); font-weight: 600; }
+.auth-clave .link-btn { min-height: 44px; padding: 6px 0; }
+.auth-entrar { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; }
+.auth-entrar .i { width: 17px; height: 17px; }
+.auth-entrar[aria-busy] .i { display: none; }
+.auth-acceso .auth-guest { padding-top: 14px; justify-items: center; }
+.auth-acceso .auth-guest .wa { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; background: transparent; border: 0; box-shadow: none; padding: 6px 12px; color: var(--brand); font-size: 14px; }
+.auth-acceso .auth-guest .wa:hover { text-decoration: underline; }
+@media (max-width: 999px) {
+  #auth:has(> .auth-acceso) { display: flex; flex-direction: column; padding: max(16px, env(safe-area-inset-top)) 12px max(16px, env(safe-area-inset-bottom)); background: var(--bg); }
+  .auth-acceso { flex: none; }
+}
+@media (max-width: 359px) {
+  .auth-esfera { right: -7%; height: 94%; top: 35%; }
+}
 .fld select { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-size: 16px; font-weight: 600; }
 .fld select:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
 .check { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.4; color: var(--ink); cursor: pointer; }

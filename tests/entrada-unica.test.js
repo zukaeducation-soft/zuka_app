@@ -45,6 +45,16 @@ test('al entrar, cada cuenta va a lo suyo', () => {
   assert.match(c, /bienvenidaCuenta\(/);
 });
 
+test('el acceso enlaza la contraseña con el control de visibilidad y comunica el envío', () => {
+  const s = read('js/cuenta.js');
+  assert.match(s, /id="auth-password"/);
+  assert.match(s, /aria-controls="auth-password"/);
+  assert.match(s, /aria-pressed="false"/);
+  assert.match(s, /setAttribute\('aria-busy', 'true'\)/);
+  assert.match(s, /campo.setAttribute\('aria-describedby', 'auth-error'\)/);
+  assert.match(s, /campo.removeAttribute\('aria-describedby'\)/);
+});
+
 test('?admin, ?portal y ?entrar abren la entrada, sin presentación y también en localhost', () => {
   for (const q of ['?admin', '?portal', '?entrar']) assert.equal(toca({ standalone: false, user: null, query: q }), false, q);
   assert.equal(toca({ standalone: false, user: null, query: '' }), true);

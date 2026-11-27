@@ -1810,40 +1810,94 @@ function authScreen(modo = 'codigo', aviso = '') {
   if (!el) { el = document.createElement('div'); el.id = 'auth'; document.body.appendChild(el); }
   const volver = typeof pzDesde !== 'undefined' && pzDesde;   // se llegó desde la presentación: se puede volver a ella
   const pedir = waBoton(WA.prueba(), 'Pedir un código de prueba');
-  el.innerHTML = `<div class="auth-in">
-    ${volver ? `<button class="link-btn auth-volver" type="button" data-pz-volver>${ICON.back} Conocer Zuka</button>` : ''}
-    <div class="auth-brand">${zukaWord()}</div>
-    <h1>Entra a Zuka</h1>
-    <p class="muted">Con tu código entras siempre y la app te lleva a lo tuyo: tus cursos, el portal de tu institución o el panel.</p>
-    <form class="acct-form" novalidate>
-      ${campo('codigo', 'Código o correo', 'text', 'autocomplete="username" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="ABCDE-FGH23" required')}
-      <div class="auth-clave"${modo === 'correo' ? '' : ' hidden'}>${campo('clave', 'Contraseña', 'password', 'autocomplete="current-password"')}
-        <button class="link-btn" type="button" data-olvide>Olvidé mi contraseña</button></div>
-      <p class="form-msg${aviso ? ' bad' : ''}" role="alert"${aviso ? '' : ' hidden'}>${aviso}</p>
-      <button class="btn main" type="submit">Entrar</button>
-    </form>
-    <div class="auth-guest">${pedir || '<p class="muted">Si aún no tienes código, pídelo por el WhatsApp de Zuka.</p>'}</div>
-  </div>`;
+  el.innerHTML = `<section class="auth-in auth-acceso" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <header class="auth-cabecera">
+      <svg class="auth-esfera" viewBox="0 0 180 180" fill="none" aria-hidden="true" focusable="false">
+        <g transform="rotate(-23 90 90)" stroke="currentColor">
+          <circle cx="90" cy="90" r="64"/>
+          <ellipse cx="90" cy="90" rx="24" ry="64"/><ellipse cx="90" cy="90" rx="49" ry="64"/>
+          <ellipse cx="90" cy="90" rx="64" ry="15"/><path d="M34 58Q90 78 146 58M34 122Q90 142 146 122"/>
+          <ellipse class="auth-orbita" cx="90" cy="90" rx="88" ry="24"/>
+          <circle class="auth-nodo" cx="178" cy="90" r="3"/>
+        </g>
+      </svg>
+      <div class="auth-brand">${zukaWord()}</div>
+      ${volver ? `<button class="auth-cerrar" type="button" data-pz-volver aria-label="Volver a la portada de Zuka">${ICON.x}</button>` : ''}
+      <h1 id="auth-title" tabindex="-1">Entra a Zuka</h1>
+    </header>
+    <div class="auth-cuerpo">
+      <p class="auth-intro">Usa tu código de acceso o el correo de tu cuenta.</p>
+      <form class="acct-form" novalidate>
+        ${campo('codigo', 'Código o correo', 'text', 'autocomplete="username" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="ABCDE-FGH23" required')}
+        <div class="auth-clave"${modo === 'correo' ? '' : ' hidden'}>
+          <label class="fld" for="auth-password">Contraseña</label>
+          <div class="auth-secreto"><input id="auth-password" name="clave" type="password" autocomplete="current-password">
+            <button type="button" aria-controls="auth-password" aria-label="Mostrar contraseña" aria-pressed="false">Ver</button></div>
+          <button class="link-btn" type="button" data-olvide>Olvidé mi contraseña</button>
+        </div>
+        <p id="auth-error" class="form-msg${aviso ? ' bad' : ''}" role="alert"${aviso ? '' : ' hidden'}>${esc(aviso)}</p>
+        <button class="btn main auth-entrar" type="submit"><span>Entrar</span>${ICON.right}</button>
+      </form>
+      <div class="auth-guest">${pedir || '<p class="muted">Si aún no tienes código, pídelo por el WhatsApp de Zuka.</p>'}</div>
+    </div>
+  </section>`;
   const f = $('form', el), msg = $('.form-msg', el), b = $('button[type=submit]', el), clave = $('.auth-clave', el), quien = f.codigo;
+  const ver = $('[aria-controls="auth-password"]', el), rotulo = $('span', b);
+  const muestraClave = mostrar => {
+    f.clave.type = mostrar ? 'text' : 'password';
+    ver.setAttribute('aria-pressed', String(mostrar));
+    ver.textContent = mostrar ? 'Ocultar' : 'Ver';
+  };
+  ver.onclick = () => muestraClave(f.clave.type === 'password');
   const esCorreo = () => quien.value.includes('@');
   quien.oninput = () => {
-    quien.classList.toggle('es-correo', esCorreo());   // un correo se ve como se escribe (el código va en mayúsculas)
-    if (esCorreo() && clave.hidden) clave.hidden = false; else if (!esCorreo() && modo !== 'correo') clave.hidden = true;
+    quien.classList.toggle('es-correo', esCorreo());
+    clave.hidden = !esCorreo() && modo !== 'correo';
+    if (clave.hidden) muestraClave(false);
   };
+  const limpiaError = () => {
+    msg.hidden = true; msg.textContent = '';
+    for (const campo of [quien, f.clave]) {
+      campo.removeAttribute('aria-invalid');
+      campo.removeAttribute('aria-describedby');
+    }
+  };
+  f.oninput = limpiaError;
   $('[data-olvide]', el).addEventListener('click', openOlvide);
   $('[data-pz-volver]', el)?.addEventListener('click', () => pzVolver());
+  const panel = $('.auth-acceso', el);
+  panel.onkeydown = e => {
+    if (e.key === 'Escape' && volver) { e.stopPropagation(); pzVolver(); return; }
+    if (e.key !== 'Tab') return;
+    const controles = sheetFocusables(panel);
+    const ir = trapIndex(e.shiftKey, controles.indexOf(document.activeElement), controles.length);
+    if (ir >= 0) { e.preventDefault(); controles[ir].focus(); }
+  };
+  $('#auth-title', el).focus({ preventScroll: true });
   // En el computador es una ventana sobre la presentación: tocar afuera la cierra y vuelve a ella.
   el.onclick = e => { if (e.target === el && $('#landing')) pzVolver(); };
-  const error = t => { msg.textContent = t; msg.className = 'form-msg bad'; msg.hidden = false; };
+  const error = (t, campo) => {
+    msg.textContent = t; msg.className = 'form-msg bad'; msg.hidden = false;
+    if (campo) {
+      campo.setAttribute('aria-invalid', 'true');
+      campo.setAttribute('aria-describedby', 'auth-error');
+      campo.focus();
+    }
+  };
   f.onsubmit = async e => {
     e.preventDefault();
     if (b.disabled) return;
+    limpiaError();
     const d = Object.fromEntries(new FormData(f)), cod = !esCorreo();
     d.correo = d.codigo;
     if (sinRed()) return error(sinRed());
-    if (cod && !codigoValido(limpiaCodigo(d.codigo))) return error(canjeError('formato'));
-    if (!cod && (!/^\S+@\S+\.\S+$/.test(d.correo.trim()) || !d.clave)) { clave.hidden = false; return error('Escribe tu correo y tu contraseña.'); }
-    msg.hidden = true; b.disabled = true; b.textContent = 'Un momento…';
+    if (cod && !codigoValido(limpiaCodigo(d.codigo))) return error(canjeError('formato'), quien);
+    if (!cod) {
+      clave.hidden = false;
+      if (!/^\S+@\S+\.\S+$/.test(d.correo.trim())) return error('Revisa tu correo. Por ejemplo, nombre@colegio.edu.co.', quien);
+      if (!d.clave) return error('Escribe tu contraseña para entrar.', f.clave);
+    }
+    b.disabled = true; b.setAttribute('aria-busy', 'true'); rotulo.textContent = 'Entrando…';
     let mal = null;
     try {
       entrando = true;
@@ -1854,7 +1908,7 @@ function authScreen(modo = 'codigo', aviso = '') {
       }
     } catch (x) { mal = authError(x); }
     if (!f.isConnected) return;
-    b.disabled = false; b.textContent = 'Entrar';
+    b.disabled = false; b.removeAttribute('aria-busy'); rotulo.textContent = 'Entrar';
     if (mal) { entrando = false; error(mal); }   // con sesión, la pantalla la cierra cuentaSesion
   };
 }
@@ -1947,7 +2001,10 @@ function cuentaInit() {
   // Dentro del aviso de Supabase no se le puede volver a llamar: se sale primero con setTimeout.
   Cuenta.sb.auth.onAuthStateChange((ev, session) => setTimeout(() => cuentaSesion(ev, session), 0));
   // Al llegar el WhatsApp por primera vez, la entrada lo muestra (sin borrar lo que ya se estaba escribiendo).
-  cuentaTienda().then(() => { const i = $('#auth input[name="codigo"]'); if (i && !i.value && !$('#auth .wa')) authScreen(); }, () => {});
+  cuentaTienda().then(() => {
+    const pie = $('#auth .auth-guest'), pedir = waBoton(WA.prueba(), 'Pedir un código de prueba');
+    if (pie && pedir && !$('.wa', pie)) pie.innerHTML = pedir;
+  }, () => {});
   Cuenta.sb.from('cursos').select('id,publicado').then(({ data }) => {
     if (!data || !data.length) return;
     const m = {}; data.forEach(r => { m[r.id] = r.publicado; });
