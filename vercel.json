@@ -48,6 +48,15 @@
       ]
     },
     {
+      "source": "/js/paquetes/lista.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
       "source": "/(icons|brand)/(.*)",
       "headers": [
         {

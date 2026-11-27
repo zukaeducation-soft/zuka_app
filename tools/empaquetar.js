@@ -99,6 +99,16 @@ function plan() {
       for (const f of dif) for (const g of deps[f]) for (const c of de[f]) if (!de[g].has(c)) { de[g].add(c); cambio = true; }
     }
   };
+  // Lo que el arranque nombra (figura-kit.js lee las tablas XG.ROTULA de rotula-mueve.js al comprobar) hace falta en
+  // cualquier curso: al común. Y un archivo que no registra juegos pero nombra los de otros (esas mismas tablas) sirve a
+  // todos los cursos de esos juegos.
+  const arranque = lista.filter(f => !esDiferido(f)).map(f => lee(f)).join('\n');
+  const paraArranque = Object.keys(apo).filter(a => /^[\w$]+\.[A-Za-z_$][\w$]*$/.test(a) && !/^(GAMES|EXPLORA|GUIDES)\./.test(a) && arranque.includes(a));
+  for (const a of paraArranque) cursos.forEach(c => de[apo[a]].add(c));
+  for (const f of dif) {
+    if ((registra[f] || []).length || (aporta[f] || []).some(a => a.startsWith('EXPLORA.'))) continue;
+    for (const g of deps[f]) if ((registra[g] || []).length) for (const c of de[g]) de[f].add(c);
+  }
   propaga();
   for (const f of dif) if (!de[f].size) cursos.forEach(c => de[f].add(c));
   propaga();
@@ -107,7 +117,7 @@ function plan() {
     const g = de[f].size === 1 ? [...de[f]][0] : 'comun';
     (grupos[g] = grupos[g] || []).push(f);
   }
-  return (memo = { arranque: lista.filter(f => !esDiferido(f)), grupos, explora, cursos });
+  return (memo = { arranque: lista.filter(f => !esDiferido(f)), grupos, explora, cursos, paraArranque });
 }
 
 // Cada archivo va tras un «;» y un rótulo con su ruta: así un archivo sin punto y coma final no se pega al siguiente.

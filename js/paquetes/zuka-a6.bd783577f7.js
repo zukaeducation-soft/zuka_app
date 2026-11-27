@@ -3908,7 +3908,9 @@ function dkMundosHTML(c, b) {
     `<span${u.lessons.every(isDone) ? ' class="ok"' : ''}>${esc((WORLDS[u.world] || {}).name || u.title)}</span>`).join('')}</span>`;
 }
 function dkLeccionHTML(l) {
-  const xp = typeof hayExplora === 'function' ? hayExplora(l.id) : typeof EXPLORA !== 'undefined' && EXPLORA[l.id];   // hayExplora: js/carga.js
+  // Las explicaciones se cargan con el curso (js/carga.js): antes de eso, la lista de paquetes dice cuáles lecciones tienen.
+  const lista = typeof window !== 'undefined' && window.zukaPaquetes && window.ZUKA_PAQUETES;
+  const xp = (typeof EXPLORA !== 'undefined' && EXPLORA[l.id]) || (lista && lista.explora.includes(l.id));
   return `<span class="dk cv-meta">${xp ? 'Explicación interactiva' : `Video de ${esMin(clipSecs(l))}`} · ${l.ex.length} ejercicios</span>`;
 }
 function dkBind(root) {
@@ -6321,8 +6323,15 @@ const CARGA = (() => {
   }));
   const de = id => (P ? [P.comun, P.cursos[id]].filter(Boolean) : []);
   const faltan = id => de(id).filter(s => !listos.has(s));
-  const curso = id => Promise.all(faltan(id).map(pide));
-  const todo = () => (P ? Promise.all([P.comun, ...Object.values(P.cursos)].filter(s => !listos.has(s)).map(pide)) : Promise.resolve());
+  // De uno en uno: si el común no llega, el del curso no se pide (sin el común se ejecutaría a medias y, ya marcado como
+  // cargado, dejaría el curso roto hasta recargar).
+  const enFila = lista => lista.filter(s => !listos.has(s)).reduce((antes, s) => (antes ? antes.then(() => pide(s)) : pide(s)), null) || Promise.resolve();
+  const curso = id => enFila(de(id));
+  const todo = () => (P ? enFila([P.comun, ...Object.values(P.cursos)]) : Promise.resolve());
+  // Un paquete que no llega puede ser de una versión que ya no está publicada (otra pestaña aceptó la actualización y el
+  // service worker soltó los paquetes viejos): si la lista de ahora ya no lo nombra, lo que toca es recargar.
+  const caduco = () => (typeof fetch !== 'function' ? Promise.resolve(false)
+    : fetch('js/paquetes/lista.js', { cache: 'no-store' }).then(r => (r.ok ? r.text() : '')).then(t => !!t && [P.comun, ...Object.values(P.cursos)].some(s => !t.includes(s.split('/').pop())), () => false));
 
   // ¿Está todo lo que esta lección necesita? Si el reparto por curso dejó algo fuera, se pide el resto (red de seguridad).
   const completo = n => (n.juegos || []).every(g => typeof GAMES === 'undefined' || GAMES[g]) &&
@@ -6335,10 +6344,22 @@ const CARGA = (() => {
     if (!P || (!faltan(cursoId).length && completo(necesita))) return sigue();
     if (abriendo) return undefined;   // un segundo toque mientras llega no abre dos lecciones
     abriendo = true;
-    const aviso = setTimeout(() => { if (abriendo && typeof toast === 'function') toast('Cargando los juegos…'); }, 600);
+    const di = m => { if (typeof toast === 'function') toast(m); };
+    const aviso = setTimeout(() => { if (abriendo) di('Cargando los juegos…'); }, 600);
+    // Una red que se queda colgada no deja la app sin poder abrir lecciones: a los 20 s se suelta y se avisa.
+    let vencido = false;
+    const plazo = setTimeout(() => { if (!abriendo) return; vencido = true; abriendo = false; di('Los juegos están tardando en cargar. Revisa tu conexión e inténtalo otra vez.'); }, 20000);
+    const fin = () => { clearTimeout(aviso); clearTimeout(plazo); const sigo = !vencido; if (sigo) abriendo = false; return sigo; };
     return curso(cursoId).then(() => (completo(necesita) ? null : todo())).then(
-      () => { abriendo = false; clearTimeout(aviso); sigue(); },
-      () => { abriendo = false; clearTimeout(aviso); if (typeof toast === 'function') toast('No se pudieron cargar los juegos. Revisa tu conexión e inténtalo otra vez.'); });
+      () => { if (fin()) sigue(); },
+      () => {
+        if (!fin()) return undefined;
+        return caduco().then(viejo => {
+          if (!viejo) return di('No se pudieron cargar los juegos. Revisa tu conexión e inténtalo otra vez.');
+          di('Hay una versión nueva de Zuka: se va a recargar.');
+          return setTimeout(() => location.reload(), 1200);
+        });
+      });
   }
   return { P, abre, curso, todo, faltan, completo, juegosDe, listos };
 })();
@@ -6369,6 +6390,7 @@ if (typeof startReto === 'function') {
 // Quien ya estudia un curso lo tiene listo antes de tocar «Continuar»: se piden sus juegos con la app ya pintada y quieta.
 // Quien solo mira la portada o la Tienda no los pide nunca.
 if (CARGA.P && typeof S !== 'undefined' && S.lastLesson && S.course) {
-  const pide = () => CARGA.curso(S.course).catch(() => {});
+  const suyo = typeof findLesson === 'function' && findLesson(S.lastLesson);   // el curso de la última lección, no el que se mira
+  const pide = () => CARGA.curso(suyo ? suyo.c.id : S.course).catch(() => {});
   setTimeout(() => (typeof requestIdleCallback === 'function' ? requestIdleCallback(pide, { timeout: 4000 }) : pide()), 1500);
 }

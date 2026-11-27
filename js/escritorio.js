@@ -29,7 +29,9 @@ function dkMundosHTML(c, b) {
     `<span${u.lessons.every(isDone) ? ' class="ok"' : ''}>${esc((WORLDS[u.world] || {}).name || u.title)}</span>`).join('')}</span>`;
 }
 function dkLeccionHTML(l) {
-  const xp = typeof hayExplora === 'function' ? hayExplora(l.id) : typeof EXPLORA !== 'undefined' && EXPLORA[l.id];   // hayExplora: js/carga.js
+  // Las explicaciones se cargan con el curso (js/carga.js): antes de eso, la lista de paquetes dice cuáles lecciones tienen.
+  const lista = typeof window !== 'undefined' && window.zukaPaquetes && window.ZUKA_PAQUETES;
+  const xp = (typeof EXPLORA !== 'undefined' && EXPLORA[l.id]) || (lista && lista.explora.includes(l.id));
   return `<span class="dk cv-meta">${xp ? 'Explicación interactiva' : `Video de ${esMin(clipSecs(l))}`} · ${l.ex.length} ejercicios</span>`;
 }
 function dkBind(root) {

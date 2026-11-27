@@ -93,6 +93,21 @@ Lo que queda en el arranque son sobre todo los datos de los cursos (3.3 MB), el 
   `http://zuka.localhost:5197` para el service worker): `tests/robot-paquetes.js` abre la primera lección de un curso y
   monta cada juego que usa. Hecho con los nueve cursos, también aislados, y sin conexión tras una visita.
 
+## Revisión fresca (subagente) y lo que cambió por ella
+
+- Los paquetes se piden **en fila**: si el común no llega, el del curso no se pide (se ejecutaría a medias y quedaría
+  marcado como cargado).
+- Un paquete que no llega porque **ya hay otra versión** (otra pestaña aceptó la actualización y el service worker soltó
+  los paquetes viejos) recarga la app en vez de culpar a la conexión: `js/carga.js` pide `lista.js` sin caché y compara.
+- Una red colgada suelta el intento a los 20 s, con aviso.
+- Lo que **el arranque nombra** de un archivo diferido (`figura-kit.js` lee `XG.ROTULA`, `XG.ORDEN` y `XG.cadena`, de
+  `rotula-mueve.js`) va al común (`paraArranque`); y un archivo de tablas que nombra juegos sirve a los cursos de esos juegos.
+- `js/escritorio.js` lee la lista de paquetes sin esperar a `js/carga.js` (el primer pintado ya dice «Explicación interactiva»).
+- `lista.js` lleva `Cache-Control: no-cache`.
+
+Quedó sin hacer (raro y se recupera con red): si un paquete diferido falló al instalar el service worker y después se
+publica otra versión, ese paquete viejo ya no existe; la app lo detecta al abrir la lección y se recarga.
+
 ## Al tocar esto
 
 - Juego o explicación nuevos: registrar en la plantilla, `node tools/empaquetar.js`, subir `VERSION`. El reparto se

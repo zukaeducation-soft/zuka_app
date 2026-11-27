@@ -141,7 +141,7 @@ test('Vercel: los paquetes con huella se guardan para siempre en el navegador; l
   const reglas = JSON.parse(lee('vercel.json')).headers.map(h => ({ re: new RegExp('^' + h.source + '$'), h: h.headers }));
   const cache = ruta => reglas.filter(r => r.re.test(ruta)).flatMap(r => r.h).filter(h => h.key === 'Cache-Control').map(h => h.value).pop();
   for (const f of Object.keys(archivos)) assert.match(cache('/' + f) || '', /immutable/, f);
-  assert.equal(cache('/' + LISTA), undefined);
+  assert.equal(cache('/' + LISTA), 'no-cache', 'la lista se revalida siempre: no puede quedar una vieja con un index.html nuevo');
 });
 
 // ---- la página ----
@@ -252,6 +252,7 @@ test('con el paquete común y el de su curso, cada curso tiene todos sus juegos 
   for (const [i, c] of cursos.entries()) {
     const n = enNode([P.arranque, P.grupos.comun, P.grupos[c] || []]);
     assert.deepEqual(sinBoot(n.fallos), [], c);
+    for (const a of P.paraArranque) assert.equal(corre(n, `typeof ${a}`), corre(completa, `typeof ${a}`), `${c}: falta ${a}, que el arranque usa`);
     // Lo que el curso usa: los juegos de sus lecciones, jefes, evaluaciones y retos de gimnasio, y sus explicaciones.
     const usa = `(() => { const c = COURSES[${i}], s = new Set(), v = new Set(), ids = new Set(c.units.flatMap(u => u.lessons.map(l => l.id)));
       const anda = x => { if (!x || typeof x !== 'object' || v.has(x)) return; v.add(x); if (typeof x.game === 'string') s.add(x.game); for (const k of Object.keys(x)) anda(x[k]); };
@@ -267,19 +268,27 @@ test('con el paquete común y el de su curso, cada curso tiene todos sus juegos 
   assert.ok(vistos > 1300 && explicadas > 150, `solo se comprobaron ${vistos} juegos y ${explicadas} explicaciones`);
 });
 
+test('lo que el arranque usa de un archivo diferido (las tablas de «Comprobar» de rotula-mueve y marca-mueve) va en el común', () => {
+  for (const a of ['XG.ROTULA', 'XG.ORDEN', 'XG.cadena']) assert.ok(P.paraArranque.includes(a), a);
+  for (const f of ['js/games/rotula-mueve.js', 'js/games/marca-mueve.js']) assert.ok(P.grupos.comun.includes(f), f);
+});
+
 test('la lista dice qué lecciones tienen explicación interactiva (la app lo muestra antes de cargarlas)', () => {
   const ids = new Set(JSON.parse(corre(completa, 'JSON.stringify(COURSES.flatMap(c => c.units.flatMap(u => u.lessons.map(l => l.id))))')));
   assert.equal([...lista.explora].sort().join(), [...corre(completa, 'Object.keys(EXPLORA)')].filter(id => ids.has(id)).sort().join());
   assert.ok(lista.explora.length > 150);
-  assert.match(lee('js/escritorio.js'), /hayExplora\(l\.id\)/);
+  assert.match(lee('js/escritorio.js'), /ZUKA_PAQUETES[\s\S]{0,200}explora\.includes\(l\.id\)/, 'el primer pintado ya lo sabe, sin esperar a js/carga.js');
 });
 
 // ---- js/carga.js ----
 function cargador({ paquetes = { arranque: ['a.js'], comun: 'comun.js', cursos: { algebra: 'alg.js', trig: 'trig.js' }, explora: ['alg-1'] } } = {}) {
-  const puestos = [], avisos = [], abiertas = [];
+  const puestos = [], avisos = [], abiertas = [], relojes = [];
+  let listaEnRed = () => JSON.stringify(paquetes);
   const ctx = vm.createContext({
     document: { createElement: () => ({ remove() {} }), head: { appendChild: s => puestos.push(s) } },
-    setTimeout: () => 0, clearTimeout() {}, toast: m => avisos.push(m), console,
+    setTimeout: (fn, ms) => { relojes.push({ fn, ms }); return relojes.length; }, clearTimeout: i => { if (relojes[i - 1]) relojes[i - 1].fn = () => {}; },
+    toast: m => avisos.push(m), console, location: { reload: () => { avisos.push('RECARGA'); } },
+    fetch: async () => ({ ok: true, text: async () => listaEnRed() }),
   });
   ctx.window = paquetes ? { zukaPaquetes: paquetes.arranque, ZUKA_PAQUETES: paquetes } : {};
   ctx.abiertas = abiertas;
@@ -289,7 +298,8 @@ function cargador({ paquetes = { arranque: ['a.js'], comun: 'comun.js', cursos: 
     function startReto(c, r) { abiertas.push('reto ' + r.id); }`, ctx);
   vm.runInContext(lee('js/carga.js'), ctx, { filename: 'js/carga.js' });
   const llega = async src => { const s = puestos.find(x => x.src === src && !x.hecho); s.hecho = true; s.onload(); await new Promise(r => setImmediate(r)); };
-  return { ctx, puestos, avisos, abiertas, llega, corre: js => vm.runInContext(js, ctx) };
+  const pasan = ms => relojes.filter(t => t.ms === ms).forEach(t => t.fn());
+  return { ctx, puestos, avisos, abiertas, llega, pasan, publica: t => { listaEnRed = () => t; }, corre: js => vm.runInContext(js, ctx) };
 }
 const tick = () => new Promise(r => setImmediate(r));
 const PLAY = g => `{ type: 'play', game: '${g}' }`;
@@ -305,9 +315,10 @@ test('carga.js: con archivos sueltos (localhost) no pide nada y la lección abre
 test('carga.js: la primera lección de un curso pide el paquete común y el del curso, en ese orden, y abre al llegar', async () => {
   const k = cargador();
   k.corre(`startLesson({ id: 'algebra' }, { id: 'alg-2', ex: [${PLAY('uno')}] })`);
-  assert.deepEqual(k.puestos.map(s => [s.src, s.async]), [['comun.js', false], ['alg.js', false]]);
+  assert.deepEqual(k.puestos.map(s => s.src), ['comun.js'], 'el del curso espera al común');
   assert.deepEqual(k.abiertas, []);
   await k.llega('comun.js');
+  assert.deepEqual(k.puestos.map(s => s.src), ['comun.js', 'alg.js']);
   assert.deepEqual(k.abiertas, []);
   await k.llega('alg.js');
   assert.deepEqual(k.abiertas, ['leccion alg-2']);
@@ -329,7 +340,7 @@ test('carga.js: un segundo toque mientras llegan los juegos no abre dos leccione
 test('carga.js: red de seguridad: si tras cargar el curso falta un juego o la explicación, pide los demás paquetes', async () => {
   const k = cargador();
   k.corre(`startReto({ id: 'algebra' }, { id: 'r1', steps: [{ ex: ${PLAY('de-otro-curso')} }] })`);
-  await k.llega('comun.js'); await k.llega('alg.js');
+  await k.llega('comun.js'); await k.llega('alg.js'); await tick();
   assert.deepEqual(k.puestos.map(s => s.src), ['comun.js', 'alg.js', 'trig.js']);
   assert.deepEqual(k.abiertas, []);
   k.corre("GAMES['de-otro-curso'] = {}");
@@ -346,9 +357,43 @@ test('carga.js: red de seguridad: si tras cargar el curso falta un juego o la ex
 test('carga.js: sin conexión avisa, no abre la lección a medias y deja reintentar', async () => {
   const k = cargador();
   k.corre(`startLesson({ id: 'algebra' }, { id: 'alg-2', ex: [] })`);
-  k.puestos[1].onerror(); await tick();
+  await k.llega('comun.js');
+  k.puestos[1].onerror(); await tick(); await tick();
   assert.deepEqual(k.abiertas, []);
   assert.match(k.avisos[0], /No se pudieron cargar los juegos/);
   k.corre(`startLesson({ id: 'algebra' }, { id: 'alg-2', ex: [] })`);
   assert.equal(k.puestos.filter(s => s.src === 'alg.js').length, 2, 'el paquete que falló se vuelve a pedir');
+});
+
+test('carga.js: si el paquete común no llega, el del curso no se pide (se ejecutaría a medias y quedaría como cargado)', async () => {
+  const k = cargador();
+  k.corre(`startLesson({ id: 'algebra' }, { id: 'alg-2', ex: [] })`);
+  k.puestos[0].hecho = true; k.puestos[0].onerror(); await tick(); await tick(); await tick();
+  assert.deepEqual(k.puestos.map(s => s.src), ['comun.js']);
+  assert.equal(k.corre('CARGA.listos.size'), 0);
+  assert.deepEqual(k.abiertas, []);
+  // Al reintentar se piden los dos, otra vez en fila.
+  k.corre(`startLesson({ id: 'algebra' }, { id: 'alg-2', ex: [] })`);
+  await k.llega('comun.js'); await k.llega('alg.js');
+  assert.deepEqual(k.abiertas, ['leccion alg-2']);
+});
+
+test('carga.js: un paquete que ya no existe porque hay versión nueva (otra pestaña actualizó) recarga la app en vez de culpar a la conexión', async () => {
+  const k = cargador();
+  k.publica('self.ZUKA_PAQUETES = {"comun":"comun-nuevo.js","cursos":{"algebra":"alg-nuevo.js"}}');
+  k.corre(`startLesson({ id: 'algebra' }, { id: 'alg-2', ex: [] })`);
+  k.puestos[0].onerror(); await tick(); await tick(); await tick();
+  assert.match(k.avisos[0], /versión nueva/);
+  k.pasan(1200);
+  assert.equal(k.avisos[1], 'RECARGA');
+});
+
+test('carga.js: una red colgada no deja la app sin poder abrir lecciones: a los 20 s se suelta y avisa', async () => {
+  const k = cargador();
+  k.corre(`startLesson({ id: 'algebra' }, { id: 'alg-2', ex: [] })`);
+  k.pasan(20000);
+  assert.match(k.avisos[0], /tardando/);
+  k.corre(`startLesson({ id: 'trig' }, { id: 'trig-1', ex: [] })`);   // ya se puede tocar otra
+  await k.llega('comun.js'); await k.llega('trig.js');
+  assert.deepEqual(k.abiertas, ['leccion trig-1'], 'la que venció no se abre sola después');
 });
