@@ -10,6 +10,7 @@ const ART_PAL = {
   geo:     { blue: '#4f93f0', deep: '#2a62bd', soft: '#8dbdfc', pale: '#c5dcfd', sun: '#5eead4', sunDeep: '#2bb39c' },   // azul + turquesa
   fis:     { blue: '#f2b705', deep: '#b48200', soft: '#fbd94a', pale: '#fde99a', sun: '#fb7a3c', sunDeep: '#cf541c' },   // amarillo + naranja
   int:     { blue: '#22c087', deep: '#11845a', soft: '#6ee7b7', pale: '#b6f3da', sun: '#d9f25e', sunDeep: '#a4bd2c' },   // verde + lima
+  euc:     { blue: '#14b8a6', deep: '#0f766e', soft: '#5eead4', pale: '#ccfbf1', sun: '#fb923c', sunDeep: '#c2540a' },   // turquesa + naranja
   preuda:  { blue: '#84cc16', deep: '#4d7c0f', soft: '#bef264', pale: '#d9f99d', sun: '#38bdf8', sunDeep: '#0284c7' },   // lima + celeste
   preicfes: { blue: '#e879f9', deep: '#a21caf', soft: '#f0abfc', pale: '#fae8ff', sun: '#fbbf24', sunDeep: '#d97706' },   // fucsia + ámbar
   lin:     { blue: '#f5822a', deep: '#b9580f', soft: '#fdb070', pale: '#fed3ab', sun: '#ff5d7a', sunDeep: '#d23a58' },   // naranja + rojo rosado
@@ -109,6 +110,17 @@ const COURSE_ART_BASE = {
     <path d="M10 50l38.2-8.3" stroke="${ART_C.sun}" stroke-width="4.5" stroke-linecap="round"/>
     <path d="M56 40l-6.8 6.6-2.1-9.8z" fill="${ART_C.sun}" stroke="${ART_C.sun}" stroke-width="2" stroke-linejoin="round"/>
     <circle cx="10" cy="50" r="4" fill="${ART_C.deep}"/>`),
+  // Geometría Euclidiana: un triángulo inscrito en su circunferencia y el compás que la traza.
+  euc: artSvg(`
+    <circle cx="30" cy="35" r="23" fill="none" stroke="${ART_C.pale}" stroke-width="2.5" stroke-dasharray="3 4" stroke-linecap="round"/>
+    <path d="M13 53.5L50 49.5L27.5 15z" fill="${ART_C.deep}" transform="translate(3 3)"/>
+    <path d="M13 53.5L50 49.5L27.5 15z" fill="${ART_C.blue}" stroke="${ART_C.soft}" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M27.5 15L30 35" stroke="${ART_C.pale}" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+    <path d="M30 35L52 9" stroke="${ART_C.sun}" stroke-width="4" stroke-linecap="round"/>
+    <path d="M52 9L57 41" stroke="${ART_C.sun}" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="52" cy="9" r="4.5" fill="${ART_C.sun}" stroke="${ART_C.sunDeep}" stroke-width="2"/>
+    <circle cx="30" cy="35" r="3" fill="${ART_C.pale}"/>`),
+
   // Preicfes Saber 11: la hoja de respuestas, con una burbuja rellena por fila, y un lápiz.
   preicfes: artSvg(`
     <rect x="12" y="9" width="38" height="50" rx="4" fill="${ART_C.deep}"/>

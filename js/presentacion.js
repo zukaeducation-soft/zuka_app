@@ -109,7 +109,7 @@ const PZ_PROG = {
   preicfes: { foto: '<img class="pz-img-saber" src="brand/saber11.webp" alt="Una mano rellena con lápiz una hoja de respuestas" width="1200" height="900" loading="lazy">', tag: 'Grado 11', h: 'Las cinco pruebas del Saber 11, una por una', meta: 'Prepara el Saber 11 área por área, con problemas en contexto.', trae: 'Matemáticas, Lectura, Sociales, Ciencias e Inglés' },
 };
 // Cursos de fundamentación en Ingeniería y Ciencias: van juntos en una lámina y una tarjeta ancha.
-const PZ_FUND = ['algebra', 'trig', 'calc', 'geo', 'int', 'lin', 'fis'], PZ_FUND_N = 'Fundamentación en Ingeniería y Ciencias', PZ_FUND_C = '#5eead4';
+const PZ_FUND = ['algebra', 'trig', 'calc', 'geo', 'euc', 'int', 'lin', 'fis'], PZ_FUND_N = 'Fundamentación en Ingeniería y Ciencias', PZ_FUND_C = '#5eead4';
 const PZ_CORTO = { algebra: 'Álgebra', trig: 'Trigo', calc: 'Cálculo', geo: 'Geometría', int: 'Integral', lin: 'Lineal', fis: 'Física' };
 const PZ_ORDEN = ['preuda', 'preicfes', 'algebra', 'trig'];
 const pzOrdena = cs => [...cs].sort((a, b) => ((PZ_ORDEN.indexOf(a.id) + 1) || 99) - ((PZ_ORDEN.indexOf(b.id) + 1) || 99));

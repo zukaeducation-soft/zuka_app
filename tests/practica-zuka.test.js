@@ -9,9 +9,9 @@ const files = require('./load').enRepo(read('index.html'))
   .filter(f => /content|games\/|courses\/|data\.js|guia/.test(f));
 const ctx = loadScripts(files), games = get(ctx, 'GAMES');
 
-test('los nueve cursos tienen instrucciones para la práctica sobre la escena', () => {
+test('los diez cursos tienen instrucciones para la práctica sobre la escena', () => {
   const lines = get(ctx, 'practiceGuideLines'), courses = get(ctx, 'COURSES');
-  assert.equal(courses.length, 9);
+  assert.equal(courses.length, 10);
   for (const c of courses) for (const u of c.units) for (const l of [...u.lessons, u.boss].filter(Boolean)) {
     for (const e of l.ex) {
       const text = lines(e);

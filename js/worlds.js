@@ -541,6 +541,31 @@ const WORLDS = (() => {
     'icf-cn-cts': { name: 'Ciencia y Sociedad', art: plate('icf-cn-cts', TEAL, `
       ${C(68, 30, 13, INK, 1.1)}${C(92, 30, 13, TEAL, 1.2)}${C(80, 50, 13, INK, 1.1)}${D(80, 37, 2.2, TEAL)}${L('M46 66h68', INK, .8)}${L('M62 30h12M86 30h12M80 46v10', TEAL, .9)}
       ${T(28, 42, 'control', INK, 6)}${T(134, 42, 'decidir', TEAL, 6)}`) },
+    // ---------- Geometría Euclidiana (spec 2026-11-26-curso-euclidiana): un mundo por capítulo del libro ----------
+    'euc-demostrar': { name: 'Lógica de la Demostración', art: plate('euc-demostrar', TEAL, `
+      ${L('M50 22h26v12H50z', INK, 1.1)}${L('M84 46h26v12H84z', TEAL, 1.3)}${L('M76 28h12v18', INK, 1)}${L('M84 42l4 4 4-4', INK, 1)}${L('M56 28h14', INK, .8)}${L('M90 52h14', TEAL, .9)}${L('M50 52l5 5 9-10', TEAL, 1.4)}
+      ${T(28, 42, 'p ⇒ q', INK, 7)}${T(134, 42, '∴', TEAL, 10)}`) },
+    'euc-elementos': { name: 'Puntos, Rectas y Ángulos', art: plate('euc-elementos', TEAL, `
+      ${L('M48 60h64', INK, 1.1)}${L('M60 60L98 20', TEAL, 1.4)}${L('M78 60a18 18 0 0 0-5.6-13', TEAL, 1)}${D(60, 60, 2, TEAL)}${D(104, 60, 1.6)}${D(92.3, 26, 1.6, TEAL)}${L('M52 24h22', INK, 1)}${D(52, 24, 1.5)}${D(74, 24, 1.5)}
+      ${T(28, 42, 'AB', INK, 8)}${T(134, 42, '∠', TEAL, 10)}`) },
+    'euc-triangulo': { name: 'Triángulos Congruentes', art: plate('euc-triangulo', TEAL, `
+      ${L('M46 58h30L58 24z', INK, 1.2)}${L('M84 58h30L96 24z', TEAL, 1.4)}${L('M59 60.5v-5M63 60.5v-5M97 60.5v-5M101 60.5v-5', INK, .8)}${L('M50 40l4 2M88 40l4 2', INK, .8)}${L('M52 58a6 6 0 0 0-2.7-5M90 58a6 6 0 0 0-2.7-5', TEAL, .9)}
+      ${T(28, 42, 'L-A-L', INK, 6.5)}${T(136, 42, '≅', TEAL, 10)}`) },
+    'euc-cuadrilateros': { name: 'Paralelas y Cuadriláteros', art: plate('euc-cuadrilateros', TEAL, `
+      ${L('M52 58h44l14-34H66z', INK, 1.2)}${L('M52 58l58-34M96 58L66 24', TEAL, 1)}${D(81, 41, 1.8, TEAL)}${L('M72 60l3-2-3-2M86 26l3-2-3-2', INK, .8)}${D(52, 58, 1.5)}${D(110, 24, 1.5)}${L('M58 58a6 6 0 0 0-1.6-5.2', TEAL, .9)}
+      ${T(28, 42, 'ℓ ∥ m', INK, 7)}${T(136, 42, '360°', TEAL, 7)}`) },
+    'euc-circunferencia': { name: 'La Circunferencia', art: plate('euc-circunferencia', TEAL, `
+      ${C(80, 40, 24, INK, 1.2)}${L('M60 53.3L96 22.1L100 53.3', TEAL, 1.4)}${L('M60 53.3L80 40L100 53.3', INK, .9)}${D(80, 40, 1.8)}${D(96, 22.1, 1.8, TEAL)}${L('M46 64.3h68', INK, .8)}
+      ${T(28, 42, '2α', INK, 8)}${T(136, 42, 'α', TEAL, 9)}`) },
+    'euc-metricas': { name: 'Semejanza y Métricas', art: plate('euc-metricas', TEAL, `
+      ${L('M48 60h64L48 20z', INK, 1.2)}${L('M48 60l28.8-22', TEAL, 1.4)}${L('M48 54h6v6', INK, .8)}${L('M72.3 40.5l3.7 4.5 4.5-3.5', TEAL, .8)}${D(76.8, 38, 1.8, TEAL)}
+      ${T(28, 42, 'a² + b²', INK, 6)}${T(136, 42, 'h² = mn', TEAL, 5.5)}`) },
+    'euc-areas': { name: 'Áreas de Figuras Planas', art: plate('euc-areas', TEAL, `
+      ${L('M50 60V22h44v38z', INK, 1.1)}${F('M50 60V22a38 38 0 0 1 38 38z', TEAL, .3)}${L('M50 22a38 38 0 0 1 38 38', TEAL, 1.4)}${L('M100 60l12-24 0 24z', INK, 1)}${Ld('M50 41h44M72 22v38', INK, .7)}
+      ${T(28, 42, 'b · h', INK, 7)}${T(136, 42, 'πr²', TEAL, 8)}`) },
+    'euc-construcciones': { name: 'Regla y Compás', art: plate('euc-construcciones', TEAL, `
+      ${L('M52 46h56', INK, 1.2)}${D(52, 46, 1.8)}${D(108, 46, 1.8)}${L('M72.6 18.1a40 40 0 0 1 0 55.8', TEAL, 1.1)}${L('M87.4 18.1a40 40 0 0 0 0 55.8', TEAL, 1.1)}${Ld('M80 12v62', INK, .9)}${D(80, 17.4, 1.6, TEAL)}${D(80, 74.6, 1.6, TEAL)}${L('M80 42v4h4', INK, .8)}
+      ${T(28, 42, 'compás', INK, 6)}${T(136, 42, '⊥', TEAL, 10)}`) },
   };
 })();
 

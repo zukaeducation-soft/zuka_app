@@ -15,8 +15,8 @@ const VERSION = 'zuka-v419';
 // DIFERIDOS, los juegos y explicaciones de cada curso (js/carga.js los pide al abrir una lección): se guardan también al
 // instalar, para que todo funcione sin conexión, pero si uno falla no detiene la instalación.
 // <paquetes> Generado por tools/empaquetar.js: no editar a mano.
-const ARRANQUE = ["js/paquetes/zuka-a1.388e7f217f.js","js/paquetes/zuka-a2.51d7d68c49.js","js/paquetes/zuka-a3.858c56921c.js","js/paquetes/zuka-a4.fdfecfb447.js","js/paquetes/zuka-a5.919963a231.js","js/paquetes/zuka-a6.977f331b16.js"];
-const DIFERIDOS = ["js/paquetes/zuka-comun.3d57f07fc2.js","js/paquetes/zuka-algebra.e79a197add.js","js/paquetes/zuka-trig.ef6189aba1.js","js/paquetes/zuka-calc.9c117ef5fd.js","js/paquetes/zuka-geo.f8e61ed0aa.js","js/paquetes/zuka-preuda.41f33ad8b5.js","js/paquetes/zuka-preicfes.240043dff2.js"];
+const ARRANQUE = ["js/paquetes/zuka-a1.07318a5149.js","js/paquetes/zuka-a2.4c948e2de9.js","js/paquetes/zuka-a3.41a60ce7f4.js","js/paquetes/zuka-a4.c761f4a53d.js","js/paquetes/zuka-a5.50fd6b2780.js","js/paquetes/zuka-a6.06d175312d.js"];
+const DIFERIDOS = ["js/paquetes/zuka-comun.eac03cf57a.js","js/paquetes/zuka-algebra.e79a197add.js","js/paquetes/zuka-trig.ef6189aba1.js","js/paquetes/zuka-calc.9c117ef5fd.js","js/paquetes/zuka-geo.f8e61ed0aa.js","js/paquetes/zuka-euc.66840feb17.js","js/paquetes/zuka-preuda.41f33ad8b5.js","js/paquetes/zuka-preicfes.99180240e5.js"];
 // </paquetes>
 const PAQUETES = 'zuka-paquetes-v1';
 const esPaquete = ruta => /\/js\/paquetes\/zuka-[\w-]+\.[0-9a-f]{10}\.js$/.test(ruta);

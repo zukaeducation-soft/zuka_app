@@ -1,561 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preicfes-lc-comparar.js
-// Preicfes · Lectura Crítica · mundo 8 «Comparar Textos» (spec 2026-11-25-preicfes-estructura). Parejas de textos escritos para Zuka.
-PI_MUNDOS.push((() => {
-  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
-
-  const SILENCIO = {
-    id: 'icf-dos-siestas', title: 'Dos maneras de mirar la siesta',
-    ficha: { autor: 'Texto 1: Dra. Marta Ríos. Texto 2: Julián Pardo', fuente: 'Revista de salud y columna de humor', fecha: 'Marzo de 2026' },
-    paras: [
-      'TEXTO 1: «La siesta corta: qué se sabe». Dormir entre diez y veinte minutos después del almuerzo mejora, en promedio, la atención y el ánimo durante las dos o tres horas siguientes. Así lo muestran varios estudios con trabajadores por turnos, conductores y estudiantes, en los que se comparó a quienes dormían con quienes solo descansaban sentados.',
-      'TEXTO 1: No toda siesta ayuda. Las de más de cuarenta minutos suelen dejar una sensación de aturdimiento, porque la persona despierta en medio del sueño profundo. Además, quien duerme mal en la noche puede empeorar si lo compensa de día. La siesta no reemplaza las horas nocturnas: las acompaña.',
-      'TEXTO 1: Por eso, algunas empresas han habilitado cuartos en penumbra para un descanso breve. Los resultados son alentadores, pero todavía no hay datos suficientes para saber si el efecto se mantiene a lo largo de los años.',
-      'TEXTO 2: «Elogio del señor que ronca». Mi tío Abelardo duerme la siesta desde antes de que la ciencia le diera permiso. Se sienta en la mecedora, se pone el sombrero en la cara y anuncia: «Vuelvo en un rato». No dice cuánto. Un rato, en mi tío, es una unidad de medida que va de quince minutos a la hora de la comida.',
-      'TEXTO 2: Ahora resulta que una oficina del centro tiene un cuarto para dormir. Me parece maravilloso y un poco triste. Maravilloso, porque por fin alguien entendió lo que mi tío sabe. Triste, porque lo hicieron para que la gente rinda más. Mi tío no duerme para rendir. Duerme, dice, «para que el día no se le vaya todo seguido».',
-      'TEXTO 2: Temo el día en que le pongan un cronómetro a la mecedora. A los veinte minutos sonará una campana, y mi tío, productivo y despeinado, tendrá que explicarle a un gráfico por qué quiere cinco más. Que sigan estudiando la siesta los que saben. Yo solo pido que, entre tanto dato, dejen una libre, de esas que no sirven para nada.',
-    ],
-  };
-  const l1 = leccion('icf-lc-comparar-1', 'Dos textos, un tema', guion(
-    ['¿Qué comparten?', 'El tema, un dato o una preocupación.'],
-    ['¿En qué se diferencian?', 'El propósito, el tono, el tipo de texto y las pruebas que usan.'],
-    ['Cómo se relacionan', 'Uno puede ampliar, ejemplificar, matizar o discutir al otro.'],
-    ['Responder por los dos', 'Una afirmación sobre ambos debe valer en los dos.']), [
-    x('pinta-tipos', 'Pinta cada afirmación con el texto al que corresponde.', { doc: SILENCIO, plumas: ['texto 1', 'texto 2', 'los dos'],
-      ...P(['Da resultados de estudios.', 0, '¿Cuál cita comparaciones?'], ['Usa el humor y la exageración.', 1, '¿Cuál habla de un cronómetro en la mecedora?'], ['Menciona cuartos para dormir en el trabajo.', 2, '¿Aparece en uno o en ambos?'], ['Advierte que las siestas largas aturden.', 0, '¿Cuál habla del sueño profundo?'], ['Valora descansar sin un fin.', 1, '¿Cuál pide una siesta que no sirva para nada?']), bien: 'Uno, otro o ambos.' },
-      'Estudios y aturdimiento son del 1; humor y descanso libre, del 2; los cuartos aparecen en los dos.', 'Busca si la idea aparece en los párrafos 1 a 3, en los 4 a 6 o en ambos.'),
-    x('voz-de-la-fuente', 'Ata cada rasgo a su texto.', { ayuda: 'Tira un hilo desde cada rasgo hasta su texto.', doc: SILENCIO, portadas: [['Texto 1', 'revista de salud'], ['Texto 2', 'columna de humor']],
-      ...T(['informar con cautela', 0, '¿Cuál dice que aún faltan datos?'], ['defender una costumbre con gracia', 1, '¿Cuál habla de un tío?']), bien: 'Informar y defender.' },
-      'El primero informa y reconoce límites; el segundo defiende con humor.', 'Pregunta qué quiere lograr cada autor en su lector.'),
-    x('genero-o-cita', '¿Los dos textos **coinciden** o **difieren** en esto?', { doc: SILENCIO, rot: ['coinciden', 'difieren'],
-      ...F(['La siesta puede hacer bien', 0, '¿Alguno lo niega?'], ['Para qué sirve dormir de día', 1, '¿Uno habla de rendir y otro no?'], ['Hay oficinas con cuarto para dormir', 0, '¿Está en los dos?'], ['Cuánto debe durar', 1, '¿A los dos les importa medirla?']), bien: 'El hecho los une; el sentido los separa.' },
-      'Los dos ven algo bueno y mencionan los cuartos; difieren en el fin y en medir el tiempo.', 'Busca el mismo punto en cada texto y compara.'),
-    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: SILENCIO,
-      ...F(['¿Por qué aturden las siestas largas?', 1, 'Busca el párrafo que dice que no toda siesta ayuda.'], ['¿Qué no se sabe todavía?', 2, 'Busca el párrafo que habla de resultados alentadores.'], ['¿Qué le entristece al columnista?', 4, 'Busca el párrafo que dice «un poco triste».']),
-      luz: [[2, 'sueño profundo'], [3, 'todavía no hay datos'], [5, 'Triste, porque']], bien: 'Cada pregunta, su párrafo.' },
-      'El aturdimiento está en el 2, lo que falta en el 3 y la tristeza en el 5.', 'Primero decide en cuál de los dos textos estaría.'),
-    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: SILENCIO, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
-      ...F(['Faltan datos sobre el efecto a largo plazo.', 0, 'Búscala en el párrafo 3.'], ['Al columnista le incomoda que todo deba ser útil.', 1, '¿Por qué le parece triste el cuarto?'], ['Los dos autores saben de los cuartos para dormir.', 1, 'Compara los dos párrafos.'], ['El tío Abelardo trabaja en esa oficina.', 2, '¿Se dice dónde trabaja?']),
-      luz: [[3, 'todavía no hay datos suficientes'], [5, 'para que la gente rinda más'], [5, 'un cuarto para dormir']], bien: 'Comparar también es deducir.' },
-      'Los datos que faltan están escritos; la incomodidad y que ambos los conocen se deducen; el trabajo del tío no.', 'Une una frase de cada texto y compara lo que valoran.'),
-    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que los textos.', { doc: SILENCIO, filas: [{ antes: 'Según el texto 1, la siesta', topes: ['reemplaza la noche', 'daña siempre', 'acompaña la noche'], va: 2 }, { antes: 'El texto 2 critica', topes: ['la siesta', 'medir la siesta para rendir', 'a los médicos'], va: 1 }, { antes: 'Los efectos a largo plazo', topes: ['no se conocen aún', 'son malos', 'son excelentes'], va: 0 }], mira: ['Relee el final del párrafo 2.', 'Relee los párrafos 5 y 6.', 'Relee el final del párrafo 3.'], luz: [[2, 'las acompaña'], [6, 'un cronómetro'], [3, 'todavía no hay datos']], bien: 'Acompaña, medir y no se sabe.' },
-      'La siesta acompaña, el columnista critica medirla y el largo plazo no se conoce.', 'Busca la frase exacta en el texto que corresponde.'),
-    x('bisagras', 'Une una idea del texto 1 con una del 2. Sobran dos palabras.', { doc: SILENCIO, pares: [['El texto 1 mide minutos;', 'el texto 2 se burla de medirlos.'], ['Los dos hablan de cuartos para dormir:', 'comparten un ejemplo.'], ['El texto 2 cuenta lo de su tío', 'quiere mostrar otra manera de descansar.']],
-      ...F(['en cambio,', 0, 'Contrasta: ¿dónde hacen cosas opuestas?'], ['es decir,', 1, 'Aclara: ¿dónde lo segundo dice lo mismo con otras palabras?'], ['porque', 2, 'Da la razón: ¿dónde lo segundo explica lo primero?'], ['aunque', null, 'Opondría las dos partes sin necesidad.'], ['por ejemplo,', null, 'Anunciaría un caso: ninguna segunda parte lo es.']), bien: 'Contraste, aclaración y razón.' },
-      'Medir y burlarse contrastan, compartir un ejemplo aclara y la intención explica lo del tío.', 'Di qué hace la segunda idea con la primera.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran al comparar los textos.', { doc: SILENCIO, lineas: ['Los dos hablan de la siesta y la valoran.', 'El tío usa sombrero.', 'Uno informa con estudios y reconoce límites.', 'El otro defiende con humor descansar sin un fin.', 'Hay conductores en los estudios.', 'Difieren en para qué sirve descansar.'], ...S([1, 4], { 0: 'Es lo que comparten.', 2: 'Es el primer texto.', 3: 'Es el segundo texto.', 5: 'Es la diferencia de fondo.' }), bien: 'Lo común, cada uno y la diferencia.' },
-      'El sombrero y los conductores son detalles; lo demás compara.', 'Deja lo que sirve para comparar, no para recordar.'),
-  ]);
-
-  const ARBOLES = {
-    id: 'icf-arboles-calle', title: 'Los almendros de la avenida',
-    ficha: { autor: 'Texto 1: Germán Solano, ingeniero. Texto 2: Lucía Becerra, vecina', fuente: 'Cartas a un concejo municipal', fecha: 'Abril de 2026' },
-    paras: [
-      'TEXTO 1: Señores concejales: la avenida Los Almendros mueve treinta mil vehículos al día y fue diseñada para doce mil. En las horas pico, un recorrido de tres kilómetros tarda cuarenta minutos, y las ambulancias del hospital San José pierden en ella, según sus propios registros, un cuarto de hora por viaje. Propongo ampliarla a seis carriles. Para hacerlo hay que retirar ciento ocho árboles.',
-      'TEXTO 1: No lo propongo con gusto. Pero un trancón también contamina: un motor detenido gasta y no avanza. Según nuestro modelo, la ampliación reduciría el tiempo de viaje a la mitad durante los primeros seis años. Sembraríamos trescientos árboles en el parque del sur, casi tres por cada uno que se quite.',
-      'TEXTO 1: Entiendo el cariño por los almendros. Sin embargo, una ciudad no puede quedarse quieta para no incomodar a la memoria. Los que hoy protestan son los mismos que mañana pitarán en el semáforo, y entonces nadie se acordará de las hojas.',
-      'TEXTO 2: Señores concejales: en la avenida hay ciento ocho almendros y yo he barrido las hojas de once durante treinta años. No les escribo por nostalgia. A las dos de la tarde, bajo su sombra, el termómetro marca ocho grados menos que en la esquina sin árboles. Por ahí caminan cada día mil setecientos niños hacia tres colegios.',
-      'TEXTO 2: El ingeniero dice que sembrará trescientos en el sur. Los niños no caminan por el sur. Un árbol recién sembrado tarda quince años en dar la sombra que hoy tenemos. Y él mismo reconoce que el alivio del tráfico dura seis. Es decir: cuando los arbolitos den sombra, la avenida llevará nueve años trancada otra vez.',
-      'TEXTO 2: Tampoco quiero que todo quede igual. Propongo un carril solo para buses en cada sentido, que no exige talar, y entradas escalonadas en los tres colegios. No sé si bastará. Sé que se puede probar por seis meses con pintura, y que la pintura, a diferencia de los almendros, se puede borrar si nos equivocamos.',
-    ],
-  };
-  const l2 = leccion('icf-lc-comparar-2', 'Posturas que se cruzan', guion(
-    ['La tesis de cada uno', 'Di en una frase qué propone cada texto.'],
-    ['Cómo responde', 'Un texto puede refutar, conceder, matizar o usar un dato del otro.'],
-    ['Qué pruebas usa', 'Cifras, experiencia, autoridad, ejemplos.'],
-    ['Qué no responde', 'A veces lo más revelador es el argumento que nadie contestó.']), [
-    x('pinta-voces', 'Pinta cada idea con su autor.', { doc: ARBOLES, plumas: ['Solano', 'Becerra'],
-      ...P(['Ampliar a seis carriles.', 0, '¿Quién propone talar?'], ['Probar un carril de buses con pintura.', 1, '¿Quién propone algo que se pueda borrar?'], ['Un motor detenido también contamina.', 0, '¿Quién habla del trancón como contaminación?'], ['Los niños no caminan por el sur.', 1, '¿Quién responde a la siembra?'], ['El tiempo de viaje bajaría a la mitad.', 0, '¿Quién lo calculó con su modelo?']), bien: 'Dos cartas, dos propuestas.' },
-      'Solano amplía, calcula y habla del motor; Becerra prueba con pintura y responde sobre los niños.', 'Busca primero en qué carta aparece cada idea.'),
-    x('pista-tipo', 'Ata cada movimiento a la frase que lo hace.', { doc: ARBOLES, lineas: ['«No lo propongo con gusto».', '«son los mismos que mañana pitarán en el semáforo».', '«Los niños no caminan por el sur».', '«Tampoco quiero que todo quede igual».'],
-      ...T(['admite un costo', 0, '¿Cuál reconoce algo malo de su idea?'], ['ataca a quien se opone', 1, '¿Cuál habla de las personas y no de los árboles?'], ['refuta la compensación', 2, '¿Cuál responde a los trescientos árboles?'], ['acepta que hay un problema', 3, '¿Cuál concede que el tráfico importa?']), bien: 'Admitir, atacar, refutar y conceder.' },
-      'Solano admite un costo y ataca; Becerra refuta la siembra y concede que hay un problema.', 'Pregunta qué hace cada frase con la posición del otro.'),
-    x('genero-o-cita', '¿Es una respuesta **a la idea** o un ataque **a la persona**?', { doc: ARBOLES, rot: ['a la idea', 'a la persona'],
-      ...F(['Un árbol nuevo tarda quince años en dar sombra', 0, '¿Habla del plan o de alguien?'], ['Los que protestan son los que pitarán', 1, '¿Habla del plan o de alguien?'], ['El alivio dura solo seis años', 0, '¿Habla del plan o de alguien?'], ['Los niños no caminan por el sur', 0, '¿Habla del plan o de alguien?']), bien: 'Solo una ataca.' },
-      'Los años y la sombra discuten el plan; pitar en el semáforo ataca a quienes se oponen.', 'Mira si la frase habla de los árboles y el tráfico o de la gente.'),
-    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: ARBOLES, nums: [2, 4, 6], pregunta: 'Queda en pie', queda: 'Los dos reconocen que hay un problema de tráfico.',
-      ...T(['Solano quiere talar con gusto.', 0, 'Busca cómo lo propone.'], ['Becerra escribe solo por nostalgia.', 5, 'Busca por qué dice que no escribe.'], ['Becerra quiere que todo siga igual.', 8, 'Busca qué tampoco quiere.']), bien: 'No, no y tampoco.' },
-      'Solano no lo propone con gusto, Becerra no escribe por nostalgia y tampoco quiere dejar todo igual.', 'Saca la palabra clave: gusto, nostalgia, igual.'),
-    x('balanza-tesis', 'Propuesta de Solano: «ampliar la avenida». ¿Qué hace cada dato?', { doc: ARBOLES, tesis: 'Conviene ampliar la avenida',
-      ...F(['Reduce a la mitad el tiempo de viaje.', 0, '¿Es una razón a favor?'], ['El alivio dura seis años.', 1, '¿Qué pasa después?'], ['En otra ciudad, al ampliar llegaron más carros y el trancón volvió antes.', 1, '¿Qué sugiere ese caso?'], ['La avenida mide tres kilómetros.', 2, '¿Es una razón a favor o en contra?']), bien: 'A favor, en contra y nada.' },
-      'La mitad del tiempo la apoya; que dure poco y que lleguen más carros la debilita; el largo no pesa.', 'Supón cierto cada dato y mira si la propuesta gana o pierde.'),
-    x('comprueba-apuesta', 'Subraya en el párrafo 5 la oración en que Becerra **usa un dato de Solano contra él**.', { doc: ARBOLES, nums: [5], apuesta: 'Usa los seis años del otro.', ...S(['5.3'], { '5.0': 'Recoge lo que él propone, sin responder aún.', '5.1': 'Responde, pero con un dato suyo.', '5.2': 'Da un dato propio sobre los árboles.', '5.4': 'Saca la conclusión de los dos datos.' }), bien: '«Él mismo reconoce».' },
-      '«Y él mismo reconoce que el alivio del tráfico dura seis» toma el dato del otro texto.', 'Busca la oración que nombra lo que el otro admite.'),
-    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: ARBOLES, nums: [4, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
-      ...F(['Bajo los árboles hay ocho grados menos.', 0, 'Léela junto al termómetro.'], ['Los almendros protegen a los niños del calor.', 1, '¿Quiénes caminan por esa sombra?'], ['Becerra valora las soluciones que se pueden revertir.', 1, '¿Por qué prefiere la pintura?'], ['Becerra es profesora.', 2, '¿Se dice en qué trabaja?']),
-      luz: [[4, 'ocho grados menos'], [4, 'mil setecientos niños'], [6, 'se puede borrar']], bien: 'Preferir la pintura muestra un valor.' },
-      'Los grados están escritos; la protección y el valor de revertir se deducen; el oficio no.', 'Une el dato con quien se beneficia o con lo que prefiere.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran al comparar las posturas.', { doc: ARBOLES, lineas: ['Solano propone ampliar y compensar en otro lugar.', 'La avenida se llama como los árboles.', 'Becerra muestra que el alivio acaba antes de que llegue la nueva sombra.', 'Ella propone una prueba que se pueda deshacer.', 'Ella barre hojas.', 'Los dos reconocen el problema del tráfico.'], ...S([1, 4], { 0: 'Es la primera postura.', 2: 'Es su mejor argumento.', 3: 'Es la segunda postura.', 5: 'Es lo que comparten.' }), bien: 'Dos posturas, un argumento y lo común.' },
-      'El nombre y las hojas son detalles; lo demás compara las posturas.', 'Deja lo que necesitas para decidir entre las dos.'),
-  ]);
-
-  const FOTOS = {
-    id: 'icf-dos-fotos', title: 'Dos textos sobre las fotos',
-    paras: [
-      'TEXTO 1: «Treinta mil». Mi teléfono dice que tengo treinta mil fotos. Las revisé anoche y descubrí que no recuerdo casi ninguna. Hay once de un mismo plato de sopa. Hay un atardecer repetido cuarenta veces, como si el sol hubiera tenido tos. De mi abuela, que murió antes de los teléfonos, tengo tres: en las tres la miro y la oigo.',
-      'TEXTO 1: No creo que la culpa sea de la máquina. La culpa es de la facilidad. Cuando cada foto costaba, uno miraba antes de disparar. Ahora disparamos para no tener que mirar: ya lo veremos después. Y después nunca llega, porque después está lleno de fotos nuevas.',
-      'TEXTO 1: Esta semana borré veintinueve mil novecientas. No fue valentía, fue curiosidad. Quería saber cuáles me dolía perder. Fueron setenta y dos. Las imprimí. Ocupan menos que un libro y por primera vez en años sé dónde están.',
-      'TEXTO 2: «Guardar por si acaso». Un grupo de investigadores pidió a cien personas que recorrieran un museo. Unas fotografiaron los objetos; otras solo los miraron. Al día siguiente, quienes habían tomado fotos recordaban menos detalles de lo fotografiado. Pero cuando se les pidió acercar la cámara a una parte del objeto, recordaban tan bien como los demás. No era la cámara lo que hacía olvidar: era usarla sin atención.',
-      'TEXTO 2: El estudio tiene límites. Se hizo con estudiantes, en un solo museo, y midió el recuerdo a las veinticuatro horas. No sabemos qué pasa a los diez años, cuando la memoria se gasta y una foto cualquiera, hasta la de un plato de sopa, puede devolvernos una tarde entera.',
-      'TEXTO 2: Quizá por eso conviene no elegir entre mirar y fotografiar. Conviene hacer las dos cosas en orden: primero lo uno, después lo otro. Y tener cuidado antes de borrar. La memoria no avisa qué va a necesitar.',
-    ],
-  };
-  const Q = preg(FOTOS, 'lectura');
-  return mundo('icf-lc-comparar', 'Comparar Textos', 'lectura', [l1, l2], [
-    ['icf-lc-comparar-1', 'Los dos textos comparten una idea de fondo.', Q('Los dos textos coinciden en que:', ['Las cámaras deben prohibirse', 'El problema no es la máquina, sino usarla sin atención', 'Hay que borrar casi todas las fotos', 'Los museos son aburridos'], 1, 'El 1 dice «la culpa es de la facilidad», no de la máquina; el 2, que no era la cámara sino usarla sin atención.', 'Busca qué dice cada uno sobre la culpa de la máquina.')],
-    ['icf-lc-comparar-1', 'Mira con qué sostiene cada uno su idea.', Q('La diferencia entre las pruebas que usan los textos es que:', ['El 1 usa un estudio y el 2, una anécdota', 'Los dos usan solo anécdotas', 'El 1 usa su experiencia y el 2, un estudio con sus límites', 'Ninguno da pruebas'], 2, 'El 1 cuenta lo que hizo con sus fotos; el 2 describe una investigación.', 'Pregunta de dónde saca cada uno lo que afirma.')],
-    ['icf-lc-comparar-1', 'El propósito distingue a dos textos del mismo tema.', Q('El tono del texto 1, comparado con el del 2, es más:', ['Técnico', 'Autoritario', 'Indiferente', 'Personal y humorístico'], 3, 'Habla de sí mismo y bromea: «como si el sol hubiera tenido tos».', 'Compara cómo habla cada uno de las fotos repetidas o del estudio.')],
-    ['icf-lc-comparar-2', 'Un texto puede advertir sobre lo que propone el otro.', Q('La frase «tener cuidado antes de borrar» del texto 2 puede leerse como:', ['Un matiz a lo que hizo el autor del texto 1', 'Una repetición del texto 1', 'Una burla del museo', 'Una orden de no fotografiar'], 0, 'El autor del 1 borró casi todo; el 2 advierte que la memoria no avisa qué va a necesitar.', 'Recuerda qué hizo el autor del texto 1 con sus fotos.')],
-    ['icf-lc-comparar-2', 'Busca el mejor argumento de un texto contra el otro.', Q('El autor del texto 2 podría objetarle al del 1 que:', ['Debió tomar más fotos de la sopa', 'Setenta y dos fotos son muchas', 'Una foto que hoy parece inútil puede servir para recordar años después', 'Su abuela no existió'], 2, 'El 2 dice que hasta la de un plato de sopa puede devolver una tarde.', 'Busca en el texto 2 la mención a la sopa.')],
-    ['icf-lc-comparar-2', 'Una conclusión sobre los dos debe valer en los dos.', Q('¿Cuál conclusión respeta **ambos** textos?', ['Es mejor no tomar fotos', 'Conviene mirar con atención antes de fotografiar', 'Hay que guardar todo', 'La memoria no falla'], 1, 'El 1 extraña mirar antes de disparar; el 2 propone primero mirar y después fotografiar.', 'Descarta la que contradiga a alguno.')],
-  ]);
-})());
-;
-//#archivo js/courses/preicfes-sc-constitucion.js
-// Preicfes · Sociales y Ciudadanas · mundo 1 «Constitución y Estado» (spec 2026-11-20-curso-preicfes): lo que más pregunta la
-// prueba de ciudadanía: el Estado social de derecho, las ramas del poder y los órganos de control, y los mecanismos para proteger
-// los derechos. Cada lección es un caso original en 7 juegos LEC distintos y un juego en movimiento; la evaluación, otro caso con
-// preguntas A–D. Casos escritos para Zuka.
-PI_MUNDOS.push((() => {
-  const { leccion, mundo, x, F, T, P, S, preg } = ICF;
-
-  const PUENTE = {
-    id: 'icf-puente', title: 'El puente que pidió la vereda',
-    ficha: { autor: 'Profesora de ciencias sociales', fuente: 'Guía de ciudadanía para grado once', fecha: 'Abril de 2026' },
-    paras: [
-      'Cada vez que llueve, los niños de la vereda La Esperanza dejan de ir a la escuela. Para llegar tienen que cruzar una quebrada que en invierno crece tanto que arrastra piedras y troncos. Los padres llevan años pidiendo un puente. Seguir su solicitud paso a paso es una buena manera de entender cómo funciona el Estado colombiano.',
-      'La Constitución de 1991 dice en su primer artículo que Colombia es un Estado social de derecho. «De derecho» significa que todas las autoridades, desde el presidente hasta el alcalde, deben actuar según las leyes y no según su voluntad. «Social» significa que el Estado no solo pone reglas: también tiene el deber de garantizar condiciones de vida dignas, como la educación de esos niños.',
-      'Para que nadie concentre todo el poder, este se divide en tres ramas. La legislativa hace las leyes: es el Congreso, formado por el Senado y la Cámara. La ejecutiva gobierna y ejecuta: el presidente a nivel nacional, los gobernadores en los departamentos y los alcaldes en los municipios. La judicial resuelve los conflictos y protege los derechos por medio de los jueces y las altas cortes. En el municipio, las normas locales y el presupuesto los aprueba el concejo, una corporación administrativa elegida por voto popular: no es parte del Congreso, pero cumple allí la tarea de decidir las normas.',
-      'En el caso del puente, la junta de acción comunal llevó la petición a la alcaldía. El alcalde incluyó la obra en su proyecto de presupuesto, pero no podía gastar el dinero por su cuenta: primero el concejo municipal tuvo que aprobarlo. Solo entonces la alcaldía pudo contratar a la empresa que construiría el puente.',
-      'Además de las tres ramas, existen órganos de control que vigilan a los demás. La Contraloría revisa que el dinero público se gaste bien; la Procuraduría investiga a los funcionarios que incumplen sus deberes; y la Defensoría del Pueblo y las personerías ayudan a los ciudadanos a defender sus derechos. Cuando la obra se retrasó, la Contraloría pidió explicaciones sobre los pagos que ya se habían hecho.',
-      'El puente se terminó dos años después de la primera solicitud. Para los habitantes de La Esperanza, la espera fue larga; para el Estado, la división del poder hizo más lento el proceso, pero también más difícil que el dinero se perdiera. Esa es la tensión de siempre: los controles cuestan tiempo, y sin ellos el poder no le rinde cuentas a nadie.',
-    ],
-  };
-
-  const TUTELA = {
-    id: 'icf-tutela', title: 'Las herramientas de Valentina',
-    ficha: { autor: 'Personería estudiantil de un colegio público', fuente: 'Cartilla de derechos', fecha: 'Mayo de 2026' },
-    paras: [
-      'Valentina tiene quince años y usa silla de ruedas. Cuando su familia se mudó, el colegio más cercano le negó el cupo con el argumento de que sus salones quedan en el segundo piso y no hay rampa. Su mamá no sabía qué hacer. La personera estudiantil le explicó que la Constitución no solo enumera derechos: también da herramientas concretas para reclamarlos.',
-      'La primera es el derecho de petición. Cualquier persona puede presentar una solicitud respetuosa ante una autoridad, de forma verbal o escrita, y esta debe responder de fondo, por regla general, en un plazo de quince días hábiles. La mamá de Valentina escribió a la secretaría de educación pidiendo una explicación y una solución. La respuesta llegó a tiempo, pero solo decía que el caso «se estaba estudiando».',
-      'Entonces acudieron a la acción de tutela, quizá el mecanismo más conocido de la Constitución de 1991. La tutela sirve para proteger los derechos fundamentales, como la vida, la igualdad o la educación de los niños, cuando una autoridad o un particular los vulnera o los amenaza. No necesita abogado y el juez debe decidir en un máximo de diez días. Sin embargo, por regla general procede solo cuando no existe otro medio eficaz para defender el derecho.',
-      'El juez le dio la razón a Valentina: negarle el cupo por la falta de una rampa era discriminarla. Ordenó al colegio recibirla y a la secretaría construir la rampa en un plazo de tres meses. La decisión no regaló nada: obligó al Estado a cumplir lo que la Constitución ya le exigía.',
-      'Existen otras herramientas para otros problemas. La acción popular protege derechos colectivos, que son de todos a la vez, como un ambiente sano o el espacio público: sirve, por ejemplo, si una fábrica contamina el río de un pueblo. La acción de cumplimiento se usa para exigir que una autoridad cumpla una ley o un decreto que está ignorando. Y el habeas corpus protege a quien ha sido privado de su libertad de manera ilegal.',
-      'Conocer estas herramientas cambia la relación de un ciudadano con el Estado. Quien sabe que puede reclamar deja de pedir favores y empieza a exigir derechos.',
-    ],
-  };
-
-  const l1 = leccion('icf-sc-constitucion-1', 'Estado social de derecho y ramas del poder', [
-    sc(6, 'La prueba de Sociales pregunta casi siempre por **casos**: una comunidad, una autoridad y una decisión. Para resolverlos hay que saber quién hace qué en el Estado.', { title: 'Casos, no fechas' }),
-    sc(7, 'Colombia es un **Estado social de derecho**: las autoridades obedecen las leyes, y además el Estado debe garantizar condiciones de vida dignas.', { title: 'De derecho y social' }),
-    sc(7, 'El poder se divide en **tres ramas**: la legislativa hace las normas, la ejecutiva gobierna y ejecuta, y la judicial resuelve conflictos. Es como un equipo en el que nadie es a la vez jugador, árbitro y dueño del reglamento.', { title: 'Tres ramas' }),
-    sc(7, 'Ejemplo en un municipio: el concejo (una corporación administrativa, no parte del Congreso) aprueba la norma que prohíbe parquear en el andén, la alcaldía pone las señales y multa, y un juez decide si una multa fue injusta.', { title: 'Concejo, alcaldía y juez' }),
-    sc(6, 'Los **órganos de control** vigilan: la Contraloría cuida el dinero público, la Procuraduría a los funcionarios y la Defensoría los derechos humanos.', { title: 'Quién vigila' }),
-  ], [
-    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: PUENTE,
-      ...F(['¿Qué quiere decir «social» en Estado social?', 1, 'Busca el comienzo que nombra la Constitución.'], ['¿Para qué se divide el poder?', 2, 'Busca el comienzo que habla de no concentrarlo.'], ['¿Quién vigila el dinero público?', 4, 'Busca el comienzo que va más allá de las tres ramas.']),
-      luz: [[2, '«Social» significa'], [3, 'Para que nadie concentre todo el poder'], [5, 'La Contraloría revisa']], bien: 'Los comienzos ya decían de qué iba cada uno.' },
-      'El segundo párrafo abre con el primer artículo, el tercero con la división del poder y el quinto con los órganos de control.', 'Busca en los comienzos la palabra que promete responder cada pregunta.'),
-    x('pasos-del-proceso', 'Ordena el camino del puente. El primer paso está en su puesto.', { que: 'lo que pasó', de: 'De la petición al puente', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['La junta lleva la petición a la alcaldía.', 'El alcalde la incluye en su proyecto de presupuesto.', 'El concejo aprueba el gasto.', 'La alcaldía contrata la obra.', 'La Contraloría pide cuentas de los pagos.'], mira: ['', 'Solo se incluye lo que ya se pidió.', 'Se aprueba un proyecto que ya existe.', '«Solo entonces» contrata: antes falta el permiso de gastar.', 'Se piden cuentas de lo que ya se pagó.'], bien: 'Petición, proyecto, aprobación, contrato y control.' },
-      'La comunidad pide, la alcaldía proyecta, el concejo aprueba, la alcaldía contrata y la Contraloría vigila.', 'Fíjate en lo que cada paso necesita que ya haya pasado.'),
-    x('pinta-tipos', 'Pinta cada acción con la rama del poder a la que corresponde.', { doc: PUENTE, plumas: ['legislativa', 'ejecutiva', 'judicial'],
-      ...P(['El Senado vota una ley de educación.', 0, '¿Esta acción crea una norma, gobierna o resuelve un conflicto?'], ['La gobernadora contrata una carretera.', 1, '¿Esta acción crea una norma, gobierna o resuelve un conflicto?'], ['Una jueza ordena devolver un cupo.', 2, '¿Esta acción crea una norma, gobierna o resuelve un conflicto?'], ['El presidente dirige a sus ministros.', 1, '¿Dirigir es hacer leyes, gobernar o juzgar?'], ['La Corte decide si una ley respeta la Constitución.', 2, '¿Quien revisa y decide en derecho hace leyes, gobierna o juzga?']), bien: 'Hacer leyes, gobernar y juzgar: tres tareas separadas.' },
-      'El Congreso hace las leyes, los gobernantes las ejecutan y los jueces deciden los conflictos.', 'No mires el tema de la acción, sino su verbo: ¿legisla, gobierna o juzga?'),
-    x('genero-o-cita', '¿Es parte de una **rama** del poder o un **órgano de control**?', { doc: PUENTE, rot: ['parte de una rama', 'órgano de control'],
-      ...F(['El Congreso', 0, '¿Hace leyes o vigila a quienes gobiernan?'], ['La Contraloría', 1, '¿Gasta el dinero público o revisa cómo se gastó?'], ['La Procuraduría', 1, '¿Gobierna o investiga a quienes incumplen?'], ['Una alcaldía', 0, '¿Ejecuta obras o vigila a quien las ejecuta?'], ['La Corte Constitucional', 0, '¿Decide como juez o investiga funcionarios?']), bien: 'Unos hacen; otros vigilan a los que hacen.' },
-      'El Congreso, la alcaldía y la Corte son parte de las ramas; la Contraloría y la Procuraduría vigilan.', 'Pregunta si el organismo legisla, gobierna o juzga. Si no, quizá vigila a quienes lo hacen.'),
-    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: PUENTE, nums: [4, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
-      ...F(['El alcalde no podía gastar por su cuenta.', 0, 'Léela junto a la segunda oración del párrafo 4.'], ['Si el concejo negaba el gasto, no había contrato.', 1, '¿Qué dice «Solo entonces» sobre el orden de los hechos?'], ['La Contraloría revisa el gasto público.', 0, 'Léela junto al párrafo de los órganos de control.'], ['La empresa se robó el dinero.', 2, 'Que pidan explicaciones, ¿prueba una culpa?']),
-      luz: [[4, 'no podía gastar el dinero por su cuenta'], [4, 'Solo entonces'], [5, 'pidió explicaciones']], bien: 'Pedir explicaciones no es condenar.' },
-      'Dos afirmaciones están escritas, una sale de «solo entonces» y la del robo no tiene apoyo en el texto.', 'Una acusación necesita una prueba escrita; una consecuencia puede salir de juntar dos oraciones.'),
-    x('balanza-tesis', 'Tesis: los controles hacen el proceso más lento, pero más seguro. ¿Qué hace cada dato?', { doc: PUENTE, tesis: 'Los controles cuestan tiempo, pero protegen lo público',
-      ...F(['El puente tardó dos años.', 0, '¿Muestra que los controles cuestan algo?'], ['Al pedir cuentas, se recuperó un pago de más.', 0, '¿Muestra que el control sirvió para algo?'], ['En otro municipio hubo controles y se robaron todo.', 1, '¿Los controles protegieron ahí el dinero?'], ['La quebrada arrastra troncos.', 2, '¿Qué tiene que ver la corriente con los controles?']), bien: 'Dos apoyan, uno debilita y otro no pesa.' },
-      'La demora y el pago recuperado apoyan la tesis; controles que no evitan el robo la debilitan; los troncos no pesan.', 'Pon cada dato como si fuera cierto: ¿la tesis queda más firme, más débil o igual?'),
-    x('sella-parrafo', '«Según el texto, todo esto es cierto, **EXCEPTO**:» Ata cada opción al párrafo que la prueba.', { doc: PUENTE,
-      ...T(['Las autoridades actúan según las leyes', 1, 'Busca qué significa «de derecho».'], ['El concejo se elige por voto popular', 2, 'Busca dónde se describe el concejo.'], ['Las personerías ayudan a defender derechos', 4, 'Busca el párrafo de los órganos de control.'], ['Los jueces aprueban el presupuesto', 6, 'Busca quién aprueba el presupuesto: ¿son ellos?']),
-      luz: [[2, 'deben actuar según las leyes'], [3, 'elegida por voto popular'], [5, 'las personerías ayudan']], bien: 'Ningún párrafo prueba la intrusa.' },
-      'El presupuesto del municipio lo aprueba el concejo; los jueces resuelven conflictos y protegen derechos.', 'Busca cada opción con su sujeto y su verbo: no basta que una palabra aparezca.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: PUENTE, lineas: ['Un Estado social de derecho cumple la ley y garantiza vida digna.', 'La quebrada arrastra piedras.', 'El poder se divide en tres ramas.', 'Los órganos de control vigilan.', 'Los niños faltan a clase cuando llueve.', 'Los controles cuestan tiempo, pero sirven.'], ...S([1, 4], { 0: 'Es la idea de Estado que explica el texto.', 2: 'Es cómo se organiza el poder.', 3: 'Es quién vigila a los demás.', 5: 'Es la conclusión del caso.' }), bien: 'Quedan el modelo de Estado, las ramas, el control y la conclusión.' },
-      'La quebrada y los niños son el caso que ilustra; las otras cuatro son las ideas sobre el Estado.', 'Separa el caso (la vereda) de lo que el caso enseña sobre el Estado.'),
-  ]);
-
-  const l2 = leccion('icf-sc-constitucion-2', 'Derechos y mecanismos de protección', [
-    sc(6, 'La Constitución no es solo una lista de derechos: trae **herramientas** para reclamarlos. La prueba pregunta cuál sirve en cada situación.', { title: 'Derechos con herramientas' }),
-    sc(7, 'El **derecho de petición** es pedir a una autoridad que responda; la **tutela**, pedirle a un juez que proteja ya un derecho fundamental vulnerado.', { title: 'Pedir y exigir' }),
-    sc(7, 'Ejemplo: si un hospital niega una cirugía urgente a un niño, sirve la tutela, porque está en juego su salud y su vida. Si se quiere saber por qué subió un impuesto, basta un derecho de petición.', { title: 'Dos casos, dos herramientas' }),
-    sc(7, 'Para lo que es de todos, como un río o un parque, está la **acción popular**; para que una autoridad cumpla una ley, la **acción de cumplimiento**; y para una detención ilegal, el **habeas corpus**.', { title: 'Lo colectivo y la libertad' }),
-    sc(6, 'Pregunta clave en cada caso: ¿el derecho es de una persona o de todos?, ¿es fundamental?, ¿se quiere información, protección o que se cumpla una norma?', { title: 'Tres preguntas' }),
-  ], [
-    x('comprueba-apuesta', 'Alguien dice que la tutela sirve **siempre**, aunque haya otro camino. Subraya la oración del párrafo 3 que lo desmiente.', { doc: TUTELA, nums: [3], apuesta: 'La tutela se puede usar siempre.', ...S(['3.3'], { '3.0': 'Presenta la tutela y cuándo acudieron a ella.', '3.1': 'Dice qué derechos protege, no cuándo procede.', '3.2': 'Habla del abogado y del plazo, no de otros caminos.' }), bien: 'Procede cuando no hay otro medio eficaz.' },
-      'La oración que empieza con «Sin embargo» pone la condición: solo si no existe otro medio eficaz.', 'Busca el conector que limita lo que se venía diciendo.'),
-    x('genero-o-cita', '¿Qué herramienta sirve en cada caso: **tutela** o **acción popular**?', { doc: TUTELA, rot: ['acción de tutela', 'acción popular'],
-      ...F(['A un paciente le niegan una cirugía urgente', 0, '¿El derecho es de una persona o de todos a la vez?'], ['Una mina ensucia el río de tres pueblos', 1, '¿El derecho es de una persona o de todos a la vez?'], ['Cierran una playa que es espacio público', 1, '¿A cuántas personas les pertenece el espacio público?'], ['Expulsan a una alumna por estar embarazada', 0, '¿A quién le están negando la educación y la igualdad?']), bien: 'Fundamental y de alguien: tutela. De todos: acción popular.' },
-      'La cirugía y la expulsión tocan derechos fundamentales de una persona; el río y la playa son de todos.', 'Pregunta de quién es el derecho que está en juego: ¿de alguien o de la comunidad entera?'),
-    x('voz-de-la-fuente', 'Cada caso pide una herramienta. Átalos.', { ayuda: 'Tira un hilo desde cada frase hasta la tarjeta que le toca, o toca la frase y luego la tarjeta.', doc: TUTELA, portadas: [['Derecho de petición', 'para pedir y recibir respuesta'], ['Acción de cumplimiento', 'para que se cumpla una norma'], ['Habeas corpus', 'para la libertad'], ['Acción de tutela', 'para derechos fundamentales']],
-      ...T(['Quiero saber por qué no hay luz en mi calle', 0, 'Aquí se busca una explicación de la autoridad.'], ['Una ley ordena publicar los gastos y la alcaldía la ignora', 1, 'Aquí ya existe una norma: ¿qué falta?'], ['Mi hermano está detenido sin orden', 2, 'Aquí está en juego que alguien pueda salir.'], ['El hospital me niega un tratamiento vital', 3, 'Aquí está en juego la vida de alguien.']), bien: 'Cada problema tiene su herramienta.' },
-      'Pedir información es derecho de petición; exigir una norma, cumplimiento; la libertad, habeas corpus; la vida, tutela.', 'Di en una palabra qué se reclama: respuesta, cumplimiento, libertad o un derecho fundamental.'),
-    x('pasos-del-proceso', 'Ordena lo que hizo la familia. El primer paso está en su puesto.', { que: 'lo que pasó', de: 'El caso de Valentina', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['El colegio negó el cupo.', 'La mamá envió un derecho de petición.', 'La secretaría respondió sin resolver.', 'Presentaron una tutela.', 'El juez ordenó recibirla y construir la rampa.'], mira: ['', 'Se pide explicación antes de demandar.', 'Responde quien ya recibió la petición.', 'Acudieron a ella después de una respuesta que no resolvía.', 'El juez decide cuando alguien acude a él.'], bien: 'Negativa, petición, respuesta vacía, tutela y fallo.' },
-      'Primero se pidió una respuesta; como no resolvía nada, se acudió a la tutela y el juez decidió.', 'Cada paso responde a lo que falló en el anterior.'),
-    x('ajusta-alcance', 'Mueve cada perilla hasta que la oración diga lo mismo que el texto.', { doc: TUTELA, filas: [{ antes: 'Para presentar una tutela el abogado es', topes: ['obligatorio', 'elegido por el juez', 'innecesario'], va: 2 }, { antes: 'En la tutela, el juez decide en un plazo de', topes: ['tres días', 'diez días', 'tres meses'], va: 1 }, { antes: 'La acción popular protege derechos', topes: ['de una persona', 'de toda la comunidad', 'de los funcionarios'], va: 1 }], mira: ['Relee el párrafo 3: ¿qué dice del abogado?', 'Cuidado: en el texto hay otros plazos, para otras cosas.', 'Relee el párrafo 5: ¿de quién son los derechos colectivos?'], luz: [[3, 'No necesita abogado'], [3, 'en un máximo de diez días'], [5, 'que son de todos a la vez']], bien: 'Ni más ni menos de lo que dice el texto.' },
-      'La tutela no necesita abogado y se decide en diez días; los quince son de la petición y los tres meses, de la rampa.', 'El texto tiene tres plazos distintos: busca de qué es cada uno.'),
-    x('pilares', 'El techo es el fallo del juez. Lleva abajo lo que lo sostiene y al patio lo que solo adorna.', { doc: TUTELA, idea: 'El colegio debe recibir a Valentina',
-      ...F(['La educación de los niños es un derecho fundamental.', 0, 'Si no fuera un derecho, ¿podría ordenarlo un juez?'], ['Negar el cupo por la rampa es discriminar.', 0, '¿Qué motivo dio el juez para su decisión?'], ['El Estado ya estaba obligado por la Constitución.', 0, '¿Fue un regalo o un deber?'], ['La familia se había mudado.', 1, 'Si no se hubieran mudado, ¿cambiaría el derecho?'], ['La personera estudiantil le explicó.', 1, '¿Es una razón para decidir o parte de la historia?']), bien: 'Derecho, igualdad y deber sostienen el fallo.' },
-      'El fallo se apoya en el derecho a la educación, la igualdad y el deber del Estado; lo demás cuenta el caso.', 'Quita cada oración: si el juez aún podría decidir lo mismo, esa no lo sostenía.'),
-    x('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: TUTELA, texto: '|La mamá de Valentina| escribió a |la secretaría| porque |el colegio| no cambió de idea. Esta respondió a tiempo, pero aquella siguió sin |un cupo| para su hija.',
-      ...T(['«Esta»', 1, 'Pon en su lugar lo que ataste: ¿quién responde una petición?'], ['«aquella»', 0, 'Pon en su lugar lo que ataste: ¿quién tiene una hija?']), bien: '«Esta» recoge lo cercano; «aquella», lo lejano.' },
-      'Quien responde la petición es la secretaría, y quien tiene una hija es la mamá: género y sentido lo confirman.', 'Prueba cada candidata en la oración: solo una puede responder y solo una tiene hija.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: TUTELA, lineas: ['La Constitución da herramientas para reclamar.', 'Valentina tiene quince años.', 'La petición exige respuesta.', 'La tutela protege derechos fundamentales.', 'El colegio tiene dos pisos.', 'Quien conoce sus herramientas exige derechos.'], ...S([1, 4], { 0: 'Es la idea que abre toda la cartilla.', 2: 'Es la primera herramienta.', 3: 'Es la herramienta central del texto.', 5: 'Es la conclusión.' }), bien: 'Queda la idea, dos herramientas y la conclusión.' },
-      'La edad y los pisos ayudan a contar el caso, pero no explican las herramientas.', 'Piensa qué necesitaría saber alguien que quiere reclamar un derecho.'),
-  ]);
-
-  const PARQUE = {
-    id: 'icf-parque', title: 'El parque que la alcaldía quería vender',
-    paras: [
-      'En un municipio de la sabana, la alcaldía presentó al concejo un proyecto para vender el lote del parque El Recreo a una constructora. Con ese dinero, explicó el alcalde, se terminaría el hospital, cuya obra está detenida hace dos años por falta de recursos. El concejo debía decidir en tres semanas.',
-      'Los vecinos del parque reaccionaron de inmediato. Para ellos, El Recreo es el único espacio verde del barrio, el lugar donde juegan los niños y se reúnen los adultos mayores. «Nos están pidiendo escoger entre la salud y el aire», dijo la presidenta de la junta de acción comunal en una sesión abierta del concejo. Al día siguiente, más de dos mil vecinos firmaron una carta para pedir que el lote siguiera siendo un parque y que el hospital se financiara de otra manera.',
-      'Los comerciantes de la zona, en cambio, apoyaron la venta: el nuevo conjunto de vivienda traería clientes y empleo. Y los médicos del municipio recordaron que, mientras el hospital siga cerrado, los pacientes graves deben viajar dos horas hasta la capital del departamento, y que algunos no alcanzan a llegar a tiempo.',
-      'Un grupo de vecinos presentó una acción popular ante un juez. Argumentaron que el espacio público es un derecho colectivo y que la ley exige que un parque no pierda su destino sin ser reemplazado por otro de igual área en la misma zona. El juez ordenó suspender la venta mientras estudiaba el caso. La alcaldía respondió que respetaría la decisión, pero insistió en que el hospital no podía esperar mucho más.',
-      'Mientras tanto, varios concejales propusieron otra salida: buscar recursos del departamento para el hospital y declarar el parque como zona protegida. La discusión sigue abierta, pero el caso dejó una lección: en una democracia, los conflictos entre intereses legítimos se resuelven con reglas, y cada parte tiene herramientas para hacerse oír.',
-    ],
-  };
-  const Q = preg(PARQUE, 'sociales');
-  return mundo('icf-sc-constitucion', 'Constitución y Estado', 'sociales', [l1, l2], [
-    ['icf-sc-constitucion-1', 'El concejo hace las normas del municipio y aprueba lo que propone el alcalde.',
-      Q('En el caso, la decisión de vender o no el parque le corresponde, en primer lugar, al concejo municipal porque:', ['Es la autoridad judicial del municipio', 'Es el órgano que aprueba las normas y decisiones que presenta la alcaldía', 'Es el órgano de control que vigila al alcalde', 'Representa a los comerciantes de la zona'], 1,
-        'El concejo es la corporación administrativa del municipio, elegida por voto popular: aprueba o rechaza las normas y los proyectos del alcalde. No es un juez ni un órgano de control, y tampoco representa a un gremio.',
-        'Recuerda qué hace cada parte del Estado: hacer normas, ejecutar, juzgar o vigilar.')],
-    ['icf-sc-constitucion-1', 'Cada rama cumple su función: el juez decide sobre los conflictos y los derechos.',
-      Q('Cuando el juez ordena suspender la venta, actúa como parte de:', ['La rama ejecutiva, porque gobierna el municipio', 'La rama legislativa, porque cambia una norma', 'Los órganos de control, porque vigila el dinero', 'La rama judicial, porque resuelve un conflicto sobre derechos'], 3,
-        'El juez no gobierna ni hace leyes: decide un conflicto y protege un derecho colectivo. Eso es propio de la rama judicial.',
-        'Pregúntate qué está haciendo el juez: ¿gobierna, hace normas, vigila o decide un conflicto?')],
-    ['icf-sc-constitucion-1', 'En los casos de la prueba cada actor defiende un interés distinto, a veces legítimo.',
-      Q('De acuerdo con el texto, los comerciantes y los vecinos del parque tienen posiciones opuestas porque:', ['Los comerciantes valoran el empleo y los clientes que traería la venta, y los vecinos el espacio verde del barrio', 'Los vecinos quieren el hospital y los comerciantes no', 'Los comerciantes quieren vender el parque para hacer un hospital privado', 'Los vecinos son propietarios del lote y no lo quieren vender'], 0,
-        'El párrafo 3 dice que los comerciantes esperan clientes y empleo; el párrafo 2, que para los vecinos es el único espacio verde. Nadie dice que los vecinos sean dueños del lote.',
-        'Busca en el texto qué gana o pierde cada grupo con la venta.')],
-    ['icf-sc-constitucion-2', 'La acción popular protege derechos colectivos, como el espacio público.',
-      Q('Los vecinos usaron una acción popular, y no una tutela, porque:', ['La tutela solo la puede presentar un abogado', 'La acción popular es más rápida que cualquier otro mecanismo', 'El espacio público es un derecho colectivo, que pertenece a toda la comunidad', 'El concejo no puede ser demandado con una tutela'], 2,
-        'El parque es de todos: el espacio público es un derecho colectivo, y para eso está la acción popular. La tutela no exige abogado y protege derechos fundamentales.',
-        'Pregúntate de quién es el derecho en juego: de una persona o de la comunidad entera.')],
-    ['icf-sc-constitucion-2', 'Un derecho de petición obliga a la autoridad a responder.',
-      Q('Si la junta de acción comunal quisiera conocer el avalúo del lote y los estudios de la venta, la herramienta más adecuada sería:', ['Un derecho de petición ante la alcaldía', 'Un habeas corpus', 'Una acción de cumplimiento contra los comerciantes', 'Una tutela contra los médicos'], 0,
-        'Pedir información a una autoridad es un derecho de petición, que debe responderse de fondo. El habeas corpus es para detenciones ilegales y las otras opciones se dirigen a quien no tiene la información.',
-        'Lo que se quiere es información que tiene una autoridad: ¿qué herramienta obliga a responder?')],
-    ['icf-sc-constitucion-2', 'La ley y los mecanismos sirven para resolver conflictos entre intereses legítimos.',
-      Q('La idea con la que concluye el texto es que:', ['El hospital es más importante que el parque', 'Los conflictos entre intereses legítimos se resuelven con reglas y con herramientas para que cada parte se haga oír', 'Los jueces deben decidir todos los asuntos del municipio', 'Los concejales deben obedecer siempre a los vecinos'], 1,
-        'El último párrafo lo dice: en una democracia los conflictos se resuelven con reglas y cada parte tiene herramientas. El texto no decide entre el hospital y el parque.',
-        'Lee la última oración del texto y descarta las opciones que toman partido por uno de los grupos.')],
-  ]);
-})());
-;
-//#archivo js/courses/preicfes-sc-participacion.js
-// Preicfes · Sociales y Ciudadanas · mundo 2 «Participación y Control» (spec 2026-11-25-preicfes-estructura). Casos escritos para Zuka.
-PI_MUNDOS.push((() => {
-  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
-
-  const VOTO = {
-    id: 'icf-relleno', title: 'La consulta del relleno',
-    ficha: { autor: 'Profesor de ciencias políticas', fuente: 'Cartilla de participación ciudadana', fecha: 'Marzo de 2026' },
-    paras: [
-      'En San Pedro del Monte, la alcaldía anunció que el nuevo relleno sanitario quedaría a un kilómetro del acueducto. Muchos vecinos no estaban de acuerdo, pero no sabían si bastaba con quejarse. El profesor de sociales reunió a sus estudiantes y les hizo una pregunta: además de votar cada cuatro años, ¿qué puede hacer un ciudadano?',
-      'La Constitución de 1991 dice que Colombia es una democracia representativa y participativa. Representativa, porque elegimos a quienes deciden en nuestro nombre. Participativa, porque también podemos decidir directamente en ciertos casos. El artículo 103 enumera los mecanismos: el voto, el plebiscito, el referendo, la consulta popular, el cabildo abierto, la iniciativa legislativa y la revocatoria del mandato.',
-      'Cada uno responde a una necesidad distinta. En un plebiscito, el presidente pide a los ciudadanos apoyar o rechazar una decisión suya. En un referendo se aprueba o se deroga una norma. En una consulta popular se pregunta sobre un asunto de interés nacional, departamental o municipal. En un cabildo abierto, los vecinos discuten un tema con el concejo o la junta administradora, sin votar sobre él.',
-      'La iniciativa permite que un grupo de ciudadanos presente un proyecto de ley, de ordenanza o de acuerdo. La revocatoria, en cambio, sirve para retirar del cargo a un gobernador o a un alcalde que no cumple su programa de gobierno; no se aplica al presidente ni a los congresistas, y solo puede pedirse cuando ha pasado al menos un año de mandato.',
-      'Los estudiantes propusieron empezar por un cabildo abierto, porque la mayoría de los vecinos aún no conocía el proyecto. Reunieron las firmas necesarias y el concejo citó la sesión. Allí, por primera vez, la alcaldía mostró los estudios y los vecinos expusieron sus dudas sobre el agua.',
-      'El alcalde no estaba obligado a cambiar de opinión, pero sí a responder. Dos meses después, el relleno se trasladó a otro predio. No siempre termina así. Lo que sí cambia siempre es la pregunta: participar no garantiza ganar, garantiza que la decisión no se tome en silencio.',
-    ],
-  };
-  const l1 = leccion('icf-sc-participacion-1', 'Voto y mecanismos de participación', guion(
-    ['Representar y participar', 'Elegir a alguien es democracia representativa; decidir directamente es participativa. Colombia reconoce las dos.'],
-    ['Cada mecanismo, su uso', 'Plebiscito: una decisión del presidente. Referendo: una norma. Consulta: un asunto de interés público. Cabildo: deliberar.'],
-    ['Quitar del cargo', 'La revocatoria es solo para gobernadores y alcaldes, después de un año.'],
-    ['Firmas', 'La iniciativa popular deja que los ciudadanos presenten una norma.']), [
-    x('voz-de-la-fuente', 'Cada situación pide un mecanismo. Átalas.', { ayuda: 'Tira un hilo desde cada situación hasta su mecanismo.', doc: VOTO, portadas: [['Referendo', 'sobre una norma'], ['Plebiscito', 'decisión presidencial'], ['Cabildo abierto', 'deliberar'], ['Revocatoria', 'retirar del cargo']],
-      ...T(['El pueblo vota si deroga una ley', 0, '¿Qué se somete a votación: una norma, una decisión o una persona?'], ['El presidente pide apoyo a un acuerdo suyo', 1, '¿Quién pide apoyo y para qué?'], ['Los vecinos discuten una vía con el concejo', 2, '¿Se vota o se conversa?'], ['Quieren retirar a una alcaldesa que no cumple', 3, '¿Se discute una norma o un cargo?']), bien: 'Norma, decisión, discusión y cargo.' },
-      'La norma va a referendo, la decisión presidencial a plebiscito, la discusión a cabildo y el cargo a revocatoria.', 'Pregunta qué está en juego en cada caso: una norma, una decisión, una conversación o un cargo.'),
-    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: VOTO,
-      ...F(['¿Por qué se llama participativa?', 1, 'Busca el comienzo que nombra la Constitución.'], ['¿A quién no se le puede revocar?', 3, 'Busca el comienzo que habla de proyectos de ciudadanos.'], ['¿Por qué escogieron el cabildo?', 4, 'Busca el comienzo que nombra a los estudiantes.']),
-      luz: [[2, 'también podemos decidir directamente'], [4, 'no se aplica al presidente'], [5, 'aún no conocía el proyecto']], bien: 'Cada comienzo abre su tema.' },
-      'La Constitución está en el 2, la revocatoria en el 4 y la elección de los estudiantes en el 5.', 'Busca en los comienzos la palabra más cercana a cada pregunta.'),
-    x('genero-o-cita', '¿Es democracia **representativa** o **participativa**?', { doc: VOTO, rot: ['representativa', 'participativa'],
-      ...F(['Elegir a una senadora', 0, '¿Decide el ciudadano o elige a quien decide?'], ['Votar una consulta sobre minería', 1, '¿Decide el ciudadano o elige a quien decide?'], ['Firmar un proyecto de ley ciudadano', 1, '¿Actúa el ciudadano o su representante?'], ['El concejo aprueba un acuerdo', 0, '¿Actúa el ciudadano o su representante?']), bien: 'Elegir a otro o decidir uno mismo.' },
-      'Elegir y dejar decidir a los elegidos es representativa; votar una consulta o presentar un proyecto, participativa.', 'Mira quién toma la decisión final en cada caso.'),
-    x('pasos-del-proceso', 'Ordena lo que hicieron en San Pedro. El primer paso está en su puesto.', { que: 'lo que pasó', de: 'Del anuncio al traslado', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['La alcaldía anunció el relleno.', 'Los estudiantes propusieron un cabildo.', 'Reunieron las firmas.', 'El concejo citó la sesión.', 'El relleno se trasladó.'], mira: ['', 'Se propone algo frente a lo ya anunciado.', 'Se firma lo que ya se propuso.', 'Se cita cuando ya hay respaldo suficiente.', 'Es lo que ocurre después de discutir.'], bien: 'Anuncio, propuesta, firmas, sesión y cambio.' },
-      'El anuncio provoca la propuesta; las firmas permiten la sesión; después llega el traslado.', 'Pregunta qué hacía falta para poder dar cada paso.'),
-    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: VOTO, filas: [{ antes: 'La revocatoria se aplica a', topes: ['presidentes', 'congresistas', 'alcaldes y gobernadores'], va: 2 }, { antes: 'En el cabildo abierto los vecinos', topes: ['discuten', 'votan la norma', 'eligen concejales'], va: 0 }, { antes: 'Participar garantiza', topes: ['ganar', 'que se discuta', 'que nada cambie'], va: 1 }], mira: ['Relee el párrafo 4: ¿a quién no se aplica?', 'Relee el final del párrafo 3.', 'Relee la última oración del texto.'], luz: [[4, 'no se aplica al presidente ni a los congresistas'], [3, 'sin votar sobre él'], [6, 'que la decisión no se tome en silencio']], bien: 'Cada mecanismo con su alcance.' },
-      'La revocatoria es para alcaldes y gobernadores, el cabildo es para deliberar y participar no asegura ganar.', 'Busca la oración que pone límites a cada mecanismo.'),
-    x('comprueba-apuesta', 'Alguien dice: «participar no sirve, porque el alcalde puede no hacer caso». Subraya en el párrafo 6 la oración que le **concede** una parte y le pone un límite.', { doc: VOTO, nums: [6], apuesta: 'El alcalde puede no hacer caso.', ...S(['6.0'], { '6.1': 'Cuenta qué pasó con el relleno.', '6.2': 'Dice que no siempre sale bien, sin hablar de responder.', '6.3': 'Es la conclusión sobre participar en general.' }), bien: 'No está obligado a cambiar, pero sí a responder.' },
-      'La primera oración acepta que no debe cambiar de opinión y agrega su obligación: responder.', 'Busca la oración con «pero» que habla de la obligación del alcalde.'),
-    x('balanza-tesis', 'Tesis: el cabildo fue útil en San Pedro. ¿Qué hace cada dato?', { doc: VOTO, tesis: 'El cabildo fue útil en San Pedro',
-      ...F(['La alcaldía mostró los estudios por primera vez.', 0, '¿Se logró algo que antes no había?'], ['Los vecinos expusieron sus dudas.', 0, '¿Se logró algo que antes no había?'], ['El traslado ya estaba decidido antes.', 1, 'Si fuera cierto, ¿el cabildo habría cambiado algo?'], ['El profesor enseña sociales.', 2, '¿Cambia lo que logró el cabildo?']), bien: 'Dos apoyan, uno debilita y otro no pesa.' },
-      'Estudios a la vista y dudas escuchadas apoyan; un traslado decidido antes debilita; la materia no pesa.', 'Supón cierto cada dato y mira si creerías más o menos en la tesis.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: VOTO, lineas: ['La democracia colombiana es representativa y participativa.', 'El relleno quedaba a un kilómetro.', 'Hay varios mecanismos, cada uno con su uso.', 'La revocatoria es para alcaldes y gobernadores.', 'El profesor reunió a sus estudiantes.', 'Participar hace que se discuta la decisión.'], ...S([1, 4], { 0: 'Es el modelo de democracia.', 2: 'Es la idea que organiza el texto.', 3: 'Es una regla que conviene recordar.', 5: 'Es la conclusión.' }), bien: 'Modelo, mecanismos, regla y conclusión.' },
-      'La distancia y la reunión cuentan el caso; las demás enseñan sobre la participación.', 'Separa el caso del relleno de lo que ese caso enseña sobre participar.'),
-  ]);
-
-  const CONTROL = {
-    id: 'icf-comedor', title: 'Los almuerzos que no llegaban',
-    ficha: { autor: 'Equipo de una veeduría ciudadana', fuente: 'Boletín comunitario', fecha: 'Mayo de 2026' },
-    paras: [
-      'El contrato decía que cada estudiante del colegio Los Almendros recibiría un almuerzo con carne, verdura y fruta. En la mesa solo había arroz y una galleta. Durante tres meses, las familias pensaron que era un error. Después, cansadas de esperar, empezaron a tomar fotos.',
-      'Una madre, Rosalba Tique, propuso conformar una veeduría ciudadana: un grupo de vecinos que, según la ley, puede vigilar cómo se gasta el dinero público y pedir información a las entidades. Con un derecho de petición obtuvieron una copia del contrato y compararon lo pagado con lo servido.',
-      'La diferencia era grande, y el caso llegó a varios organismos a la vez. La Contraloría revisó las cuentas, porque su tarea es vigilar el uso de los recursos públicos; si comprueba un daño, puede exigir que se devuelva el dinero. La Procuraduría investigó a la funcionaria que firmó los recibos sin verificar los platos, porque vigila la conducta de los servidores públicos y puede sancionarlos.',
-      'La personería del municipio, que forma parte del Ministerio Público, acompañó a las familias y recibió sus quejas. Como había indicios de un delito, también intervino la Fiscalía, que investiga los delitos y acusa ante los jueces. La Fiscalía no es un organismo de control: pertenece a la rama judicial. Una misma falta puede tener, entonces, consecuencias fiscales, disciplinarias y penales.',
-      'Algunos vecinos preguntaron por qué tantas entidades se ocupaban de unos platos de arroz. La respuesta es que cada una hace una pregunta distinta: si se perdió dinero, si alguien incumplió su deber, si se cometió un delito, si se vulneró un derecho. Responder una no responde las demás.',
-      'El contratista fue cambiado y parte del dinero se recuperó. La veeduría no se disolvió. Los lunes, dos madres visitan el comedor con una libreta y anotan qué se sirvió, cuánto y a qué hora. Cada mes publican esos datos en la cartelera del colegio. «Lo público es de todos», dice Rosalba, «y lo que es de todos necesita muchos ojos».',
-    ],
-  };
-  const l2 = leccion('icf-sc-participacion-2', 'Organismos de control', guion(
-    ['Contraloría', 'Sigue el dinero público: ¿se perdió?, ¿quién debe devolverlo? Es el control fiscal.'],
-    ['Procuraduría', 'Vigila la conducta de los funcionarios y puede sancionarlos. Es el control disciplinario.'],
-    ['Fiscalía', 'Investiga delitos y acusa ante los jueces. Es de la rama judicial, no un organismo de control.'],
-    ['Veedurías', 'Los ciudadanos también pueden vigilar: piden información y comparan lo pagado con lo hecho.']), [
-    x('pinta-tipos', 'Pinta cada pregunta con quien la responde.', { doc: CONTROL, plumas: ['Contraloría', 'Procuraduría', 'Fiscalía'],
-      ...P(['¿Cuánto dinero del comedor se perdió?', 0, '¿La pregunta es por dinero, por conducta o por delito?'], ['¿La funcionaria incumplió su deber?', 1, '¿La pregunta es por dinero, por conducta o por delito?'], ['¿Hubo un robo que deba ir a juicio?', 2, '¿La pregunta es por dinero, por conducta o por delito?'], ['¿Un inspector llegó borracho a trabajar?', 1, '¿La pregunta es por dinero, por conducta o por delito?'], ['¿Quién debe devolver lo pagado de más?', 0, '¿La pregunta es por dinero, por conducta o por delito?']), bien: 'Dinero, conducta y delito.' },
-      'El dinero es de la Contraloría, la conducta del funcionario de la Procuraduría y el delito de la Fiscalía.', 'Subraya en cada pregunta si habla de plata, de deber o de delito.'),
-    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: CONTROL,
-      ...F(['muestra el incumplimiento', 0, 'Busca lo que decía y lo que había.'], ['cuenta cómo vigilaron los vecinos', 1, 'Busca la veeduría.'], ['explica dos controles', 2, 'Busca Contraloría y Procuraduría.'], ['suma a quien acompaña y a quien acusa', 3, 'Busca personería y Fiscalía.'], ['responde una duda', 4, 'Busca lo que preguntaron los vecinos.'], ['cierra con lo que quedó', 5, 'Busca qué pasó con el contratista.'], ['critica a los maestros', null, 'Ningún párrafo habla de los maestros.']),
-      luz: [[1, 'El contrato decía'], [2, 'veeduría ciudadana'], [3, 'La Contraloría'], [4, 'la Fiscalía'], [5, 'preguntaron'], [6, 'La veeduría no se disolvió']], bien: 'Falla, vigilancia, controles, duda y cierre.' },
-      'El texto muestra la falla, quién la vigiló, qué hizo cada entidad, por qué son varias y qué quedó.', 'Pregunta qué hace cada párrafo, no solo a quién nombra.'),
-    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CONTROL, nums: [2, 4], pregunta: 'Queda en pie', queda: 'Una falta puede tener varias consecuencias.',
-      ...T(['Los vecinos no pueden vigilar el gasto.', [0, 1], 'Busca qué es una veeduría o qué logró.'], ['La Fiscalía es un organismo de control.', 4, 'Busca a qué rama pertenece.'], ['La personería es una rama del poder.', 2, 'Busca de qué forma parte.']), bien: 'Cada opción cae con una oración.' },
-      'La ley permite las veedurías, la Fiscalía es de la rama judicial y la personería, del Ministerio Público.', 'Saca la entidad de cada opción y busca qué se dice de ella.'),
-    x('genero-o-cita', '¿Puede hacerlo la **veeduría** o le toca a una **entidad del Estado**?', { doc: CONTROL, rot: ['la veeduría', 'una entidad'],
-      ...F(['Pedir copia del contrato', 0, '¿Basta con ser ciudadano?'], ['Sancionar a la funcionaria', 1, '¿Un vecino puede castigar?'], ['Comparar lo pagado con lo servido', 0, '¿Basta con ser ciudadano?'], ['Acusar ante un juez penal', 1, '¿Quién acusa en nombre del Estado?'], ['Visitar el comedor y anotar', 0, '¿Basta con ser ciudadano?']), bien: 'Vigilar y pedir; sancionar y acusar.' },
-      'La veeduría pide, compara y observa; sancionar es de la Procuraduría y acusar, de la Fiscalía.', 'Distingue entre mirar y pedir, por un lado, y castigar o acusar, por otro.'),
-    x('pilares', 'El techo es la respuesta a los vecinos. ¿Qué la sostiene y qué adorna?', { doc: CONTROL, idea: 'Hacen falta varias entidades porque cada una pregunta algo distinto',
-      ...F(['La Contraloría pregunta por el dinero.', 0, '¿Muestra una pregunta propia?'], ['La Procuraduría pregunta por el deber.', 0, '¿Muestra una pregunta propia?'], ['La Fiscalía pregunta por el delito.', 0, '¿Muestra una pregunta propia?'], ['Había arroz y una galleta.', 1, 'Si hubiera sopa, ¿cambiaría la idea?'], ['Las visitas son los lunes.', 1, 'Si fueran los martes, ¿cambiaría la idea?']), bien: 'Tres preguntas sostienen; dos detalles adornan.' },
-      'Cada entidad con su pregunta sostiene la idea; el menú y el día solo cuentan el caso.', 'Pregunta si cada oración muestra una tarea distinta.'),
-    x('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: CONTROL, texto: '|La Contraloría| revisó |las cuentas| y, después, actuó |la Procuraduría|. Esta puede sancionar; aquella, pedir que se devuelva |el dinero|.',
-      ...T(['«Esta»', 2, 'Pon en su lugar lo que ataste: ¿quién puede sancionar?'], ['«aquella»', 0, 'Pon en su lugar lo que ataste: ¿quién sigue la plata?']), bien: '«Esta», la cercana; «aquella», la lejana.' },
-      'Sancionar es de la Procuraduría, la más cercana; pedir el dinero, de la Contraloría, la más lejana.', 'Comprueba con la tarea de cada entidad, no solo con la distancia.'),
-    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CONTROL, nums: [3, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
-      ...F(['La funcionaria firmó sin verificar.', 0, 'Léela junto a lo que investigó la Procuraduría.'], ['No todo el dinero volvió.', 1, 'Mira con cuidado cuánto se recuperó.'], ['El contratista fue cambiado.', 0, 'Léela junto al comienzo del párrafo 6.'], ['El contratista está preso.', 2, '¿Alguna oración habla de cárcel?']),
-      luz: [[3, 'firmó los recibos sin verificar'], [6, 'parte del dinero se recuperó']], bien: '«Parte» dice más de lo que parece.' },
-      'Firmar y cambiar están escritos; si se recuperó una parte, otra no; la cárcel se inventa.', 'Fíjate en palabras como «parte», que dejan algo por fuera.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: CONTROL, lineas: ['Una veeduría vigiló un contrato incumplido.', 'Dos madres llevan una libreta.', 'La Contraloría sigue el dinero.', 'La Procuraduría, la conducta.', 'En la mesa había arroz.', 'La Fiscalía investiga delitos y es de la rama judicial.'], ...S([1, 4], { 0: 'Es quién vigiló y qué.', 2: 'Es el control fiscal.', 3: 'Es el control disciplinario.', 5: 'Es una distinción que se pregunta mucho.' }), bien: 'Quién vigila y qué pregunta cada quien.' },
-      'La libreta y el arroz son del caso; las demás explican quién controla qué.', 'Piensa qué serviría para otro caso distinto.'),
-  ]);
-
-  const REFORMA = {
-    id: 'icf-reforma', title: 'Cómo se cambia la regla mayor',
-    ficha: { autor: 'Abogada constitucionalista', fuente: 'Columna pedagógica de un diario', fecha: 'Abril de 2026' },
-    paras: [
-      'Una Constitución es la regla que está por encima de las demás reglas. Si una ley la contradice, la ley pierde. Por eso surge una duda razonable: si el país cambia, ¿cómo se cambia la Constitución sin que cualquiera la acomode a su gusto?',
-      'La nuestra, de 1991, prevé tres caminos. El primero es el acto legislativo, que tramita el Congreso. No basta una votación: se exigen en total ocho debates, en dos períodos ordinarios y consecutivos, y en el segundo período debe aprobarlo la mayoría de los miembros de cada cámara. Es lento a propósito. Entre un período y otro, el país alcanza a enterarse y a opinar.',
-      'El segundo es el referendo constitucional. El gobierno o un grupo de ciudadanos presenta un texto, el Congreso aprueba una ley que convoca a votar y la Corte Constitucional revisa esa ley antes de que se vote. Después, los ciudadanos dicen sí o no. El tercero es la asamblea constituyente: el pueblo decide, primero, si la convoca y con qué temas; luego elige a sus miembros.',
-      'En los tres casos hay un vigilante. La Corte Constitucional revisa que se hayan cumplido los trámites. También ha dicho que reformar no es lo mismo que sustituir: el Congreso puede cambiar partes de la Constitución, pero no reemplazarla por otra distinta, porque quien la puede reemplazar es el pueblo.',
-      'Hay quienes ven en estas reglas un obstáculo. Argumentan que una mayoría reciente debería poder cambiarlo todo con rapidez. Otros responden que una mayoría de hoy puede ser minoría mañana, y que las reglas difíciles de cambiar protegen a ambas. Por eso algunas constituciones del mundo exigen aún más pasos que la nuestra, y otras, menos. La discusión es vieja y no tiene una respuesta única.',
-      'Lo que sí muestra es para qué sirve la lentitud. Cambiar la regla mayor debe ser posible, o el país quedaría atado para siempre a sus abuelos. Pero debe costar trabajo, o quedaría atado al humor de una semana.',
-    ],
-  };
-  const l3 = leccion('icf-sc-participacion-3', 'Reformar la Constitución', guion(
-    ['La regla mayor', 'La Constitución está por encima de las leyes; cambiarla exige un trámite más difícil.'],
-    ['Tres caminos', 'Acto legislativo (Congreso, ocho debates en dos períodos), referendo y asamblea constituyente.'],
-    ['El vigilante', 'La Corte Constitucional revisa el trámite y que no se reemplace la Constitución disfrazando el cambio de reforma.'],
-    ['¿Por qué lento?', 'La dificultad protege a las minorías y da tiempo de discutir.']), [
-    x('genero-o-cita', '¿Es **acto legislativo** o **asamblea constituyente**?', { doc: REFORMA, rot: ['acto legislativo', 'asamblea constituyente'],
-      ...F(['Ocho debates en el Congreso', 0, '¿Quién discute: congresistas o miembros elegidos para eso?'], ['El pueblo decide si la convoca', 1, '¿Hay una votación para convocarla?'], ['Se eligen miembros especiales', 1, '¿Discuten congresistas u otros elegidos?'], ['Dos períodos consecutivos', 0, '¿De quién son los períodos ordinarios?']), bien: 'Uno en el Congreso, otro con miembros propios.' },
-      'Los debates y los períodos son del Congreso; convocarla y elegir miembros es de la constituyente.', 'Busca en el texto quién discute en cada camino.'),
-    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: REFORMA,
-      ...F(['plantea la pregunta', 0, 'Busca los signos de interrogación.'], ['explica el primer camino', 1, 'Busca el acto legislativo.'], ['explica los otros dos', 2, 'Busca «segundo» y «tercero».'], ['presenta al vigilante', 3, 'Busca quién revisa.'], ['muestra dos posturas', 4, 'Busca «Hay quienes» y «Otros».'], ['concluye', 5, 'Busca para qué sirve la lentitud.'], ['cuenta la vida de un senador', null, 'No se narra la vida de nadie.']),
-      luz: [[1, '¿cómo se cambia la Constitución'], [2, 'acto legislativo'], [3, 'asamblea constituyente'], [4, 'hay un vigilante'], [5, 'Hay quienes'], [6, 'para qué sirve la lentitud']], bien: 'Pregunta, caminos, vigilante, posturas y cierre.' },
-      'El texto pregunta, responde con tres caminos, presenta a la Corte, contrasta posturas y concluye.', 'Guíate por los números y por las palabras que presentan posturas.'),
-    x('pasos-del-proceso', 'Ordena el camino de un referendo constitucional. El primer paso está en su puesto.', { que: 'el trámite', de: 'Referendo constitucional', fija: 1, ini: [0, 2, 3, 1], tiras: ['Se presenta un texto.', 'El Congreso aprueba la ley que convoca.', 'La Corte revisa esa ley.', 'Los ciudadanos votan.'], mira: ['', 'Se convoca sobre un texto ya presentado.', 'Se revisa una ley que ya existe.', 'Se vota cuando ya se revisó.'], bien: 'Texto, ley, revisión y voto.' },
-      'Primero el texto, después la ley que convoca, la revisión de la Corte y al final la votación.', 'Busca «antes de que se vote» y «Después».'),
-    x('pinta-voces', 'Pinta cada idea con quien la sostiene.', { doc: REFORMA, plumas: ['los del cambio rápido', 'los que defienden la dificultad', 'la Corte'],
-      ...P(['La mayoría reciente debería poder cambiarlo todo.', 0, 'Busca quiénes ven un obstáculo.'], ['Quien es mayoría hoy puede ser minoría mañana.', 1, 'Busca quiénes «responden».'], ['Reformar no es sustituir.', 2, 'Busca quién «ha dicho» eso.'], ['Las reglas difíciles protegen a todos.', 1, 'Busca quiénes «responden».']), bien: 'Dos posturas y un juez.' },
-      'Unos piden rapidez, otros defienden la dificultad y la distinción entre reformar y sustituir es de la Corte.', 'Busca «Argumentan», «responden» y «ha dicho».'),
-    x('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: REFORMA, pares: [['La Constitución está por encima de las leyes.', 'si una ley la contradice, la ley pierde.'], ['El Congreso puede cambiar partes de ella,', 'no puede reemplazarla.'], ['No puede reemplazarla,', 'eso solo puede hacerlo el pueblo.']],
-      ...F(['Por eso,', 0, 'Concluye: ¿dónde lo segundo resulta de lo primero?'], ['pero', 1, 'Limita: ¿dónde se permite algo y se prohíbe otra cosa?'], ['porque', 2, 'Da la razón: ¿dónde lo segundo explica lo primero?'], ['para que', null, 'Anunciaría un propósito: aquí nada se hace con ese fin.'], ['a fin de que', null, 'Anunciaría un propósito: aquí nada se hace con ese fin.']), bien: 'Concluir, limitar y explicar.' },
-      'Que la ley pierda es consecuencia; no reemplazar es un límite; que solo el pueblo pueda es la razón.', 'Di qué hace la segunda idea antes de escoger la palabra.'),
-    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: REFORMA, filas: [{ antes: 'El acto legislativo lo tramita', topes: ['el presidente', 'el Congreso', 'la Corte'], va: 1 }, { antes: 'Necesita debates en número de', topes: ['cuatro', 'seis', 'ocho'], va: 2 }, { antes: 'La Corte revisa la ley del referendo', topes: ['antes de votar', 'al contar los votos', 'un año después'], va: 0 }], mira: ['Relee la segunda oración del párrafo 2.', 'Relee lo que se exige en el párrafo 2.', 'Relee el párrafo 3: ¿cuándo revisa?'], luz: [[2, 'que tramita el Congreso'], [2, 'ocho debates'], [3, 'antes de que se vote']], bien: 'Quién, cuántos y cuándo.' },
-      'El Congreso lo tramita en ocho debates, y la Corte revisa la ley del referendo antes de la votación.', 'Cada perilla tiene su dato exacto en los párrafos 2 y 3.'),
-    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: REFORMA, nums: [2, 4], pregunta: 'Queda en pie', queda: 'La Constitución se puede reformar, con límites.',
-      ...T(['Basta una sola votación del Congreso.', 2, 'Busca cuántos debates se exigen.'], ['Es lento por descuido.', 3, 'Busca si la demora es intencional.'], ['El Congreso puede cambiarla por otra.', 7, 'Busca la diferencia entre reformar y sustituir.']), bien: 'Tres oraciones, tres desmentidos.' },
-      'Se exigen ocho debates, la lentitud es intencional y el Congreso no puede reemplazarla.', 'Busca en cada opción la palabra que el texto niega.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: REFORMA, lineas: ['La Constitución está sobre las leyes.', 'La discusión es vieja.', 'Se reforma por tres caminos.', 'La Corte vigila el trámite.', 'Otros países exigen más pasos.', 'La dificultad protege y da tiempo.'], ...S([1, 4], { 0: 'Es la razón de que cambiarla sea difícil.', 2: 'Es la respuesta a la pregunta.', 3: 'Es el control sobre la reforma.', 5: 'Es la conclusión.' }), bien: 'Jerarquía, caminos, control y razón.' },
-      'Que la discusión sea vieja y que otros países exijan más pasos no explica cómo se reforma aquí.', 'Deja lo que responde a la pregunta del comienzo.'),
-  ]);
-
-  const BARRIO = {
-    id: 'icf-ciclorruta', title: 'La avenida de los dos carriles',
-    paras: [
-      'La alcaldía de Puerto Nuevo decidió quitar un carril de la avenida principal para construir una ciclorruta. El alcalde lo había prometido en su programa de gobierno y contaba con el presupuesto aprobado por el concejo. Aun así, el anuncio dividió a la ciudad.',
-      'Los transportadores convocaron una marcha y anunciaron que recogerían firmas para revocarle el mandato. El alcalde llevaba cinco meses en el cargo. Un grupo de ciclistas, en cambio, pidió un cabildo abierto para que la comunidad conociera los planos y opinara sobre las paradas de bus.',
-      'Mientras tanto, una concejala denunció que el contrato se había firmado con la empresa de un primo del secretario de obras. La denuncia llegó a la Procuraduría y a la Contraloría. El secretario respondió que el precio era el más bajo y que la ley se había cumplido.',
-      'En el cabildo hablaron setenta y dos personas. Los comerciantes temían perder clientes; los médicos mostraron cifras de accidentes de ciclistas; las personas con discapacidad recordaron que los andenes también estaban dañados. Nadie votó, pero la alcaldía se comprometió a responder cada propuesta por escrito.',
-      'La marcha fue pacífica y numerosa. Un columnista escribió que protestar era irrespetar la decisión de las urnas. Una lectora le contestó al día siguiente que el voto elige gobernantes, no los vuelve dueños de la ciudad, y que la Constitución protege la protesta pacífica.',
-      'Al terminar la marcha, los organizadores barrieron la plaza y entregaron un pliego con seis peticiones. La alcaldía aceptó tres y explicó por qué no podía cumplir las otras: dos dependían del gobierno departamental y una iba en contra de una norma sobre andenes. Esa respuesta, escrita y pública, se discutió durante varios días en la emisora. La obra comenzó con tres cambios: dos paradas más, andenes reparados y una veeduría con representantes de los transportadores y de los ciclistas. La investigación sobre el contrato sigue abierta.',
-    ],
-  };
-  const Q = preg(BARRIO, 'sociales');
-  return mundo('icf-sc-participacion', 'Participación y Control', 'sociales', [l1, l2, l3], [
-    ['icf-sc-participacion-1', 'La revocatoria exige que haya pasado al menos un año de mandato.', Q('La iniciativa de los transportadores de revocar al alcalde no puede prosperar en ese momento porque:', ['Los alcaldes no pueden ser revocados', 'Solo el concejo puede revocar', 'El alcalde aún no cumple un año en el cargo', 'La marcha fue pacífica'], 2, 'La revocatoria sí procede contra alcaldes, pero después de un año; lleva cinco meses.', 'Busca cuánto tiempo lleva en el cargo y recuerda la condición de tiempo.')],
-    ['icf-sc-participacion-1', 'En un cabildo abierto se delibera; no se vota la decisión.', Q('El cabildo abierto permitió principalmente que:', ['Los ciudadanos aprobaran la obra por votación', 'La comunidad expusiera sus posturas y recibiera respuesta', 'El alcalde dejara el cargo', 'Se modificara la Constitución'], 1, '«Nadie votó, pero la alcaldía se comprometió a responder»: se deliberó.', 'Lee el final del párrafo 4.')],
-    ['icf-sc-participacion-2', 'Contraloría: dinero público. Procuraduría: conducta del funcionario.', Q('Frente a la denuncia sobre el contrato, a la Contraloría le corresponde establecer:', ['Si se causó un daño al dinero público', 'Si el secretario es buen conductor', 'Si el concejo debe cambiar', 'Si la ciclorruta es bonita'], 0, 'La Contraloría vigila los recursos públicos; la conducta del secretario la revisa la Procuraduría.', 'Recuerda qué pregunta hace cada organismo.')],
-    ['icf-sc-participacion-2', 'Una investigación abierta no prueba una culpa.', Q('A partir del texto, sobre el secretario de obras se puede afirmar que:', ['Es culpable, porque hay denuncia', 'Es inocente, porque el precio era bajo', 'Fue retirado por la Procuraduría', 'Está siendo investigado y aún no hay decisión'], 3, 'La investigación sigue abierta: no hay condena ni absolución.', 'Lee la última oración del texto.')],
-    ['icf-sc-participacion-3', 'La Constitución está por encima de las demás decisiones y protege derechos de todos.', Q('La lectora responde al columnista apoyándose en que:', ['La mayoría siempre tiene la razón', 'Protestar anula las elecciones', 'La Constitución protege la protesta pacífica aun contra decisiones de quien ganó', 'El columnista no votó'], 2, 'El voto elige, pero no quita derechos: la protesta pacífica tiene protección constitucional.', 'Relee lo que dice la lectora después de «que la Constitución».')],
-    ['icf-sc-participacion-3', 'Para quitar un derecho de la Constitución habría que reformarla por sus caminos.', Q('Si el concejo quisiera prohibir toda protesta pacífica en la ciudad, la norma:', ['Sería válida, porque el concejo representa a la ciudad', 'Sería contraria a la Constitución, que está por encima de los acuerdos municipales', 'Sería válida si el alcalde la firma', 'Reformaría la Constitución en ese municipio'], 1, 'Un acuerdo municipal no puede contradecir la Constitución ni reformarla.', 'Compara la jerarquía de las dos normas.')],
-  ]);
-})());
-;
-//#archivo js/courses/preicfes-sc-perspectivas.js
-// Preicfes · Sociales y Ciudadanas · mundo 3 «Perspectivas e Intereses» (spec 2026-11-25-preicfes-estructura). Casos escritos para Zuka.
-PI_MUNDOS.push((() => {
-  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
-
-  const PLAYA = {
-    id: 'icf-mangle', title: 'El manglar de Boca Grande',
-    ficha: { autor: 'Grupo de sociales de grado once', fuente: 'Estudio de caso escolar', fecha: 'Marzo de 2026' },
-    paras: [
-      'Boca Grande es un pueblo de pescadores rodeado de manglar. Hace dos años, una empresa propuso construir un muelle turístico en la zona donde los mangles son más viejos. El proyecto prometía doscientos empleos, y la autoridad ambiental debía decidir si lo autorizaba. El pueblo se dividió, pero no en dos bandos, como suele contarse, sino en muchos más.',
-      'Los pescadores se opusieron. Entre las raíces del mangle crecen los peces y los camarones de los que viven; sin ellas, la pesca bajaría en pocos años. Las piangüeras, mujeres que recogen conchas en el barro, compartían el temor, aunque agregaban otro: el muelle pasaría justo por donde trabajan, y nadie les había preguntado.',
-      'Los jóvenes estaban repartidos. Muchos querían el muelle, porque estaban cansados de tener que irse a la ciudad para conseguir un sueldo. Otros respondían que los empleos serían para gente de afuera, con estudios de hotelería que allí nadie ofrece. Los dueños de las dos tiendas apoyaban el proyecto, pues esperaban más clientes.',
-      'La empresa aseguraba que sembraría diez mangles por cada uno que cortara. La alcaldía, interesada en los impuestos que recibiría, pedía una decisión rápida. Una bióloga explicó que un mangle tarda unos veinte años en cumplir la función de los viejos y que, mientras tanto, la costa quedaría más expuesta al oleaje.',
-      'En la reunión pública, una piangüera hizo la pregunta que cambió la discusión: «¿Por qué el muelle tiene que ir ahí?». Nadie había pensado en otra respuesta. Dos kilómetros al sur había una playa sin mangle. La empresa la había descartado porque costaba más llegar; los jóvenes, en cambio, vieron que el camino también daría trabajo.',
-      'La autoridad negó el primer sitio y aceptó estudiar el segundo. No todos quedaron contentos: los tenderos lamentaron que los turistas no pasarían por el centro. Pero casi todos reconocieron algo. Cuando solo se pregunta «sí o no», cada quien defiende su posición; cuando se pregunta «para qué», aparecen los intereses, y a veces caben juntos.',
-    ],
-  };
-  const l1 = leccion('icf-sc-perspectivas-1', 'Actores de un conflicto', guion(
-    ['Actores', 'En un conflicto hay varios actores: personas, grupos, empresas, autoridades.'],
-    ['Posición e interés', 'La posición es lo que piden; el interés, para qué lo piden.'],
-    ['Coincidir por razones distintas', 'Dos actores pueden pedir lo mismo por motivos diferentes.'],
-    ['Dentro de un grupo', 'No todos los jóvenes ni todos los comerciantes piensan igual.']), [
-    x('voz-de-la-fuente', 'Ata cada interés al actor que lo tiene.', { ayuda: 'Tira un hilo desde cada interés hasta su actor.', doc: PLAYA, portadas: [['Los pescadores', 'actor'], ['La alcaldía', 'actor'], ['Los tenderos', 'actor'], ['Jóvenes a favor', 'actor']],
-      ...T(['Que siga habiendo peces', 0, '¿Quién vive de lo que crece en las raíces?'], ['Recibir impuestos', 1, '¿Quién cobra por lo que se construye?'], ['Tener más clientes', 2, '¿Quién vende en el centro?'], ['Trabajar sin irse del pueblo', 3, '¿Quién está cansado de irse?']), bien: 'Cada quien, con su para qué.' },
-      'Los peces son de los pescadores, los impuestos de la alcaldía, los clientes de los tenderos y el empleo cercano, de los jóvenes.', 'Busca en el texto por qué cada actor apoya o rechaza.'),
-    x('genero-o-cita', '¿Es una **posición** (lo que piden) o un **interés** (para qué)?', { doc: PLAYA, rot: ['posición', 'interés'],
-      ...F(['No al muelle', 0, '¿Dice qué quieren o para qué?'], ['Conservar el lugar donde trabajan', 1, '¿Dice qué quieren o para qué?'], ['Que se autorice ya', 0, '¿Dice qué quieren o para qué?'], ['Conseguir un sueldo en el pueblo', 1, '¿Dice qué quieren o para qué?']), bien: 'La posición se grita; el interés se pregunta.' },
-      '«No al muelle» y «que se autorice» son posiciones; el trabajo y el sueldo son los intereses de fondo.', 'Pregunta «¿para qué?»: si ya lo responde, es un interés.'),
-    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: PLAYA,
-      ...F(['¿Qué temían las mujeres que recogen conchas?', 1, 'Busca el comienzo que habla de oponerse.'], ['¿Qué prometía la empresa sobre los árboles?', 3, 'Busca el comienzo que la nombra.'], ['¿Qué pregunta cambió la discusión?', 4, 'Busca el comienzo de la reunión.']),
-      luz: [[2, 'nadie les había preguntado'], [4, 'sembraría diez mangles'], [5, '¿Por qué el muelle tiene que ir ahí?']], bien: 'Opositores, empresa y reunión.' },
-      'La oposición abre el 2, la empresa el 4 y la reunión el 5.', 'Busca en los comienzos quién o qué momento se nombra.'),
-    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: PLAYA, nums: [3, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
-      ...F(['Los jóvenes no piensan todos igual.', 1, 'No está con esas palabras: ¿qué querían unos y qué respondían otros?'], ['Los tenderos esperaban más clientes.', 0, 'Léela junto al final del párrafo 3.'], ['Sembrar diez no repone enseguida lo perdido.', 1, '¿Cuánto tarda un mangle en cumplir su función?'], ['La empresa es extranjera.', 2, '¿Alguna oración dice de dónde es?']),
-      luz: [[3, 'esperaban más clientes'], [4, 'unos veinte años']], bien: 'Dentro de un grupo también hay diferencias.' },
-      'Los clientes están escritos; la división de los jóvenes y la demora se deducen; el origen de la empresa no está.', 'Junta dos oraciones antes de decidir que algo no está.'),
-    x('pinta-voces', 'Pinta cada razón con quien la da.', { doc: PLAYA, plumas: ['a favor del primer sitio', 'en contra'],
-      ...P(['Daría empleos en el pueblo.', 0, '¿Con esa razón se acepta o se rechaza?'], ['Bajaría la pesca.', 1, '¿Con esa razón se acepta o se rechaza?'], ['Se recibirían impuestos.', 0, '¿Con esa razón se acepta o se rechaza?'], ['La costa quedaría expuesta al oleaje.', 1, '¿Con esa razón se acepta o se rechaza?'], ['Los empleos serían para gente de afuera.', 1, '¿Con esa razón se acepta o se rechaza?']), bien: 'Razones de dinero, de ambiente y de justicia.' },
-      'Empleos e impuestos apoyan; la pesca, el oleaje y los empleos para otros van en contra.', 'Imagina que esa razón es cierta: ¿aceptarías el muelle ahí?'),
-    x('balanza-tesis', 'Tesis: el segundo sitio reúne más intereses. ¿Qué hace cada dato?', { doc: PLAYA, tesis: 'El segundo sitio reúne más intereses',
-      ...F(['Allí no hay mangle.', 0, '¿Protege lo que pedían los pescadores?'], ['El camino también daría trabajo.', 0, '¿Atiende lo que pedían los jóvenes?'], ['Los turistas no pasarían por el centro.', 1, '¿A quién deja por fuera?'], ['El pueblo se llama Boca Grande.', 2, '¿Cambia los intereses de alguien?']), bien: 'Reúne más, aunque no todos.' },
-      'Sin mangle y con trabajo atiende a pescadores y jóvenes; deja por fuera a los tenderos; el nombre no pesa.', 'Mira a qué actor ayuda o perjudica cada dato.'),
-    x('comprueba-apuesta', 'Subraya en el párrafo 6 la oración que dice la **enseñanza** del caso.', { doc: PLAYA, nums: [6], apuesta: 'Preguntar «para qué» ayuda a encontrar salidas.', ...S(['6.3'], { '6.0': 'Cuenta qué decidió la autoridad.', '6.1': 'Cuenta quién quedó inconforme.', '6.2': 'Anuncia que hay algo que reconocer, sin decirlo.' }), bien: 'De las posiciones a los intereses.' },
-      'La última oración opone «sí o no» a «para qué» y explica por qué a veces los intereses caben juntos.', 'Busca la oración que valdría para cualquier otro conflicto.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: PLAYA, lineas: ['Un muelle dividió a un pueblo en muchos actores.', 'El pueblo tiene dos tiendas.', 'Cada actor tenía su interés.', 'Una pregunta abrió otra salida.', 'El otro sitio queda al sur.', 'Los intereses a veces caben juntos.'], ...S([1, 4], { 0: 'Es el conflicto.', 2: 'Es lo que explica las posturas.', 3: 'Es lo que cambió la discusión.', 5: 'Es la enseñanza.' }), bien: 'Conflicto, intereses, pregunta y enseñanza.' },
-      'El número de tiendas y el punto cardinal son detalles del caso.', 'Deja lo que serviría para entender otro conflicto.'),
-  ]);
-
-  const MARCHA = {
-    id: 'icf-vecinos', title: 'La casa de los recién llegados',
-    ficha: { autor: 'Laura Benavides, antropóloga', fuente: 'Revista de divulgación social', fecha: 'Abril de 2026' },
-    paras: [
-      'En el barrio La Esperanza, la junta alquiló una casa vacía para alojar a doce familias que llegaron de otro país. Al mes, alguien pintó en la pared una frase que pedía que se fueran. Yo hacía allí un trabajo de campo y decidí preguntar, casa por casa y sin prisa, qué pensaban los vecinos.',
-      'Don Elías me dijo que desde que llegaron hay más robos. Le pregunté si le habían robado. Respondió que no, pero que «esa gente es así». Busqué los datos de la inspección de policía: en los seis meses anteriores hubo catorce denuncias; en los seis siguientes, trece. La afirmación de don Elías no se apoyaba en un hecho. Era un prejuicio: un juicio hecho antes de conocer y aplicado a todo un grupo.',
-      'Su vecina, Teresa, pensaba distinto. Ella misma llegó al barrio hace treinta años, desplazada por la violencia, y recuerda que entonces a su familia también la miraban mal. Su experiencia no prueba que los nuevos sean buenos o malos, pero le permite ponerse en su lugar.',
-      'El pastor de la iglesia había organizado una colecta. Para él, ayudar es un mandato: en su manera de ver el mundo, el forastero es un enviado. Un comerciante colaboró por otro motivo; calculaba que doce familias son doce clientes. Ambos hicieron lo mismo, movidos por ideas muy diferentes de lo que está bien.',
-      'También hablé con Génesis, una de las recién llegadas. Creía que los vecinos no saludaban porque la odiaban. Al contarle que en ese barrio casi nadie saluda antes de las diez, porque todos salen corriendo a trabajar, se rió. También ella había juzgado antes de conocer.',
-      'Nadie ve el mundo desde ninguna parte. La edad, la fe, el oficio y lo que cada quien ha vivido forman una cosmovisión, un lente con el que se miran las cosas. El lente no es un defecto: todos lo llevamos. El problema empieza cuando se olvida que está ahí y se confunde con el paisaje.',
-    ],
-  };
-  const l2 = leccion('icf-sc-perspectivas-2', 'Cosmovisiones y prejuicios', guion(
-    ['Cosmovisión', 'Es la manera de ver el mundo: fe, oficio, edad, experiencia.'],
-    ['Prejuicio', 'Un juicio hecho antes de conocer y aplicado a todo un grupo.'],
-    ['Misma acción, otra razón', 'Dos personas pueden ayudar por motivos muy distintos.'],
-    ['Comprobar', 'Un prejuicio se detecta al pedir el hecho que lo sostiene.']), [
-    x('genero-o-cita', '¿Es un **prejuicio** o una afirmación que se puede **comprobar**?', { doc: MARCHA, rot: ['prejuicio', 'se puede comprobar'],
-      ...F(['Esa gente es así', 0, '¿Habla de un hecho o de todo un grupo sin conocerlo?'], ['Hubo trece denuncias en seis meses', 1, '¿Habría un registro para verlo?'], ['Los jóvenes no respetan nada', 0, '¿Habla de un hecho o de todo un grupo?'], ['Llegaron doce familias', 1, '¿Se podría contar?'], ['Los ricos son tacaños', 0, '¿Habla de un hecho o de todo un grupo?']), bien: 'Todo un grupo, sin conocerlo.' },
-      'Los prejuicios juzgan a un grupo entero; las denuncias y las familias se pueden contar.', 'Pregunta qué registro o conteo permitiría saber si es cierto.'),
-    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: MARCHA,
-      ...F(['presenta el caso', 0, 'Busca qué pasó en el barrio.'], ['muestra un prejuicio y lo contrasta con datos', 1, 'Busca las denuncias.'], ['muestra a quien se pone en el lugar del otro', 2, 'Busca a la vecina desplazada.'], ['compara dos motivos para ayudar', 3, 'Busca al pastor.'], ['muestra un prejuicio de quien llega', 4, 'Busca a Génesis.'], ['define y concluye', 5, 'Busca «cosmovisión».'], ['narra un robo', null, 'Ningún párrafo cuenta un robo.']),
-      luz: [[1, 'doce familias'], [2, 'catorce denuncias'], [3, 'ponerse en su lugar'], [4, 'movidos por ideas muy diferentes'], [5, 'juzgado antes de conocer'], [6, 'una cosmovisión']], bien: 'Caso, prejuicio, empatía, motivos, otro prejuicio y concepto.' },
-      'La autora va de persona en persona y al final nombra el concepto que las une.', 'Busca a quién se entrevista en cada párrafo.'),
-    x('voz-de-la-fuente', 'Ata cada razón para actuar a quien la tiene.', { ayuda: 'Tira un hilo desde cada razón hasta su dueño.', doc: MARCHA, portadas: [['El pastor', 'vecino'], ['El comerciante', 'vecino'], ['Teresa', 'vecina'], ['Don Elías', 'vecino']],
-      ...T(['Ayudar es un deber de fe', 0, '¿Quién ve al forastero como un enviado?'], ['Más familias, más ventas', 1, '¿Quién piensa en clientes?'], ['A mí también me pasó', 2, '¿Quién llegó hace treinta años?'], ['Los de afuera traen problemas', 3, '¿Quién habló de robos sin datos?']), bien: 'Fe, negocio, memoria y temor.' },
-      'La fe es del pastor, el cálculo del comerciante, el recuerdo de Teresa y el temor de don Elías.', 'Busca qué experiencia o idea mueve a cada persona.'),
-    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: MARCHA, nums: [2, 4, 5], pregunta: 'Queda en pie', queda: 'Todos miran con algún lente.',
-      ...T(['A don Elías lo habían robado.', 2, 'Busca qué respondió a la pregunta.'], ['El pastor y el comerciante ayudaron por lo mismo.', [8, 9], 'Busca qué los movía.'], ['Solo los vecinos juzgaron antes de conocer.', 13, 'Busca qué se dice de Génesis al final.']), bien: 'Cada opción, su oración.' },
-      'A don Elías no lo habían robado, los motivos eran diferentes y Génesis también había juzgado.', 'Lee la oración completa donde aparece cada persona.'),
-    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: MARCHA, filas: [{ antes: 'Después de la llegada, las denuncias', topes: ['se duplicaron', 'casi no cambiaron', 'desaparecieron'], va: 1 }, { antes: 'Tener una cosmovisión es', topes: ['un defecto', 'un delito', 'algo de todos'], va: 2 }, { antes: 'Un prejuicio se forma', topes: ['antes de conocer', 'después de medir', 'por ley'], va: 0 }], mira: ['Compara catorce y trece.', 'Relee la última parte del párrafo 6.', 'Relee cómo se define en el párrafo 2.'], luz: [[2, 'catorce denuncias; en los seis siguientes, trece'], [6, 'todos lo llevamos'], [2, 'un juicio hecho antes de conocer']], bien: 'Dato, lente y definición.' },
-      'De 14 a 13 casi no cambia; todos tienen un lente; el prejuicio es anterior a conocer.', 'Cada perilla tiene su frase exacta en el texto.'),
-    x('balanza-tesis', 'Afirmación de don Elías: «desde que llegaron hay más robos». ¿Qué hace cada dato?', { doc: MARCHA, tesis: 'Desde que llegaron hay más robos',
-      ...F(['Las denuncias pasaron de 14 a 13.', 1, '¿Hay más o menos?'], ['Se descubrió que muchos robos nuevos no se denunciaron.', 0, '¿Podría haber más de los que se ven?'], ['Una encuesta en el barrio halló menos robos que antes.', 1, '¿Apoya que haya más?'], ['La casa estaba vacía.', 2, '¿Dice algo de los robos?']), bien: 'Un dato nuevo puede obligar a revisar.' },
-      'Menos denuncias y menos robos en la encuesta debilitan; robos sin denunciar podrían apoyarla; la casa vacía no pesa.', 'Olvida quién lo dijo: mira si el dato la hace más o menos creíble.'),
-    x('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: MARCHA, texto: '|El lente| no es |un defecto|: |todos| lo llevamos. El problema empieza cuando se olvida que está ahí y se confunde con |el paisaje|.',
-      ...T(['el «lo» de «lo llevamos»', 0, 'Pon en su lugar lo que ataste: ¿qué se lleva puesto?'], ['lo que «se olvida que está ahí»', 0, 'Pon en su lugar lo que ataste: ¿qué se olvida?']), bien: 'El lente, las dos veces.' },
-      'Lo que todos llevamos y lo que se olvida es lo mismo: el lente con el que se mira.', 'Comprueba si lo que ataste se puede llevar y olvidar.'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: MARCHA, lineas: ['Una autora entrevista a un barrio dividido.', 'La frase estaba en la pared.', 'Un prejuicio no se apoya en hechos.', 'La misma acción puede tener motivos distintos.', 'Nadie saluda antes de las diez.', 'Todos miran con un lente y conviene recordarlo.'], ...S([1, 4], { 0: 'Es lo que hace la autora.', 2: 'Es el primer concepto.', 3: 'Es la comparación entre vecinos.', 5: 'Es la conclusión.' }), bien: 'Caso, conceptos y conclusión.' },
-      'La pared y la hora del saludo son detalles; lo demás explica prejuicio y cosmovisión.', 'Deja los conceptos y el hilo del caso; quita los detalles.'),
-  ]);
-
-  const AGUA = {
-    id: 'icf-represa', title: 'El turno del agua',
-    ficha: { autor: 'Comité de riego de una vereda', fuente: 'Memoria comunitaria', fecha: 'Mayo de 2026' },
-    paras: [
-      'Cuando la quebrada baja poca agua, en la vereda El Cedro todos la necesitan al mismo tiempo. Las familias de arriba cultivan fresas; las de abajo crían ganado; en la mitad está la escuela. Durante una sequía, los de arriba cerraron la compuerta para llenar sus tanques, y a los de abajo no les llegó nada en once días.',
-      'La primera solución fue de la alcaldía: multar a quien cerrara la compuerta. Nadie la aceptó, ni siquiera quienes pedían mano dura. Los de arriba la sintieron como un castigo por cuidar su cosecha; los de abajo dijeron que una multa no da de beber. Además, no había quién vigilara de noche.',
-      'La segunda la propuso un ingeniero: construir un reservorio. Resolvía el problema de fondo, pero costaba más de lo que la vereda reúne en diez años y tardaría dos en estar listo. A los de abajo les pareció bien; a los de arriba, también, siempre que no fuera en sus tierras.',
-      'La tercera salió de la escuela. Los estudiantes midieron el caudal durante una semana y dibujaron un horario: de noche, los tanques de arriba; al amanecer, la escuela; de día, los bebederos de abajo. No daba a nadie todo lo que pedía. Daba a cada uno lo que necesitaba en la hora en que lo necesitaba, porque las fresas pueden regarse de noche y las vacas no beben a oscuras.',
-      'Aceptaron probarlo quince días. Hubo reclamos: una familia de arriba trabajaba en la ciudad y no podía abrir la llave a las diez. Se cambió con un vecino y todo siguió. El comité, formado por dos personas de cada sector, anotaba los incumplimientos en un cuaderno que cualquiera podía leer.',
-      'El reservorio sigue siendo necesario, y la vereda ahorra para él. Pero el turno mostró que una solución no se acepta por ser la mejor en el papel, sino porque quienes deben cumplirla ayudaron a hacerla, ven que es justa y pueden comprobar que los demás también la cumplen.',
-    ],
-  };
-  const l3 = leccion('icf-sc-perspectivas-3', 'Soluciones y quién las acepta', guion(
-    ['¿A quién ayuda?', 'Cada solución atiende unos intereses y deja otros por fuera.'],
-    ['¿Se puede hacer?', 'Una buena idea puede fallar por costo, por tiempo o porque nadie la vigila.'],
-    ['¿La aceptan?', 'Se cumple más lo que se construyó entre todos.'],
-    ['Corto y largo plazo', 'Un turno ayuda hoy; un reservorio, dentro de dos años.']), [
-    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: AGUA,
-      ...F(['plantea el conflicto', 0, 'Busca lo que pasó en la sequía.'], ['muestra una solución que nadie aceptó', 1, 'Busca la multa.'], ['muestra una buena pero costosa', 2, 'Busca el reservorio.'], ['muestra la que repartió horas', 3, 'Busca a los estudiantes.'], ['cuenta cómo se ajustó', 4, 'Busca los reclamos.'], ['saca la enseñanza', 5, 'Busca por qué se acepta una solución.'], ['describe el sabor de las fresas', null, 'Nadie habla del sabor.']),
-      luz: [[1, 'cerraron la compuerta'], [2, 'Nadie la aceptó'], [3, 'costaba más'], [4, 'dibujaron un horario'], [5, 'Hubo reclamos'], [6, 'ayudaron a hacerla']], bien: 'Conflicto, tres soluciones, ajuste y enseñanza.' },
-      'El texto presenta el conflicto, prueba tres salidas, cuenta el ajuste y explica por qué una funcionó.', 'Busca «primera», «segunda» y «tercera» en los comienzos.'),
-    x('genero-o-cita', '¿La solución se queda corta por **viabilidad** o por **falta de acuerdo**?', { doc: AGUA, rot: ['no es viable aún', 'no hay acuerdo'],
-      ...F(['Cuesta lo de diez años', 0, '¿Falta dinero o falta que la acepten?'], ['La sienten como un castigo', 1, '¿Falta dinero o falta que la acepten?'], ['Tardaría dos años', 0, '¿Falta tiempo o falta que la acepten?'], ['No quieren que sea en sus tierras', 1, '¿Falta tiempo o falta que la acepten?']), bien: 'Poder hacerla y querer cumplirla.' },
-      'El costo y la demora son de viabilidad; el castigo y las tierras, de acuerdo.', 'Pregunta si con más dinero o tiempo se resolvería.'),
-    x('pinta-tipos', 'Pinta cada efecto con la dimensión que toca.', { doc: AGUA, plumas: ['económica', 'ambiental', 'social'],
-      ...P(['Se pierde la cosecha de fresas.', 0, '¿Toca el dinero, la naturaleza o la convivencia?'], ['La quebrada se seca aguas abajo.', 1, '¿Toca el dinero, la naturaleza o la convivencia?'], ['Dos sectores dejan de hablarse.', 2, '¿Toca el dinero, la naturaleza o la convivencia?'], ['Construir vale lo de diez años.', 0, '¿Toca el dinero, la naturaleza o la convivencia?'], ['El comité reúne a los dos lados.', 2, '¿Toca el dinero, la naturaleza o la convivencia?']), bien: 'Un conflicto tiene varias dimensiones.' },
-      'La cosecha y el costo son económicos, la quebrada es ambiental y el trato entre sectores, social.', 'Di qué se gana o se pierde: plata, naturaleza o relaciones.'),
-    x('pasos-del-proceso', 'Ordena lo que pasó en El Cedro. El primer paso está en su puesto.', { que: 'lo que pasó', de: 'Del cierre al turno', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Cerraron la compuerta.', 'La alcaldía propuso multas.', 'Un ingeniero propuso un reservorio.', 'Los estudiantes propusieron turnos.', 'Se ajustaron los turnos tras los reclamos.'], mira: ['', 'Fue la reacción inicial de la autoridad.', 'Llegó después de una idea que nadie aceptó.', 'Salió de la escuela, después de otras dos.', 'Se ajusta lo que ya se está probando.'], bien: 'Cierre, multa, reservorio, turnos y ajuste.' },
-      'Tras el cierre vienen tres propuestas en orden y, al probar la última, sus ajustes.', 'Guíate por «primera», «segunda» y «tercera».'),
-    x('balanza-tesis', 'Tesis: el horario fue una solución justa. ¿Qué hace cada dato?', { doc: AGUA, tesis: 'El horario fue una solución justa',
-      ...F(['Cada sector recibe en la hora que necesita.', 0, '¿Atiende las necesidades de todos?'], ['El cuaderno lo puede leer cualquiera.', 0, '¿Permite comprobar que todos cumplen?'], ['El comité lo formaban solo los de arriba.', 1, 'Si fuera cierto, ¿estarían todos representados?'], ['Se midió durante una semana.', 2, '¿Medir un tiempo lo hace más o menos justo?']), bien: 'Necesidad, control y representación.' },
-      'Atender necesidades y poder comprobar apoyan; un comité de un solo lado debilitaría; la semana no decide la justicia.', 'Piensa en lo que haría que un grupo se sintiera excluido.'),
-    x('sella-parrafo', '«El horario funcionó por todo esto, **EXCEPTO**:» Ata cada opción.', { doc: AGUA,
-      ...T(['Las fresas pueden regarse de noche', 3, 'Busca por qué servía esa hora.'], ['Se permitió cambiar turnos', 4, 'Busca qué hizo la familia de la ciudad.'], ['Quienes lo cumplían ayudaron a hacerlo', 5, 'Busca por qué se acepta una solución.'], ['Había multas altas', 6, 'Las multas se nombran: ¿se aplicaron en el horario?']),
-      luz: [[4, 'las fresas pueden regarse de noche'], [5, 'Se cambió con un vecino'], [6, 'ayudaron a hacerla']], bien: 'Las multas fueron de otra propuesta.' },
-      'Las multas se propusieron y nadie las aceptó; las otras tres razones están en los párrafos 4, 5 y 6.', 'Mira de qué propuesta habla el texto cuando nombra cada cosa.'),
-    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: AGUA, nums: [3, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
-      ...F(['El reservorio tardaría dos años.', 0, 'Léela junto al párrafo 3.'], ['El turno no reemplaza del todo al reservorio.', 1, '¿Por qué la vereda sigue ahorrando?'], ['Cada quien quería la obra lejos de lo suyo.', 2, '¿Eso se dice de todos o solo de los de arriba?'], ['El reservorio sigue siendo necesario.', 0, 'Léela junto al comienzo del párrafo 6.']),
-      luz: [[3, 'tardaría dos'], [6, 'sigue siendo necesario']], bien: 'De un sector no se concluye sobre todos.' },
-      'Los dos años y la necesidad están escritos; que el turno no baste se deduce; «cada quien» generaliza lo de un sector.', 'Cuidado con palabras como «cada quien» y «todos».'),
-    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: AGUA, lineas: ['Una sequía enfrentó a dos sectores.', 'La escuela está en la mitad.', 'La multa no se aceptó y el reservorio costaba mucho.', 'Un horario repartió el agua según la necesidad.', 'Faltó agua once días.', 'Se cumple lo que se construye entre todos.'], ...S([1, 4], { 0: 'Es el conflicto.', 2: 'Son las soluciones que no bastaron.', 3: 'Es la que funcionó.', 5: 'Es la enseñanza.' }), bien: 'Conflicto, intentos, solución y enseñanza.' },
-      'La ubicación y los días son detalles; lo demás explica por qué una solución se acepta.', 'Deja lo que ayudaría a resolver otro conflicto.'),
-  ]);
-
-  const MERCADO = {
-    id: 'icf-plazuela', title: 'La plazuela de las ventas',
-    paras: [
-      'En la plazuela San Roque trabajan unos noventa vendedores informales. La alcaldía quiere recuperar el espacio para instalar juegos y árboles, y les ofrece trasladarse a un centro comercial popular a ocho cuadras. El anuncio abrió una discusión que ya lleva cuatro meses.',
-      'Los vendedores más antiguos rechazan el traslado. Dicen que sus clientes son los pasajeros del paradero y que nadie camina ocho cuadras por un jugo. Los más jóvenes están dispuestos a irse si les garantizan seis meses de arriendo gratis. Las madres del sector quieren los juegos, pero compran a diario en los puestos y temen que los precios suban.',
-      'Los comerciantes con local apoyan la recuperación. Argumentan que pagan impuestos y que compiten con quien no los paga. Una líder de los vendedores les respondió que pagar no los hace dueños de la calle y que la informalidad no se escoge por gusto: se cae en ella cuando no hay otro empleo.',
-      'Un concejal afirmó en la radio que «los vendedores son los culpables de los atracos». La Policía aclaró que las denuncias han bajado desde que el paradero tiene luz, hace un año, y que no hay registro de vendedores capturados por robo en el sector.',
-      'La universidad presentó un estudio con tres alternativas. Trasladar a todos en un mes cuesta menos, pero en otras dos ciudades la mitad volvió a la calle antes del año. Dejar a la mitad, con puestos ordenados y horarios, libera espacio para los juegos. No hacer nada aplaza el problema y aumenta el desorden.',
-      'La alcaldía citó una mesa con todos los sectores. La primera sesión terminó en gritos. En la segunda, una moderadora pidió que nadie dijera qué quería, sino para qué lo quería. Escribieron las respuestas en un tablero: trabajar, jugar sin peligro, caminar, vender lo mismo, respetar las reglas. Alguien notó que ninguna era contraria a las otras.',
-    ],
-  };
-  const Q = preg(MERCADO, 'sociales');
-  return mundo('icf-sc-perspectivas', 'Perspectivas e Intereses', 'sociales', [l1, l2, l3], [
-    ['icf-sc-perspectivas-1', 'Dentro de un mismo grupo puede haber intereses distintos.', Q('Sobre los vendedores, del texto se concluye que:', ['Todos rechazan el traslado', 'Todos quieren irse ya', 'No tienen una sola postura frente al traslado', 'Prefieren pagar impuestos'], 2, 'Los antiguos lo rechazan y los jóvenes lo aceptarían con condiciones.', 'Compara a los antiguos con los jóvenes.')],
-    ['icf-sc-perspectivas-1', 'La posición es lo que se pide; el interés, para qué.', Q('La moderadora logró avanzar porque pidió hablar de:', ['Los intereses, en lugar de las posiciones', 'Los precios, en lugar de los juegos', 'La ley, en lugar de la convivencia', 'El pasado, en lugar del futuro'], 0, 'Pidió decir «para qué», no «qué»: los intereses podían convivir.', 'Distingue entre qué se quiere y para qué.')],
-    ['icf-sc-perspectivas-2', 'Un prejuicio se detecta al pedir el hecho que lo sostiene.', Q('La frase del concejal expresa un prejuicio porque:', ['La dijo en la radio', 'Culpa a todo un grupo sin un hecho que lo respalde', 'Habla de la plazuela', 'Contradice al alcalde'], 1, 'Generaliza a todos los vendedores, y la Policía no tiene registro que lo apoye.', 'Busca qué datos aclaró la Policía.')],
-    ['icf-sc-perspectivas-2', 'La experiencia y el oficio influyen en lo que cada quien considera justo.', Q('Los comerciantes con local y la líder de los vendedores discrepan principalmente sobre:', ['El color de los juegos', 'La cantidad de pasajeros', 'La luz del paradero', 'Qué es justo en el uso de la calle y por qué existe la informalidad'], 3, 'Unos apelan a los impuestos; la otra, a que la calle es de todos y a la falta de empleo.', 'Lee las razones que da cada uno en el párrafo 3.')],
-    ['icf-sc-perspectivas-3', 'Una solución se evalúa por sus efectos, no solo por su costo.', Q('Según el estudio, el principal riesgo de trasladar a todos en un mes es que:', ['Cueste más que las otras', 'Muchos vuelvan a la calle', 'No haya árboles', 'Aumente la luz'], 1, 'Cuesta menos, pero en otras ciudades la mitad regresó antes del año.', 'Busca el «pero» del párrafo 5.')],
-    ['icf-sc-perspectivas-3', 'Una solución que reúne intereses tiene más probabilidad de aceptarse.', Q('La alternativa que atiende más intereses a la vez es:', ['Trasladar a todos', 'No hacer nada', 'Dejar a la mitad con orden y horarios, y abrir espacio para juegos', 'Cerrar el paradero'], 2, 'Combina venta ordenada y juegos, aunque habría que resolver qué pasa con la otra mitad; trasladar a todos hace que muchos regresen y no hacer nada aplaza el problema.', 'Compara cada alternativa con la lista del tablero.')],
-  ]);
-})());
-;
 //#archivo js/courses/preicfes-sc-fuentes.js
 // Preicfes · Sociales y Ciudadanas · mundo 4 «Fuentes y Argumentos» (spec 2026-11-25-preicfes-estructura). Fuentes inventadas para Zuka.
 PI_MUNDOS.push((() => {
@@ -4138,1028 +3582,1269 @@ PI_MUNDOS.push((() => {
   ]);
 })());
 ;
-//#archivo js/data.js
-// Contenido de Zuka: cursos → unidades → lecciones. Cada lección = 1 clip vertical + ejercicios.
-// Álgebra, Trigonometría, Cálculo Diferencial y Geometría Vectorial viven en js/courses/; las ayudas para escribir contenido, en js/content.js.
-
-const COURSES = [
-  COURSE_ALGEBRA,
-  COURSE_TRIG,
-  COURSE_CALC,
-  COURSE_GEO,
-  COURSE_PREUDA,
-  {
-    id: 'fis', level: 'Semestre 1', name: 'Física Mecánica', icon: 'F', color: '#facc15',
-    tagline: 'Por qué las cosas se mueven: fuerzas, energía y movimiento.',
-    units: [
-      {
-        world: 'cinematica', title: 'Cinemática',
-        lessons: [
-          {
-            id: 'fis-1', title: 'MRU y MRUA',
-            clip: { scenes: [
-              sc(5, '**MRU**: velocidad constante. La posición crece en línea recta.', { title: '$x = x_0 + v\\,t$', viz: { type: 'graph', xr: [0, 5], yr: [0, 22], f: t => 4 * t, draw: true, ax: ['t (s)', 'x (m)'] } }),
-              sc(5, '**MRUA**: la velocidad cambia de forma constante. La gráfica es una parábola.', { title: '$x = x_0 + v_0 t + \\tfrac{1}{2} a t^2$', viz: { type: 'graph', xr: [0, 5], yr: [0, 26], f: t => t * t, draw: true, ax: ['t (s)', 'x (m)'] } }),
-              sc(5, 'Y la velocidad crece linealmente con el tiempo.', { title: '$v = v_0 + a\\,t$', viz: { type: 'graph', xr: [0, 5], yr: [0, 12], f: t => 2 * t, draw: true, ax: ['t (s)', 'v (m/s)'] } }),
-            ] },
-            ex: [
-              num('Un auto va a 20 m/s constantes. ¿Qué distancia recorre en 5 s?', 100, '$x = v\\,t = 20 \\cdot 5 = 100$ m.', { suffix: 'm' }),
-              num('Parte del reposo con $a = 2$ m/s². ¿Velocidad a los 6 s?', 12, '$v = 0 + 2 \\cdot 6 = 12$ m/s.', { suffix: 'm/s' }),
-              num('¿Y qué distancia recorrió en esos 6 s?', 36, '$x = \\tfrac{1}{2} \\cdot 2 \\cdot 6^2 = 36$ m.', { suffix: 'm' }),
-              mc('En el MRU la aceleración es…', ['Cero', 'Constante y positiva', 'Igual a la velocidad', 'Igual a $g$'], 0, 'Velocidad constante ⇒ no hay aceleración.'),
-            ],
-          },
-          {
-            id: 'fis-2', title: 'Tiro parabólico',
-            clip: { scenes: [
-              sc(6, 'Un proyectil combina **dos movimientos**: MRU en $x$ y caída libre en $y$.', { viz: { type: 'projectile', v0: 20, ang: 50 } }),
-              sc(5, 'Cambia el ángulo y cambia el alcance.', { viz: { type: 'projectile', v0: 20, anim: [15, 75] } }),
-              sc(5, 'Sin resistencia del aire, el alcance máximo se logra a 45°.', { title: '$R = \\dfrac{v_0^2 \\sin 2\\theta}{g}$', viz: { type: 'projectile', v0: 20, ang: 45 } }),
-            ] },
-            ex: [
-              sld('Ajusta el ángulo de lanzamiento para lograr el **máximo alcance**', {
-                viz: { type: 'projectile', v0: 20 }, min: 10, max: 80, step: 5, init: 20,
-                readout: v => `$\\theta = ${v}^\\circ$`, check: v => v === 45, answerText: '$\\theta = 45^\\circ$',
-                explain: '$\\sin 2\\theta$ es máximo cuando $2\\theta = 90^\\circ$.',
-              }),
-              mc('En el punto más alto de la trayectoria, la velocidad vertical es…', ['Cero', 'Máxima', 'Igual a $v_0$', 'Igual a $g$'], 0, 'Deja de subir y empieza a bajar: $v_y = 0$.'),
-              num('Caída libre desde 20 m con $g = 10$ m/s². ¿Tiempo en llegar al suelo?', 2, '$20 = \\tfrac{1}{2} \\cdot 10\\,t^2 \\Rightarrow t = 2$ s.', { suffix: 's' }),
-            ],
-          },
-        ],
-      },
-      {
-        world: 'dinamica', title: 'Dinámica',
-        lessons: [
-          {
-            id: 'fis-3', title: 'Leyes de Newton',
-            clip: { scenes: [
-              sc(5, '**1ª ley**: sin fuerza neta, un cuerpo mantiene su velocidad.', { title: '$\\sum \\vec F = 0 \\Rightarrow \\vec v = \\text{cte}$', viz: { type: 'push', F: 0 } }),
-              sc(5, '**2ª ley**: la fuerza neta produce aceleración.', { title: '$\\sum \\vec F = m\\,\\vec a$', viz: { type: 'push', F: 10, m: 2 } }),
-              sc(5, '**3ª ley**: a toda acción corresponde una reacción igual y opuesta.', { viz: { type: 'push', pair: true } }),
-            ] },
-            ex: [
-              num('Una masa de 5 kg acelera a 3 m/s². ¿Fuerza neta?', 15, '$F = m\\,a = 5 \\cdot 3 = 15$ N.', { suffix: 'N' }),
-              sld('Ajusta la fuerza para que el bloque de 4 kg acelere a $2$ m/s²', {
-                viz: { type: 'push', m: 4 }, min: 0, max: 20, step: 1, init: 2,
-                readout: v => `$F = ${v}$ N`, check: v => v === 8, answerText: '$F = 8$ N', explain: '$F = m\\,a = 4 \\cdot 2 = 8$ N.',
-              }),
-              num('¿Cuánto pesa un objeto de 10 kg? ($g = 9.8$ m/s²)', 98, '$W = m\\,g = 98$ N.', { suffix: 'N' }),
-              mc('Si empujas una pared con 50 N, la pared te empuja con…', ['50 N en sentido contrario', '0 N', 'Más de 50 N', 'Menos de 50 N'], 0, 'Tercera ley de Newton.'),
-            ],
-          },
-          {
-            id: 'fis-4', title: 'Plano inclinado',
-            clip: { scenes: [
-              sc(5, 'Un bloque sobre un plano inclinado. ¿Qué fuerzas actúan?', { viz: { type: 'incline', ang: 30 } }),
-              sc(6, 'Descompón el peso en una parte paralela y otra perpendicular al plano.', { title: '$mg\\sin\\theta \\quad mg\\cos\\theta$', viz: { type: 'incline', ang: 30, comps: true } }),
-              sc(5, 'Más inclinación → más componente que lo hace deslizar.', { viz: { type: 'incline', anim: [15, 55], comps: true } }),
-            ] },
-            ex: [
-              sld('Ajusta $\\theta$ para que la componente paralela sea **la mitad** del peso', {
-                viz: { type: 'incline', comps: true }, min: 5, max: 60, step: 5, init: 15,
-                readout: v => `$\\theta = ${v}^\\circ$`, check: v => v === 30, answerText: '$\\theta = 30^\\circ$',
-                explain: '$mg\\sin\\theta = \\tfrac{1}{2} mg \\Rightarrow \\sin\\theta = \\tfrac{1}{2} \\Rightarrow \\theta = 30^\\circ$.',
-              }),
-              num('Un bloque sin fricción baja por un plano de 30°. ¿Su aceleración? ($g = 10$)', 5, '$a = g \\sin 30^\\circ = 5$ m/s².', { suffix: 'm/s²' }),
-              mc('La fuerza normal sobre el bloque vale…', ['$mg\\cos\\theta$', '$mg\\sin\\theta$', '$mg$', '$mg\\tan\\theta$'], 0, 'Equilibra la componente perpendicular del peso.'),
-            ],
-          },
-          {
-            id: 'fis-5', title: 'Trabajo y energía',
-            clip: { scenes: [
-              sc(5, 'La energía del movimiento es la **energía cinética**.', { title: '$E_c = \\tfrac{1}{2} m v^2$', viz: { type: 'graph', xr: [0, 5], yr: [0, 26], f: sq, draw: true, ax: ['v', 'Ec'] } }),
-              sc(5, 'La energía por estar a cierta altura es la **potencial gravitatoria**.', { title: '$E_p = m\\,g\\,h$', viz: { type: 'energy' } }),
-              sc(6, 'Sin fricción, al caer la potencial se convierte en cinética: la total se conserva.', { title: '$E_c + E_p = \\text{cte}$', viz: { type: 'energy' } }),
-            ] },
-            ex: [
-              num('Energía cinética de una masa de 2 kg a 3 m/s', 9, '$\\tfrac{1}{2} \\cdot 2 \\cdot 3^2 = 9$ J.', { suffix: 'J' }),
-              num('Energía potencial de 1 kg a 5 m de altura ($g = 10$)', 50, '$m\\,g\\,h = 1 \\cdot 10 \\cdot 5 = 50$ J.', { suffix: 'J' }),
-              num('Un objeto cae desde 5 m ($g = 10$). ¿Con qué velocidad llega al suelo?', 10, '$m g h = \\tfrac{1}{2} m v^2 \\Rightarrow v = \\sqrt{2gh} = 10$ m/s.', { suffix: 'm/s' }),
-              mc('Si no hay fricción, al caer la energía potencial…', ['Se convierte en cinética', 'Desaparece', 'Se duplica', 'Permanece igual'], 0, 'Conservación de la energía mecánica.'),
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'int', level: 'Semestre 2', name: 'Cálculo Integral', icon: '∫', color: '#34d399',
-    tagline: 'Sumar lo infinitamente pequeño: áreas, volúmenes y acumulación.',
-    units: [
-      {
-        world: 'integral', title: 'La integral',
-        lessons: [
-          {
-            id: 'int-1', title: 'Área bajo la curva',
-            clip: { scenes: [
-              sc(5, '¿Cuál es el área bajo $y = x^2$ entre 0 y 2? Usemos rectángulos.', { viz: { type: 'riemann', f: sq, a: 0, b: 2, n: [4, 4], xr: [-0.3, 2.4], yr: [-0.5, 4.5] } }),
-              sc(6, 'Más rectángulos → mejor aproximación.', { viz: { type: 'riemann', f: sq, a: 0, b: 2, n: [4, 80], xr: [-0.3, 2.4], yr: [-0.5, 4.5], exact: '8/3 ≈ 2.667' } }),
-              sc(5, 'En el límite, la suma se vuelve una **integral**.', { title: '$\\displaystyle\\int_0^2 x^2\\,dx = \\dfrac{8}{3}$', viz: { type: 'riemann', f: sq, a: 0, b: 2, n: [300, 300], xr: [-0.3, 2.4], yr: [-0.5, 4.5] } }),
-            ] },
-            ex: [
-              num('$\\displaystyle\\int_0^2 2x\\,dx = \\;?$ (pista: es un triángulo)', 4, 'Triángulo de base 2 y altura 4: área $= \\tfrac{1}{2} \\cdot 2 \\cdot 4 = 4$.'),
-              mc('Si $n \\to \\infty$, la suma de Riemann…', ['Tiende al área exacta', 'Tiende a cero', 'Siempre diverge', 'No cambia'], 0, 'Esa es justamente la definición de la integral definida.'),
-              sld('El área exacta es $\\tfrac{8}{3} \\approx 2.667$. Elige $n$ para que el error sea menor que $0.1$', {
-                viz: { type: 'riemann', f: sq, a: 0, b: 2, xr: [-0.3, 2.4], yr: [-0.5, 4.5], exact: '2.667' }, min: 2, max: 60, step: 1, init: 4,
-                readout: v => `$n = ${v}$`, check: v => v >= 40, answerText: '$n \\geq 40$',
-                explain: 'Con rectángulos izquierdos el error es $\\tfrac{4}{3}\\cdot\\tfrac{3n - 1}{n^2} \\approx \\tfrac{4}{n}$: necesitas $n \\geq 40$.',
-              }),
-            ],
-          },
-          {
-            id: 'int-2', title: 'Antiderivadas',
-            clip: { scenes: [
-              sc(5, 'Integrar es el proceso **inverso** de derivar.', { steps: ['$\\dfrac{d}{dx}\\left(\\tfrac{x^3}{3}\\right) = x^2$', '$\\Rightarrow \\displaystyle\\int x^2\\,dx = \\tfrac{x^3}{3} + C$'] }),
-              sc(5, 'Regla de la potencia para integrales:', { title: '$\\displaystyle\\int x^n\\,dx = \\dfrac{x^{n+1}}{n+1} + C$', steps: ['$\\displaystyle\\int x^4\\,dx = \\tfrac{x^5}{5} + C$'] }),
-              sc(6, '**Teorema fundamental**: evalúa la antiderivada en los extremos.', { title: '$\\displaystyle\\int_a^b f(x)\\,dx = F(b) - F(a)$', steps: ['$\\displaystyle\\int_0^3 x^2\\,dx = \\tfrac{27}{3} - 0 = 9$'] }),
-            ] },
-            ex: [
-              mc('$\\displaystyle\\int x^2\\,dx$', ['$\\tfrac{x^3}{3} + C$', '$2x + C$', '$x^3 + C$', '$\\tfrac{x^2}{2} + C$'], 0, 'Sube el exponente y divide entre el nuevo exponente.'),
-              num('$\\displaystyle\\int_0^3 x^2\\,dx = \\;?$', 9, '$\\left[\\tfrac{x^3}{3}\\right]_0^3 = 9$.'),
-              mc('$\\displaystyle\\int \\cos x\\,dx$', ['$\\sin x + C$', '$-\\sin x + C$', '$\\cos x + C$', '$-\\cos x + C$'], 0, "Porque $(\\sin x)' = \\cos x$."),
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'lin', level: 'Semestre 2', name: 'Álgebra Lineal', icon: 'M', color: '#fb923c',
-    tagline: 'Vectores y matrices: el idioma del espacio y sus transformaciones.',
-    units: [
-      {
-        world: 'lineal', title: 'Vectores y matrices',
-        lessons: [
-          {
-            id: 'lin-1', title: 'Vectores',
-            clip: { scenes: [
-              sc(5, 'Un vector tiene **magnitud** y **dirección**.', { viz: { type: 'vectors', A: [3, 1], only: 'A' } }),
-              sc(6, 'Para sumar, pon la cola de uno en la punta del otro.', { title: '$\\vec a + \\vec b$', viz: { type: 'vectors', A: [3, 1], B: [1, 2] } }),
-              sc(5, 'La magnitud sale de Pitágoras:', { title: '$|\\vec v| = \\sqrt{v_x^2 + v_y^2}$', viz: { type: 'vectors', A: [3, 4], only: 'A', xr: [-1, 5], yr: [-1, 5] } }),
-            ] },
-            ex: [
-              mc('$(1, 2) + (3, 1) = \\;?$', ['$(4, 3)$', '$(3, 2)$', '$(4, 2)$', '$(2, 3)$'], 0, 'Se suma componente a componente.'),
-              num('Magnitud de $\\vec v = (3, 4)$', 5, '$\\sqrt{9 + 16} = 5$.'),
-              num('Producto punto $(1, 2) \\cdot (3, 4)$', 11, '$1 \\cdot 3 + 2 \\cdot 4 = 11$.'),
-            ],
-          },
-          {
-            id: 'lin-2', title: 'Matrices como transformaciones',
-            clip: { scenes: [
-              sc(4, 'Una matriz $2 \\times 2$ **transforma** el plano entero.', { viz: { type: 'matrix', M: [[1, 0], [0, 1]] } }),
-              sc(5, 'Esta estira el eje $x$ al doble.', { title: '$\\begin{pmatrix} 2 & 0 \\\\ 0 & 1 \\end{pmatrix}$', viz: { type: 'matrix', M: [[2, 0], [0, 1]] } }),
-              sc(5, 'Esta gira el plano 90°.', { title: '$\\begin{pmatrix} 0 & -1 \\\\ 1 & 0 \\end{pmatrix}$', viz: { type: 'matrix', M: [[0, -1], [1, 0]] } }),
-              sc(5, 'El **determinante** mide cuánto escala las áreas.', { title: '$\\det = ad - bc$', viz: { type: 'matrix', M: [[1, 1], [0, 2]] } }),
-            ] },
-            ex: [
-              mc('¿Qué matriz gira el plano $90^\\circ$ en sentido antihorario?', ['$\\begin{pmatrix} 0 & -1 \\\\ 1 & 0 \\end{pmatrix}$', '$\\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix}$', '$\\begin{pmatrix} 2 & 0 \\\\ 0 & 2 \\end{pmatrix}$', '$\\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}$'], 0, 'Envía $\\hat\\imath \\to (0, 1)$ y $\\hat\\jmath \\to (-1, 0)$.'),
-              num('$\\det\\begin{pmatrix} 2 & 1 \\\\ 1 & 3 \\end{pmatrix} = \\;?$', 5, '$2 \\cdot 3 - 1 \\cdot 1 = 5$.'),
-              mc('Si $\\det A = 0$, la transformación…', ['Aplasta el plano a una recta o un punto', 'Rota el plano', 'No cambia nada', 'Duplica las áreas'], 0, 'Las áreas se multiplican por 0: se pierde una dimensión.'),
-            ],
-          },
-        ],
-      },
-    ],
-  },
+//#archivo js/courses/euclidiana-base.js
+// Curso de Geometría Euclidiana (spec 2026-11-26-curso-euclidiana): sigue los ocho capítulos de «Geometría Euclidiana» de
+// J. R. Londoño (Ude@). Cada mundo vive en js/courses/euclidiana-<mundo>.js y hace EUC_MUNDOS.push(EUC.mundo(…));
+// js/courses/euclidiana.js (después de data.js) arma el curso en el orden del temario. Va después de preicfes-base.js: los
+// ejercicios se escriben con los mismos ayudantes (x, sol, err, opc, guion, leccion). EUC_HECHOS lista los mundos terminados.
+const EUC_MUNDOS = [];
+const EUC_HECHOS = [];
+// Temario: [mundo, título, [lecciones], capítulo del libro]. Lo que no esté en EUC_MUNDOS sale como «En preparación».
+const EUC_TEMARIO = [
+  ['euc-demostrar', 'Lógica de la Demostración', ['Hipótesis, tesis y razones', 'Demostración directa e indirecta', 'Condicionales y contraejemplos'], 1],
+  ['euc-elementos', 'Puntos, Rectas y Ángulos', ['Puntos, rectas y segmentos', 'Ángulos y su medida', 'Polígonos'], 2],
+  ['euc-triangulo', 'Triángulos Congruentes', ['El triángulo y sus elementos', 'Criterios L-A-L, A-L-A y L-L-L', 'Desigualdades en el triángulo', 'L-A-A y triángulos rectángulos'], 3],
+  ['euc-cuadrilateros', 'Paralelas y Cuadriláteros', ['Paralelas y perpendiculares', 'Ángulos entre paralelas y en polígonos', 'Paralelogramos y trapecios', 'Rectas y puntos notables'], 4],
+  ['euc-circunferencia', 'La Circunferencia', ['Cuerdas, tangentes y posiciones relativas', 'Ángulo central e inscrito', 'Ángulos interiores, exteriores y semiinscritos'], 5],
+  ['euc-metricas', 'Semejanza y Métricas', ['Segmentos proporcionales y Tales', 'Semejanza de triángulos', 'Pitágoras y el triángulo rectángulo', 'Potencia de un punto y polígonos regulares'], 6],
+  ['euc-areas', 'Áreas de Figuras Planas', ['Áreas básicas', 'Relaciones entre áreas', 'Áreas sombreadas'], 7],
+  ['euc-construcciones', 'Regla y Compás', ['Construcciones elementales', 'Lugares geométricos y construcción de triángulos'], 8],
 ];
-;
-//#archivo js/courses/preicfes.js
-// Curso Preicfes Saber 11 (spec 2026-11-20-curso-preicfes): preparación para el examen de Estado de grado 11, con cinco
-// componentes que se estudian por separado (como el Preuniversitario UdeA): al entrar se elige el componente y luego se ven solo
-// sus mundos. Va después de data.js: arma el curso con los mundos de js/courses/preicfes-*.js y lo pone en COURSES después del
-// Preuniversitario. Nace en borrador (supabase/migrations/20261120000001_curso_preicfes.sql) hasta la revisión docente.
-const COURSE_PREICFES = {
-  id: 'preicfes', level: 'Saber 11', name: 'Preicfes Saber 11', icon: '11', color: '#e879f9',
-  tagline: 'Las cinco pruebas del examen de grado 11, una por una.',
-  blocks: PI_BLOCKS,
-  units: PI_BLOCKS.flatMap(b => PI_MUNDOS.filter(u => u.block === b.id)),
-  soon: piPendientes(PI_MUNDOS),
-};
-COURSES.splice(COURSES.findIndex(c => c.id === 'preuda') + 1, 0, COURSE_PREICFES);
-;
-//#archivo js/courses/sin-escribir.js
-// Sin escribir (spec 2026-11-17-sin-escribir): ningún ejercicio pide teclear un número. Cada ejercicio `num(...)` de los
-// cursos se cambia aquí, al cargar, por un juego: «Arma la cuenta» (el estudiante plantea la operación con fichas y el
-// juego la calcula) o «Escala la solución» (elige el paso válido en cada nivel del razonamiento). El enunciado, la
-// explicación y la pista del ejercicio original se conservan.
-// La tabla va por `lección#posición` (las evaluaciones: `exam-<mundo>#posición`). Si alguien mueve un ejercicio y la
-// ficha deja de dar su respuesta, el cambio no se aplica (queda el ejercicio de escribir) y `tests/sin-escribir.test.js` avisa.
-//   C('7 * 200000 / 100000', ['1000'])  → Arma la cuenta: una cuenta correcta y las fichas que sobran.
-//   E([paso válido, falso, falso], …)   → Escala la solución: un nivel por paso; el válido va primero.
-
-const SIN_ESCRIBIR = (() => {
-  const C = (sol, traps = []) => ({ game: 'arma-la-cuenta', sol: sol.split(' '), traps });
-  const E = (...levels) => ({ game: 'escala-solucion', levels });
-  return {
-    // ---------- Álgebra ----------
-    'alg-0a#4': C('7 - 2', ['3', '1']),
-    'alg-0b#3': C('2 ^ 4', ['1', '6', '8']),
-    'exam-conjuntos#3': C('2 ^ 5', ['10', '4']),
-    'alg-12b#4': E(['Junta 4 · 25 = 100', 'Junta 4 · 19 = 100', 'Junta 4 · 25 = 29'], ['19 · 100 = 1900', '19 · 100 = 190', '19 + 100 = 119']),
-    'alg-12c#3': C('5/6 * 9/10', ['6/5']),
-    'exam-numeros#6': C('2.25 - -3.5', ['3.5']),
-    'alg-12#3': C('7 * 200000 / 100000', ['1000', '100']),
-    'alg-12#4': C('13500 / 5', ['5600', '2']),
-    'alg-13c#5': C('476000 / 1.19', ['0.19', '0.81']),
-    'exam-razones#6': C('7 * 15 / 2', ['100']),
-    'alg-22a#3': C('r ( 64 + 36 )', ['8', '6']),
-    'alg-22b#2': C('2 + 4', ['20', '80', '5']),
-    'exam-potencias#5': C('( r r 16 ) ^ 3', ['4', '12']),
-    'alg-14d#3': C('6 + 2 * 6', ['12', '3']),
-    'alg-4a#3': C('-5 * 3 ^ 2 + 30 * 3 + 1', ['6']),
-    'alg-4a#4': C('15 * 15', ['30', '2']),
-    'alg-73#3': C('ln(30) / ln(4)', ['30', '4']),
-    'alg-73#4': C('ln(2) / 0.04', ['2', '4']),
-    // ---------- Trigonometría ----------
-    'trig-41a#2': C('180 / π', ['360', '2']),
-    'trig-41b#2': C('50 * 120 * π / 180', ['360']),
-    'trig-1#1': C('10 * 3/5', ['5/3', '4/5']),
-    'trig-2#1': C('10 * sen(60°)', ['cos(60°)', 'tan(60°)']),
-    'trig-42c#2': C('2000 / sen(30°)', ['cos(30°)', 'tan(30°)']),
-    'trig-3#1': C('-12 / r ( 5 ^ 2 + 12 ^ 2 )', ['13', '17']),
-    'trig-43b#2': C('360 - 315', ['180', '270']),
-    'trig-44a#1': E(['La amplitud es |a|', 'La amplitud es a', 'La amplitud es 2π ÷ |a|'], ['4', '−4', 'π/2']),
-    'trig-44b#1': C('π / 4', ['2', '8']),
-    'trig-45#2': C('360 - 210', ['180', '30']),
-    'trig-45#3': E(['sen θ = 5/6', 'cos θ = 5/6', 'tan θ = 5/6'], ['θ = sen⁻¹(5/6)', 'θ = cos⁻¹(5/6)', 'θ = tan⁻¹(5/6)'], ['θ ≈ 56.4°', 'θ ≈ 33.6°', 'θ ≈ 39.8°']),
-    'trig-4#1': C('-1 * r ( 1 + 2 ^ 2 )'),
-    'trig-47b#2': E(['1 − cos²x = sen²x', '1 − cos²x = −sen²x'], ['1 + cot²x = csc²x', '1 + cot²x = sec²x'], ['sen²x · csc²x = 1', 'sen²x · csc²x = sen⁴x', 'sen²x · csc²x = 0']),
-    'trig-48a#1': C('3/5 * -5/13 + 4/5 * 12/13', ['-4/5', '-12/13']),
-    'trig-48b#2': C('2 * 5/13 * -12/13', ['12/13']),
-    'trig-49#2': E(['3x = π/4 + kπ', '3x = π/4 + kπ/2'], ['x = π/12 + kπ/3', 'x = π/12 + kπ/6'], ['k = 0, 1, 2: tres soluciones', 'k = 0 a 5: seis soluciones', 'k = 0: una solución']),
-    'trig-46a#1': C('10 * sen(45°) / sen(30°)', ['cos(30°)']),
-    'trig-46b#1': E(['c² = 5² + 8² − 2·5·8·cos 60°', 'c² = 5² + 8² + 2·5·8·cos 60°', 'c² = 5² + 8² − 2·5·8'], ['c² = 89 − 40 = 49', 'c² = 89 + 40 = 129', 'c² = 89 − 80 = 9'], ['c = √49 = 7', 'c = √129 ≈ 11.36', 'c = √9 = 3']),
-    'trig-151#2': C('r ( 6 ^ 2 + 8 ^ 2 )', ['14']),
-    'trig-151#3': C('180 + 45', ['360', '90']),
-    'trig-152#3': E(['z = √2 cis 135°', 'z = √2 cis 45°', 'z = 2 cis 135°'], ['z⁴ = (√2)⁴ cis (4 · 135°)', 'z⁴ = 4 · √2 cis (135° + 4°)'], ['4 cis 540° = 4 cis 180°', '4 cis 540° = 4 cis 0°'], ['−4', '4']),
-    'trig-153#3': C('90 / 3', ['8', '360', '2']),
-    // ---------- Cálculo ----------
-    'alg-32#4': E(['15 > 5x', '15 < 5x', '−1 > 5x'], ['x < 3', 'x > 3', 'x ≤ 3'], ['mayor entero: 2', 'mayor entero: 3', 'mayor entero: 4']),
-    'alg-26c#3': C('75 - 0.4', ['2']),
-    'alg-26c#4': C('7 * -2', ['2', '-7', '9', '5']),
-    'alg-51#3': C('6 + 8 + r ( 6 * 6 + 8 * 8 )', ['0']),
-    'alg-51#4': C('2 * -1 - 4', ['3']),
-    'calc-recta#3': C('12 / 3', ['2', '-2']),
-    'calc-recta#4': C('-1 / -1/4 + 1', ['1/4']),
-    'alg-52#3': C('( -2 ) ^ 2 - 3 * -2'),
-    'alg-52#4': C('6 / 2', ['-6', '1']),
-    'calc-tipos#3': C('5 - 3', ['11', '1']),
-    'calc-tipos#4': C('24 / 2 ^ 3', ['6']),
-    'alg-53#3': E(['Primero g: g(1) = 1', 'Primero f: f(1) = 2'], ['Luego f(1) = 1² + 1', 'Luego g(2) = 3 · 2 − 2'], ['2', '4']),
-    'alg-53#4': E(['Primero f: f(2) = 5', 'Primero g: g(2) = 4'], ['Luego g(5) = 3 · 5 − 2', 'Luego f(4) = 4² + 1'], ['13', '17']),
-    'calc-tramos#3': C('6 + 1.5 * ( 6 - 2 )'),
-    'calc-tramos#4': C('5 - 3', ['-5', '7']),
-    'alg-61#3': C('3 * 5 - 4', ['2']),
-    'alg-61#4': C('1 - 3', ['6']),
-    'alg-62#3': C('( 13 + 7 ) / 4'),
-    'alg-62#4': C('( 29 - 2 ) ^ 1/3'),
-    'calc-1#0': C('3 * 2 + 1'),
-    'calc-1#1': E(['(x − 1)(x + 1) ÷ (x − 1)', '(x − 1)² ÷ (x − 1)'], ['x + 1, con x → 1', 'x − 1, con x → 1'], ['2', '0']),
-    'calc-2#0': E(['Divide todo entre x²', 'Reemplaza x por ∞ y resta'], ['3 + 1/x²', '3x² + 1'], ['3', '∞']),
-    'calc-3#1': C('2 * 3', ['9']),
-    'calc-4#1': C('6 * 1 + 2', ['3']),
-    'calc-5#1': C('6 / 2', ['-6', '1']),
-    // ---------- Geometría vectorial ----------
-    'geo-1#1': E(['Suma las dos: 4x = 8', 'Suma las dos: 4x = 16', 'Resta las dos: 2x = 8'], ['x = 2', 'x = 4', 'x = 8']),
-    'geo-1#3': E(['z = −1', 'z = 1'], ['2y + 1 = 5, y = 2', '2y − 1 = 5, y = 3'], ['x = 2 − 2 + 1 = 1', 'x = 2 − 2 − 1 = −1', 'x = 2 − 3 + 1 = 0']),
-    'geo-2#2': C('1 * 1 + 2 * 4', ['3', '0', '-1']),
-    'geo-2#3': C('2 * 4', ['3']),
-    'geo-2#4': C('1 * 4 + 3 * 1', ['2', '-1']),
-    'geo-3#2': C('-3 + 5', ['8']),
-    'geo-3#3': E(['Aᵀ es 2 × 3', 'Aᵀ es 3 × 2'], ['AᵀA: (2 × 3)(3 × 2) = 2 × 2', 'AᵀA: (3 × 2)(2 × 3) = 3 × 3'], ['2 filas', '3 filas']),
-    'geo-3#4': E(['(AB)ᵀ(2, 1) = AB(1, 2)', '(AB)ᵀ(2, 1) = AB(2, 1)'], ['fila 1 de A · columna 2 de B', 'fila 2 de A · columna 1 de B'], ['1 · 1 + 2 · 0 = 1', '3 · 0 + 4 · 1 = 4']),
-    'geo-4#1': C('-1 * -3', ['1/3', '0']),
-    'geo-4#2': C('-1 * 3 / ( 5 * 2 - 3 * 3 )'),
-    'geo-4#3': E(['(AB)⁻¹ = B⁻¹A⁻¹', '(AB)⁻¹ = A⁻¹B⁻¹'], ['fila 2 de B⁻¹ · columna 2 de A⁻¹', 'fila 2 de A⁻¹ · columna 2 de B⁻¹'], ['3 · 2 + 1 · 1 = 7', '0 · 0 + 1 · 1 = 1']),
-    'geo-5#1': C('-1 * 5 / ( 2 * 3 - 5 * 1 )'),
-    'geo-5#3': C('3 * 1 + -5 * 1', ['-1', '2']),
-    'geo-6#1': E(['Desarrolla por la fila 1', 'Multiplica la diagonal'], ['2 · (3 − 2) − 0 + 1 · (1 − 0)', '2 · (3 + 2) − 0 + 1 · (1 + 0)', '2 · 3 · 1'], ['3', '11', '6']),
-    'geo-6#2': C('3 * -1 * 4', ['7', '-2', '5', '0']),
-    'geo-6#3': C('2 ^ 3 * 5'),
-    'geo-7#1': E(['0 · (5 − 3) − 2 · (5 − 2) + 4 · (3 − 2)', '0 · (5 − 3) + 2 · (5 − 2) + 4 · (3 − 2)'], ['−6 + 4', '6 + 4'], ['−2', '10']),
-    'geo-7#2': C('12 / 3 / -1', ['2']),
-    'geo-7#3': E(['Sumar a una fila un múltiplo de otra', 'Multiplicar una fila por 7'], ['no cambia el determinante', 'multiplica el determinante por 7'], ['det = 1', 'det = 7']),
-    'geo-8#1': C('2 * -3 - 1 * 1', ['7', '0']),
-    'geo-8#2': C('( 7 * -3 - 1 * 0 ) / -7'),
-    'geo-8#3': C('-3 / 4', ['3']),
-    'geo-8#4': C('8 / 3', ['4', '2']),
-    'geo-9#2': C('r ( ( -5 ) ^ 2 + 12 ^ 2 )', ['17', '7']),
-    'geo-9#3': E(['El vector es (2t + 1, −t + 4)', 'El vector es (2t + 4, −t + 1)'], ['Anula la y: −t + 4 = 0', 'Anula la x: 2t + 1 = 0'], ['t = 4', 't = −½']),
-    'geo-10#2': C('( 2 + 4 + 9 ) / 3', ['1', '7']),
-    'geo-10#3': C('14 / 2', ['3']),
-    'geo-11#2': C('r ( 2 ^ 2 + 3 ^ 2 + 6 ^ 2 )'),
-    'geo-11#3': C('2 / 3', ['-1', '9']),
-    'geo-12#1': C('4 / 2', ['1', '3']),
-    'geo-12#2': C('1 + 3 * 2', ['-2', '4']),
-    'geo-12#3': C('-6 / 3', ['2', '5']),
-    'geo-13#2': E(['1 + 2t = 3 + s  y  2 + t = 6 − s', '1 + 2t = 6 − s  y  2 + t = 3 + s'], ['Sumando: 3 + 3t = 9, t = 2', 'Sumando: 3 + 3t = 9, t = 3'], ['x = 1 + 2 · 2 = 5', 'x = 1 + 2 · 3 = 7']),
-    'geo-13#3': C('( 9 - 3 ) / 4', ['2', '1']),
-    'geo-14#1': E(['u · v = 1', 'u · v = 2'], ['cos θ = 1 ÷ (√2 · √2) = ½', 'cos θ = 1 ÷ (2 · 2) = ¼'], ['θ = 60°', 'θ = 30°', 'θ = 45°']),
-    'geo-14#2': C('4 / ( 3 + 2 )', ['-1']),
-    'geo-14#3': C('3 ^ 2 + 2 * 6 + 4 ^ 2'),
-    'geo-15#2': C('( -1 * 3 + 3 * 4 ) / 5', ['2', '0']),
-    'geo-15#3': E(['La proyección es el vector cero', 'La proyección es lo más larga posible'], ['u · v = 0', 'u · v = ‖u‖‖v‖'], ['90°', '0°', '180°']),
-    'geo-16#1': C('( 4 * 3 + 3 * -1 - 4 ) / 5'),
-    'geo-16#2': C('2 * 1 - 2 + 3 * -1'),
-    'geo-16#3': C('( 14 - 2 - 2 - 1 ) / 3'),
-    'geo-16#4': E(['Normales: (1, 1, 1) y (1, −1, 0)', 'Normales: (1, 1, 1) y (1, 1, 0)'], ['n₁ · n₂ = 1 − 1 + 0 = 0', 'n₁ · n₂ = 1 + 1 + 0 = 2'], ['90°', '0°', '45°']),
-    'geo-17#1': C('2 * 2 - 0 * -1', ['3', '1']),
-    'geo-17#2': C('1 * -1 - 2 * 3', ['0']),
-    'geo-17#3': C('r ( 8 ^ 2 + 6 ^ 2 ) / 2'),
-    'geo-17#4': E(['î × ĵ = k̂', 'î × ĵ = −k̂'], ['Al cambiar el orden cambia el signo', 'El orden no importa'], ['c = −1', 'c = 1']),
-    'geo-18#1': C('-1 * 0 - 2 * -1', ['3', '6']),
-    'geo-18#2': C('1 * 2 * 4', ['3', '0']),
-    'geo-18#3': C('r ( 3 ^ 2 + 4 ^ 2 )', ['1']),
-    'geo-18#4': C('1 * -1 - 1 * 1', ['0']),
-    'geo-19#2': C('100 / ( 2 * sen(30°) )', ['cos(30°)']),
-    'geo-19#3': C('r ( 30 ^ 2 + 40 ^ 2 )', ['70']),
-    'geo-19#4': C('20 * cos(60°)', ['sen(60°)']),
-    'geo-20#2': C('r ( 8 ^ 2 + 6 ^ 2 ) / 2'),
-    'geo-20#3': C('r ( 200 ^ 2 + 50 ^ 2 )', ['250', '150']),
-    'geo-21#2': C('50 * 10 * cos(60°)', ['sen(60°)']),
-    'geo-21#3': C('40 * 0.25', ['4']),
-    'geo-21#4': C('0 * 0 - 3 * 1', ['2']),
-    'geo-22#2': C('-12 / 4', ['2', '12']),
-    'geo-22#3': C('1 ^ 2 / ( 4 * 0.25 )', ['2']),
-    'geo-23#2': C('r ( 169 - 144 )', ['13', '12']),
-    'geo-23#3': C('r ( 16 + 9 ) / 4', ['3']),
-    'geo-23#4': C('3 * r ( 1 - 4 ^ 2 / 5 ^ 2 )'),
-    // ---------- Física, Cálculo integral, Álgebra lineal ----------
-    'fis-1#0': C('20 * 5', ['2']),
-    'fis-1#1': C('2 * 6', ['0']),
-    'fis-1#2': C('2 * 6 ^ 2 / 2'),
-    'fis-2#2': C('r ( 2 * 20 / 10 )'),
-    'fis-3#0': C('5 * 3', ['2']),
-    'fis-3#2': C('10 * 9.8'),
-    'fis-4#1': C('10 * sen(30°)', ['cos(30°)']),
-    'fis-5#0': C('2 * 3 ^ 2 / 2'),
-    'fis-5#1': C('1 * 10 * 5'),
-    'fis-5#2': C('r ( 2 * 10 * 5 )'),
-    'int-1#0': C('2 * 4 / 2'),
-    'int-2#1': C('3 ^ 3 / 3', ['2']),
-    'lin-1#1': C('r ( 3 ^ 2 + 4 ^ 2 )', ['7']),
-    'lin-1#2': C('1 * 3 + 2 * 4'),
-    'lin-2#1': C('2 * 3 - 1 * 1'),
+const EUC = (() => {
+  const KIND = 'Geometría';
+  // Mundo con su evaluación: items = [[lección, nota de repaso, ejercicio]]; 1.5 minutos por pregunta.
+  const mundo = (world, lessons, items) => {
+    const fila = EUC_TEMARIO.find(t => t[0] === world), order = lessons.map(l => l.id);
+    const exam = { id: `exam-${world}`, title: `Evaluación · ${fila[1]}`, minutes: 0, items: items.map(([lesson, review, ex]) => ({ lesson, review,
+      ex: { ...ex, kind: ex.kind || KIND, canvasGuide: true, exam: true, params: { ...ex.params, autoDemo: false } } })) };
+    exam.items.sort((a, b) => order.indexOf(a.lesson) - order.indexOf(b.lesson));
+    exam.minutes = Math.max(8, Math.ceil(exam.items.length * 1.5));
+    EUC_HECHOS.push(world);
+    return { world, title: fila[1], lessons, exam };
   };
+  // Los mundos del temario que aún no están escritos.
+  const pendientes = hechos => EUC_TEMARIO.filter(([w]) => !hechos.some(u => u.world === w)).map(([world, title, lessons]) => ({ world, title, lessons }));
+  return { ...ICF, mundo, pendientes, KIND };
 })();
-
-// Cambia en los cursos cada ejercicio de escribir por su juego. Devuelve cuántos cambió y cuáles no pudo.
-function sinEscribir(courses, table = SIN_ESCRIBIR) {
-  const out = { done: 0, missing: [], mismatch: [], unused: new Set(Object.keys(table)) };
-  const swap = (list, id) => (list || []).forEach((ex, i) => {
-    if (!ex || ex.type !== 'input') return;
-    const key = `${id}#${i}`, t = table[key];
-    if (!t) { out.missing.push(key); return; }
-    out.unused.delete(key);
-    const { type, answer, tol, prefix, suffix, answerText, ...rest } = ex;
-    let params;
-    if (t.game === 'arma-la-cuenta') {
-      const v = GAMES['arma-la-cuenta']?.evaluate(t.sol), lim = tol ?? 1e-6 * Math.max(1, Math.abs(answer));
-      if (!(Math.abs(v - answer) <= lim)) { out.mismatch.push(key); return; }   // la ficha ya no es de este ejercicio: se deja como estaba
-      // El juego calcula exacto: vale la cuenta de la ficha, no el redondeo que se aceptaba al escribir (con ese margen
-      // pasaban cuentas falsas). La tolerancia vieja solo dice cuántos decimales mostrar.
-      const round = { sol: t.sol, traps: t.traps, answer: v, tol: 1e-9 * Math.max(1, Math.abs(v)), ...(tol != null ? { digits: tol } : {}), ...(suffix ? { unit: suffix } : {}) };
-      params = { rounds: [round] };
-    } else params = { rounds: [{ levels: t.levels }] };
-    list[i] = { ...rest, type: 'play', game: t.game, params };
-    out.done++;
-  });
-  for (const c of courses) for (const u of c.units || []) {
-    for (const l of u.lessons || []) swap(l.ex, l.id);
-    if (u.exam) { const exs = u.exam.items.map(it => it.ex); swap(exs, `exam-${u.world}`); exs.forEach((ex, i) => { u.exam.items[i].ex = ex; }); }
-    if (u.boss) swap(u.boss.ex, u.boss.id);
-  }
-  out.unused = [...out.unused];
-  return out;
-}
-if (typeof COURSES !== 'undefined') {
-  const r = sinEscribir(COURSES);
-  if ((r.missing.length || r.mismatch.length) && typeof console !== 'undefined') console.warn('sin-escribir: quedan ejercicios de escribir', r.missing, r.mismatch);
-}
 ;
-//#archivo js/courses/algebra-taller.js
-// Práctica final del curso. Los id de las lecciones, el progreso y los medios se conservan.
-(() => {
-  const algebra = COURSE_ALGEBRA.units.flatMap(u => u.lessons);
-  const lessons = new Map(algebra.map(l => [l.id, l]));
-  const tex = s => '$' + s + '$';
-  const n = x => +x.toFixed(5);
-  const grid = (size, fn) => Array.from({ length: size }, (_, i) => fn(i));
-  const pick = (size, fn) => grid(size, i => i).filter(fn);
-  const xy = v => tex('(' + v.join(',') + ')');
-  const line = (a, b) => x => a * x + b;
-  const par = (a, h, k) => x => a * (x - h) ** 2 + k;
-  const format = (v, symbol = 'x') => tex(symbol + '=' + n(v));
-  const lab = (mode, q, r, hint, explain, motion = false) => play('taller-' + mode, q,
-    { rounds: [r], ...(motion ? { motion: true } : {}) },
-    explain || hint + ' ' + (r.solution || r.read(r.goal)), { hint, canvasGuide: true, ...(motion ? { motion: true } : {}) });
-  const rail = (q, [lo, hi, start, goal, step], read, hint, more = {}) =>
-    lab(more.loads ? 'balanza' : 'barra', q, { lo, hi, start, goal, step, read, ...more }, hint, more.explain, more.motion);
-  const rect = (q, max, goal, hint, { start = [1, 2], read = ([a, b]) => tex(`${a}\\cdot ${b}=${a * b}`), valid, explain } = {}) =>
-    lab('area', q, { max, start, goal, read, valid }, hint, explain);
-  const point = (q, bounds, start, goal, curves, hint, more = {}) =>
-    lab('plano', q, { bounds, start, goal, curves, read: xy, ...more }, hint, more.explain, more.motion);
-  const probe = (q, bounds, start, goal, fn, hint, more = {}) => lab('sonda', q,
-    { bounds, start, goal, curves: [fn, ...(more.other || [])],
-      read: x => Number.isFinite(fn(x)) ? tex(`f(${x})=${n(fn(x))}`) : `Sin valor en ${x}`,
-      ...more }, hint, more.explain, more.motion);
-  const dial = (q, values, goal, read, hint, more = {}) =>
-    lab('giro', q, { values, goal, start: more.start ?? 0, read: i => read(values[i], i), ...more }, hint, more.explain, more.motion);
-  const tiles = (q, cols, values, goal, hint, more = {}) => lab('mosaico', q,
-    { tiles: values, cols, start: [], goal, read: v => 'Celdas pintadas · ' + v.length, ...more }, hint, more.explain);
-  const groups = (q, regions, values, goal, hint, more = {}) => lab('membrana', q,
-    { regions, tiles: values, start: values.map(() => -1), goal,
-      read: v => regions.map((label, i) => label + ' ' + v.filter(x => x === i).length).join('  ·  '),
-      solution: regions.map((label, i) => label + ' → ' + values.filter((_, j) => goal[j] === i).join(', ')).join(' · '),
-      ...more }, hint, more.explain, more.motion);
-  const bridges = (q, fractions, den, cards, goal, hint, explain) => lab('puentes', q,
-    { fractions: fractions.map(([a, b]) => tex('\\frac{' + a + '}{' + b + '}')), tiles: cards.map(tex), start: [-1, -1], goal,
-      read: v => tex(v.map((j, i) => j < 0 ? den[i] : '(' + den[i] + ')(' + cards[j] + ')').join('\\quad | \\quad')),
-      solution: explain }, hint, explain);
-  function route(q, labels, goal, hint, more = {}) {
-    const nodes = [[.5, .07, labels[0]], [.22, .38, labels[1]], [.78, .38, labels[2]],
-      [.22, .68, labels[3]], [.78, .68, labels[4]], [.5, .94, labels[5]]];
-    const edges = [[0, 1], [0, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 5], [4, 5]];
-    const read = v => v.map(i => labels[i]).join(' → ');
-    return lab('trazo', q, { nodes, edges, start: [0], goal: [0, ...goal, 5], minLength: 4, read, ...more }, hint, more.explain, more.motion);
-  }
-  function tune(id, keep, additions, close) {
-    const l = lessons.get(id), previous = l.ex;
-    const selected = keep.map(g => {
-      const e = previous.find(e => e.game === g);
-      if (!e) throw new Error(id + ' no contiene el juego ' + g);
-      return { ...e, canvasGuide: true };
-    });
-    const ending = close || previous.at(-1);
-    l.ex = [...selected, ...additions, { ...ending, canvasGuide: true, motion: true }];
-  }
+//#archivo js/courses/euclidiana-demostrar.js
+// Geometría Euclidiana · mundo 1 «euc-demostrar» (spec 2026-11-26-curso-euclidiana). Enunciados, números y contextos propios.
+EUC_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = EUC;
+  const TESIS = 'Esa es la tesis: no se marca como dato, es lo que hay que demostrar.';
 
-  // Teoría de Conjuntos
-  tune('alg-0a', ['cumple-notacion', 'tacha-repetidos', 'atrapa-elementos'], [
-    groups('Separa las letras de SOL del resto del universo.', ['En SOL', 'Fuera'], ['S', 'M', 'O', 'L', 'R'], [0, 1, 0, 0, 1], 'Cada letra cuenta una vez. Busca las que puedes señalar en SOL.', { explain: 'El conjunto de letras de SOL es $\\{S,O,L\\}$. M y R quedan fuera.' }),
-    tiles('Pinta todas las palabras que terminan en «a».', 3, ['mesa', 'sol', 'nube', 'silla', 'papel', 'tiza'], [0, 3, 5], 'Comprueba la última letra de cada palabra.', { read: v => 'Elementos elegidos · ' + v.length, explain: 'Mesa, silla y tiza comparten la propiedad de terminar en «a».' }),
-    rail('Ajusta la cardinalidad del conjunto de letras de ARENA.', [0, 7, 1, 4], v => tex('n(A)=' + v), 'Las dos apariciones de A representan el mismo elemento.', { input: v => v + ' elementos', bars: v => [['Letras distintas', v]], explain: '$A=\\{A,R,E,N\\}$ contiene cuatro elementos.' }),
-  ]);
-  tune('alg-0b', ['arma-conjunto', 'mueve-circulos', 'cubo-partes'], [
-    groups('Construye dos conjuntos disjuntos. Pon las vocales en A y las consonantes en B.', ['A', 'B'], ['A', 'R', 'U', 'S', 'I', 'T'], [0, 1, 0, 1, 0, 1], 'Si los conjuntos son disjuntos, ningún elemento puede pertenecer a ambos.', { explain: '$A\\cap B=\\varnothing$. Ninguna letra de A está en B.' }),
-    tiles('Pinta dos elementos del conjunto $B=\\{A,C,E\\}$.', 3, ['A', 'b', 'C', 'd', 'E', 'f'], [0, 2], 'Elige dos de las letras mayúsculas. Cualquier pareja de ellas sirve.', { valid: v => v.length === 2 && v.every(i => i % 2 === 0), explain: 'Cualquier pareja tomada de $B=\\{A,C,E\\}$ es un subconjunto de dos elementos.' }),
-    rail('Cuenta los subconjuntos de un conjunto con tres elementos, incluido el vacío.', [0, 12, 3, 8], v => tex('n(\\mathcal P(A))=' + v), 'Haz dos elecciones por elemento: incluirlo o dejarlo fuera.', { bars: v => [['Subconjuntos', v]], explain: 'Hay $2^3=8$ combinaciones de incluir o excluir elementos.' }),
-  ]);
-  tune('alg-0c', ['reparte-venn', 'pinta-venn', 'encuesta-venn'], [
-    tiles('Pinta la intersección. M marca múltiplos de 2 y T marca múltiplos de 3.', 4,
-      ['2M', '3T', '4M', '6MT', '7', '8M', '9T', '12MT'], [3, 7], 'La intersección conserva cada elemento que cumple las dos condiciones.', { explain: 'Los únicos números que pertenecen a las dos familias de la escena son 6 y 12.' }),
-    groups('Construye A menos B. A contiene las letras de CASTOR y B las de CARTA.', ['$A-B$', 'Resto'], ['A', 'S', 'T', 'O', 'R', 'C'], [1, 0, 1, 0, 1, 1], 'Parte de las letras de CASTOR y retira las que también se usan en CARTA.', { explain: '$A-B=\\{S,O\\}$.' }),
-    rail('Entre 18 personas, 10 usan bus, 11 usan metro y 6 usan ambos. Ajusta cuántas usan al menos uno.', [0, 18, 7, 15], v => tex('n(B\\cup M)=' + v), 'Entre las dos listas, las seis personas en común aparecen dos veces.', { bars: v => [['Al menos uno', v], ['Ninguno', 18 - v]], explain: '$10+11-6=15$ personas usan al menos uno. Tres no usan ninguno.' }),
+  const l1 = leccion('euc-demostrar-1', 'Hipótesis, tesis y razones', guion(
+    ['Medir o demostrar', 'Medir muchos casos solo deja sospechar. La geometría deductiva razona una vez y vale para todos los casos.'],
+    ['Los ladrillos', 'Punto, recta y plano no se definen. Con ellos se escriben las definiciones; los postulados se aceptan sin demostrar.'],
+    ['Teorema', 'Un teorema se demuestra con definiciones, postulados y teoremas anteriores. Un corolario sale enseguida de un teorema.'],
+    ['Hipótesis y tesis', 'En «si…, entonces…», lo que se da es la hipótesis y lo que hay que demostrar es la tesis.'],
+    ['Afirmación y razón', 'Cada afirmación de una demostración lleva su razón al lado. «Se ve en el dibujo» no es una razón.']), [
+    x('toca-hipotesis', 'Teorema: «Si OB es bisectriz del $\\angle AOC$ y el $\\angle AOC$ es recto, entonces el $\\angle AOB$ mide $45^\\circ$». Toca **todo** lo que es **hipótesis**.',
+      { fig: { t: 'rayos', r: [['A', 0], ['B', 45], ['C', 90]], ig: [[0, 1, 'fa'], [1, 2, 'fg']] }, casos: [{ t: 'OB es bisectriz del ∠AOC', si: true }, { t: '∠AOB mide 45°', no: 'Esa es la tesis: lo que hay que demostrar, no lo que se da.' }, { t: '∠AOC es recto', si: true }, { t: 'OA y OC miden lo mismo', no: 'Eso no lo dice el enunciado: el dibujo no es un dato.' }],
+        falta: 'Falta otro dato: la hipótesis es todo lo que va entre el «si» y el «entonces».', ok: 'La hipótesis es lo que se da; la tesis, lo que hay que demostrar.' },
+      'Lo que va entre «si» y «entonces» es la hipótesis: la bisectriz y el ángulo recto. Los $45^\\circ$ son la tesis.', 'Parte la frase en dos: lo que va después de «si» y lo que va después de «entonces».'),
+    x('marca-dato', 'Hipótesis: $AB \\cong CD$. Tesis: $AC \\cong BD$. Toca en la figura **solo** los segmentos que la hipótesis da como congruentes.',
+      { t: 'seg', n: 'ABCD', pos: [0, 5, 9, 14], si: [0, 2], no: { 1: 'BC no aparece en la hipótesis: nadie dijo con quién es congruente.', 3: TESIS, 4: TESIS }, falta: 'Falta uno: la hipótesis nombra dos segmentos.', ok: 'En la figura se marca lo que se da, nunca lo que se quiere probar.', texto: 'AB y CD' },
+      'La hipótesis solo habla de AB y CD. Que AC y BD sean congruentes es la tesis: todavía no se sabe.', 'Lee la hipótesis letra por letra: ¿cuáles dos segmentos nombra?'),
+    x('clasifica-enunciado', 'Cada renglón es un ladrillo de la geometría. Ponle a cada uno su **nombre**.',
+      { et: ['«Recta»: todos saben qué es,|nadie la define', 'Bisectriz: rayo que parte un|ángulo en dos congruentes', 'Por dos puntos distintos|pasa una sola recta', 'Los ángulos opuestos por el|vértice son congruentes'], metas: ['primitivo', 'definición', 'postulado', 'teorema'], fichas: ['primitivo', 'definición', 'postulado', 'teorema', 'corolario', 'hipótesis'],
+        mira: ['No se define: es un punto de partida que todos entienden.', 'Dice qué significa una palabra nueva usando otras ya conocidas.', 'Se acepta sin demostración: es una regla del juego.', 'Se demuestra a partir de postulados y definiciones.'],
+        trampas: { '2:teorema': 'Un teorema se demuestra; esto se acepta sin demostración.', '3:postulado': 'Esto sí se demuestra, con el par lineal: no hace falta aceptarlo sin más.', '1:postulado': 'No afirma un hecho: explica qué quiere decir «bisectriz».' }, ok: 'Primitivos y definiciones dan las palabras; postulados y teoremas, las verdades.' },
+      'Recta es término primitivo; la bisectriz se define; que por dos puntos pase una sola recta se acepta; lo de los opuestos por el vértice se demuestra.', 'Pregúntate: ¿explica una palabra, se acepta sin más o hay que demostrarlo?'),
+    x('arma-hipotesis', 'Arma la figura de esta hipótesis: «**M** es el punto medio de AB y **N** es el punto medio de AM». El segmento AB mide 12.',
+      { L: 12, m: 6, n: 3, mira: ['M debe partir a AB en dos partes iguales: cuenta las rayitas a cada lado.', 'M quedó bien. Ahora N debe partir a AM, no a AB ni a MB, en dos partes iguales.'], ok: 'AM = MB = 6 y AN = NM = 3: la figura dice lo mismo que la hipótesis.' },
+      'El punto medio parte en dos congruentes: $AM = 12 \\div 2 = 6$ y $AN = 6 \\div 2 = 3$.', 'Primero ubica M contando rayitas; después mira solo el trozo AM.'),
+    x('razon-de-paso', 'Demostración de «si M es el punto medio de AB, entonces $AB = 2 \\cdot AM$». Pon la **razón** de cada afirmación.',
+      { fig: { t: 'recta', L: 10, pts: [['A', 0], ['M', 5], ['B', 10]], ig: [[0, 1], [1, 2]] }, et: ['1. M es punto medio de AB', '2. AM = MB', '3. AM + MB = AB', '4. AM + AM = AB'], metas: ['hipótesis', 'def. punto medio', 'suma de segmentos', 'sustitución'], fichas: ['hipótesis', 'def. punto medio', 'suma de segmentos', 'sustitución', 'tesis', 'se ve en la figura'],
+        mira: ['Es lo que el enunciado da: se copia tal cual.', 'Sale de lo que significa «punto medio».', 'Los dos trozos juntos arman el segmento entero.', 'En el paso 3 se cambió MB por su igual, AM.'],
+        trampas: { '0:tesis': 'La tesis es lo que se quiere probar: va al final, no al comienzo.', '1:se ve en la figura': 'El dibujo no es una razón: di qué definición lo garantiza.', '3:suma de segmentos': 'La suma ya se usó en el paso 3; aquí solo se cambió MB por AM.' }, ok: 'Cada afirmación con su razón: dato, definición, postulado y propiedad.' },
+      'Dato, definición de punto medio, suma de segmentos y sustitución: así $AM + AM = AB$, es decir, $AB = 2 \\cdot AM$.', 'Pregúntate de dónde sale cada renglón: ¿me lo dieron, lo dice una definición o cambié algo por su igual?'),
+    x('razon-vale', 'Dos rectas se cortan y en una demostración escribes «$\\angle 1 \\cong \\angle 3$». Toca **todas** las razones que **sí** valen para ponerle al lado.',
+      { fig: { t: 'cruce', a: 60 }, casos: [{ t: 'Teorema: opuestos por el vértice', si: true }, { t: 'En el dibujo se ven iguales', no: 'Un dibujo puede engañar: lo que «se ve» no es una razón.' }, { t: 'Lo medí con el transportador', no: 'Medir es geometría experimental: sirve para sospechar, no para demostrar.' }, { t: 'La hipótesis lo dice', si: true }, { t: 'Es lo que quiero demostrar', no: 'Usar la tesis como razón es dar vueltas en círculo.' }],
+        falta: 'Falta una: lo que se da y lo ya demostrado también son razones.', ok: 'Valen los datos, las definiciones, los postulados y los teoremas ya demostrados.' },
+      'Una razón es un dato, una definición, un postulado o un teorema ya demostrado. Ver, medir o repetir la tesis no demuestra nada.', 'Piensa si esa razón convencería a alguien que no puede ver tu dibujo ni tu transportador.'),
+    x('cinta-deduce', 'Deduce el largo que falta y lanza la cinta desde el primer punto. Puedes fallar **una** vez.', { tiros: [
+      { q: '**M** es el punto medio de AB y $AB = 26$. ¿Cuánto mide **AM**?', pts: [['A', 0], ['M', 13], ['B', 26]], ig: [[0, 1], [1, 2]], da: [[0, 2, '26', 1]], x: [0, 1, 0], r: 13, c: '26 \\div 2', e: { 26: 'Ese es todo AB: el punto medio lo parte en dos.' } },
+      { q: 'B está entre A y C, $AC = 27$ y $BC = 12$. ¿Cuánto mide **AB**?', pts: [['A', 0], ['B', 15], ['C', 27]], da: [[1, 2, '12', 0], [0, 2, '27', 1]], x: [0, 1, 0], r: 15, c: '27 - 12', e: { 39: 'Sumaste: AB es una parte de AC, no puede ser más largo.' } },
+      { q: '$AB \\cong CD$, $AB = 8$ y $BC = 6$. ¿Cuánto mide **AD**?', pts: [['A', 0], ['B', 8], ['C', 14], ['D', 22]], ig: [[0, 1], [2, 3]], da: [[0, 1, '8', 0], [1, 2, '6', 0]], x: [0, 3, 1], r: 22, c: '8 + 6 + 8', e: { 14: 'Falta CD: es congruente con AB, también mide 8.', 16: 'Dejaste por fuera a BC.' } }] },
+      '$26 \\div 2 = 13$ (definición de punto medio); $27 - 12 = 15$ (suma de segmentos); $8 + 6 + 8 = 22$ (segmentos congruentes miden igual).', 'Antes de lanzar, di qué definición o postulado te deja hacer la cuenta.'),
+    sol('En la figura, B está entre A y C, $AB = 9$ y $AC = 21$. Completa la demostración de que $BC = 12$, con la razón de cada paso.',
+      ['$AB + BC = AC$, por la [[suma de segmentos]]', '$AB = 9$ y $AC = 21$, por [[hipótesis]]', '$9 + BC = 21$, por [[sustitución]]', '$BC = 21 - 9 =$ [[12]]'], ['tesis', '30', 'se ve en la figura'],
+      'B entre A y C da $AB + BC = AC$; con los datos, $9 + BC = 21$ y $BC = 12$.', 'Cada renglón necesita su porqué: ¿es un dato, un postulado o un cambio de iguales por iguales?'),
+    err('Se quiere demostrar: «si OB es bisectriz del $\\angle AOC$, entonces el $\\angle AOC$ mide el doble del $\\angle AOB$». Una de las razones está mal.',
+      ['OB es bisectriz del $\\angle AOC$ (hipótesis)', '$\\angle AOB \\cong \\angle BOC$ (se ve en la figura)', '$\\angle AOB + \\angle BOC = \\angle AOC$ (suma de ángulos)', '$\\angle AOC = 2 \\cdot \\angle AOB$ (sustitución)'], 1,
+      ['$\\angle AOB \\cong \\angle BOC$ (definición de bisectriz)', '$\\angle AOB \\cong \\angle BOC$ (es la tesis)', '$\\angle AOB \\cong \\angle BOC$ (lo medí con transportador)'],
+      'La bisectriz, por definición, parte el ángulo en dos congruentes. «Se ve en la figura» no es una razón.', 'Busca la razón que no es ni dato, ni definición, ni postulado, ni teorema.'),
+    opc('En el teorema «si dos ángulos son opuestos por el vértice, entonces son congruentes», la tesis es:', ['que los ángulos son opuestos por el vértice', 'que las rectas se cortan', 'que los ángulos son congruentes', 'que los ángulos suman $180^\\circ$'], 2,
+      'La tesis es lo que va después del «entonces»: lo que hay que demostrar.', 'La hipótesis va después del «si»; la tesis, después del «entonces».'),
   ]);
 
-  // La Recta Real
-  tune('alg-11', ['ascensor', 'recta-espejo', 'fuga-de-familia'], [
-    point('Marca en el eje horizontal dónde terminas después de avanzar 4 desde −7.', [-8, 8, -2, 2], [0, 0], [-3, 0], [], 'Cada avance es un paso hacia la derecha. Conserva la altura cero.', { explain: '$-7+4=-3$.' }),
-    groups('Distribuye los enteros según queden antes o después de cero.', ['Negativos', 'Cero', 'Positivos'], ['$-7$', '$0$', '$4$', '$-3$', '$9$'], [0, 1, 2, 0, 2], 'Usa la posición respecto del cero. El cero queda en su propia región.'),
-    rail('Eleva una sonda que parte de la cota −9 hasta la cota 2.', [0, 15, 3, 11], v => tex('(-9)+' + v + '=' + (v - 9)),
-      'Cuenta los pasos hasta la cota cero y luego añade los que faltan.', { bars: v => [['Distancia al cero', 9], ['Tramo recorrido', v]] }),
-  ]);
-  tune('alg-11b', ['pizzeria', 'candado-fraccion', 'pon-la-rayita', 'fuga-de-familia'], [
-    tiles('Cubre con un color exactamente tres octavos del tablero.', 4, grid(8, () => ''), [0, 1, 2], 'El tablero tiene ocho partes del mismo tamaño. El numerador cuenta las que se cubren.', { valid: v => v.length === 3, read: v => tex('\\frac{' + v.length + '}{8}'), explain: 'Tres celdas de ocho representan $\\tfrac38$ sin importar su ubicación.' }),
-    rect('Construye 18 casillas organizadas en 3 filas iguales.', [9, 6], [6, 3], 'Reparte las 18 unidades entre las tres filas. Cada fila es un tercio del total.', { read: ([a, b]) => tex(a + '\\cdot' + b + '=' + (a * b)) }),
-    point('Pon el punto en el eje horizontal donde están $\\tfrac54$ y 1.25.', [0, 2, -1, 1], [.25, 0], [1.25, 0], [], 'Completa primero una unidad de cuatro cuartos. Mira cuánto sobra.', { dx: .25, explain: '$\\tfrac54=1+\\tfrac14=1.25$.' }),
-  ]);
-  tune('alg-11c', ['cajas-numericas', 'lupa-densidad', 'ubica-en-recta', 'compas-raiz', 'acorrala-raiz'], [
-    dial('Gira hasta una marca situada entre $\\sqrt{19}$ y $\\sqrt{27}$.', [3, 4, 5, 6, 7, 8], 2, v => tex(v + '^2=' + v * v), 'Eleva al cuadrado las marcas positivas para compararlas con 19 y 27.', { explain: '$19<25<27$, de modo que $5$ queda entre las dos raíces.' }),
-    point('Busca en el eje horizontal un racional estrictamente entre 1.41 y 1.42.', [1.405, 1.425, -1, 1], [1.405, 0], [1.415, 0], [], 'Mira las milésimas que hay entre las dos centésimas dadas.', { dx: .001, valid: ([x, y]) => y === 0 && x > 1.41 && x < 1.42, explain: '$1.415$ es una de varias opciones racionales dentro del intervalo.' }),
-  ]);
-  tune('alg-12b', ['corta-rectangulo', 'inversos-gemelos'], [
-    rect('Reagrupa el área de $4(2+3)$ en dos filas iguales.', [10, 6], [10, 2], 'La distributiva conserva las 20 unidades de área. Cambia la forma sin cambiar la cantidad.'),
-    rail('Iguala $4(3+x)$ con 32.', [0, 9, 2, 5], x => tex('4(3+' + x + ')=' + (4 * (3 + x))), 'Divide 32 entre los cuatro grupos y mira qué parte de cada grupo ya está fija.', { loads: x => [4 * (3 + x), 32] }),
-    tiles('Pinta el rectángulo de 3 filas que forman las columnas B, C y D.', 5, grid(15, i => 'ABCDE'[i % 5]), [1, 2, 3, 6, 7, 8, 11, 12, 13], 'El área de cada columna suma lo mismo. Tres columnas por tres filas forman nueve celdas.', { read: v => tex('A=' + v.length), explain: 'Puedes repartir el cálculo como $3(1+2)=3+6=9$.' }),
-    route('Desde 1, recorre las estaciones aplicando primero ×4 y después +3.', ['1', '4', '5', '7', '8', 'fin'], [1, 3], 'Multiplica primero lo que hay en la estación de salida. Suma después.'),
-  ], probe('Lleva la sonda al valor que deja $3x+12$ en cero y suéltala.', [-7, 6, -10, 32], 1, -4, line(3, 12), 'Busca el opuesto aditivo de 12 antes de dividir entre 3.', { motion: true }));
-  tune('alg-12c', ['arma-producto', 'cancela-balanza'], [
-    rail('Mueve el contrapeso hasta que $(-3)x$ sea 18.', [-8, 8, 2, -6], x => tex('(-3)(' + x + ')=' + (-3 * x)), 'Con un factor negativo, ¿qué signo necesita el otro para que el producto sea positivo?', { loads: x => [-3 * x, 18] }),
-    point('Representa en el eje horizontal el resultado de $-3-(-5)$.', [-7, 7, -3, 3], [0, 0], [2, 0], [], 'Restar un negativo equivale a sumar su opuesto.'),
-    tiles('Pinta los productos de signo negativo.', 3, ['$(-2)(-5)$', '$3(-4)$', '$(-7)2$', '$2(6)$', '$0(-4)$', '$(-6)(-1)$'], [1, 2], 'Un producto de dos factores distintos de cero es negativo cuando exactamente uno de ellos lo es.', { explain: 'Los productos negativos son $3(-4)$ y $(-7)2$.' }),
-    groups('Lleva cada cociente a la región de su signo.', ['$+$', '$-$'], ['$8/2$', '$-6/3$', '$-9/-3$', '$9/-3$'], [0, 1, 0, 1], 'Los signos iguales dan cociente positivo. Los distintos dan negativo.'),
-  ], route('Traza la ruta que aplica ×(−2) dos veces desde 3. Suelta para recorrerla.', ['3', '6', '$-6$', '$-12$', '12', 'fin'], [2, 4], 'Cada multiplicación por un negativo invierte el signo.', { motion: true, explain: '$3\\to -6\\to12$.' }));
-  tune('alg-12d', ['tren-ordenado', 'dobla-la-recta', 'distancia-justa', 'dibuja-intervalo'], [
-    point('En el eje horizontal, marca el punto a cuatro unidades de −2 que queda a su izquierda.', [-8, 8, -2, 2], [0, 0], [-6, 0], [], 'La distancia admite dos direcciones. La consigna fija la que necesitas.', { marks: [[-2, 0]], explain: '$|-6-(-2)|=4$ y $-6<-2$.' }),
-    rail('Iguala la distancia de $x$ a 3 con la distancia de $x$ a −5.', [-8, 8, 2, -1], x => tex('|' + x + '-3|=' + Math.abs(x - 3) + '\\quad |' + x + '+5|=' + Math.abs(x + 5)), 'El punto medio de dos marcas queda a la misma distancia de ambas.', { loads: x => [Math.abs(x - 3), Math.abs(x + 5)] }),
-  ]);
-
-  // Escalas y Proporciones
-  tune('alg-12', ['limonada', 'estira-foto'], [
-    rect('Haz un panel de 12 celdas cuyo ancho sea tres veces su alto.', [10, 5], [6, 2], 'Si cada fila es tres veces el alto, prueba con alturas pequeñas y compara las áreas.', { read: ([a, b]) => tex(a + ':' + b + '\\qquad A=' + a * b) }),
-    tiles('Pinta exactamente dos celdas por cada tres que dejes sin pintar.', 5, grid(10, () => ''), [0, 1, 2, 3], 'Una copia de la razón ocupa cinco celdas. El tablero admite dos copias.', { valid: v => v.length === 4, read: v => tex(v.length + ':' + (10 - v.length)), explain: '$4:6$ y $2:3$ representan la misma razón.' }),
-    point('Coloca en el plano una mezcla de 9 vasos con razón limón a agua de 1:2. El eje horizontal mide limón.', [0, 9, 0, 9], [1, 2], [3, 6], [line(2, 0)], 'Cada grupo completo tiene un vaso de limón y dos de agua.', { read: ([x, y]) => tex(x + ':' + y + '\\qquad ' + x + '+' + y + '=' + (x + y)) }),
-    rail('Ajusta el número de tandas para servir 20 porciones, con 5 por tanda.', [0, 8, 1, 4], x => tex('5\\cdot' + x + '=' + 5 * x), 'Cada tanda añade el mismo volumen.', { bars: x => [['Porciones servidas', 5 * x]], scale: 40 }),
-  ], dial('Ajusta el brazo de la válvula para servir 15 medidas en razón jarabe a agua de 2:3. Suelta para verter.', [0, 1, 2, 3, 4, 5], 3,
-    k => tex(2 * k + ':' + 3 * k + '\\qquad V=' + 5 * k), 'Una vuelta a otra marca selecciona cuántos lotes de cinco medidas sirves.', { motion: true }));
-  tune('alg-12e', ['balanza-proporcion', 'sombra-arbol', 'cuadrado-media', 'duplica-magnitud', 'grafica-relacion', 'reparto'], [],
-    lab('fraccion', 'Ajusta la segunda cinta hasta representar la misma fracción que la primera.',
-      { parts: 5, filled: 3, lo: 0, hi: 10, start: 2, goal: 6, read: v => tex('\\frac35\\qquad\\frac{' + v + '}{10}') },
-      'Cada quinto ocupa exactamente dos décimos. Compara las dos longitudes.', '$\\frac35=\\frac6{10}$.', true));
-  tune('alg-12f', ['arma-regla', 'bascula', 'la-obra', 'engranajes'], [
-    probe('Tres bombas llenan un tanque en 20 minutos. Sitúa la sonda en cinco bombas para leer el tiempo.', [1, 8, 0, 30], 3, 5, x => 60 / x,
-      'Duplica el número de bombas y el tiempo se reduce a la mitad. El producto se conserva.',
-      { read: x => tex('t=' + (60 % x ? '\\frac{60}{' + x + '}' : 60 / x) + '\\ \\mathrm{min}'), explain: 'Con cinco bombas tarda $60/5=12$ minutos.' }),
-    rect('Ocho personas hacen un trabajo en seis turnos. Organiza la misma carga en cuatro turnos.', [14, 8], [12, 4], 'Conserva las 48 unidades persona-turno. Déjalas en cuatro filas.', { explain: 'Se necesitan $48/4=12$ personas a ese ritmo.' }),
-  ]);
-  tune('alg-13', ['cuadricula-cien', 'rueda-porcentaje', 'cruz-porcentaje', 'mezcla'], [
-    rect('Forma 20 casillas en 5 filas. La primera fila será exactamente el 20 % del rectángulo.', [8, 7], [4, 5], 'Cinco filas iguales hacen que cada fila sea la quinta parte.', { read: ([x, y]) => tex(x + '\\cdot' + y + '=' + x * y + '\\qquad \\frac{1}{' + y + '}') }),
-    point('Marca la compra de 80 mil pesos con un ahorro del 30 %. El eje horizontal es el precio, el vertical es el ahorro.', [0, 100, 0, 40], [20, 6], [80, 24], [line(.3, 0)], 'Por cada diez mil pesos de precio ahorras tres mil.', { dx: 10, dy: 1 }),
-  ], rail('Desliza la banda del precio para cobrar el 35 % de $80 mil. Suelta para aplicar el cobro.', [0, 100, 15, 35, 5],
-    p => tex('\\frac{' + p + '}{100}\\cdot 80=' + n(.8 * p)), 'El precio completo representa el 100 %. Busca qué parte del total te piden cobrar.',
-    { input: p => p + ' %', bars: p => [['Precio completo', 80], ['Cobro · ' + n(.8 * p) + ' mil', .8 * p]], scale: 80, motion: true }));
-  tune('alg-13c', ['estira-barra', 'etiqueta-rebaja', 'bodegas'], [
-    rail('Halla el descuento para que 150 mil pesos se conviertan en 120 mil.', [0, 50, 10, 20, 5], p => tex('150(1-' + p + '/100)=' + n(150 * (1 - p / 100))), 'Compara el ahorro con los 150 mil iniciales.', { input: p => p + ' %', bars: p => [['Antes', 150], ['Después', 150 * (1 - p / 100)]], scale: 150 }),
-    tiles('Un artículo pierde una cuarta parte de su valor. Pinta el valor que conserva.', 4, grid(12, () => ''), grid(9, i => i), 'El descuento ocupa una de cuatro partes iguales. Pinta las restantes.', { valid: v => v.length === 9, read: v => tex('100\\%\\cdot\\frac{' + v.length + '}{12}=' + n(v.length * 100 / 12) + '\\%'), explain: 'Conserva el 75 % del valor inicial.' }),
-    point('Marca en la gráfica la pareja de precios antes y después de aumentar 25 % a 48 mil pesos.', [0, 80, 0, 100], [16, 20], [48, 60], [line(1.25, 0)], 'El precio original sigue allí y se suma una cuarta parte.', { dx: 4, dy: 5 }),
-  ], lab('recibo', 'Recorta el precio de 72 mil para que vuelva a 60 mil.',
-    { price: 72, lo: 0, hi: 12, start: 0, goal: 2, read: v => tex('72\\cdot\\frac{' + (12 - v) + '}{12}=' + (72 - 6 * v)) },
-    'La rebaja se mide sobre 72. Cada división de la banda descuenta seis mil.',
-    'La rebaja exacta es $\\tfrac16$ del precio vigente, es decir, $16\\tfrac23\\%$.', true));
-  tune('alg-13d', ['cascada', 'mejor-oferta', 'rebote', 'dos-etapas'], [
-    rail('Después de un aumento del 25 %, ajusta el descuento que devuelve un precio al valor inicial.', [0, 50, 10, 20, 5],
-      p => tex('1.25(1-' + p + '/100)=' + n(1.25 * (1 - p / 100))), 'El descuento se aplica sobre un total mayor que el original.', { input: v => v + ' %', loads: v => [1.25 * (1 - v / 100), 1] }),
-    point('Marca el par de precios de un artículo de 50 mil tras descuentos del 10 % y del 20 %.', [0, 70, 0, 70], [20, 14], [50, 36], [line(.72, 0)], 'Multiplica los factores de lo que queda: 90 % y 80 %.', { dx: 2, dy: 1 }),
-  ], lab('cascada', 'Aplica a 100 mil una rebaja del 30 % y luego un aumento del 20 %.',
-    { price: 100, start: [0, 0], goal: [-30, 20], read: ([a, b]) => tex('100(' + (1 + a / 100) + ')(' + (1 + b / 100) + ')=' + n(100 * (1 + a / 100) * (1 + b / 100))) },
-    'El segundo porcentaje se calcula sobre el resultado de la primera etapa.', 'Primero quedan 70 mil. Al aumentar ese valor un 20 %, quedan 84 mil.', true));
-
-  // Exponentes y Radicales
-  tune('alg-21a', ['arbol-potencia', 'torre-producto', 'pares-negativos'], [
-    rail('Ajusta el exponente de base 3 para producir 243.', [0, 6, 1, 5], x => tex('3^{' + x + '}=' + 3 ** x), 'Cada paso multiplica otra vez por 3.', { bars: x => [['Cantidad producida', 3 ** x]], scale: 3 ** 6 }),
-    tiles('Identifica las potencias de base negativa que dan un valor positivo.', 3, ['$(-3)^2$', '$(-3)^3$', '$(-2)^4$', '$(-2)^5$', '$(-5)^6$', '$(-5)^7$'], [0, 2, 4], 'Agrupa los signos negativos en pares. Cuando sobra uno, el resultado queda negativo.', { explain: 'Los exponentes 2, 4 y 6 forman pares completos de signos.' }),
-    dial('Gira al exponente que produce $\\tfrac{1}{8}$ con base 2.', [-4, -3, -2, -1, 0, 1], 1, v => tex('2^{' + v + '}=' + n(2 ** v)), 'Un exponente negativo da el recíproco de la potencia con exponente positivo.'),
-  ]);
-  tune('alg-21b', ['cuenta-factores', 'cambia-de-piso', 'salta-la-coma'], [
-    rail('Ajusta el exponente de $2^x$ para que $2^5\\cdot 2^x=2^9$.', [-5, 7, 1, 4], x => tex('2^5\\cdot2^{' + x + '}=2^{' + (5 + x) + '}'), 'Al unir las dos cadenas se cuentan juntos todos los factores.'),
-    rect('Representa los factores de $(a^4)^3$ como tres filas iguales de factores $a$.', [7, 6], [4, 3], 'Cada fila representa una copia completa de $a^4$.', { read: ([x, y]) => tex('(a^{' + x + '})^{' + y + '}=a^{' + x * y + '}') }),
-    groups('Distribuye las potencias según el signo de su exponente tras simplificarlas.', ['Negativo', 'Cero', 'Positivo'], ['$a^2/a^5$', '$a^2a^3$', '$a^4/a^4$', '$(a^{-1})^3$'], [0, 2, 1, 0],
-      'En un cociente de la misma base, elimina los factores que están en ambos lados.', { explain: 'Los exponentes finales son −3, 5, 0 y −3, respectivamente.' }),
-  ], lab('factores', 'Simplifica $a^6/a^3$ arrastrando los factores de abajo sobre sus copias de arriba.',
-    { top: 6, bottom: 3, factor: '$a$', start: 0, goal: 3,
-      read: k => tex('\\frac{a^{' + (6 - k) + '}}{a^{' + (3 - k) + '}}' + (k === 3 ? '=a^3' : '')) },
-    'Cada pareja cancelada reduce en uno los dos exponentes.', '$a^6/a^3=a^{6-3}=a^3$ para $a\\ne0$.', true));
-  tune('alg-22a', ['lado-del-cuadrado', 'reparte-factores'], [
-    rail('Mueve el lado del cuadrado hasta que su área sea 49.', [0, 10, 3, 7], x => tex(x + '^2=' + x * x), 'La raíz cuadrada principal mide una longitud y es no negativa.', { loads: x => [x * x, 49] }),
-    groups('Agrupa los radicandos según si tienen raíz cuadrada entera.', ['Entera', 'No entera'], ['16', '18', '25', '27', '36', '38'], [0, 1, 0, 1, 0, 1], 'Busca los números que aparecen al cuadrar un entero.', { explain: '$16=4^2$, $25=5^2$ y $36=6^2$.' }),
-    probe('Mueve la sonda de $x^3$ hasta la altura −27.', [-4, 4, -30, 30], 2, -3, x => x ** 3, 'Una potencia impar conserva el signo de la base.'),
-    dial('Ajusta el exponente de 64 que equivale a sacar la raíz cúbica y luego elevar al cuadrado.', ['$0$', '$1/3$', '$1/2$', '$2/3$', '$3/2$', '$2$'], 3,
-      (v, i) => tex('64^{' + ['0', '1/3', '1/2', '2/3', '3/2', '2'][i] + '}=' + n(64 ** [0, 1 / 3, 1 / 2, 2 / 3, 3 / 2, 2][i])), 'El índice de la raíz queda en el denominador y la potencia en el numerador.'),
-  ]);
-  tune('alg-22b', ['saca-del-radical', 'parte-baldosa', 'tabla-conjugado'], [
-    groups('Agrupa las longitudes radicales por su parte irracional simplificada.', ['$\\sqrt2$', '$\\sqrt3$'],
-      ['$\\sqrt8$', '$\\sqrt{12}$', '$\\sqrt{18}$', '$\\sqrt{27}$'], [0, 1, 0, 1], 'Separa primero un factor cuadrado perfecto de cada radicando.', { explain: '$2\\sqrt2,2\\sqrt3,3\\sqrt2,3\\sqrt3$.' }),
-    rect('Construye una baldosa de área 24 con base cuadrada perfecta 4.', [8, 8], [4, 6], 'Extraer la raíz de 4 solo deja el otro factor dentro del radical.',
-      { read: ([a, b]) => tex('\\sqrt{' + (a * b) + '}=\\sqrt{' + a + '}\\sqrt{' + b + '}'), explain: '$\\sqrt{24}=2\\sqrt6$.' }),
-    rail('Ajusta el multiplicador entero de $\\sqrt3$ para igualar $\\sqrt{75}$.', [1, 9, 2, 5], x => tex('(' + x + '\\sqrt3)^2=' + 3 * x * x), 'Busca el cuadrado perfecto que acompaña al 3 dentro de 75.', { loads: x => [3 * x * x, 75], explain: '$\\sqrt{75}=5\\sqrt3$.' }),
+  const l2 = leccion('euc-demostrar-2', 'Demostración directa e indirecta', guion(
+    ['Razones de la igualdad', 'Reflexiva: a = a. Simétrica: se lee al revés. Transitiva: se encadena. Aditiva: se suma lo mismo. Sustitución: se cambia por su igual.'],
+    ['Reglas de inferencia', 'Modus ponens: de «si p, entonces q» y p sale q. Modus tollens: si q falla, p también. Silogismo: las flechas se encadenan.'],
+    ['Lo que no vale', 'De «si p, entonces q» y q no se saca p: un rectángulo tiene cuatro ángulos rectos y no es cuadrado.'],
+    ['Directa', 'Se parte de la hipótesis y, paso a paso, cada uno con su razón, se llega a la tesis.'],
+    ['Indirecta', 'Se supone lo contrario de la tesis, se llega a una contradicción y por eso la tesis es cierta: reducción al absurdo.']), [
+    x('propiedad-igualdad', 'A, B, C y D están en una recta. ¿Qué **propiedad de la igualdad** justifica cada renglón?',
+      { fig: { t: 'recta', L: 13, pts: [['A', 0], ['B', 4], ['C', 9], ['D', 13]] }, et: ['BC = BC', 'Si AB = CD,|entonces CD = AB', 'Si AB = CD y CD = 4,|entonces AB = 4', 'Si AB = CD, entonces|AB + BC = CD + BC'], metas: ['reflexiva', 'simétrica', 'transitiva', 'aditiva'], fichas: ['reflexiva', 'simétrica', 'transitiva', 'aditiva', 'hipótesis', 'definición'],
+        mira: ['Una medida comparada consigo misma.', 'La misma igualdad, leída al revés.', 'Dos igualdades con un término en común se encadenan.', 'A los dos lados se les sumó el mismo trozo.'],
+        trampas: { '1:reflexiva': 'Reflexiva es una cosa igual a sí misma; aquí la igualdad se volteó.', '2:simétrica': 'No se volteó nada: se encadenaron dos igualdades.', '3:transitiva': 'No se encadenó nada: se sumó BC a los dos lados.' }, ok: 'Reflexiva, simétrica, transitiva y aditiva: las razones de las cuentas.' },
+      'Igual a sí mismo: reflexiva. Leída al revés: simétrica. Encadenada con otra: transitiva. Sumando lo mismo a los dos lados: aditiva.', 'Mira qué le pasó a la igualdad: ¿se volteó, se encadenó con otra o se le sumó algo?'),
+    x('afirmacion-de-paso', 'Dos rectas se cortan. Demuestra que $\\angle 1 \\cong \\angle 3$: las razones ya están; pon la **afirmación** de cada paso.',
+      { fig: { t: 'cruce', a: 55 }, et: ['1. ∠1 y ∠2: par lineal', '2. ∠3 y ∠2: par lineal', '3. transitiva (1 y 2)', '4. se resta ∠2'], metas: ['∠1 + ∠2 = 180°', '∠3 + ∠2 = 180°', '∠1 + ∠2 = ∠3 + ∠2', '∠1 = ∠3'], fichas: ['∠1 + ∠2 = 180°', '∠3 + ∠2 = 180°', '∠1 + ∠2 = ∠3 + ∠2', '∠1 = ∠3', '∠1 + ∠3 = 180°', '∠1 = ∠2'],
+        mira: ['Un par lineal suma 180°: escribe la suma de ∠1 y ∠2.', 'El otro par lineal: ∠3 con ∠2.', 'Las dos sumas valen 180°: iguálalas.', 'Al quitar ∠2 de los dos lados queda la tesis.'],
+        trampas: { '0:∠1 + ∠3 = 180°': '∠1 y ∠3 no son vecinos: no forman par lineal.', '1:∠1 + ∠3 = 180°': '∠1 y ∠3 no son vecinos: no forman par lineal.', '3:∠1 = ∠2': 'Eso solo pasa si las rectas son perpendiculares. La tesis habla de ∠1 y ∠3.', '2:∠1 = ∠3': 'Esa es la tesis: va al final, después de igualar las dos sumas.' }, ok: 'De la hipótesis a la tesis, cada paso con su razón: demostración directa.' },
+      'Los dos pares lineales suman $180^\\circ$; por transitiva las sumas son iguales, y al restar $\\angle 2$ queda $\\angle 1 = \\angle 3$.', 'Lee cada razón y escribe lo que esa razón permite afirmar, ni más ni menos.'),
+    x('conclusion-valida', 'Se sabe: «**si un cuadrilátero es un cuadrado, entonces tiene cuatro ángulos rectos**». Toca **todas** las conclusiones que salen **seguras**.',
+      { cartas: [{ f: 'cuadrado', t: 'Es cuadrado: luego|tiene 4 ángulos rectos', si: true }, { f: 'rect', t: 'Tiene 4 rectos:|luego es cuadrado', no: 'Que se cumpla la segunda parte no devuelve la primera: este rectángulo tiene 4 rectos y no es cuadrado.' }, { f: 'rombo', t: 'No tiene 4 rectos:|luego no es cuadrado', si: true }, { f: 'rectAlto', t: 'No es cuadrado: luego|no tiene 4 rectos', no: 'Negar la primera parte no niega la segunda: esta figura no es cuadrado y sí tiene 4 rectos.' }],
+        falta: 'Falta una: hay dos reglas seguras, el modus ponens y el modus tollens.', ok: 'Modus ponens: se da p y sale q. Modus tollens: falla q y cae p.', texto: 'la del cuadrado (modus ponens) y la del rombo (modus tollens)' },
+      'Si se cumple la primera parte, sale la segunda (ponens); si falla la segunda, falla la primera (tollens). Las otras dos son falacias.', 'Para cada tarjeta busca si podría existir una figura que la contradiga.'),
+    x('regla-usada', 'Los tres razonamientos son correctos. Ponle a cada uno su regla: modus **ponens**, modus **tollens** o **silogismo**.',
+      { et: ['Si es cuadrado, es rombo.|Es cuadrado; luego es rombo.', 'Si es cuadrado, es rombo.|No es rombo; no es cuadrado.', 'Si es cuadrado, es rombo.|Si es rombo, tiene 4 lados iguales.|Luego: cuadrado, 4 lados iguales.'], metas: ['ponens', 'tollens', 'silogismo'], fichas: ['ponens', 'tollens', 'silogismo', 'recíproco', 'simétrica'],
+        mira: ['Se afirma la primera parte y sale la segunda.', 'Se niega la segunda parte y cae la primera.', 'Dos condicionales se encadenan en uno solo.'],
+        trampas: { '0:tollens': 'Aquí nada se niega: se afirma la primera parte.', '1:ponens': 'Aquí se niega la segunda parte: es la regla que quita.', '2:recíproco': 'No se volteó ninguna frase: se encadenaron dos.' }, ok: 'Ponens afirma, tollens niega y el silogismo encadena.' },
+      'Afirmar la primera parte es modus ponens; negar la segunda, modus tollens; encadenar dos condicionales, silogismo.', 'Fíjate en el segundo renglón: ¿afirma algo, niega algo o es otro «si… entonces…»?'),
+    x('absurdo-pasos', 'Demuestra por **reducción al absurdo**: «si $\\angle 1$ y $\\angle 2$ forman par lineal y $\\angle 1$ es agudo, entonces $\\angle 2$ es obtuso».',
+      { fig: { t: 'par', a: 50 }, et: ['Supongo:', 'Entonces:', 'Pero:', 'Luego:'], metas: ['∠2 no es obtuso', '∠1 + ∠2 es menor que 180°', 'un par lineal suma 180°', '∠2 es obtuso'], fichas: ['∠2 no es obtuso', '∠1 + ∠2 es menor que 180°', 'un par lineal suma 180°', '∠2 es obtuso', '∠1 no es agudo', '∠1 + ∠2 es mayor que 180°'],
+        mira: ['Se empieza negando la tesis, no la hipótesis.', 'Un agudo más otro que no pasa de 90° no llegan a 180°.', 'La contradicción choca con algo que ya se sabía: el par lineal.', 'Lo supuesto era imposible: queda la tesis.'],
+        trampas: { '0:∠1 no es agudo': 'Eso niega la hipótesis. En el absurdo se niega la tesis.', '0:∠2 es obtuso': 'Esa es la tesis: en el absurdo se supone lo contrario.', '1:∠1 + ∠2 es mayor que 180°': 'Menos de 90° más 90° o menos: la suma queda por debajo de 180°.' }, ok: 'Negar la tesis, llegar a un absurdo y concluir la tesis.' },
+      'Si $\\angle 2$ no fuera obtuso, mediría $90^\\circ$ o menos; con $\\angle 1$ agudo no llegarían a $180^\\circ$, y un par lineal suma $180^\\circ$: absurdo.', 'El primer paso de una demostración indirecta siempre es el mismo: suponer que la tesis es falsa.'),
+    x('cadena-flechas', 'Demuestra que «si ABCD es un cuadrado, entonces sus ángulos suman $360^\\circ$»: ordena la cadena para que cada afirmación salga de la de arriba.',
+      { metas: ['ABCD es un cuadrado', 'ABCD es un rectángulo', 'tiene 4 ángulos rectos', 'sus ángulos suman 360°'], fichas: ['ABCD es un cuadrado', 'ABCD es un rectángulo', 'tiene 4 ángulos rectos', 'sus ángulos suman 360°', 'ABCD es un rombo'],
+        mira: ['Arriba va la hipótesis: ser cuadrado.', 'De ser cuadrado sale ser rectángulo, y no al revés.', 'Ser rectángulo es tener los cuatro ángulos rectos.', 'Cuatro rectos suman 360°: esa es la tesis, al final.'],
+        trampas: { '1:ABCD es un rombo': 'Un cuadrado sí es rombo, pero de «rombo» no sale «rectángulo»: la cadena se rompe.', '0:sus ángulos suman 360°': 'Eso es lo último que se deduce: la cadena está al revés.' }, ok: 'Cada flecha es un «si… entonces…»: encadenadas llevan de la hipótesis a la tesis.' },
+      'Cuadrado, luego rectángulo, luego cuatro rectos, luego $4 \\cdot 90^\\circ = 360^\\circ$: tres condicionales encadenados por silogismo.', 'Empieza por la hipótesis y pregúntate qué se puede afirmar enseguida a partir de ella.'),
+    x('vecinos-razon', '$\\angle 1$ y $\\angle 2$ forman par lineal, y la hipótesis dice que el de la derecha mide **5 veces** el dorado. Gira el rayo hasta que la figura cumpla las dos cosas.', { k: 5 },
+      'Par lineal: $x + 5x = 180^\\circ$, por sustitución. Entonces $x = 30^\\circ$ y el otro mide $150^\\circ$.', 'Escribe la suma del par lineal y cambia un ángulo por «5 veces el otro».'),
+    x('lanza-angulo', 'Deduce cada ángulo por pasos y lánzalo. Puedes fallar **una** vez.', { tiros: [
+      { q: '$\\angle 1$ y $\\angle 2$ forman par lineal; $\\angle 2$ y $\\angle 3$ son opuestos por el vértice. Si $\\angle 1 = 125^\\circ$, lanza $\\angle 3$', r: 55, c: '180^\\circ - 125^\\circ', e: { 125: 'El 3 es opuesto al 2, no al 1: primero halla el 2 con el par lineal.' } },
+      { q: '$\\angle A$ y $\\angle B$ son complementarios, y $\\angle B \\cong \\angle C$. Si $\\angle C = 25^\\circ$, lanza $\\angle A$', r: 65, c: '90^\\circ - 25^\\circ', e: { 155: 'Complementarios suman 90°, no 180°.', 25: 'Ese es el ángulo B, por sustitución. Falta su complemento.' } },
+      { q: 'OB es bisectriz del $\\angle AOC$, y el $\\angle AOC$ forma par lineal con un ángulo de $40^\\circ$. Lanza $\\angle AOB$', r: 70, c: '(180^\\circ - 40^\\circ) \\div 2', e: { 140: 'Ese es todo el ángulo AOC: la bisectriz lo parte en dos.', 20: 'La bisectriz parte al ángulo AOC, no al de 40°.' } }] },
+      '$180 - 125 = 55$ y su opuesto mide igual; $90 - 25 = 65$; $(180 - 40) \\div 2 = 70$.', 'Ve de a un paso: nombra la razón (par lineal, opuestos, definición) antes de hacer la cuenta.'),
+    sol('Completa la demostración directa: «si $\\angle 1$ y $\\angle 2$ son complementarios, y $\\angle 3$ y $\\angle 2$ también, entonces $\\angle 1 \\cong \\angle 3$».',
+      ['$\\angle 1 + \\angle 2 = 90^\\circ$, por definición de [[complementarios]]', '$\\angle 3 + \\angle 2 = 90^\\circ$, por la misma [[definición]]', '$\\angle 1 + \\angle 2 = \\angle 3 + \\angle 2$, por la propiedad [[transitiva]]', 'Se resta $\\angle 2$ a los dos lados y queda $\\angle 1 =$ [[∠3]]'], ['suplementarios', 'reflexiva', '∠2'],
+      'Las dos sumas valen $90^\\circ$, así que son iguales entre sí; al quitar $\\angle 2$ queda $\\angle 1 = \\angle 3$.', 'Dos cosas iguales a una tercera son iguales entre sí: ¿cómo se llama esa propiedad?'),
+    err('Regla: «si un punto es el punto medio de AB, entonces está entre A y B». Se sabe que P está entre A y B. ¿Dónde falla este razonamiento?',
+      ['Regla: si es el punto medio de AB, entonces está entre A y B', 'Dato: P está entre A y B', 'Conclusión: P es el punto medio de AB'], 2,
+      ['Conclusión: no se puede asegurar que P sea el punto medio', 'Conclusión: P no es el punto medio de AB', 'Conclusión: P no está entre A y B'],
+      'Que se cumpla la segunda parte no devuelve la primera: hay muchos puntos entre A y B que no son el punto medio.', 'El modus ponens necesita que se cumpla la primera parte de la regla, no la segunda.'),
+    opc('Para demostrar por reducción al absurdo que «si M es el punto medio de AB, entonces AM es menor que AB», el primer paso es suponer que:', ['AM es mayor o igual que AB', 'M no es el punto medio de AB', 'AM es menor que AB', 'M no está en la recta AB'], 0,
+      'En el absurdo se niega la tesis (AM menor que AB) y se conserva la hipótesis.', 'Se supone lo contrario de lo que va después del «entonces».'),
   ]);
 
-  // Sucesiones y Series
-  tune('alg-14', ['pisa-huellas', 'escalera-aritmetica', 'rellena-medios', 'cuenta-saltos'], [
-    point('Ubica el quinto término de la secuencia 4, 7, 10, … . El eje horizontal es el índice.', [0, 7, 0, 25], [1, 4], [5, 16], [line(3, 1)], 'Desde la primera posición hasta la quinta hay cuatro saltos.'),
-    rail('Ajusta la diferencia para que una progresión que empieza en 24 tenga cuarto término 9.', [-8, 6, 1, -5], d => tex('a_4=24+3(' + d + ')=' + (24 + 3 * d)), 'Hay tres saltos y el total disminuye 15 unidades.', { bars: d => [['Primer término', 24], ['Cuarto término', 24 + 3 * d]], scale: 42 }),
-  ]);
-  tune('alg-14b', ['dos-escaleras', 'parejas-gauss', 'suma-filas'], [
-    rect('Construye el rectángulo formado por dos escaleras de cinco peldaños, con extremos 4 y 12.', [7, 18], [5, 16], 'Los extremos de las escaleras se emparejan para producir la altura de cada columna.', { explain: 'El rectángulo tiene cinco columnas de altura 16. Cada escalera tiene área 40.' }),
-    rail('Ajusta el número de términos de 3, 6, 9, … cuya suma sea 63.', [1, 10, 3, 6], x => tex('S_{' + x + '}=' + (3 * x * (x + 1) / 2)), 'La suma es la media del primer y último término por el número de términos.', { bars: x => [['Suma', 3 * x * (x + 1) / 2]], scale: 165 }),
-    tiles('Pinta las parejas que permiten sumar 5, 8, 11, 14, 17 por los extremos.', 3, ['$5+17$', '$5+14$', '$8+14$', '$8+17$', '$11+11$', '$11+14$'], [0, 2, 4],
-      'Cada término emparejado con su reflejo en la lista suma lo mismo. El central se empareja consigo al duplicar la lista.', { explain: 'Las parejas valen 22. Para calcular una sola suma, divides en dos la suma de la lista duplicada.' }),
-  ]);
-  tune('alg-14c', ['rebota-pelota', 'torre-producto', 'rellena-medios'], [
-    probe('Una pelota parte de 64 cm y conserva la mitad de la altura en cada rebote. Busca cuándo queda en 8 cm.', [0, 6, 0, 64], 1, 3, x => 64 * .5 ** x,
-      'Cada rebote multiplica la altura anterior por la misma razón.'),
-    dial('Gira a la razón que transforma 5 en 20 después de dos pasos.', ['$1/2$', '$1$', '$2$', '$3$', '$4$', '$5$'], 2,
-      (_, i) => tex('a_3=' + n(5 * [.5, 1, 2, 3, 4, 5][i] ** 2)), 'La misma razón debe aplicarse dos veces para que el resultado se cuadruplique.'),
-    point('Ubica el cuarto término de 3, 6, 12, … en el plano índice–valor.', [0, 6, 0, 32], [1, 3], [4, 24], [x => 3 * 2 ** (x - 1)], 'Al pasar del índice 1 al 4 aplicas tres veces la razón.', { dy: 1 }),
-  ]);
-  tune('alg-14d', ['resta-corrida', 'limite-serie'], [
-    tiles('En un mosaico de 16 celdas pinta lo que cubren las tres primeras capas: mitad, cuarto y octavo.', 4, grid(16, () => ''), grid(14, i => i), 'Parte de la mitad. Cada nueva contribución ocupa la mitad de la anterior.', { valid: v => v.length === 14, read: v => tex('\\frac{' + v.length + '}{16}'), explain: '$\\frac12+\\frac14+\\frac18=\\frac{14}{16}$.' }),
-    rail('Ajusta cuántos términos de $12+6+3+\\cdots$ suman 21.', [1, 8, 1, 3], x => tex('S_{' + x + '}=' + n(24 * (1 - .5 ** x))), 'Al agregar un término, se suma la mitad del último que ya tienes.', { bars: x => [['Suma acumulada', 24 * (1 - .5 ** x)], ['Distancia a 24', 24 * .5 ** x]], scale: 24 }),
-    point('Ubica el punto que muestra cuánto falta para 2 después de sumar $1+\\tfrac12+\\tfrac14$. El eje horizontal cuenta términos.', [0, 6, 0, 2], [1, 1], [3, .25], [x => 2 * .5 ** x], 'Resta la suma parcial al límite. La distancia restante va disminuyendo.', { dy: .125 }),
-    dial('Ajusta la razón de una serie geométrica cuyo primer término es 8 y cuya suma infinita es 16.', ['$0$', '$1/4$', '$1/3$', '$1/2$', '$3/4$', '$7/8$'], 3,
-      (_, i) => tex('S_\\infty=' + n(8 / (1 - [0, .25, 1 / 3, .5, .75, .875][i]))), 'Si la suma es el doble del primer término, compara cuánto queda al quitar la primera contribución.'),
-  ]);
-  tune('alg-15', ['arma-sigma', 'parte-sigma', 'suma-filas', 'torre-producto'], [
-    groups('Lleva a la región de suma los términos que intervienen en $\\sum_{k=2}^{4}(2k+1)$.', ['Suma', 'Fuera'], ['3', '5', '7', '9', '11'], [1, 0, 0, 0, 1],
-      'Los índices de 2 a 4 se incluyen en ambos extremos.', { explain: 'Los términos son 5, 7 y 9. El total es 21.' }),
-    rail('Ajusta el último índice para que $\\prod_{k=2}^{m}k=120$.', [2, 7, 3, 5],
-      m => tex('\\prod_{k=2}^{' + m + '}k=' + grid(m - 1, i => i + 2).reduce((a, b) => a * b, 1)), 'Cada nuevo índice aporta un factor y el producto anterior se conserva como factor parcial.'),
-  ]);
-
-  // Álgebra de Polinomios
-  tune('alg-23a', [], [
-    groups('Agrupa los términos por su grado para ver cuáles se pueden sumar.', ['$x^2$', '$x$', 'Constante'],
-      ['$-5x$', '$7$', '$-x^2$', '$4x^2$', '$3x$', '$-2$'], [1, 2, 0, 0, 1, 2], 'El coeficiente puede variar. Los términos semejantes conservan la misma potencia de x.'),
-    tiles('En la expresión $7x^5-5x^5-2x^5+4x^2+x-3$, pinta los términos de grado 5 que se cancelan.', 3,
-      ['$7x^5$', '$-5x^5$', '$-2x^5$', '$4x^2$', '$x$', '$-3$'], [0, 1, 2], 'Suma los coeficientes de la potencia mayor antes de leer el grado.', { explain: 'Los términos de grado 5 suman cero. El polinomio resultante tiene grado 2.' }),
-    probe('Evalúa $2x^2-x+3$ en $x=-2$ con la sonda.', [-4, 4, 0, 32], 1, -2, x => 2 * x ** 2 - x + 3, 'Sustituye el número negativo entre paréntesis antes de elevarlo.'),
-    rail('Ajusta $k$ para que $kx^3-6x^3+2x^2$ tenga grado 2.', [0, 10, 2, 6], x => tex('(' + (x - 6) + ')x^3+2x^2'),
-      'El grado baja cuando el coeficiente del término cúbico se vuelve cero.'),
-    rect('Construye la malla de cruces al multiplicar un polinomio de tres términos por uno de cuatro.', [6, 6], [4, 3],
-      'Cada término de un polinomio se multiplica por cada término del otro.', { valid: ([a, b]) => a * b === 12 && Math.min(a, b) === 3, explain: 'Se calculan 12 productos antes de reunir términos semejantes.' }),
-    point('Marca el intercepto vertical de $x^2+2x-3$.', [-5, 5, -6, 10], [1, 0], [0, -3], [x => x * x + 2 * x - 3],
-      'En el eje vertical, la entrada es cero y solo queda el término constante.'),
-  ]);
-  tune('alg-3', ['bloques-area'], [
-    rect('Arma el cuadrado que representa $(3+4)^2$.', [9, 9], [7, 7], 'El lado tiene las dos partes juntas. El cuadrado incluye también los dos rectángulos mixtos.',
-      { explain: '$7^2=3^2+2\\cdot3\\cdot4+4^2=49$.' }),
-    rail('Equilibra $(x+3)^2$ con $x^2+6x+9$ y llévalos juntos a 64.', [0, 8, 1, 5],
-      x => tex('(' + x + '+3)^2=' + (x + 3) ** 2), 'La expansión da el mismo valor para todo x. Busca primero qué lado positivo tiene área 64.',
-      { loads: x => [(x + 3) ** 2, 64], explain: 'El lado mide 8. Por eso $x=5$ y ambas escrituras valen 64.' }),
-    tiles('Pinta las piezas que quedan al repartir $(x+3)(x-3)$.', 2, ['$x^2$', '$3x$', '$-3x$', '$-9$'], [0, 3],
-      'Los dos productos mixtos tienen el mismo tamaño y signos opuestos.', { explain: 'Se cancelan $3x$ y $-3x$. Queda $x^2-9$.' }),
-    probe('Usa la sonda de $(x-4)^2$ para encontrar dónde vale cero.', [-1, 8, 0, 30], 1, 4, par(1, 4, 0),
-      'Un cuadrado es cero cuando la cantidad que se eleva es cero.'),
-    groups('Separa por tipo las piezas del área de $(x+2)(x+5)$.', ['$x^2$', 'Término lineal', 'Constante'],
-      ['$x^2$', '$2x$', '$5x$', '$10$'], [0, 1, 1, 2], 'Las bandas mixtas llevan una sola x y se pueden juntar.', { explain: 'El área total es $x^2+7x+10$.' }),
-  ]);
-  tune('alg-24c', [], [
-    rail('Ajusta el coeficiente central en $(a+b)^4$.', [0, 10, 2, 6], v => tex(v + 'a^2b^2'),
-      'Cuenta cuántas formas hay de escoger dos de los cuatro factores para tomar b.', { bars: v => [['Término central', v]] }),
-    tiles('Para obtener $a^2b^3$ en $(a+b)^5$, pinta tres factores de los que tomas $b$.', 5,
-      ['1', '2', '3', '4', '5'], [0, 2, 4], 'Cada casilla pintada representa un factor del que tomas b.', { valid: v => v.length === 3,
-        read: v => tex('a^{' + (5 - v.length) + '}b^{' + v.length + '}'), explain: 'Hay $\\binom53=10$ maneras de pintar tres de las cinco posiciones.' }),
-    groups('Agrupa los términos de $(a-b)^4$ según el signo de su coeficiente.', ['Positivos', 'Negativos'],
-      ['$a^4$', '$a^3b$', '$a^2b^2$', '$ab^3$', '$b^4$'], [0, 1, 0, 1, 0], 'Cada b viene de elegir un factor −b. Cuenta cuántos signos negativos se multiplican.'),
-    rect('En $(a+b)^3$ dibuja tres columnas con dos opciones por columna.', [6, 6], [3, 2],
-      'Cada columna representa un factor, y sus dos celdas son las opciones a y b.', { read: ([x, y]) => tex(y + '^{' + x + '}=' + y ** x), explain: 'Hay 8 productos antes de reunirlos en los términos de la expansión.' }),
-    dial('Gira hasta el exponente de b del término con coeficiente 5 que tiene menor exponente de a en $(a+b)^5$.', [0, 1, 2, 3, 4, 5], 4,
-      (k, i) => tex([1, 5, 10, 10, 5, 1][i] + 'a^{' + (5 - k) + '}b^{' + k + '}'), 'Hay dos coeficientes 5. Compara en cuál el exponente de a queda más pequeño.'),
-    route('Sigue la potencia de a al avanzar dos términos desde el primer término de $(a+b)^5$.', ['5', '4', '6', '3', '2', 'fin'], [1, 3],
-      'En cada paso, cambias una elección de a por una de b.'),
-  ]);
-  tune('alg-24b', ['bloques-area', 'completa-cuadrado'], [
-    rect('Encuentra dos factores positivos de 24 que sumen 11.', [12, 10], [8, 3],
-      'El área representa el producto y la suma de los dos lados representa el término lineal.', { valid: ([a, b]) => a * b === 24 && a + b === 11,
-        read: ([a, b]) => tex('u+v=' + (a + b) + '\\quad uv=' + a * b), explain: '$x^2+11x+24=(x+3)(x+8)$.' }),
-    rail('Ajusta el factor común de $18x^3+12x^2$ para que el factor restante tenga coeficientes 3 y 2.', [1, 18, 3, 6],
-      v => tex(v + 'x^2\\left(\\frac{18}{' + v + '}x+\\frac{12}{' + v + '}\\right)'), 'El número debe dividir ambos coeficientes. Usa además la menor potencia común de x.'),
-    probe('Encuentra el cero negativo de $x^2-25$ sobre la curva.', [-7, 7, -27, 26], 1, -5, x => x * x - 25,
-      'Factoriza como diferencia de cuadrados. Busca el cruce que está a la izquierda del origen.'),
-    groups('Separa los factores de $x^2+x-20$ de las otras expresiones.', ['Factores', 'Fuera'], ['$x+5$', '$x-4$', '$x+4$', '$x-5$'], [0, 0, 1, 1],
-      'Los dos números deben sumar 1 y multiplicar −20.', { explain: '$x^2+x-20=(x+5)(x-4)$.' }),
+  const l3 = leccion('euc-demostrar-3', 'Condicionales y contraejemplos', guion(
+    ['Suficiente', 'En «si p, entonces q», p es condición suficiente para q: con p basta.'],
+    ['Necesaria', 'Y q es condición necesaria para p: sin q, p no puede darse. Necesaria no quiere decir suficiente.'],
+    ['Recíproco y contrario', 'El recíproco voltea la frase; el contrario niega sus dos partes. Ninguno de los dos queda garantizado por la frase original.'],
+    ['Contrarrecíproco', 'Voltear y negar a la vez da el contrarrecíproco, que siempre vale lo mismo que la frase original.'],
+    ['Contraejemplo', 'Para refutar «si p, entonces q» basta un caso que cumpla p y no cumpla q.']), [
+    x('suficiente-necesaria', 'En cada renglón, ¿la primera condición es **suficiente**, **necesaria** o **las dos** cosas para la segunda?',
+      { et: ['Ser el punto medio de AB,|para estar entre A y B', 'Tener 4 lados iguales,|para ser un cuadrado', 'Medir 90°,|para ser un ángulo recto', 'Ser opuestos por el vértice,|para ser congruentes'], metas: ['suficiente', 'necesaria', 'las dos', 'suficiente'], fichas: ['suficiente', 'suficiente', 'necesaria', 'las dos', 'necesaria', 'ninguna'],
+        mira: ['Todo punto medio está entre A y B, pero hay otros puntos entre A y B.', 'Sin 4 lados iguales no hay cuadrado; con ellos puede ser solo un rombo.', 'Es la definición: vale en los dos sentidos.', 'Ser opuestos por el vértice garantiza ser congruentes; hay congruentes que no son opuestos.'],
+        trampas: { '1:suficiente': 'No basta: un rombo tiene 4 lados iguales y no es cuadrado.', '0:necesaria': 'No hace falta ser el punto medio para estar entre A y B.', '3:las dos': 'Dos ángulos de 30° en figuras distintas son congruentes y no son opuestos por el vértice.' }, ok: 'Suficiente: con eso basta. Necesaria: sin eso no se puede.' },
+      'Punto medio y opuestos por el vértice bastan (suficientes); los 4 lados iguales hacen falta pero no bastan (necesaria); medir $90^\\circ$ es la definición de recto (las dos).', 'Hazte dos preguntas: ¿con eso basta? ¿Sin eso se puede?'),
+    x('voltea-niega', 'Arma el **contrarrecíproco** de «si dos ángulos forman par lineal, entonces son suplementarios».',
+      { frase: '«si forman par lineal, son suplementarios»', metas: ['no son suplementarios', 'no forman par lineal'], fichas: ['no son suplementarios', 'no forman par lineal', 'son suplementarios', 'forman par lineal'], mira: ['El contrarrecíproco empieza negando la segunda parte.', 'Y termina negando la primera parte.'],
+        trampas: { '0:no forman par lineal': 'Ese es el contrario: negaste, pero falta voltear.', '0:son suplementarios': 'Ese es el recíproco: volteaste, pero falta negar.', '1:forman par lineal': 'Falta negar la primera parte.' }, ok: 'Voltear y negar: dice lo mismo que la frase original.' },
+      'Se voltea y se niega: «si no son suplementarios, entonces no forman par lineal». Vale lo mismo que la frase original.', 'Haz dos cosas a la vez: cambia de lugar las dos partes y ponles «no».'),
+    x('mismo-condicional', '«**Si dos ángulos son opuestos por el vértice, entonces son congruentes**». Toca **todas** las frases que dicen **lo mismo**.',
+      { casos: [{ t: 'si no son congruentes, no son opuestos', si: true }, { t: 'si son congruentes, son opuestos', no: 'Ese es el recíproco, y es falso: hay ángulos congruentes en figuras distintas.' }, { t: 'ser opuestos basta para ser congruentes', si: true }, { t: 'si no son opuestos, no son congruentes', no: 'Ese es el contrario: equivale al recíproco, no a la frase original.' }, { t: 'sin ser congruentes no pueden ser opuestos', si: true }],
+        falta: 'Falta otra: el contrarrecíproco y las formas de decir «basta» o «hace falta» dicen lo mismo.', ok: 'El contrarrecíproco equivale; el recíproco y el contrario, no.' },
+      'Dicen lo mismo el contrarrecíproco, «basta ser opuestos» (suficiente) y «sin ser congruentes no se puede» (necesaria). El recíproco y el contrario dicen otra cosa.', 'Para cada frase busca un par de ángulos que la cumpla o la rompa sin romper la original.'),
+    x('caza-contraejemplo', '«**Si un cuadrilátero tiene cuatro ángulos rectos, entonces es un cuadrado**». Toca **todas** las figuras que son **contraejemplo**.',
+      { cartas: [{ f: 'cuadrado', n: 'cuadrado', no: 'El cuadrado cumple la hipótesis y también la conclusión: confirma la frase, no la tumba.' }, { f: 'rect', n: 'rectángulo ancho', si: true }, { f: 'rombo', n: 'rombo', no: 'El rombo no tiene ángulos rectos: no cumple la hipótesis, la frase no habla de él.' }, { f: 'trapRect', n: 'trapecio con dos ángulos rectos', no: 'Solo tiene dos ángulos rectos: no cumple la hipótesis.' }, { f: 'rectAlto', n: 'rectángulo alto', si: true }, { f: 'romboide', n: 'paralelogramo inclinado', no: 'No tiene ángulos rectos: no cumple la hipótesis.' }],
+        falta: 'Falta otro: todo rectángulo que no sea cuadrado sirve.', ok: 'Cuatro ángulos rectos y lados distintos: cumplen la hipótesis y fallan la conclusión.', texto: 'los dos rectángulos que no son cuadrados' },
+      'Un contraejemplo cumple la hipótesis (cuatro ángulos rectos) y falla la conclusión (no es cuadrado): los dos rectángulos alargados.', 'Descarta primero las figuras que no cumplen lo que va después del «si».'),
+    x('rombo-no-cuadrado', 'Refuta: «**si un cuadrilátero tiene sus cuatro lados iguales, entonces es un cuadrado**». El lado AB mide 5. Mueve D hasta fabricar un **contraejemplo**.', { L: 5 },
+      'Con $AD = 5$ los cuatro lados son iguales (hipótesis cumplida); con el ángulo distinto de $90^\\circ$ no es cuadrado (conclusión fallida): es un rombo.', 'Un contraejemplo cumple todo lo que va después del «si» y falla lo que va después del «entonces».'),
+    x('equidista-fuera', 'Refuta: «**si $AM = MB$, entonces M es el punto medio del segmento AB**». Mueve M hasta fabricar un **contraejemplo**.', { d: 3 },
+      'Un punto justo encima del centro de AB está a la misma distancia de A y de B, pero no está en el segmento: no es su punto medio.', 'Busca un punto que quede igual de lejos de A y de B sin estar sobre el segmento.'),
+    x('abanico-refuta', 'Lanza el ángulo que sirve de **contraejemplo** de cada frase. Puedes fallar **una** vez.', { tiros: [
+      { q: '«Si un ángulo es agudo, entonces **no** es congruente con su complemento»', base: 90, r: 45, c: '45^\\circ = 90^\\circ - 45^\\circ', e: { 30: 'El complemento de 30° mide 60°: son distintos, así que 30° cumple la frase.', 60: 'El complemento de 60° mide 30°: son distintos, así que 60° cumple la frase.' } },
+      { q: '«Si un ángulo mide el doble de su complemento, entonces es obtuso»', base: 90, r: 60, c: '60^\\circ = 2 \\cdot 30^\\circ \\text{ y no es obtuso}', e: { 30: 'Al revés: 30° es la mitad de su complemento, no el doble.', 45: 'Uno de 45° es igual a su complemento: no cumple la hipótesis.' } },
+      { q: '«Si un ángulo mide el triple de su suplemento, entonces es recto»', base: 180, r: 135, c: '135^\\circ = 3 \\cdot 45^\\circ \\text{ y no es recto}', e: { 45: 'Al revés: 45° es la tercera parte de su suplemento.', 90: 'Un recto es igual a su suplemento, no su triple: no cumple la hipótesis.' } }] },
+      '$45^\\circ$ es agudo e igual a su complemento; $60^\\circ = 2 \\cdot 30^\\circ$ y no es obtuso; $135^\\circ = 3 \\cdot 45^\\circ$ y no es recto.', 'Busca primero el ángulo que cumple la hipótesis; después mira si la conclusión le falla.'),
+    sol('Frase: «si un triángulo es equilátero, entonces es isósceles». Completa con el nombre de cada pariente y con la figura que refuta al recíproco.',
+      ['«Si es isósceles, entonces es equilátero» es el [[recíproco]]', '«Si no es isósceles, entonces no es equilátero» es el [[contrarrecíproco]]', '«Si no es equilátero, entonces no es isósceles» es el [[contrario]]', 'El recíproco se refuta con un triángulo isósceles que no sea [[equilátero]]'], ['negación', 'escaleno', 'corolario'],
+      'Voltear da el recíproco; negar, el contrario; voltear y negar, el contrarrecíproco, que es el único equivalente a la frase.', 'Mira qué cambió: ¿el orden de las dos partes, los «no», o las dos cosas?'),
+    err('Se quiere refutar: «si un cuadrilátero tiene cuatro lados iguales, entonces tiene cuatro ángulos rectos». Un paso está mal.',
+      ['Un contraejemplo debe cumplir la hipótesis: cuatro lados iguales', 'Y debe fallar la conclusión: no tener cuatro ángulos rectos', 'Sirve un rectángulo de 3 por 5', 'Con un solo contraejemplo la frase queda refutada'], 2,
+      ['Sirve un rombo con ángulos de $60^\\circ$ y $120^\\circ$', 'Sirve un cuadrado de lado 4', 'Sirve un triángulo equilátero'],
+      'El rectángulo de 3 por 5 no cumple la hipótesis. El rombo sí: cuatro lados iguales y ningún ángulo recto.', 'Revisa si la figura propuesta cumple primero lo que va después del «si».'),
+    opc('Que un cuadrilátero tenga sus cuatro ángulos rectos es, para que sea un cuadrado, una condición:', ['suficiente pero no necesaria', 'necesaria y suficiente', 'ni necesaria ni suficiente', 'necesaria pero no suficiente'], 3,
+      'Sin cuatro ángulos rectos no hay cuadrado (necesaria), pero un rectángulo los tiene y no es cuadrado (no suficiente).', 'Pregunta dos cosas: ¿sin eso se puede? ¿Con eso basta?'),
   ]);
 
-  // Parábolas y Complejos
-  tune('alg-23c', [], [
-    point('Arrastra el punto hasta representar $-3+2i$.', [-5, 5, -5, 5], [1, 1], [-3, 2], [],
-      'El eje horizontal mide la parte real y el vertical la parte imaginaria.'),
-    dial('Gira el brazo desde $i^0$ hasta la quinta multiplicación por $i$.', [0, 1, 2, 3, 4, 5, 6, 7], 5,
-      k => tex('i^{' + k + '}=' + ['1', 'i', '-1', '-i'][k % 4]), 'Cada paso multiplica por i. Cuatro pasos completan una vuelta.'),
-    rail('Ajusta la parte imaginaria de $3+bi$ hasta que el módulo sea 5. Usa un b positivo.', [0, 7, 2, 4],
-      b => tex('|3+' + b + 'i|=\\sqrt{' + (9 + b * b) + '}'), 'Las partes real e imaginaria son catetos de un triángulo rectángulo.',
-      { bars: b => [['Cuadrado de la parte real', 9], ['Cuadrado de la parte imaginaria', b * b]], scale: 49 }),
-    groups('Mueve cada complejo a su lado del eje real.', ['Arriba', 'Abajo', 'En el eje'], ['$5-2i$', '$-i$', '$2i$', '$-3$', '$2+i$'],
-      [1, 1, 0, 2, 0], 'Solo el coeficiente de i decide la altura.'),
-    tiles('Pinta las operaciones que dejan un número real.', 2, ['$i^2$', '$i^3$', '$(2+i)(2-i)$', '$2+i$'], [0, 2],
-      'Busca productos de conjugados y potencias pares de i.', { explain: '$i^2=-1$ y $(2+i)(2-i)=5$ son reales.' }),
-    route('Parte de $1+i$ y multiplica por i dos veces.', ['$1+i$', '$-1+i$', '$1-i$', '$-1-i$', '$1+i$', 'fin'], [1, 3],
-      'Multiplicar por i gira el vector 90° en sentido antihorario.'),
+  return mundo('euc-demostrar', [l1, l2, l3], [
+    ['euc-demostrar-1', 'En la figura se marca lo que da la hipótesis, nunca la tesis.', x('marca-dato', 'Hipótesis: $\\angle 1 \\cong \\angle 3$. Tesis: $\\angle AOC \\cong \\angle BOD$. Toca **solo** lo que la hipótesis da como congruente.',
+      { t: 'ang', n: 'ABCD', g: [0, 40, 100, 140], si: [0, 2], no: { 1: 'El ángulo 2 no aparece en la hipótesis.', 3: TESIS, 4: TESIS }, falta: 'Falta uno: la hipótesis nombra dos ángulos.', ok: 'Se marca lo que se da: los ángulos 1 y 3.', texto: '∠1 y ∠3' },
+      'La hipótesis solo nombra a los ángulos 1 y 3; lo de AOC y BOD es la tesis.', 'Lee la hipótesis: ¿cuáles dos ángulos nombra?')],
+    ['euc-demostrar-1', 'Cada afirmación lleva su razón: dato, definición, postulado o teorema.', x('razon-de-paso', 'Demostración de «si $\\angle 1$ es complemento de $\\angle 2$ y $\\angle 2 \\cong \\angle 3$, entonces $\\angle 1$ es complemento de $\\angle 3$». Pon la **razón** de cada afirmación.',
+      { et: ['1. ∠1 complemento de ∠2', '2. ∠1 + ∠2 = 90°', '3. ∠2 = ∠3', '4. ∠1 + ∠3 = 90°'], metas: ['hipótesis', 'definición', 'hipótesis', 'sustitución'], fichas: ['hipótesis', 'hipótesis', 'definición', 'sustitución', 'tesis', 'postulado'],
+        mira: ['Es uno de los datos del enunciado.', 'Es lo que significa «complemento».', 'Es el otro dato del enunciado.', 'En el paso 2 se cambió ∠2 por su igual, ∠3.'], trampas: { '3:tesis': '«Tesis» no es una razón: di qué propiedad permite escribir ese renglón.' }, ok: 'Dos datos, una definición y una sustitución.' },
+      'Los pasos 1 y 3 son datos; el 2 es la definición de complemento; en el 4 se sustituye ∠2 por ∠3.', 'Mira si el renglón está en el enunciado o si sale de un renglón anterior.')],
+    ['euc-demostrar-1', 'Postulado: se acepta. Teorema: se demuestra. Definición: explica una palabra.', opc('Una afirmación que se acepta sin demostración y sirve de punto de partida para demostrar otras se llama:', ['teorema', 'postulado', 'corolario', 'definición'], 1,
+      'El postulado se acepta sin demostrar; el teorema y el corolario se demuestran.', 'Piensa cuál de los cuatro no necesita demostración y afirma un hecho.')],
+    ['euc-demostrar-2', 'Reducción al absurdo: negar la tesis y llegar a una contradicción.', x('absurdo-pasos', 'Demuestra por **reducción al absurdo**: «dos rectas distintas se cortan, a lo más, en un punto».',
+      { et: ['Supongo:', 'Entonces:', 'Pero:', 'Luego:'], metas: ['se cortan en dos puntos', 'por P y Q pasan dos rectas', 'por dos puntos pasa una sola', 'se cortan a lo más en uno'], fichas: ['se cortan en dos puntos', 'por P y Q pasan dos rectas', 'por dos puntos pasa una sola', 'se cortan a lo más en uno', 'no se cortan', 'son paralelas'],
+        mira: ['Se empieza negando la tesis: más de un punto de corte.', 'Con dos puntos de corte, P y Q, las dos rectas pasan por ambos.', 'La contradicción choca con un postulado.', 'Lo supuesto era imposible: queda la tesis.'], trampas: { '0:no se cortan': 'Eso no niega la tesis: «a lo más uno» incluye no cortarse.' }, ok: 'Negar la tesis, chocar con un postulado y concluir.' },
+      'Si se cortaran en P y Q, por esos dos puntos pasarían dos rectas distintas: contradice el postulado.', 'Lo contrario de «a lo más un punto» es «dos puntos o más».')],
+    ['euc-demostrar-2', 'Directa: de la hipótesis a la tesis, cada paso sale del anterior.', x('cadena-flechas', 'Demuestra que «si M es el punto medio de AB y AB mide 18, entonces AM mide 9»: ordena la cadena para que cada afirmación salga de la de arriba.',
+      { fig: { t: 'recta', L: 18, pts: [['A', 0], ['M', 9], ['B', 18]] }, metas: ['M es el punto medio de AB', 'AM = MB', 'AM + AM = 18', 'AM = 9'], fichas: ['M es el punto medio de AB', 'AM = MB', 'AM + AM = 18', 'AM = 9', 'AM = 18'],
+        mira: ['Arriba va la hipótesis.', 'De la definición de punto medio salen dos trozos iguales.', 'Los dos trozos arman el segmento de 18.', 'La tesis va al final.'], trampas: { '3:AM = 18': 'Todo AB mide 18; AM es la mitad.' }, ok: 'Hipótesis, definición, suma y tesis.' },
+      'Punto medio, luego AM = MB, luego dos veces AM es 18, luego AM = 9.', 'Empieza por lo que el enunciado da y termina en lo que pide.')],
+    ['euc-demostrar-2', 'Modus tollens: si falla la segunda parte, falla la primera.', opc('Se sabe que «si un triángulo es equilátero, entonces es isósceles» y que el triángulo T no es isósceles. Se concluye con seguridad que T:', ['es equilátero', 'tiene dos lados iguales', 'puede ser equilátero o no', 'no es equilátero'], 3,
+      'Modus tollens: falla la segunda parte, así que falla la primera.', 'Si fuera equilátero, tendría que ser isósceles.')],
+    ['euc-demostrar-3', 'Contraejemplo: cumple la hipótesis y falla la conclusión.', x('equidista-fuera', 'Refuta: «**si un punto M está a la misma distancia de A y de B, entonces M está en el segmento AB**». Mueve M hasta fabricar un **contraejemplo**.', { d: 2 },
+      'Un punto encima del centro de AB está igual de lejos de A y de B, y no está en el segmento.', 'Busca un punto igual de lejos de los dos extremos, pero fuera del segmento.')],
+    ['euc-demostrar-3', 'Un caso que no cumple la hipótesis no refuta nada.', x('caza-contraejemplo', '«**Si un triángulo tiene dos lados iguales, entonces tiene un ángulo recto**». Toca **todas** las figuras que son **contraejemplo**.',
+      { cartas: [{ f: 'isoRect', n: 'isósceles con ángulo recto', no: 'Tiene dos lados iguales y un ángulo recto: cumple la frase, no la tumba.' }, { f: 'isosceles', n: 'isósceles alto', si: true }, { f: 'triRect', n: 'rectángulo de lados distintos', no: 'No tiene dos lados iguales: no cumple la hipótesis.' }, { f: 'isoAncho', n: 'isósceles ancho', si: true }, { f: 'escaleno', n: 'escaleno', no: 'No tiene dos lados iguales: la frase no habla de él.' }],
+        falta: 'Falta otro triángulo con dos lados iguales y sin ángulo recto.', ok: 'Dos lados iguales y ningún ángulo recto.', texto: 'los dos isósceles sin ángulo recto' },
+      'Sirven los que tienen dos lados iguales (hipótesis) y ningún ángulo recto (falla la conclusión).', 'Descarta primero los que no tienen dos lados iguales.')],
+    ['euc-demostrar-3', 'El contrarrecíproco voltea y niega, y vale lo mismo que la frase.', opc('El contrarrecíproco de «si un punto es el punto medio de AB, entonces está entre A y B» es:', ['si un punto no está entre A y B, entonces no es el punto medio de AB', 'si un punto está entre A y B, entonces es el punto medio de AB', 'si un punto no es el punto medio de AB, entonces no está entre A y B', 'si un punto no está entre A y B, entonces es el punto medio de AB'], 0,
+      'Se voltean las dos partes y se niegan las dos.', 'Cambia de lugar las dos partes y ponles «no» a ambas.')],
   ]);
-  tune('alg-1', ['balanza-exponencial'], [
-    rail('Quita la misma cantidad a ambos lados de $3x+7=19$ hasta aislar $3x$.', [0, 14, 0, 7],
-      v => tex('3x+' + (7 - v) + '=' + (19 - v)), 'El 7 debe quedar en cero y los dos miembros deben recibir el mismo cambio.', { explain: 'Quitar 7 deja $3x=12$ y luego $x=4$.' }),
-    rect('Construye tres filas de fichas iguales para representar $3x=21$.', [10, 7], [7, 3],
-      'El total se reparte en tres filas iguales. La fila representa una copia de x.', { explain: '$x=7$.' }),
-    point('Coloca el punto donde $y=2x-1$ y $y=7$ tienen el mismo valor.', [-4, 8, -5, 12], [1, 1], [4, 7], [line(2, -1), line(0, 7)],
-      'El punto de intersección debe tener la misma altura en las dos rectas.'),
-    tiles('Pinta las ecuaciones cuyo único valor solución sea 3.', 2, ['$2x=6$', '$x+2=6$', '$5x-7=8$', '$3x=12$'], [0, 2],
-      'Sustituye x por 3 y compara los miembros de cada igualdad.', { explain: 'Tres cumple $2x=6$ y $5x-7=8$.' }),
-    route('Traza las cantidades correctas al resolver $4x-5=23$: primero elimina el −5 y luego despeja.', ['23', '$4x=28$', '$4x=18$', '$x=7$', '$x=4$', 'fin'],
-      [1, 3], 'Suma 5 a ambos lados. Después divide ambos lados entre 4.'),
-  ]);
-  tune('alg-4a', ['completa-cuadrado', 'mueve-parabola'], [
-    point('Marca el vértice de $y=2(x+1)^2-3$.', [-5, 5, -6, 12], [1, 2], [-1, -3], [par(2, -1, -3)],
-      'El vértice aparece donde se anula la parte al cuadrado.'),
-    probe('Busca en $f(x)=-(x-2)^2+7$ el máximo de la altura.', [-3, 7, -11, 9], -1, 2, par(-1, 2, 7), 'El término cuadrático se resta. La altura es mayor cuando ese término es cero.'),
-    rail('Ajusta el coeficiente $a$ para que $y=ax^2+1$ pase por $(2,13)$.', [-4, 7, 1, 3], a => tex('y(2)=4(' + a + ')+1=' + (4 * a + 1)),
-      'Sustituye el valor horizontal en el cuadrado y compara la altura resultante con 13.', { loads: a => [4 * a + 1, 13] }),
-    groups('Mueve cada parábola al lado que indica su abertura.', ['Hacia arriba', 'Hacia abajo'],
-      ['$2x^2$', '$-x^2+4$', '$(x-2)^2$', '$-3(x+1)^2$'], [0, 1, 0, 1], 'El signo del factor que multiplica el cuadrado controla la abertura.'),
-  ]);
-  tune('alg-4', ['raices-imanes'], [
-    point('Marca la raíz positiva de $y=x^2-9$.', [-6, 6, -10, 12], [1, 3], [3, 0], [par(1, 0, -9)], 'Una raíz es un cruce con la altura cero. La raíz positiva queda a la derecha.'),
-    rail('Ajusta $c$ para que el discriminante de $x^2-6x+c=0$ sea cero.', [0, 14, 5, 9], c => tex('\\Delta=36-4(' + c + ')=' + (36 - 4 * c)),
-      'Iguala el cuadrado del coeficiente lineal con cuatro veces el independiente.', { loads: c => [36, 4 * c] }),
-    groups('Separa las ecuaciones por la cantidad de raíces reales distintas.', ['Ninguna', 'Una', 'Dos'],
-      ['$x^2+1=0$', '$x^2-4=0$', '$(x-2)^2=0$', '$x^2+9=0$'], [0, 2, 1, 0],
-      'Compara lo que tendría que valer el cuadrado con cero.'),
-    tiles('Pinta todas las raíces enteras de $x^2-3x-10=0$.', 3, ['$-5$', '$-2$', '$0$', '$2$', '$3$', '$5$'], [1, 5],
-      'Busca dos números cuyo producto sea −10 y cuya suma sea 3 para leer las raíces.', { explain: 'Los cruces son $-2$ y $5$, pues $(x+2)(x-5)=0$.' }),
-    route('Empieza en $x^2-10x=-21$ y sigue hasta la raíz mayor por completar el cuadrado.', ['$x^2-10x$', 'suma 25', 'suma 10', '$5+2$', '$5-2$', 'fin'],
-      [1, 3], 'La mitad de −10 se eleva al cuadrado. Luego usa el signo que produce la raíz mayor.'),
+})());
+;
+//#archivo js/courses/euclidiana-elementos.js
+// Geometría Euclidiana · mundo 2 «Puntos, Rectas y Ángulos» (spec 2026-11-26-curso-euclidiana). Enunciados, números y contextos propios.
+EUC_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = EUC;
+
+  const l1 = leccion('euc-elementos-1', 'Puntos, rectas y segmentos', guion(
+    ['Dos puntos, una recta', 'Dos puntos diferentes determinan una recta, y tres puntos que no son colineales determinan un plano.'],
+    ['Estar entre', 'De tres puntos de una recta, uno y solo uno está entre los otros dos. Con esa idea se definen el segmento, el rayo y la semirrecta.'],
+    ['Medir y sumar', 'Si B está entre A y C, entonces AB + BC = AC. Para hallar un pedazo, se resta.'],
+    ['Punto medio y congruencia', 'El punto medio parte al segmento en dos segmentos congruentes. Congruentes: de igual medida. Iguales: el mismo segmento.'],
+    ['Contar rectas', 'Con n puntos, sin tres colineales, se determinan n(n − 1)/2 rectas.']), [
+    x('nombra-figuras', 'Arrastra a cada dibujo su **nombre**. Fíjate en los extremos y en las flechas.', { filas: ['rayo', 'segmento', 'recta', 'semirrecta'], fichas: ['rayo', 'segmento', 'recta', 'semirrecta', 'semiplano', 'rayos opuestos'] },
+      'El segmento tiene dos extremos; el rayo, un origen y sigue sin fin; la semirrecta es el rayo sin su origen, y la recta sigue hacia los dos lados.', 'Mira cuántos puntos sirven de extremo y si el punto del borde está relleno o hueco.'),
+    x('orden-afirma', 'En una recta están A, B y C, con **B entre A y C**, $AB = 5$ y $BC = 8$. Toca **todas** las afirmaciones verdaderas.', { casos: [
+      { t: 'A, B y C son colineales', si: true },
+      { t: 'C está entre A y B', no: 'De tres puntos de una recta, solo uno está entre los otros dos, y aquí es B.' },
+      { t: 'AC = 13', si: true },
+      { t: 'AB ≅ BC', no: 'AB mide 5 y BC mide 8: no tienen la misma medida, así que no son congruentes.' },
+      { t: 'El rayo BA y el rayo BC son opuestos', si: true },
+      { t: 'B es el punto medio de AC', no: 'Para ser el punto medio, AB y BC tendrían que medir lo mismo.' }],
+    falta: 'Falta alguna que también es verdadera.', ok: 'Colineales, AB + BC = AC y, desde B, dos rayos opuestos.' },
+      'Estar entre exige estar en la misma recta; por la adición de segmentos, $AC = 5 + 8 = 13$, y desde B salen dos rayos opuestos, uno hacia A y otro hacia C.', 'Dibuja los tres puntos en orden sobre una recta y revisa cada frase contra el dibujo y las medidas.'),
+    x('segmento-reparte', 'A, B y C son colineales, con B entre A y C, y $AC = 18$. Ubica B de modo que **BC mida el doble de AB**.', { ac: 18, k: 2 },
+      'Como $AB + BC = AC$ y BC es el doble de AB, son tres partes iguales de 6: $AB = 6$ y $BC = 12$.', 'Si BC es el doble de AB, ¿en cuántas partes iguales queda repartido todo AC?'),
+    x('tramos-suma', 'Los puntos A, B, C y D están en una recta, en ese orden, y $AD = 20$. Pon las medidas que faltan.', { tr: [7, null, 4], tot: 20, letras: 'ABCD', et: ['BC', 'AC', 'BD'], metas: ['9', '16', '13'], fichas: ['9', '16', '13', '11', '31', '20'],
+      mira: ['A todo AD quítale AB y CD.', 'AC es AB más BC.', 'BD es BC más CD.'], trampas: { '0:11': 'Sumaste AB y CD: eso es lo que hay que quitarle a AD.', '0:31': 'BC es un pedazo de AD: no puede medir más que 20.', '1:20': 'Ese es AD: a AC le falta el tramo CD.' }, ok: 'Se resta para hallar un pedazo y se suma para juntar dos.' },
+      'Sustracción: $BC = 20 - 7 - 4 = 9$. Adición: $AC = 7 + 9 = 16$ y $BD = 9 + 4 = 13$.', 'Empieza por el tramo desconocido: es lo que le queda a AD al quitar los otros dos.'),
+    x('mitad-segmento', 'En la recta numérica, A está en $-5$ y B en $7$. Lleva M al **punto medio** de AB.', { a: -5, b: 7, min: -8, max: 8 },
+      'AB mide $7 - (-5) = 12$ y su mitad es 6. A 6 de A está el 1: $AM = MB = 6$.', 'Halla primero cuánto mide AB restando las coordenadas; el punto medio queda a la mitad de esa medida de cada extremo.'),
+    x('rectas-por-puntos', 'Entre estos puntos no hay tres colineales. ¿Cuántos puntos hacen falta para que determinen exactamente **28 rectas**?', { total: 28, max: 12 },
+      'Con 8 puntos, de cada uno salen 7 rectas; como cada recta se cuenta desde sus dos puntos, son $\\tfrac{8 \\cdot 7}{2} = 28$.', 'Cada par de puntos determina una recta: cuenta las que salen de un punto y cuida de no contar la misma dos veces.'),
+    x('sube-distancia', 'Sube el ascensor a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'B está entre A y C, $AB = 14$ y $AC = 41$. ¿Cuánto mide BC?', r: 27, c: '41 - 14', e: { 55: 'B está entre A y C: BC es un pedazo de AC, así que se resta.' } },
+      { q: 'M es el punto medio de PQ y $PM = 19$. ¿Cuánto mide PQ?', r: 38, c: '2 \\cdot 19', e: { 19: 'Ese es PM: a PQ lo forman dos pedazos congruentes.' } },
+      { q: '¿Cuántas rectas determinan **7** puntos si no hay tres colineales?', r: 21, c: '\\tfrac{7 \\cdot 6}{2}', e: { 42: 'Cada recta quedó contada dos veces.', 7: 'De cada punto salen 6 rectas, no una.' } }] },
+      '$41 - 14 = 27$; $2 \\cdot 19 = 38$; $\\tfrac{7 \\cdot 6}{2} = 21$.', 'Un pedazo se halla restando; el punto medio deja dos partes congruentes; las rectas se cuentan por parejas de puntos.'),
+    sol('A, B, C y D son colineales, en ese orden. B es el punto medio de AC, $AB = 9$ y $CD = 5$. ¿Cuánto mide AD?', ['B es punto medio de AC: $BC = AB =$ [[9]]', 'Adición de segmentos: $AC = 9 + 9 =$ [[18]]', 'Otra vez la adición: $AD = AC + CD =$ [[23]]'], ['14', '4', '45'],
+      'El punto medio deja $BC = 9$; entonces $AC = 18$ y $AD = 18 + 5 = 23$.', 'El punto medio te da un segmento congruente con AB; después solo hay que sumar tramos.'),
+    err('M es el punto medio de AB y N es el punto medio de MB. Si $AB = 24$, ¿cuánto mide AN?', ['$AM = MB = 12$, porque M es el punto medio de AB', '$MN = NB = 6$, porque N es el punto medio de MB', '$AN = AM - MN = 6$, porque N está entre A y M'], 2,
+      ['$AN = AM + MN = 18$, porque M está entre A y N', '$AN = AB + NB = 30$, porque B está entre A y N', '$AN = AM = 12$, porque N coincide con M'],
+      'N está en MB, así que el orden es A, M, N, B: M está entre A y N, y $AN = 12 + 6 = 18$.', 'Ubica los cuatro puntos en orden sobre la recta antes de decidir si se suma o se resta.'),
+    opc('Dos segmentos AB y CD, dibujados en lugares distintos del plano, miden ambos 6 cm. Lo correcto es decir que:', ['son iguales, porque miden lo mismo', 'son congruentes, pero no iguales', 'no son congruentes ni iguales', 'son iguales, pero no congruentes'], 1,
+      'Congruentes: tienen la misma medida. Iguales: coinciden en todos sus puntos, es decir, son el mismo segmento. Aquí son dos figuras distintas de igual medida.', 'Piensa en dos lápices del mismo largo: ¿son el mismo lápiz?'),
   ]);
 
-  // Raíces de Polinomios
-  tune('alg-23b', [], [
-    rect('Empaca 32 unidades como cuatro filas de ocho para representar una división exacta en el arreglo.', [10, 8], [8, 4],
-      'Cada fila tiene el tamaño del divisor. El número de filas es el cociente.', { explain: '$32=8\\cdot4+0$.' }),
-    rail('Ajusta el coeficiente de $x^2$ para que $kx^2+5x+6=(x+2)(x+3)$.', [0, 8, 4, 1],
-      k => tex(k + 'x^2+5x+6'), 'El coeficiente del término de mayor grado se obtiene multiplicando los dos términos x.'),
-    groups('Pon los términos del dividendo en su columna y detecta qué grado falta.', ['Grado 3', 'Grado 2', 'Grado 1'],
-      ['$2x^3$', '$0x$', '$-4x^2$', '$0x^2$'], [0, 2, 1, 1],
-      'Un término con coeficiente cero sirve como marcador de posición en una columna.', { explain: 'El polinomio $2x^3-4x^2$ tiene coeficiente lineal cero.' }),
-    probe('Sondea $x^2+2x+7$ en $x=2$ para medir el residuo al dividir por $x-2$.', [-4, 4, 0, 30], 0, 2, x => x * x + 2 * x + 7,
-      'La identidad del dividendo se simplifica cuando el divisor se vuelve cero.'),
-    tiles('Pinta las divisiones cuyo cociente, si la división es exacta, tiene grado 2.', 2,
-      ['$x^5/x^3$', '$x^4/x^3$', '$x^6/x^4$', '$x^3/x^3$'], [0, 2], 'Resta el grado del divisor al grado del dividendo.',
-      { explain: 'Las diferencias $5-3$ y $6-4$ valen 2.' }),
-    route('Parte del grado 7. Divide por un polinomio de grado 3 y luego divide el cociente por otro de grado 2.',
-      ['7', '4', '10', '2', '6', 'fin'], [1, 3], 'En cada división, resta el grado del divisor al del dividendo.'),
-  ]);
-  tune('alg-92', ['division-sintetica'], [
-    probe('Mide el residuo de dividir $x^3-2x+5$ por $x+2$.', [-4, 4, -14, 18], 0, -2, x => x ** 3 - 2 * x + 5,
-      'Busca primero el valor que hace que el divisor valga cero.'),
-    point('Marca el punto que da el residuo de dividir $x^2-3x+4$ por $x-4$.', [-2, 6, 0, 22], [1, 3], [4, 8],
-      [x => x * x - 3 * x + 4], 'El dato horizontal viene del divisor. El vertical es el valor del polinomio en ese punto.'),
-    tiles('Pinta los valores de r que hacen de $x-r$ un factor de $(x-1)(x+3)(x-4)$.', 3, ['$-4$', '$-3$', '$-1$', '$0$', '$1$', '$4$'],
-      [1, 4, 5], 'Para cada factor, encuentra qué valor de x lo hace cero.', { explain: '$r=-3,1,4$.' }),
-    rail('Ajusta $k$ para que $x-3$ sea factor de $x^2+kx-15$.', [-5, 6, 0, 2],
-      k => tex('P(3)=9+3(' + k + ')-15=' + (3 * k - 6)), 'Si el divisor es un factor, el residuo de evaluar en 3 debe ser cero.', { loads: k => [9 + 3 * k, 15] }),
-    groups('Agrupa divisores de $P(x)=x^2-4$ según produzcan división exacta o residuo.', ['Exacta', 'Con residuo'],
-      ['$x-2$', '$x+1$', '$x+2$', '$x-3$'], [0, 1, 0, 1], 'El divisor es factor cuando el polinomio se anula en su raíz.'),
-  ]);
-  tune('alg-93', ['raices-imanes'], [
-    tiles('Marca las raíces en las que la gráfica de $(x+3)(x-1)^2(x-4)^3$ cruza el eje.', 3, ['$-3$', '$1$', '$4$'],
-      [0, 2], 'Un factor de potencia impar cambia de signo al pasar por su cero.', { explain: 'Cruza en −3 y 4. En 1 toca el eje y rebota.' }),
-    probe('Alumbra la raíz negativa de $(x+2)^2(x-3)$.', [-4, 5, -30, 24], 0, -2, x => (x + 2) ** 2 * (x - 3),
-      'Un cero doble toca el eje aunque la gráfica no cambie de lado.'),
-    groups('Coloca cada potencia en su región. Mira el comportamiento de la curva en 2.', ['Cruza', 'Toca y vuelve'],
-      ['$(x-2)^2$', '$(x-2)^3$', '$(x-2)^4$', '$x-2$'], [1, 0, 1, 0], 'Los exponentes pares mantienen el signo alrededor de la raíz.'),
-    point('Marca la altura de $y=-(x+2)(x-4)$ en $x=0$.', [-5, 6, -12, 10], [1, 1], [0, 8],
-      [x => -(x + 2) * (x - 4)], 'Sustituye cero y observa los signos de los dos factores.'),
-    rail('Ajusta la multiplicidad del primer cero para que $(x+1)^m(x-4)^2$ tenga grado 7.', [1, 8, 2, 5],
-      m => tex('\\deg P=' + m + '+2=' + (m + 2)), 'Cada copia de un factor lineal aporta uno al grado total.'),
+  const l2 = leccion('euc-elementos-2', 'Ángulos y su medida', guion(
+    ['Ángulo', 'Dos rayos con el mismo origen forman un ángulo: los rayos son sus lados y el origen, su vértice. Su medida va de 0° a 180°.'],
+    ['Sumar y partir', 'Si P está en el interior del ángulo AOB, entonces ∠AOP + ∠POB = ∠AOB. La bisectriz lo parte en dos ángulos congruentes.'],
+    ['Clases', 'Agudo: menos de 90°. Recto: 90°. Obtuso: entre 90° y 180°. Llano: 180°.'],
+    ['Parejas', 'Complementarios suman 90° y suplementarios, 180°. Un par lineal es adyacente y suplementario. Los opuestos por el vértice son congruentes.'],
+    ['Perpendiculares', 'Dos rectas perpendiculares forman cuatro ángulos rectos. La mediatriz de un segmento es la perpendicular por su punto medio.']), [
+    x('clase-angulo', 'Sin dibujarlos, di de qué **clase** es cada ángulo.', { et: ['el complemento de 25°', 'el suplemento de 25°', 'la mitad de un llano', 'el doble de un recto'], metas: ['agudo', 'obtuso', 'recto', 'llano'], fichas: ['agudo', 'obtuso', 'recto', 'llano', 'agudo', 'obtuso'],
+      mira: ['El complemento de 25° mide 65°: menos de 90°.', 'El suplemento de 25° mide 155°: está entre 90° y 180°.', 'La mitad de 180° es 90°.', 'Dos rectos son 180°: los lados quedan en línea.'], trampas: { '1:agudo': 'Ese sería el complemento. El suplemento completa 180°: mide 155°.' }, ok: '65° es agudo, 155° obtuso, 90° recto y 180° llano.' },
+      'El complemento de $25^\\circ$ mide $65^\\circ$, agudo; el suplemento, $155^\\circ$, obtuso; la mitad de $180^\\circ$ es un recto y dos rectos hacen un llano.', 'Halla primero la medida de cada uno y compárala con 90° y con 180°.'),
+    x('bisectriz-traza', 'El ángulo AOB mide $132^\\circ$. Mueve el rayo OP hasta que sea su **bisectriz**.', { a: 132, rot: 10 },
+      'La bisectriz deja dos ángulos congruentes: $132^\\circ \\div 2 = 66^\\circ$ cada uno.', 'La bisectriz no deja un lado más abierto que el otro: las dos partes miden lo mismo.'),
+    x('parte-angulo', 'El ángulo AOB mide $110^\\circ$ y P está en su interior. Mueve OP hasta que $\\angle AOP$ mida $30^\\circ$ **más** que $\\angle POB$.', { a: 110, dif: 30 },
+      'Por la adición de ángulos las dos partes suman $110^\\circ$: quitando los $30^\\circ$ de ventaja quedan $80^\\circ$, 40 para cada una. Miden $70^\\circ$ y $40^\\circ$.', 'Las dos partes juntas dan el ángulo entero: quítale la ventaja y reparte lo que queda por igual.'),
+    x('vecinos-razon', 'Un rayo forma con una recta un **par lineal**. Gíralo hasta que el ángulo de la derecha sea **5 veces** el dorado.', { k: 5 },
+      'Un par lineal suma $180^\\circ$: son seis partes iguales de $30^\\circ$, una para el dorado y cinco, $150^\\circ$, para el otro.', 'Los dos ángulos de un par lineal son suplementarios: cuenta en cuántas partes iguales se reparte el llano.'),
+    x('tres-parientes', 'Un ángulo mide $37^\\circ$. Pon su complemento, su suplemento y su opuesto por el vértice.', { a: 37, fichas: ['53°', '143°', '37°', '127°', '63°'] },
+      'Complemento: $90^\\circ - 37^\\circ = 53^\\circ$. Suplemento: $180^\\circ - 37^\\circ = 143^\\circ$. El opuesto por el vértice es congruente: $37^\\circ$.', 'Uno completa un ángulo recto, otro completa un llano y el tercero no cambia de medida.'),
+    x('angulos-toca', 'Cinco rayos salen del mismo punto. Toca **todos** los ángulos que forman un **par lineal** con el dorado.', { rayos: [0, 50, 180, 230, 300], de: 0, pide: 'par', falta: 'Hay uno que sí forma par lineal: comparte un lado y juntos hacen un llano.', ok: 'Lado común y los otros dos lados en rayos opuestos: juntos miden 180°.' },
+      'Solo el ángulo 2: comparte un lado con el dorado y sus otros lados son rayos opuestos. El 5 también es adyacente, pero con el dorado no completa $180^\\circ$.', 'Busca un ángulo que comparta un lado con el dorado y cuyo otro lado siga en línea recta al otro lado del dorado.'),
+    x('mediatriz-pasa', 'El segmento AB mide 10. Coloca la recta de modo que sea su **mediatriz**.', { a: 2, b: 12, max: 14 },
+      'La mediatriz es perpendicular a AB y pasa por su punto medio: queda a 5 de A y a 5 de B, formando $90^\\circ$.', 'La mediatriz cumple dos condiciones a la vez: una sobre el punto por donde pasa y otra sobre el ángulo que forma.'),
+    x('lanza-angulo', 'El faro gira desde la derecha. Dale el ángulo que se pide y suéltalo. Puedes fallar **una** vez.', { tiros: [
+      { q: 'El suplemento de un ángulo de $65^\\circ$', r: 115, c: '180^\\circ - 65^\\circ', e: { 25: 'Ese es el complemento: lo que le falta para 90°.', 65: 'Ese es el dato: falta lo que completa 180°.' } },
+      { q: 'Cada ángulo que deja la bisectriz de uno de $150^\\circ$', r: 75, c: '150^\\circ \\div 2', e: { 150: 'Ese es el ángulo entero: la bisectriz lo parte en dos congruentes.', 30: 'Ese es su suplemento; la bisectriz lo parte por la mitad.' } },
+      { q: 'P es interior a $\\angle AOB$, que mide $140^\\circ$, y $\\angle AOP$ mide $85^\\circ$. Lanza $\\angle POB$', r: 55, c: '140^\\circ - 85^\\circ', e: { 95: 'Ese es el suplemento de 85°: aquí se le quita a 140°.' } }] },
+      '$180^\\circ - 65^\\circ = 115^\\circ$; $150^\\circ \\div 2 = 75^\\circ$; $140^\\circ - 85^\\circ = 55^\\circ$.', 'Suplemento: lo que falta para un llano. Bisectriz: dos partes congruentes. Ángulo interior: se resta del total.'),
+    sol('Dos rectas se cortan y forman, en orden, los ángulos 1, 2, 3 y 4. Completa la demostración de que $\\angle 1 \\cong \\angle 3$.', ['$\\angle 1$ y $\\angle 2$ forman un [[par lineal]]: son suplementarios', '$\\angle 2$ y $\\angle 3$ también: sus medidas suman [[180°]]', 'Así, $\\angle 1$ y $\\angle 3$ son suplementos del mismo ángulo, el [[∠2]]', 'Los suplementos de ángulos congruentes son [[congruentes]]'], ['90°', 'complementarios', 'rectos'],
+      'Los dos ángulos son suplementos de $\\angle 2$, y los suplementos de un mismo ángulo son congruentes: por eso los opuestos por el vértice lo son.', 'Cada ángulo forma con su vecino un par lineal: aprovecha que los dos comparten el mismo vecino.'),
+    err('Un ángulo mide el doble de su complemento. ¿Cuánto mide?', ['Si el complemento mide $x$, el ángulo mide $2x$', 'Complementarios: suman $180^\\circ$, así que $3x = 180^\\circ$', 'Se despeja $x$ y el ángulo es el doble, $2x$'], 1,
+      ['Complementarios: suman $90^\\circ$, así que $3x = 90^\\circ$', 'Complementarios: suman $360^\\circ$, así que $3x = 360^\\circ$', 'Complementarios: se restan, así que $2x - x = 90^\\circ$'],
+      'Los complementarios suman $90^\\circ$: $3x = 90^\\circ$, $x = 30^\\circ$ y el ángulo mide $60^\\circ$. Un ángulo que tiene complemento no puede ser obtuso.', '¿Puede tener complemento un ángulo de más de 90°? Revisa cuánto suman dos complementarios.'),
+    opc('Dos rectas se cortan. Uno de los cuatro ángulos mide $3x + 10^\\circ$ y su opuesto por el vértice mide $x + 50^\\circ$. Cada uno de los otros dos ángulos mide:', ['$20^\\circ$', '$70^\\circ$', '$90^\\circ$', '$110^\\circ$'], 3,
+      'Los opuestos por el vértice son congruentes: $3x + 10 = x + 50$, $x = 20$ y miden $70^\\circ$. Los otros dos forman par lineal con ellos: $110^\\circ$.', 'Iguala los opuestos por el vértice para hallar x, y no olvides qué ángulos pide la pregunta.'),
   ]);
 
-  // Fracciones Algebraicas
-  tune('alg-25a', ['cancela-factores', 'cruz-asintotas'], [
-    point('Marca el hueco que queda al simplificar $(x^2-9)/(x-3)$.', [-5, 6, -4, 11], [1, 4], [3, 6], [line(1, 3)],
-      'La recta simplificada da la altura. La coordenada horizontal se excluye por el denominador original.', { explain: 'El hueco queda en $(3,6)$ porque la expresión original excluye $x=3$.' }),
-    tiles('Pinta todos los valores que deja fuera $\\dfrac{x+5}{(x-2)(x+3)}$.', 3, ['$-5$', '$-3$', '$-2$', '$0$', '$2$', '$3$'],
-      [1, 4], 'Se excluyen los ceros del denominador original, incluso si otro factor pudiera cancelarse.', { explain: 'Se excluyen $x=-3$ y $x=2$.' }),
-    groups('Para $\\dfrac{(x-1)(x+4)}{(x-1)(x+2)}$, separa hueco, asíntota y valor permitido.', ['Hueco', 'Asíntota', 'Permitido'],
-      ['$1$', '$-2$', '$-4$', '$0$'], [0, 1, 2, 2], 'Un cero de un factor cancelado deja un hueco. Si el factor sigue en el denominador, hay asíntota.'),
-    probe('Sigue la gráfica de $\\dfrac{x^2-4}{x-2}$ y busca dónde llega a 7.', [-5, 8, -4, 12], 0, 5, x => x === 2 ? NaN : x + 2,
-      'El factor compartido deja $x+2$ en todos los puntos permitidos.', { holes: [[2, 4]] }),
-  ]);
-  tune('alg-25b', ['cancela-factores'], [
-    bridges('Amplía las dos fracciones hasta construir el mismo denominador.', [['1', 'x-2'], ['2', 'x+3']], ['x-2', 'x+3'],
-      ['x+3', 'x-2', 'x+2', 'x-3'], [0, 1], 'Cada fracción necesita el factor que ya aparece en la otra.',
-      'Las dos fracciones quedan sobre $(x-2)(x+3)$. La suma es $\\frac{3x-1}{(x-2)(x+3)}$, con $x\\ne2,-3$.'),
-    tiles('Para $1/(x-2)+1/(x+3)$, pinta los factores que deben estar en el denominador común.', 2,
-      ['$x-2$', '$x+3$', '$x-3$', '$x+2$'], [0, 1], 'Cada factor original debe poder dividir al denominador común sin residuo.',
-      { explain: 'El denominador común más corto es $(x-2)(x+3)$.' }),
-    groups('Construye el numerador de $\\frac{2}{x}+\\frac{3}{x+1}$ sobre $x(x+1)$ llevando cada pieza a su lugar.',
-      ['Primer sumando', 'Segundo sumando', 'Sobra'], ['$2x$', '$2$', '$3x$', '$3$'], [0, 0, 1, 2],
-      'Multiplica cada numerador por el factor que le falta a su denominador.', { explain: '$2(x+1)+3x=5x+2$.' }),
-    probe('Sondea en $x=3$ la suma $\\dfrac1x+\\dfrac1{x+1}$.', [1, 7, 0, 2], 1, 3, x => 1 / x + 1 / (x + 1),
-      'Al sustituir 3, compara los dos denominadores para convertirlos a doceavos.', { explain: '$\\frac13+\\frac14=\\frac7{12}$.' }),
-    route('Traza los factores al convertir $\\dfrac{x}{x-1}\\div\\dfrac{x+2}{x-1}$ en un producto y simplificar.',
-      ['inicio', '$\\times\\frac{x-1}{x+2}$', '$\\times\\frac{x+2}{x-1}$', '$\\frac{x}{x+2}$', '$\\frac{x+2}{x}$', 'fin'],
-      [1, 3], 'Invierte solo el divisor. Conserva las restricciones de la operación original.',
-      { explain: 'El resultado es $x/(x+2)$ con $x\\ne1$ y $x\\ne-2$.' }),
-  ]);
-  tune('alg-101', ['afina-sistema', 'combina-vectores'], [
-    point('Encuentra la intersección de $y=x+2$ y $y=8-x$.', [-3, 9, -2, 11], [1, 3], [3, 5], [line(1, 2), line(-1, 8)],
-      'Una solución debe quedar sobre las dos rectas al mismo tiempo.'),
-    groups('Distribuye los puntos según si cumplen $x+y=5$.', ['En la recta', 'Fuera'], ['$(1,4)$', '$(2,4)$', '$(5,0)$', '$(-1,6)$'], [0, 1, 0, 0],
-      'Suma las dos coordenadas de cada punto para comprobar la ecuación.'),
-    rail('Ajusta el multiplicador de $x-2y$ para sumarlo a $3x+6y$ y eliminar y.', [-5, 7, 1, 3],
-      m => tex((3 + m) + 'x+(' + (6 - 2 * m) + ')y'), 'Busca qué múltiplo de −2 cancela el coeficiente +6.', { loads: m => [2 * m, 6] }),
-    tiles('Pinta las ecuaciones de rectas paralelas a $y=2x+1$ que no coinciden con ella.', 2,
-      ['$y=2x-4$', '$y=-2x+1$', '$y=2x+1$', '$y=2x+5$'], [0, 3], 'Las rectas paralelas tienen la misma pendiente. Compara sus interceptos.',
-      { explain: 'Los interceptos −4 y 5 son distintos de 1, y ambas pendientes valen 2.' }),
-  ]);
-  tune('alg-102', [], [
-    point('Encuentra la intersección positiva de $y=x^2$ y $y=4$.', [-4, 4, -2, 10], [1, 1], [2, 4], [par(1, 0, 0), line(0, 4)],
-      'Compara la rama derecha de la parábola con la altura de la recta.'),
-    probe('Sigue $y=x^2-1$ hasta su intersección de abscisa negativa con $y=2x+2$.', [-4, 5, -7, 15], 0, -1, x => x * x - 1,
-      'Iguala las dos alturas y conserva la candidata que queda a la izquierda del cero.', { other: [line(2, 2)] }),
-    tiles('Pinta las parejas que resuelven simultáneamente $x+y=5$ y $xy=6$.', 2, ['$(2,3)$', '$(1,4)$', '$(3,2)$', '$(0,5)$'],
-      [0, 2], 'Cada pareja debe pasar las dos pruebas. Cambiar el orden puede dejar las dos relaciones intactas.', { explain: 'Las parejas $(2,3)$ y $(3,2)$ tienen suma 5 y producto 6.' }),
-    rail('En $A/(x-1)+2/(x+1)$, ajusta $A$ para que el numerador común contenga $5x$.', [-4, 8, 1, 3],
-      a => tex((a + 2) + 'x+(' + (a - 2) + ')'), 'Al expandir el numerador, el coeficiente de x reúne una copia de A y una de 2.'),
-    groups('Al eliminar los denominadores de $A/(x-2)+B/(x+3)$, asigna a cada letra su factor.', ['Multiplica A', 'Multiplica B', 'Fuera'],
-      ['$x-2$', '$x+3$', '$x$', '$x+2$'], [1, 0, 2, 2], 'Completa cada denominador con el factor del otro término.'),
-    route('En $\\dfrac{7x-1}{(x-1)(x+2)}$, usa $x=1$ para despejar $A$.',
-      ['inicio', '$6=3A$', '$6=3B$', '$A=2$', '$A=3$', 'fin'], [1, 3],
-      'A acompaña a $1/(x-1)$. Tras multiplicar por el denominador común, el término con $x-1$ desaparece al sustituir 1.'),
+  const l3 = leccion('euc-elementos-3', 'Polígonos', guion(
+    ['Línea poligonal', 'Una línea quebrada cerrada y convexa es una línea poligonal; la porción de plano que limita es un polígono.'],
+    ['Elementos', 'Lados, vértices, ángulos interiores y diagonales: una diagonal une dos vértices no consecutivos.'],
+    ['Nombres y regulares', 'Los polígonos se nombran por su número de lados. Es regular el que es equilátero y equiángulo a la vez.'],
+    ['Diagonales', 'De cada vértice salen n − 3 diagonales; en total son n(n − 3)/2.'],
+    ['Circunferencia y círculo', 'La circunferencia es la línea de puntos a igual distancia del centro; el círculo la incluye con su interior. Radio, cuerda, diámetro y arco son sus elementos.']), [
+    x('poligonos-toca', 'Toca **todas** las figuras que son **polígonos convexos**.', { figs: [
+      { p: [[1, 1], [9, 2], [4, 9]], si: true },
+      { p: [[1, 2], [4, 8], [6, 3], [9, 8]], ab: true, no: 'La figura 2 es una línea quebrada abierta: no encierra ninguna porción del plano.' },
+      { p: [[1, 1], [5, 4], [9, 1], [5, 9]], no: 'La figura 3 tiene una entrada: hay rectas que la cortan en cuatro puntos. No es convexa.' },
+      { r: 4.4, no: 'La figura 4 es una línea curva: un polígono está limitado por segmentos.' },
+      { p: [[2, 1], [8, 1], [10, 5], [5, 9], [0, 5]], si: true },
+      { p: [[1, 2], [9, 2], [7, 8], [3, 8]], si: true }],
+    falta: 'Falta alguna: un polígono convexo puede tener cualquier número de lados.', ok: 'Líneas quebradas cerradas que ninguna recta corta en más de dos puntos.' },
+      'Las figuras 1, 5 y 6 son líneas quebradas cerradas y convexas. La 2 es abierta, la 3 no es convexa y la 4 es una línea curva.', 'Revisa tres cosas: que esté hecha de segmentos, que cierre y que ninguna recta la corte en más de dos puntos.'),
+    x('nombre-poligono', 'Pon a cada descripción el **nombre** del polígono.', { et: ['7 lados', 'no tiene diagonales', '2 diagonales', '12 vértices'], metas: ['heptágono', 'triángulo', 'cuadrilátero', 'dodecágono'], fichas: ['heptágono', 'triángulo', 'cuadrilátero', 'dodecágono', 'hexágono', 'decágono', 'pentágono'],
+      mira: ['Hepta quiere decir siete.', 'Si todos los vértices son vecinos entre sí, no hay a quién trazarle una diagonal.', 'De cada vértice sale una sola diagonal, y son dos en total.', 'Tiene tantos lados como vértices: doce.'], trampas: { '3:decágono': 'Deca es diez; doce es dodeca.', '2:pentágono': 'El pentágono tiene 5 diagonales: de cada vértice salen dos.', '0:hexágono': 'Hexa es seis; siete es hepta.' }, ok: 'Hepta, siete; dodeca, doce. Y el triángulo no tiene diagonales.' },
+      'Siete lados: heptágono. En el triángulo todos los vértices son consecutivos. El cuadrilátero tiene $\\tfrac{4 \\cdot 1}{2} = 2$ diagonales, y doce vértices son doce lados: dodecágono.', 'Un polígono tiene tantos vértices como lados, y de cada vértice salen tres diagonales menos que el número de lados.'),
+    x('poligono-cuenta', 'Este polígono es un **eneágono**. Pon cuántos lados tiene, cuántas diagonales salen de **un** vértice y cuántas tiene en total.', { n: 9, et: ['lados', 'desde un vértice', 'diagonales'], metas: ['9', '6', '27'], fichas: ['9', '6', '27', '54', '7', '18'],
+      mira: ['Cuenta los vértices: tiene tantos lados como vértices.', 'Un vértice no se une con él mismo ni con sus dos vecinos.', 'Multiplica los vértices por las que salen de cada uno, y recuerda que cada diagonal tiene dos extremos.'], trampas: { '2:54': 'Contaste cada diagonal desde sus dos extremos: falta partir entre 2.', '1:7': 'Quita también al otro vecino: son 9 − 3.', '1:9': 'A sí mismo y a sus dos vecinos no les traza diagonal.' }, ok: 'De cada vértice salen 6, y 9 · 6 / 2 = 27.' },
+      'Nueve lados. De cada vértice salen $9 - 3 = 6$ diagonales, y en total son $\\tfrac{9 \\cdot 6}{2} = 27$, porque cada una se cuenta desde sus dos extremos.', 'Desde un vértice no hay diagonal hacia él mismo ni hacia sus dos vecinos; al juntar las de todos, cada una aparece dos veces.'),
+    x('lados-diagonales', '¿Cuántos lados debe tener un polígono para que tenga exactamente **35 diagonales**?', { total: 35, max: 12 },
+      'Con 10 lados, de cada vértice salen 7 diagonales: $\\tfrac{10 \\cdot 7}{2} = 35$. Es un decágono.', 'El doble de las diagonales es el número de lados por tres menos que ese número: prueba hasta que coincida.'),
+    x('regular-arma', 'Este cuadrilátero tiene dos lados de 5. Arrastra sus vértices hasta que sea un polígono **regular**.', { lado: 5 },
+      'Regular quiere decir equilátero y equiángulo a la vez: los cuatro lados de 5 y los cuatro ángulos de $90^\\circ$. Es un cuadrado.', 'No basta con igualar los lados ni con igualar los ángulos: un polígono regular cumple las dos condiciones.'),
+    x('circulo-partes', 'Cada número señala un elemento de la circunferencia de centro O. Pon su **nombre**.', { partes: ['radio', 'diámetro', 'arco', 'cuerda'], fichas: ['radio', 'diámetro', 'arco', 'cuerda', 'tangente', 'secante'] },
+      'El radio va del centro a la circunferencia; la cuerda une dos de sus puntos; el diámetro es la cuerda que pasa por el centro, y el arco es un pedazo de la circunferencia.', 'Mira por dónde pasa cada trazo: si sale del centro, si lo atraviesa o si es parte de la curva.'),
+    x('lanza-diagonales', 'Estira hasta la cantidad que se pide y suelta. Puedes fallar **una** vez.', { tiros: [
+      { q: '¿Cuántas diagonales salen de **un** vértice de un dodecágono?', modo: 'vert', n: 12, r: 9, c: '12 - 3', e: { 11: 'A sus dos vecinos lo unen lados, no diagonales.', 12: 'No se une con él mismo ni con sus dos vecinos.' } },
+      { q: '¿Cuántas diagonales tiene en total un hexágono?', modo: 'diag', n: 6, r: 9, c: '\\tfrac{6 \\cdot 3}{2}', e: { 18: 'Cada diagonal quedó contada desde sus dos extremos.', 3: 'Esas son las que salen de un solo vértice.' } },
+      { q: 'Un polígono tiene **65** diagonales. ¿Cuántos lados tiene?', modo: 'lados', r: 13, c: '\\tfrac{13 \\cdot 10}{2} = 65 \\;\\Rightarrow\\; n', e: { 10: 'Con 10 lados salen 35 diagonales: 10 es lo que sale de cada vértice.' } }] },
+      '$12 - 3 = 9$; $\\tfrac{6 \\cdot 3}{2} = 9$; y $\\tfrac{13 \\cdot 10}{2} = 65$, así que tiene 13 lados.', 'De cada vértice salen tres menos que el número de lados, y cada diagonal se comparte entre dos vértices.'),
+    sol('Quince personas se sientan alrededor de una mesa redonda. Cada una le da la mano a todas las que NO tiene al lado. ¿Cuántos apretones hay?', ['Cada persona saluda a $15 - 3 =$ [[12]] personas', 'Contando persona por persona salen $15 \\cdot 12 =$ [[180]]', 'Cada apretón se contó dos veces: son [[90]]'], ['14', '210', '105'],
+      'Es contar las diagonales de un polígono de 15 lados: $\\tfrac{15 \\cdot 12}{2} = 90$.', 'Pon a las personas en los vértices de un polígono: ¿qué segmento une a dos que no son vecinas?'),
+    err('Un rombo tiene sus cuatro lados de 7 cm. ¿Es un polígono regular?', ['Tiene cuatro lados congruentes: es equilátero', 'Un polígono regular es equilátero y equiángulo', 'Como es equilátero, el rombo es regular'], 2,
+      ['Sus ángulos pueden no ser congruentes: no siempre es regular', 'Como tiene cuatro lados, el rombo es regular', 'Como tiene dos diagonales, el rombo es regular'],
+      'Para ser regular faltaría que fuera equiángulo. Un rombo solo es regular cuando sus cuatro ángulos son rectos, es decir, cuando es un cuadrado.', 'La definición de regular pide dos condiciones: revisa si la conclusión comprobó las dos.'),
+    opc('Un polígono tiene 44 diagonales. ¿Cuántos lados tiene?', ['11', '8', '22', '44'], 0,
+      'Con 11 lados salen 8 diagonales de cada vértice: $\\tfrac{11 \\cdot 8}{2} = 44$.', 'Prueba cada opción en la cuenta de las diagonales: lados por tres menos que los lados, y la mitad.'),
   ]);
 
-  // Crecimiento Exponencial
-  tune('alg-71', ['balanza-exponencial', 'proyector-sombras'], [
-    probe('Sigue la gráfica de $3^x$ hasta la altura 27.', [-3, 4, 0, 30], 0, 3, x => 3 ** x,
-      'La curva sube multiplicando por 3 con cada paso de una unidad.'),
-    point('Marca el intercepto vertical de $f(x)=2\\cdot4^x$.', [-3, 3, 0, 16], [1, 2], [0, 2], [x => 2 * 4 ** x],
-      'En el eje vertical el exponente vale cero.'),
-    groups('Separa las funciones según aumenten o disminuyan al mover x hacia la derecha.', ['Crecen', 'Decrecen'],
-      ['$2^x$', '$(1/3)^x$', '$4^x$', '$(3/4)^x$'], [0, 1, 0, 1], 'Una base entre 0 y 1 reduce la altura de cada paso siguiente.'),
-    rail('Ajusta la cantidad inicial para que, después de triplicarse dos veces, queden 54 unidades.', [1, 10, 2, 6],
-      v => tex(v + '\\cdot3^2=' + v * 9), 'Deshaz las dos multiplicaciones por 3.', { bars: v => [['Inicio', v], ['Tras dos etapas', v * 9]], scale: 90 }),
+  return mundo('euc-elementos', [l1, l2, l3], [
+    ['euc-elementos-1', 'Si B está entre A y C, entonces AB + BC = AC.', x('segmento-reparte', 'A, B y C son colineales, con B entre A y C, y $AC = 20$. Ubica B de modo que BC mida **6 más** que AB.', { ac: 20, dif: 6 },
+      'Quitando los 6 de más quedan 14, 7 para cada uno: $AB = 7$ y $BC = 13$.', 'Quítale a AC lo que BC tiene de más y reparte el resto.')],
+    ['euc-elementos-1', 'El punto medio deja dos segmentos congruentes.', x('mitad-segmento', 'En la recta numérica, A está en $-7$ y **M, el punto medio de AB**, está en $-1$. Lleva B a su lugar.', { a: -7, b: -1, min: -8, max: 8, modo: 'extremo', ini: 0 },
+      '$AM = 6$, así que B queda 6 más allá de M: en el 5.', 'M debe quedar a la misma distancia de A y de B.')],
+    ['euc-elementos-1', 'Dos puntos determinan una recta; los colineales comparten una sola.', opc('Cuatro puntos están en un plano y exactamente tres de ellos son colineales. ¿Cuántas rectas distintas determinan?', ['6', '3', '4', '1'], 2,
+      'Los tres colineales dan una sola recta, y el cuarto punto determina una con cada uno de ellos: $1 + 3 = 4$.', 'Cuenta aparte la recta de los tres colineales.')],
+    ['euc-elementos-2', 'La bisectriz parte al ángulo en dos ángulos congruentes.', x('bisectriz-traza', 'El ángulo AOB mide $76^\\circ$. Mueve el rayo OP hasta que sea su **bisectriz**.', { a: 76, rot: 30 },
+      'Dos ángulos congruentes: $76^\\circ \\div 2 = 38^\\circ$ cada uno.', 'Las dos partes deben medir lo mismo.')],
+    ['euc-elementos-2', 'Los ángulos de un par lineal son suplementarios.', x('vecinos-razon', 'Un rayo forma con una recta un par lineal. Gíralo hasta que el ángulo de la derecha sea **9 veces** el dorado.', { k: 9 },
+      'Diez partes iguales en $180^\\circ$: el dorado mide $18^\\circ$ y el otro, $162^\\circ$.', 'Los dos juntos forman un llano: cuenta las partes.')],
+    ['euc-elementos-2', 'Complementarios suman 90° y suplementarios, 180°.', opc('El suplemento de un ángulo mide el triple de su complemento. El ángulo mide:', ['$45^\\circ$', '$30^\\circ$', '$60^\\circ$', '$22.5^\\circ$'], 0,
+      '$180 - x = 3(90 - x)$ da $2x = 90$: el ángulo mide $45^\\circ$.', 'Escribe el suplemento y el complemento con la misma letra.')],
+    ['euc-elementos-3', 'Un polígono de n lados tiene n(n − 3)/2 diagonales.', x('lados-diagonales', '¿Cuántos lados tiene un polígono con exactamente **54 diagonales**?', { total: 54, max: 14 },
+      'Con 12 lados salen 9 de cada vértice: $\\tfrac{12 \\cdot 9}{2} = 54$.', 'El doble de las diagonales es lados por tres menos que los lados.')],
+    ['euc-elementos-3', 'De cada vértice salen n − 3 diagonales.', x('poligono-cuenta', 'Este polígono es un **hexágono**. Pon sus lados, las diagonales que salen de **un** vértice y las que tiene en total.', { n: 6, et: ['lados', 'desde un vértice', 'diagonales'], metas: ['6', '3', '9'], fichas: ['6', '3', '9', '18', '4', '12'],
+      mira: ['Tiene tantos lados como vértices.', 'Un vértice no se une con él mismo ni con sus dos vecinos.', 'Cada diagonal tiene dos extremos: no la cuentes dos veces.'], trampas: { '2:18': 'Contaste cada diagonal desde sus dos extremos.' }, ok: 'De cada vértice salen 3, y 6 · 3 / 2 = 9.' },
+      'Seis lados, $6 - 3 = 3$ por vértice y $\\tfrac{6 \\cdot 3}{2} = 9$ en total.', 'Desde un vértice no hay diagonal a sus vecinos.')],
+    ['euc-elementos-3', 'Regular: equilátero y equiángulo a la vez.', opc('Un polígono es equiángulo pero NO es equilátero. Puede ser:', ['un cuadrado', 'un rombo que no es cuadrado', 'un rectángulo que no es cuadrado', 'un triángulo equilátero'], 2,
+      'El rectángulo tiene sus cuatro ángulos rectos, pero sus lados no son todos congruentes.', 'Equiángulo habla de los ángulos; equilátero, de los lados.')],
   ]);
-  tune('alg-13b', ['crece-planta', 'carrera-interes', 'ajusta-capital', 'mejor-oferta', 'alcancias-gemelas'], [
-    rail('Ajusta los periodos hasta duplicar un capital de 100 con interés simple de 20 % por periodo.', [0, 9, 1, 5],
-      t => tex('M=100(1+0.2\\cdot' + t + ')=' + n(100 * (1 + .2 * t))), 'Cada vez se añaden 20 unidades calculadas sobre el capital inicial.',
-      { bars: t => [['Capital', 100], ['Monto acumulado', 100 + 20 * t]], scale: 280 }),
-    point('Marca en la curva el monto de 200 tras tres periodos al 10 % compuesto.',
-      [0, 5, 210, 300], [1, 220], [3, 266], [t => 200 * 1.1 ** t],
-      'Cada crecimiento se aplica al monto completo del periodo anterior.',
-      { valid: ([x, y]) => x === 3 && Math.abs(y - 266.2) <= 1.25, explain: '$200\\cdot1.1^3=266.2$.' }),
-  ]);
-  tune('alg-72', ['espejo-diagonal'], [
-    point('Refleja $(3,8)$ de $y=2^x$ sobre $y=x$.', [0, 9, 0, 9], [3, 8], [8, 3],
-      [x => 2 ** x, x => Math.log2(x), x => x], 'La entrada de la exponencial se vuelve la salida del logaritmo.', { explain: '$2^3=8$ equivale a $\\log_2(8)=3$.' }),
-    rail('Ajusta el argumento $b$ para que $\\log_2 4 + \\log_2 b=\\log_2 32$.', [1, 12, 2, 8],
-      b => tex('\\log_2(4\\cdot' + b + ')=\\log_2(' + (4 * b) + ')'), 'Sumar logaritmos de la misma base corresponde a multiplicar los argumentos.', { loads: b => [4 * b, 32] }),
-    dial('Gira hasta el exponente de 5 que produce $1/25$.', [-3, -2, -1, 0, 1, 2], 1,
-      v => tex('5^{' + v + '}=' + n(5 ** v)), 'El exponente que buscas es el logaritmo en base 5 de esa fracción.'),
-    groups('Agrupa los argumentos de $\\log_3 x$ por el signo del resultado.', ['Negativo', 'Cero', 'Positivo'],
-      ['$1/3$', '$1$', '$9$', '$1/9$', '$3$'], [0, 1, 2, 0, 2], 'Para una base mayor que 1, las potencias de exponente negativo quedan entre 0 y 1.'),
-    tiles('Pinta los argumentos que admite $\\ln(x-2)$.', 3, ['$-3$', '$0$', '$1$', '$2$', '$3$', '$8$'], [4, 5],
-      'El argumento completo, x menos 2, debe quedar estrictamente positivo.', { explain: 'El dominio es $x>2$. De la lista sirven 3 y 8.' }),
-  ]);
-  tune('alg-73', ['balanza-exponencial'], [
-    point('Marca el punto donde $2^x$ iguala a 16.', [-2, 6, 0, 22], [1, 2], [4, 16], [x => 2 ** x, line(0, 16)],
-      'Busca qué potencia de 2 da la altura de la recta horizontal.'),
-    probe('Sondea $\\log_2(x-1)$ hasta que la altura sea 3.', [2, 12, 0, 4], 3, 9, x => Math.log2(x - 1),
-      'Convierte la igualdad a forma exponencial y añade el desplazamiento de una unidad.'),
-    groups('Clasifica los valores para resolver $\\log_2(x-1)+\\log_2(x+1)=3$.', ['Solución', 'Admitido', 'Fuera del dominio'],
-      ['$-3$', '$1$', '$2$', '$3$', '$5$'], [2, 2, 1, 0, 1], 'Primero exige que ambos argumentos sean positivos. Luego prueba el producto en la ecuación.',
-      { explain: '$x^2-1=8$ produce las candidatas −3 y 3. La única válida es 3.' }),
-    tiles('Pinta las ecuaciones que tienen $x=2$ como solución.', 2, ['$3^x=9$', '$2^x=2$', '$\\log_2(x+2)=2$', '$\\ln(x-2)=0$'],
-      [0, 2], 'Sustituye 2 en cada caso. Para evaluar un logaritmo, verifica antes el dominio.',
-      { explain: '$3^2=9$ y $\\log_2(2+2)=2$.' }),
-    route('Despeja $x$ en $3^{2x-1}=27$ aumentando de estación cuando la igualdad sea equivalente.', ['inicio', '$2x-1=3$', '$2x-1=9$', '$x=2$', '$x=5$', 'fin'],
-      [1, 3], 'Expresa 27 como potencia de 3. Luego iguala exponentes.'),
+})());
+;
+//#archivo js/courses/euclidiana-triangulo.js
+// Geometría Euclidiana · mundo 3 «Triángulos Congruentes» (spec 2026-11-26-curso-euclidiana). Enunciados, números y contextos propios.
+// Aquí todavía no se sabe cuánto suman los ángulos de un triángulo ni se han visto paralelas: ningún ejercicio se apoya en eso.
+EUC_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = EUC;
+  const TIPOS = ['escaleno', 'isósceles', 'equilátero', 'acutángulo', 'rectángulo', 'obtusángulo'];
+  const RANGO = ['mayor', 'mediano', 'menor', 'igual'];
+
+  const l1 = leccion('euc-triangulo-1', 'El triángulo y sus elementos', guion(
+    ['Tres y tres', 'Un triángulo tiene tres vértices, tres lados y tres ángulos. Se nombra con sus vértices: triángulo ABC.'],
+    ['Por sus lados', 'Escaleno: tres lados distintos. Isósceles: dos lados congruentes. Equilátero: los tres congruentes.'],
+    ['Por sus ángulos', 'Acutángulo: tres ángulos agudos. Rectángulo: uno recto. Obtusángulo: uno obtuso.'],
+    ['Segmentos notables', 'La altura cae a escuadra; la mediana llega al punto medio; la bisectriz parte el ángulo en dos congruentes.'],
+    ['Opuesto y comprendido', 'Frente a cada ángulo está su lado opuesto. El ángulo comprendido entre dos lados es el que ellos forman.']), [
+    x('clasifica-triangulos', 'Cada triángulo trae las medidas de sus lados. Toca **todos** los que son **isósceles**.', { por: 'lados', pide: 'isósceles', tris: [[5, 5, 8], [4, 6, 7], [6, 9, 6], [3, 7, 8], [8, 5, 8], [9, 6, 5]] },
+      'Son isósceles los que repiten una medida: 5, 5, 8; 6, 9, 6 y 8, 5, 8. Los otros tres tienen sus lados distintos: son escalenos.', 'No mires la forma: compara las tres medidas de cada triángulo y busca dónde se repite una.'),
+    x('dos-apellidos', 'Las rayitas iguales marcan lados congruentes. Ponle al triángulo su nombre **por los lados** y su nombre **por los ángulos**.', { pts: [[0, 0], [8, 0], [4, 3]], fichas: TIPOS },
+      'Dos lados llevan la misma marca: es isósceles. Y el ángulo de arriba abre más que un recto: es obtusángulo.', 'Un nombre sale de contar cuántos lados llevan la misma marca; el otro, de mirar el ángulo más abierto.'),
+    x('vertice-tipo', 'Arrastra el vértice C hasta que el triángulo ABC sea **isósceles** y **rectángulo** al mismo tiempo.', { A: 2, B: 10, pide: ['isósceles', 'rectángulo'], sol: [6, 4], ini: [3, 2] },
+      'Con C sobre la mitad de AB los lados AC y BC miden lo mismo; a 4 cuadros de altura las dos diagonales de cuadro forman un ángulo recto en C.', 'Para que dos lados midan lo mismo, C debe quedar igual de lejos de A y de B. Luego busca la altura donde la punta hace escuadra.'),
+    x('nombra-segmentos', 'Desde cada vértice sale un segmento con sus marcas. Ponle a cada uno su nombre.', { de: ['mediana', 'altura', 'bisectriz'], fichas: ['altura', 'mediana', 'bisectriz', 'mediatriz', 'lado'] },
+      'Desde A llega al punto medio (dos trozos con la misma rayita): mediana. Desde B cae a escuadra: altura. Desde C parte el ángulo en dos congruentes: bisectriz.', 'Mira la marca de cada uno: una esquina recta, dos trozos con la misma rayita o dos arcos iguales en el vértice.'),
+    x('pie-notable', 'El lado BC mide **28**. Mueve el pie P hasta que el segmento AP sea la **mediana** del triángulo.', { A: [10, 24], c: 28, pide: 'mediana', ini: 3 },
+      'La mediana une el vértice con el punto medio del lado opuesto: $28 \\div 2 = 14$, así que $BP = PC = 14$.', 'La escena te da tres medidas: los trozos de BC, el ángulo en P y los dos ángulos en A. ¿Cuál de ellas define a la mediana?'),
+    x('opuesto-comprendido', 'En el triángulo PQR toca el **lado opuesto** al ángulo Q y el **ángulo comprendido** entre los lados PQ y PR.', { n: 'PQR', sol: ['PR', 'P'], no: { PQ: 'PQ toca al vértice Q: el lado opuesto es el que no lo toca.', QR: 'QR toca al vértice Q: el lado opuesto es el que no lo toca.', Q: 'PQ y PR se encuentran en P, no en Q.', R: 'PQ no llega a R: el ángulo comprendido está donde se juntan los dos lados.' }, mira: 'Opuesto: el que queda enfrente. Comprendido: el que forman los dos lados.', falta: 'Falta uno: son un lado y un ángulo.', ok: 'Frente a Q está PR, y PQ con PR se juntan en P.' },
+      'El lado opuesto a Q es el que no pasa por Q: PR. Los lados PQ y PR comparten el vértice P: allí está el ángulo que comprenden.', 'El lado opuesto a un vértice es el único que no lo toca. Dos lados comprenden el ángulo del vértice que tienen en común.'),
+    x('sube-distancia', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un triángulo **isósceles** tiene dos lados de 9 y la base de 5. Su perímetro', r: 23, c: '9 + 9 + 5', e: { 19: 'Los lados congruentes son los de 9: se suman dos de 9 y uno de 5.', 14: 'Falta un lado: son tres.' } },
+      { q: 'Un triángulo **equilátero** tiene perímetro 42. Cada lado', r: 14, c: '42 \\div 3', e: { 21: 'Son tres lados congruentes, no dos.' } },
+      { q: 'La **mediana** desde A llega al lado BC, que mide 26. Cada trozo de BC', r: 13, c: '26 \\div 2', e: { 26: 'La mediana llega al punto medio: parte el lado en dos.' } }] },
+      '$9 + 9 + 5 = 23$; $42 \\div 3 = 14$; y la mediana parte el lado de 26 en dos trozos de 13.', 'Isósceles: dos lados congruentes. Equilátero: tres. La mediana llega al punto medio del lado opuesto.'),
+    sol('En el triángulo ABC el segmento AD llega al lado BC. Se sabe que $BD = DC$ y que AD forma un ángulo recto con BC. ¿Qué nombres recibe AD?', ['Como D es punto medio de BC, AD es una [[mediana]]', 'Como AD es perpendicular a BC, AD es una [[altura]]', 'La recta AD es perpendicular a BC por su punto medio: es la [[mediatriz]] de BC'], ['bisectriz', 'hipotenusa', 'base'],
+      'Punto medio: mediana. Perpendicular al lado opuesto: altura. Perpendicular por el punto medio de un lado: mediatriz.', 'Cada dato del enunciado es la definición de uno de los segmentos notables: léelos uno por uno.'),
+    err('Un triángulo tiene lados de 7 cm, 7 cm y 10 cm, y uno de sus ángulos es obtuso. ¿Cómo se clasifica?', ['Tiene dos lados congruentes, los de 7 cm', 'Por sus lados es isósceles', 'Tiene un ángulo obtuso', 'Por sus ángulos es acutángulo'], 3, ['Por sus ángulos es obtusángulo', 'Por sus ángulos es rectángulo', 'Por sus ángulos es equilátero'],
+      'Con un ángulo obtuso el triángulo es obtusángulo. Acutángulo es el que tiene sus tres ángulos agudos.', 'Repasa qué pide cada nombre: ¿cuántos ángulos agudos necesita un triángulo acutángulo?'),
+    opc('En el triángulo MNP, el segmento que sale de N y divide al ángulo N en dos ángulos congruentes se llama:', ['altura', 'mediana', 'bisectriz', 'mediatriz'], 2, 'Partir el ángulo del vértice en dos ángulos congruentes es lo que define a la bisectriz.', 'Piensa cuál de los segmentos notables se define con ángulos y no con el lado opuesto.'),
   ]);
 
-  // Sin jefes (spec 2026-11-18-algebra-revision): la evaluación conserva sus preguntas, suma las variantes y los retos
-  // que eran del jefe (cada uno ligado a la lección que repasa) y el nodo del jefe desaparece del mundo.
-  function assess(world, boss, replacements, bossLessons) {
-    const u = COURSE_ALGEBRA.units.find(u => u.world === world);
-    const item = (lesson, ex, review) => ({ lesson, review: review || ((ex.hint || '') + ' ' + (ex.explain || '')).trim(),
-      ex: { ...ex, canvasGuide: true, exam: true, motion: false, params: { ...ex.params, motion: false, autoDemo: false } } });
-    // Las preguntas de escoger o de armar con fichas de tocar no siguen: el usuario las descartó.
-    const dull = ['escala-solucion', 'arma-la-cuenta', 'une-parejas', 'clasifica-cartas', 'ordena-terminos', 'verdadero-falso'];
-    const items = u.exam.items.filter(it => !dull.includes(it.ex.game)).map(it => item(it.lesson, it.ex, it.review));
-    for (const [i, ex] of Object.entries(replacements)) items.push(item(u.exam.items[i].lesson, ex));
-    boss.forEach((ex, i) => items.push(item(bossLessons[i], ex)));
-    // Orden del mundo: primero las preguntas de la primera lección.
-    const order = u.lessons.map(l => l.id);
-    u.exam.items = items.map((it, k) => [it, k]).sort((a, b) => order.indexOf(a[0].lesson) - order.indexOf(b[0].lesson) || a[1] - b[1]).map(([it]) => it);
-    u.exam.minutes = Math.max(12, Math.round(u.exam.items.length * 1.5));
-    delete u.boss;
-  }
+  const l2 = leccion('euc-triangulo-2', 'Criterios L-A-L, A-L-A y L-L-L', guion(
+    ['Congruentes', 'Dos triángulos son congruentes si uno encaja sobre el otro: cada vértice tiene su pareja y las partes correspondientes son congruentes.'],
+    ['L-A-L', 'Dos lados y el ángulo comprendido entre ellos respectivamente congruentes: los triángulos son congruentes.'],
+    ['A-L-A y L-L-L', 'También basta un lado con los dos ángulos pegados a él, o los tres lados.'],
+    ['Isósceles', 'Si dos lados de un triángulo son congruentes, los ángulos opuestos a ellos también; y al revés.'],
+    ['L-L-A no', 'Dos lados y un ángulo que no está entre ellos pueden dar dos triángulos distintos.']), [
+    x('partes-correspondientes', 'Los dos triángulos son congruentes y llevan las **mismas marcas**. Pon la parte del segundo que corresponde a cada una.', { corr: 'EFD', pide: ['∠A', 'AB', 'BC'], fichas: ['∠D', '∠E', '∠F', 'DE', 'EF', 'DF'] },
+      'Las marcas dicen que A va con E, B con F y C con D: $\\triangle ABC \\cong \\triangle EFD$. Entonces ∠A ≅ ∠E, AB ≅ EF y BC ≅ FD.', 'No te guíes por la posición: el segundo triángulo está girado. Sigue el color de cada arco y el número de rayitas.'),
+    x('pares-marcados', 'En cada par solo se sabe lo que está **marcado**. Toca los pares en los que eso basta para asegurar que los triángulos son congruentes.', { casos: [{ l: [1, 2], a: [0] }, { l: [0, 2], a: [0] }, { l: [2], a: [0, 1] }, { a: [0, 1, 2] }] },
+      'El par 1 tiene dos lados y el ángulo que forman (L-A-L) y el par 3, un lado con sus dos ángulos (A-L-A). En el 2 el ángulo no está entre los lados, y en el 4 solo hay ángulos.', 'En cada par mira si el ángulo marcado queda entre los dos lados marcados, o si el lado marcado une los dos ángulos.'),
+    x('arma-lal', 'Arma el triángulo DEF **congruente** con ABC usando L-A-L. El lado DE ya mide lo mismo que AB: abre el ángulo en D y dale su largo a DF.', { c: 8, b: 5, g: 60, a: 7 },
+      'L-A-L usa los dos lados que forman el ángulo: AB y AC. Entonces $\\angle D = 60^\\circ$ y $DF = AC = 5$; el tercer lado sale solo y mide 7.', 'El ángulo de 60° está en A. ¿Cuáles dos lados de ABC se juntan en A? Esos son los que debes copiar.'),
+    x('abre-ala', 'Arma DEF congruente con ABC usando A-L-A: el lado DE ya mide lo mismo que AB, con D en el lugar de A y E en el de B. Abre los ángulos en D y en E.', { A: 40, B: 65, C: 75 },
+      'A-L-A usa el lado AB y los dos ángulos pegados a él: $\\angle D = \\angle A = 40^\\circ$ y $\\angle E = \\angle B = 65^\\circ$. El de 75° no toca a AB.', 'El triángulo ABC está dibujado con B a la izquierda. Fíjate qué ángulos tocan al lado AB y cuál vértice corresponde a D.'),
+    x('marca-que-falta', 'Ya se sabe que $AB \\cong DE$ y que $\\angle A \\cong \\angle D$. Toca la congruencia que falta para poder aplicar **L-A-L**.', { l: [2], a: [0], cr: 'L-A-L' },
+      'El ángulo A debe quedar entre los dos lados: falta el otro lado que sale de A, es decir $AC \\cong DF$.', 'En L-A-L el ángulo va en medio. ¿Qué otro lado, además de AB, forma el ángulo A?'),
+    x('base-iguales', 'Sin medir lados: gira el lado AC hasta que el triángulo quede **isósceles**, con $AB = AC$.', { B: 55 },
+      'Si los ángulos de la base son congruentes, los lados opuestos a ellos también: con $\\angle C = \\angle B = 55^\\circ$ queda $AB = AC$.', 'En un triángulo isósceles, ¿qué se sabe de los ángulos que están frente a los lados congruentes?'),
+    x('razones-paso', 'Los segmentos AB y CD se cortan en M, punto medio de los dos. Pon la **razón** de cada paso para demostrar que $AC \\cong BD$.', { fig: 'cruce', et: ['AM ≅ MB y CM ≅ MD', '∠AMC ≅ ∠BMD', '△AMC ≅ △BMD', 'AC ≅ BD'], metas: ['dato', 'op. por el vértice', 'L-A-L', 'partes corresp.'], fichas: ['dato', 'op. por el vértice', 'L-A-L', 'partes corresp.', 'L-L-L', 'A-L-A', 'lado común'],
+      mira: ['M es punto medio de AB y de CD: eso lo dice el enunciado.', 'Esos dos ángulos se forman al cruzarse dos rectas, uno frente al otro.', 'Hay dos lados y el ángulo que forman.', 'AC y BD ocupan el mismo lugar en dos triángulos congruentes.'], trampas: { '2:L-L-L': 'Solo se conocen dos pares de lados; el tercero es lo que se quiere demostrar.', '2:A-L-A': 'Solo se conoce un par de ángulos, y está entre los dos lados.' }, ok: 'Dato, opuestos por el vértice, L-A-L y partes correspondientes.' },
+      'Los medios dan dos pares de lados; los ángulos en M son opuestos por el vértice; con eso hay L-A-L, y AC y BD son partes correspondientes.', 'Pregunta en cada renglón: ¿eso me lo dieron, lo veo en la figura o sale de un paso anterior?'),
+    x('lanza-angulo', 'El faro gira desde la derecha. Dale el ángulo que se pide y suéltalo. Puedes fallar **una** vez.', { tiros: [
+      { q: '$\\triangle ABC \\cong \\triangle DEF$, con $\\angle A = 35^\\circ$ y $\\angle B = 80^\\circ$. ¿Cuánto mide $\\angle E$?', r: 80, c: '\\angle E = \\angle B', e: { 35: 'Ese es el ángulo D: E es la pareja de B.' } },
+      { q: 'En $\\triangle PQR$, $PQ = PR$ y $\\angle Q = 70^\\circ$. ¿Cuánto mide $\\angle R$?', r: 70, c: '\\angle R = \\angle Q', e: { 110: 'No se resta: los ángulos frente a los lados congruentes miden lo mismo.' } },
+      { q: 'En un triángulo isósceles, la bisectriz del ángulo del vértice llega a la base. ¿Qué ángulo forma con ella?', r: 90, c: '180^\\circ \\div 2', e: { 45: 'Esa bisectriz también es altura: cae a escuadra.' } }] },
+      'Partes correspondientes: $\\angle E = \\angle B = 80^\\circ$. Ángulos de la base: $70^\\circ$. Y la bisectriz del vértice es también altura: $90^\\circ$.', 'El orden de las letras dice quién va con quién; en el isósceles, mira los ángulos frente a los lados congruentes.'),
+    sol('En el triángulo isósceles ABC, con $AB \\cong AC$, se traza la bisectriz AD del ángulo A. Demuestra que $\\angle B \\cong \\angle C$.', ['$AB \\cong AC$, porque es un [[dato]]', '$\\angle BAD \\cong \\angle CAD$, porque AD es [[bisectriz]]', '$AD \\cong AD$, porque es un [[lado común]]', '$\\triangle ABD \\cong \\triangle ACD$ por [[L-A-L]]', '$\\angle B \\cong \\angle C$, por ser [[partes correspondientes]]'], ['L-L-L', 'A-L-A', 'mediana'],
+      'Dos lados (AB con AC y AD común) y el ángulo que forman, partido por la bisectriz: L-A-L. Los ángulos B y C se corresponden.', 'El ángulo partido por la bisectriz queda entre AB y AD en un triángulo, y entre AC y AD en el otro.'),
+    err('De dos triángulos se sabe que $AB \\cong DE$, $BC \\cong EF$ y $\\angle A \\cong \\angle D$. ¿Se puede asegurar que son congruentes?', ['Hay dos pares de lados congruentes: AB con DE y BC con EF', 'Hay un par de ángulos congruentes: A con D', 'El ángulo A está comprendido entre AB y BC', 'Con esos datos se busca el criterio que aplica'], 2, ['El ángulo A no está entre AB y BC: es L-L-A y no se puede asegurar', 'El ángulo A está comprendido entre BC y AC', 'El ángulo A es opuesto al lado AB'],
+      'AB y BC se juntan en B, no en A. Con el ángulo fuera de los dos lados queda L-L-A, que no es un criterio.', 'Busca el vértice que comparten los lados AB y BC: ahí está el ángulo comprendido.'),
+    opc('Si $\\triangle RST \\cong \\triangle XYZ$, ¿cuál de estas afirmaciones es necesariamente verdadera?', ['$ST \\cong YZ$', '$RS \\cong YZ$', '$\\angle R \\cong \\angle Z$', '$RT \\cong XY$'], 0, 'El orden de las letras da la correspondencia: S con Y y T con Z, así que $ST \\cong YZ$.', 'Escribe una letra debajo de la otra: cada vértice va con el que ocupa su misma posición.'),
+  ]);
 
-  assess('conjuntos', [
-    groups('El universo son las letras de CLIMA. Separa las que pertenecen también a MAR.', ['En común', 'Solo en CLIMA'],
-      ['C', 'L', 'I', 'M', 'A'], [1, 1, 1, 0, 0], 'Un elemento en común aparece en las dos palabras.'),
-    tiles('Colorea el complemento de $A=\\{2,4,6\\}$ en $U=\\{1,2,3,4,5,6\\}$.', 3,
-      ['1', '2', '3', '4', '5', '6'], [0, 2, 4], 'Parte de U y excluye los elementos que aparecen en A.', { explain: '$A^c=\\{1,3,5\\}$.' }),
-    route('Traza las cardinalidades. Parte de 3 elementos, añade uno nuevo y luego añade dos que ya estaban.', ['3', '4', '5', '4', '6', 'fin'],
-      [1, 3], 'Añadir una copia de un elemento no cambia la cardinalidad.', { motion: true }),
-  ], {
-    3: rail('Ajusta el número de subconjuntos de $\\{P,L,A,T,O\\}$.', [0, 40, 10, 32], v => tex('n(\\mathcal P(A))=' + v),
-      'Incluye o deja fuera cada uno de los cinco elementos.', { explain: '$2^5=32$ subconjuntos, incluido el vacío.' }),
-  }, ['alg-0c', 'alg-0c', 'alg-0a']);
-  assess('numeros', [
-    play('ubica-en-recta', 'Suelta cada número en su lugar de la recta', { min: -3, max: 3, tol: 0.15, points: [
-      { label: '−7/4', tex: '-\\tfrac74', value: -1.75 }, { label: '2/3', tex: '\\tfrac23', value: 0.6667 }, { label: '−√2', tex: '-\\sqrt2', value: -1.4142 }, { label: '2.25', tex: '2.25', value: 2.25 },
-    ] }, 'Siete cuartos son una unidad y tres cuartos, a la izquierda del cero; $-\\sqrt2 \\approx -1.41$ queda un poco a su derecha, y $\\tfrac23$ y $2.25$ a la derecha del cero.',
-      { hint: 'Antes de soltar, convierte cada número a decimal: así ves entre qué enteros cae y de qué lado del cero está.' }),
-    groups('Pon cada valor en la familia más pequeña que lo contiene.', ['Enteros', 'Racionales no enteros', 'Irracionales'],
-      ['$-3$', '$1/7$', '$\\sqrt5$', '$\\sqrt{16}$', '$0.25$'], [0, 1, 2, 0, 1],
-      'Reduce una raíz cuadrada exacta antes de clasificarla.'),
-    probe('Desplaza la sonda de $y=|x+2|$ hasta la rama izquierda con altura 3 y suéltala.', [-7, 5, 0, 7], 0, -5, x => Math.abs(x + 2),
-      'Busca el punto que se aleja tres unidades hacia la izquierda de −2.', { motion: true }),
-  ], {
-    6: rail('Ajusta la distancia entre $-3.5$ y $2.25$.', [0, 8, 3, 5.75, .25], v => format(v, 'd'),
-      'Mide cada tramo hasta cero y suma las longitudes.', { explain: '$|2.25-(-3.5)|=5.75$.' }),
-  }, ['alg-11b', 'alg-11c', 'alg-12d']);
-  assess('razones', [
-    rect('Construye un rectángulo de 24 unidades cuya razón ancho a alto sea 3:2.', [10, 8], [6, 4],
-      'Multiplica los lados del modelo por el mismo número y comprueba el área.', { read: ([a, b]) => tex(a + ':' + b + '\\quad A=' + a * b) }),
-    point('Marca cuánto cuesta comprar seis unidades si cuatro cuestan 18 mil pesos.', [0, 10, 0, 40], [2, 9], [6, 27], [line(4.5, 0)],
-      'Dos unidades cuestan la mitad del precio conocido.'),
-    route('Desde 200 mil, aplica una rebaja de 25 % y después un aumento de 10 %.', ['200', '150', '175', '165', '160', 'fin'], [1, 3],
-      'El segundo cambio toma como base el precio tras la rebaja.', { motion: true }),
-  ], {
-    6: probe('En un mapa, 2 cm representan 15 km. Pon la sonda en la distancia que representan 7 cm.',
-      [0, 8, 0, 64], 2, 7, line(7.5, 0), 'Un centímetro representa la mitad de 15 km.', { explain: '$7\\cdot7.5=52.5$ km.' }),
-  }, ['alg-12', 'alg-12f', 'alg-13d']);
-  assess('potencias', [
-    rect('Empaca $(2^3)^2$ como dos filas de tres factores 2. Muestra cuántos factores hay en total.', [6, 5], [3, 2],
-      'Cada fila repite completa la potencia de adentro.', { read: ([x, y]) => tex('(2^{' + x + '})^{' + y + '}=2^{' + x * y + '}') }),
-    rail('Equilibra $k\\sqrt5$ con $\\sqrt{180}$ usando un entero positivo.', [1, 9, 3, 6], k => tex('(' + k + '\\sqrt5)^2=' + 5 * k * k),
-      'Factoriza 180 como cinco veces un cuadrado perfecto.', { loads: k => [5 * k * k, 180], explain: '$\\sqrt{180}=6\\sqrt5$.' }),
-    probe('Lleva la sonda a $x=-3$ en $y=4^x$ y sigue el cambio de escala.', [-4, 2, 0, 5], 0, -3, x => 4 ** x,
-      'Un paso hacia la izquierda divide la altura entre 4.', { motion: true, explain: '$4^{-3}=\\tfrac1{64}$.' }),
-  ], {
-    5: dial('En la rueda de potencias de 81, identifica el exponente que saca la raíz cuarta y luego eleva al cubo.',
-      ['$1/4$', '$1/3$', '$3/4$', '$4/3$', '$2$', '$3$'], 2, (v, i) => tex('81^{' + v.slice(1, -1) + '}=' + n(81 ** [.25, 1 / 3, .75, 4 / 3, 2, 3][i])),
-      'El índice de la raíz es el denominador de la potencia fraccionaria.', { explain: '$81^{3/4}=3^3=27$.' }),
-  }, ['alg-21b', 'alg-22b', 'alg-21a']);
-  assess('progresiones', [
-    point('Marca en la gráfica el séptimo término de 2, 6, 10, … .', [0, 8, 0, 35], [1, 2], [7, 26], [line(4, -2)],
-      'Entre los términos 1 y 7 hay seis saltos de la misma longitud.'),
-    tiles('Pinta cuatro capas sobre 32 celdas: mitad, cuarto, octavo y dieciseisavo.', 8, grid(32, () => ''), grid(30, i => i),
-      'La primera capa usa 16 celdas. Cada capa posterior usa la mitad de la anterior.', { valid: v => v.length === 30, read: v => tex('\\frac{' + v.length + '}{32}'), explain: '$16+8+4+2=30$ celdas.' }),
-    probe('Busca cuántas etapas necesita un acumulado de $1+2+4+\\cdots$ para llegar a 31.', [0, 6, 0, 65], 1, 5, x => 2 ** x - 1,
-      'Al duplicar la suma y restar la original, queda la siguiente potencia menos uno.', { motion: true }),
-  ], {
-    0: point('Marca el término 12 de $5,8,11,\\ldots$.', [0, 14, 0, 48], [2, 8], [12, 38], [line(3, 2)], 'Cuenta los saltos que separan el término 1 del 12.'),
-    1: rect('Forma un rectángulo de diez columnas con dos copias de la suma $2+4+\\cdots+20$.', [12, 24], [10, 22],
-      'Los términos se emparejan por los extremos. Cada pareja suma lo mismo.', { explain: 'El rectángulo tiene 220 unidades. Una copia de la suma vale 110.' }),
-    2: probe('Sondea el número de bacterias tras seis horas, si empieza una y la cantidad se duplica cada hora.', [0, 7, 0, 130], 2, 6, x => 2 ** x,
-      'El número de duplicaciones es el número de horas.'),
-  }, ['alg-14', 'alg-14d', 'alg-14d']);
-  assess('polinomios', [
-    groups('Reúne las piezas semejantes de $(x+2)(x+7)$ para construir el polinomio.', ['Cuadrado', 'Lineales', 'Constante'],
-      ['$7x$', '$x^2$', '$14$', '$2x$'], [1, 0, 2, 1], 'Solo las dos piezas lineales comparten la misma potencia de x.', { explain: '$x^2+9x+14$.' }),
-    tiles('Para el término $a^3b^2$ de $(a+b)^5$, marca exactamente las dos posiciones que aportan b.', 5,
-      ['1', '2', '3', '4', '5'], [1, 3], 'Puedes elegir cualquier par de las cinco posiciones.', { valid: v => v.length === 2, explain: 'Hay diez pares. El término completo es $10a^3b^2$.' }),
-    probe('Lleva la sonda al cero positivo de $y=x^2-2x-15$ y suéltala.', [-6, 7, -18, 20], 0, 5, x => x * x - 2 * x - 15,
-      'El factor que corresponde a la raíz positiva se anula en la rama derecha.', { motion: true }),
-  ], {
-    0: probe('Evalúa $x^2-4x+7$ en $x=-2$.', [-4, 5, 0, 42], 1, -2, x => x * x - 4 * x + 7, 'Sustituye con paréntesis en los dos términos variables.'),
-    1: tiles('Pinta los tres términos que quedan al desarrollar $(3x-2)^2$.', 3,
-      ['$9x^2$', '$-12x$', '$9x$', '$4$', '$-4x$', '$-4$'], [0, 1, 3],
-      'La parte de grado 1 suma los productos mixtos.', { explain: 'Al desarrollar sale $9x^2-12x+4$.' }),
-    2: rect('Construye una tabla de parejas ordenadas de siete objetos, sin repetir un objeto consigo mismo.', [9, 8], [7, 6],
-      'Una primera elección deja seis posibilidades para la segunda. Cada pareja sin orden aparece dos veces.',
-      { explain: '$\\binom72=7\\cdot6/2=21$.' }),
-    4: tiles('Pinta los dos factores que recomponen $x^3+27$.', 2,
-      ['$x+3$', '$x^2-3x+9$', '$x-3$', '$x^2+3x+9$'], [0, 1],
-      'Es una suma de cubos. Al multiplicar, los términos mixtos se cancelan.', { explain: '$x^3+27=(x+3)(x^2-3x+9)$.' }),
-  }, ['alg-3', 'alg-24c', 'alg-24b']);
-  assess('cuadraticas', [
-    point('Coloca el conjugado de $-2+3i$ en el plano complejo.', [-5, 5, -5, 5], [1, 0], [-2, -3], [],
-      'Refleja sobre el eje real. La parte real queda fija y la imaginaria cambia de signo.'),
-    rail('Equilibra la ecuación $5x-8=2x+7$.', [0, 10, 2, 5], x => tex(5 * x - 8 + '\\quad\\text{y}\\quad' + (2 * x + 7)),
-      'Junta las copias de x en un miembro y las constantes en el otro.', { loads: x => [5 * x - 8, 2 * x + 7] }),
-    probe('Encuentra la abscisa del máximo de $y=-(x-3)^2+8$.', [-2, 8, -9, 10], 0, 3, par(-1, 3, 8),
-      'El término que se resta es un cuadrado y puede valer cero.', { motion: true }),
-  ], {
-    0: rail('Ajusta el valor real del producto $(2-i)(2+i)$.', [0, 10, 2, 5], v => format(v),
-      'Multiplica como una diferencia de cuadrados y usa $i^2=-1$.', { explain: 'El producto es $4-i^2=5$.' }),
-    1: point('Marca la intersección de $y=2(x+3)$ y $y=x-4$.', [-12, 2, -17, 10], [-3, 0], [-10, -14], [line(2, 6), line(1, -4)],
-      'Simplifica primero la distributiva. El punto debe estar en las dos rectas.'),
-    3: rail('Desliza hasta indicar el discriminante de $3x^2-2x-1$.', [-12, 24, 0, 16], v => format(v, '\\Delta'),
-      'Eleva b al cuadrado y resta $4ac$, conservando el signo del término independiente.', { explain: '$(-2)^2-4\\cdot3(-1)=16$.' }),
-    4: tiles('Marca en el tablero las raíces de $x^2+2x-8=0$.', 3, ['$-4$', '$-2$', '$0$', '$2$', '$4$', '$8$'],
-      [0, 3], 'Dos factores lineales con constantes de producto −8 y suma 2 dejan ver las raíces.', { explain: 'Los factores son $(x+4)(x-2)$.' }),
-  }, ['alg-23c', 'alg-1', 'alg-4a']);
-  assess('grado-superior', [
-    tiles('Pinta los puntos donde cruza el eje $y=(x+1)^2(x-2)(x-4)^3$.', 3, ['$-1$', '$2$', '$4$'],
-      [1, 2], 'Solo la multiplicidad impar cambia el signo de la gráfica.', { explain: 'Cruza en 2 y 4. Rebota en −1.' }),
-    rail('Ajusta el coeficiente de $x$ para que $x+2$ sea factor de $x^2+kx+6$.', [-2, 9, 1, 5],
-      k => tex('P(-2)=10-2(' + k + ')=' + (10 - 2 * k)), 'El residuo que se obtiene al evaluar en −2 debe valer cero.', { loads: k => [10, 2 * k] }),
-    probe('Lleva la sonda al valor que da el residuo de dividir $x^3-2x+1$ por $x+3$.', [-5, 5, -45, 45], 0, -3, x => x ** 3 - 2 * x + 1,
-      'Para un divisor de la forma $x-r$, el residuo es $P(r)$.', { motion: true }),
-  ], {
-    0: groups('Reconstruye el cociente de $(x^2+2x-3)/(x-1)$ arrastrando las piezas que contiene.', ['Cociente', 'Fuera'], ['$x$', '$3$', '$-3$', '$x^2$'],
-      [0, 0, 1, 1], 'Factoriza el dividendo y retira el factor que coincide con el divisor.', { explain: '$x^2+2x-3=(x-1)(x+3)$.' }),
-    2: probe('Marca el valor de entrada que revela el residuo de dividir $2x^3-x+5$ entre $x+1$.', [-4, 4, -16, 22], 1, -1, x => 2 * x ** 3 - x + 5,
-      'Evalúa donde el divisor es cero.'),
-    4: tiles('Para $x^3-3x^2+2x+5$, pinta cada coeficiente que cambia de signo con respecto al anterior.', 4,
-      ['1', '$-3$', '2', '5'], [1, 2], 'Recorre los coeficientes en orden descendente de grado.',
-      { explain: 'Hay dos cambios de signo. Por la regla de Descartes puede haber dos raíces positivas o ninguna.' }),
-  }, ['alg-93', 'alg-92', 'alg-92']);
-  assess('racionales', [
-    bridges('Construye el denominador común para sumar las dos expresiones.',
-      [['3', 'x+1'], ['1', 'x-4']], ['x+1', 'x-4'], ['x+1', 'x-4', 'x-1', 'x+4'], [1, 0],
-      'Cada expresión necesita el factor que le falta.', 'Queda $\\frac{4x-11}{(x+1)(x-4)}$, con $x\\ne-1,4$.'),
-    groups('Clasifica los valores para $\\dfrac{(x+2)(x-5)}{(x+2)(x-1)}$.', ['Hueco', 'Asíntota', 'Permitido'],
-      ['$-2$', '$1$', '$5$', '$0$'], [0, 1, 2, 2], 'Conserva todas las restricciones del denominador original.'),
-    point('Encuentra la intersección con $x>0$ de $y=x^2-4$ y $y=2x+4$. Suelta para recorrer el plano.', [-5, 6, -6, 14],
-      [0, 1], [4, 12], [par(1, 0, -4), line(2, 4)], 'Iguala las alturas y conserva la solución positiva.', { motion: true }),
-  ], {
-    2: bridges('Amplía lo necesario para sumar $\\frac3x+\\frac2{x^2}$.', [['3', 'x'], ['2', 'x^2']], ['x', 'x^2'],
-      ['x', '1', 'x^2', 'x+1'], [0, 1], 'Solo falta un factor de x a la primera fracción.',
-      '$\\frac3x+\\frac2{x^2}=\\frac{3x+2}{x^2}$, con $x\\ne0$.'),
-    4: point('Encuentra el punto de corte de $y=x^2$ y $y=x+2$ que tiene abscisa negativa.', [-4, 4, -2, 12], [1, 1], [-1, 1],
-      [par(1, 0, 0), line(1, 2)], 'Las dos curvas pueden tener más de un punto en común. Usa el que queda a la izquierda del eje vertical.'),
-  }, ['alg-25b', 'alg-25a', 'alg-102']);
-  assess('exp-log', [
-    point('Marca en $y=2^x$ la altura que corresponde a dos pasos a la izquierda de cero.', [-4, 5, 0, 8], [1, 2], [-2, .25],
-      [x => 2 ** x], 'Cada paso a la izquierda divide la altura anterior por 2.', { dy: .25 }),
-    tiles('Pinta los argumentos que hacen que $\\log_2(x-4)$ sea positivo.', 3, ['$2$', '$4$', '$5$', '$6$', '$8$', '$3$'],
-      [3, 4], 'Para un logaritmo en base mayor que 1, la salida positiva pide un argumento estrictamente mayor que 1.',
-      { explain: '$x-4>1$, así que sirven 6 y 8.' }),
-    probe('Encuentra el valor que hace $\\log_2(x+2)=4$. Suelta para recorrer la curva.', [-1, 20, 0, 5], 2, 14, x => Math.log2(x + 2),
-      'Vuelve a la forma exponencial. Luego deshaz el desplazamiento de dos unidades.', { motion: true }),
-  ], {
-    1: rail('Ajusta el interés simple en miles que generan 200 mil pesos durante seis meses al 2 % mensual.',
-      [0, 42, 10, 24], v => format(v, 'I'), 'Cada mes se añaden 4 mil pesos sobre el capital original.', { explain: '$200\\cdot0.02\\cdot6=24$ mil pesos.' }),
-    2: dial('Elige en la rueda el exponente de base 4 que produce 64.', [0, 1, 2, 3, 4, 5], 3, v => tex('4^{' + v + '}=' + 4 ** v),
-      'Parte de la unidad y cuenta las multiplicaciones por 4.'),
-    3: probe('Sondea $3^x$ hasta alcanzar el producto $9\\cdot27$ que corresponde a la suma de logaritmos.', [0, 6, 0, 300], 2, 5, x => 3 ** x,
-      'La suma de logaritmos de la misma base se convierte en el logaritmo de un producto.'),
-    4: probe('Busca el valor aproximado de x que hace que $5^x$ llegue a 20.', [1, 2, 0, 26], 1, 1.86, x => 5 ** x,
-      'La solución queda entre 1 y 2. Acerca la sonda a la altura dada.',
-      { dx: .01, valid: x => Math.abs(5 ** x - 20) < .2, explain: '$x=\\log_5 20\\approx1.861$.' }),
-  }, ['alg-71', 'alg-72', 'alg-73']);
-})();
+  const l3 = leccion('euc-triangulo-3', 'Desigualdades en el triángulo', guion(
+    ['Ángulo exterior', 'Un ángulo exterior de un triángulo es mayor que cada uno de los dos interiores no adyacentes.'],
+    ['Lado y ángulo', 'A mayor lado se opone mayor ángulo, y a mayor ángulo se opone mayor lado.'],
+    ['¿Cierra?', 'Cada lado es menor que la suma de los otros dos y mayor que su diferencia.'],
+    ['La bisagra', 'Con dos lados fijos, a mayor ángulo entre ellos, mayor el tercer lado.']), [
+    x('exterior-cabe', 'El ángulo exterior en C mide **110°**. Toca **todas** las medidas que podría tener el ángulo A.', { ext: 110, ops: [40, 95, 110, 125, 70] },
+      'A es un interior no adyacente al exterior: debe medir menos de 110°. Pueden ser 40°, 95° y 70°; ni 110° ni 125°.', 'El ángulo exterior le gana a cada uno de los dos interiores que no lo tocan. ¿Puede haber empate?'),
+    x('angulos-por-lados', 'Los lados miden **9**, **6** y **11** (la figura no está a escala). Di cuál ángulo es el mayor, cuál el mediano y cuál el menor.', { l: [9, 6, 11], fichas: RANGO },
+      'Frente al lado de 11 (AB) está C: el mayor. Frente al de 9 (BC) está A: el mediano. Frente al de 6 (AC) está B: el menor.', 'Cada ángulo «mira» a un lado: el que no lo toca. Ordena los lados y pasa ese orden a los ángulos de enfrente.'),
+    x('lados-por-angulos', 'Los ángulos miden **48°**, **95°** y **37°** (la figura no está a escala). Di cuál lado es el mayor, cuál el mediano y cuál el menor.', { g: [48, 95, 37], fichas: RANGO },
+      'Frente al ángulo de 95° (B) está AC: el mayor. Frente al de 48° (A) está BC: el mediano. Frente al de 37° (C) está AB: el menor.', 'El lado más largo queda frente al ángulo más abierto. Busca primero qué lado está enfrente de cada ángulo.'),
+    x('tercer-lado', 'Dos varillas miden **9** y **4**. ¿Entre qué números enteros puede medir la tercera para que el triángulo **cierre**?', { a: 9, b: 4, max: 14 },
+      'Debe ser mayor que la diferencia, $9 - 4 = 5$, y menor que la suma, $9 + 4 = 13$: de 6 a 12.', 'Si es muy corta no alcanza a unir las puntas; si es muy larga, las otras dos no llegan a tocarse.'),
+    x('cierran-o-no', 'Toca **todas** las ternas de medidas con las que se puede formar un triángulo.', { casos: [{ t: '4, 7 y 10', si: true }, { t: '3, 5 y 9', no: 'En 3, 5 y 9 las dos cortas suman 8: no alcanzan a la de 9.' }, { t: '6, 6 y 11', si: true }, { t: '5, 8 y 13', no: 'En 5, 8 y 13 las dos cortas apenas igualan a la larga: queda un segmento.' }, { t: '12, 5 y 9', si: true }], no: 'Alguna de las marcadas no cierra.', falta: 'Falta alguna que sí cierra: compara el lado mayor con la suma de los otros dos.', ok: 'En todas, el lado mayor es menor que la suma de los otros dos.' },
+      '$4 + 7 > 10$, $6 + 6 > 11$ y $5 + 9 > 12$ cierran. En 3, 5, 9 la suma no alcanza y en 5, 8, 13 apenas iguala.', 'Basta comparar el lado mayor con la suma de los otros dos: tiene que ser estrictamente menor.'),
+    x('compas-bisagra', 'Los dos compases tienen las mismas patas, de 8 y 10. El de la izquierda está abierto 50°. Abre el de la derecha **lo menos posible** para que sus puntas queden **más separadas** que las del otro.', { a: 8, b: 10, g: 50 },
+      'Con los mismos dos lados, a mayor ángulo se opone mayor lado: basta pasar de 50° a 60° para que la separación crezca.', 'Con la misma abertura los triángulos serían congruentes. ¿Hacia dónde hay que mover el ángulo para que el lado de enfrente crezca?'),
+    x('lanza-escala', 'Manda el dron al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Dos lados miden 8 y 15. El **mayor** entero que puede medir el tercero', r: 22, c: '8 + 15 - 1', e: { 23: 'Con 23 los otros dos apenas lo igualan: queda un segmento.' } },
+      { q: 'Dos lados miden 8 y 15. El **menor** entero que puede medir el tercero', r: 8, c: '15 - 8 + 1', e: { 7: 'Con 7, el de 7 y el de 8 apenas igualan al de 15.' } },
+      { q: 'Un triángulo isósceles tiene dos lados de 6. La **mayor** base entera', r: 11, c: '6 + 6 - 1', e: { 12: 'Con 12 los dos lados quedan acostados sobre la base.' } }] },
+      'El tercero es menor que la suma y mayor que la diferencia: $8 + 15 = 23$ y $15 - 8 = 7$ quedan por fuera; $6 + 6 = 12$ también.', 'Halla la suma y la diferencia de los dos lados: el tercero queda entre ellas, sin tocarlas.'),
+    sol('En el triángulo ABC, $AB = 7$, $BC = 10$ y $AC = 12$. Ordena sus ángulos de menor a mayor.', ['El lado menor es AB: su ángulo opuesto es [[C]]', 'El lado mayor es AC: su ángulo opuesto es [[B]]', 'A mayor lado se opone [[mayor]] ángulo', 'De menor a mayor: C, [[A]], B'], ['menor', 'D', 'igual'],
+      'Frente a AB = 7 está C (el menor), frente a BC = 10 está A y frente a AC = 12 está B (el mayor).', 'El ángulo opuesto a un lado es el del vértice que no aparece en el nombre del lado.'),
+    err('En el triángulo DEF el ángulo exterior en F mide 118°. ¿Qué se puede decir de los ángulos D y E?', ['El exterior en F es adyacente al interior F', 'D y E son los interiores no adyacentes a ese exterior', 'El exterior es menor que cada interior no adyacente', 'Entonces D y E miden menos de 118°'], 2, ['El exterior es mayor que cada interior no adyacente', 'El exterior es congruente con cada interior no adyacente', 'El exterior es mayor que el interior adyacente'],
+      'El teorema del ángulo exterior dice que el exterior es mayor que cada interior no adyacente: así sí se concluye que D y E miden menos de 118°.', 'Mira la conclusión del último paso: ¿con cuál relación entre el exterior y los interiores lejanos se llega a ella?'),
+    opc('En el triángulo PQR, $\\angle P = 62^\\circ$, $\\angle Q = 75^\\circ$ y $\\angle R = 43^\\circ$. El lado más largo es:', ['PQ', 'QR', 'los tres miden lo mismo', 'PR'], 3, 'El ángulo mayor es Q, de 75°, y su lado opuesto es PR: a mayor ángulo se opone mayor lado.', 'Busca el ángulo mayor y luego el lado que no toca a ese vértice.'),
+  ]);
+
+  const l4 = leccion('euc-triangulo-4', 'L-A-A y triángulos rectángulos', guion(
+    ['L-A-A', 'Dos ángulos y un lado opuesto a uno de ellos, respectivamente congruentes, también garantizan triángulos congruentes.'],
+    ['Con ángulo recto', 'En triángulos rectángulos bastan dos datos más: cateto y cateto, cateto y ángulo agudo, hipotenusa y ángulo agudo, o hipotenusa y cateto.'],
+    ['H-C', 'Hipotenusa y cateto parece L-L-A, pero con el ángulo recto sí es un criterio.'],
+    ['Mediatriz', 'Todo punto de la mediatriz de un segmento equidista de sus extremos.'],
+    ['Bisectriz', 'Todo punto de la bisectriz de un ángulo equidista de sus lados.']), [
+    x('pares-rectangulos', 'Todos son triángulos **rectángulos** y solo se sabe lo marcado. Toca los pares que con eso quedan congruentes.', { casos: [{ r: 1, l: [0, 1] }, { r: 1, l: [2], a: [0] }, { r: 1, a: [0, 1] }, { r: 1, l: [2, 0] }] },
+      'El par 1 tiene los dos catetos (C-C), el 2 la hipotenusa y un ángulo agudo (H-A) y el 4 la hipotenusa y un cateto (H-C). En el 3 solo hay ángulos.', 'El ángulo recto ya cuenta como un dato. Mira si además hay dos datos más y si alguno de ellos es un lado.'),
+    x('marca-que-falta', 'Los dos triángulos son rectángulos en C y en F, y ya se sabe que $BC \\cong EF$. Toca la congruencia que falta para aplicar **H-C**.', { r: 1, l: [0], a: [], cr: 'H-C' },
+      'H-C pide la hipotenusa y un cateto. El cateto BC ya está: falta la hipotenusa, $AB \\cong DE$.', 'Ubica el ángulo recto: la hipotenusa es el lado que queda enfrente de él.'),
+    x('punto-equidista', 'Arrastra P hasta un punto que esté a **igual distancia** de A y de B y que **no** sea el punto medio de AB.', { A: [2, 1], B: [8, 5], ini: [6, 6], sol: [3, 6] },
+      'Los puntos que equidistan de A y B forman la mediatriz: pasa por el punto medio y es perpendicular a AB. Desde el medio, 2 a la izquierda y 3 arriba.', 'Ubica el punto medio de AB. De A a B se avanza 6 y se sube 4: una perpendicular cambia esos pasos de lugar y de sentido.'),
+    x('rayo-equidista', 'El ángulo mide **70°**. Gira el rayo hasta que el punto P quede a la **misma distancia** de los dos lados.', { g: 70 },
+      'Los puntos que equidistan de los lados de un ángulo están en su bisectriz: el rayo debe dejar $35^\\circ$ a cada lado.', 'Las dos distancias son las perpendiculares punteadas. ¿Sobre qué rayo especial del ángulo quedan iguales?'),
+    x('razones-paso', 'P está en la bisectriz del ángulo O, y PM y PN son perpendiculares a los lados. Los dos triángulos comparten OP. Pon la razón de cada paso para demostrar que $PM \\cong PN$.', { fig: 'equidista', et: ['∠MOP ≅ ∠NOP', '∠M ≅ ∠N', '△OMP ≅ △ONP', 'PM ≅ PN'], metas: ['bisectriz', 'ángulos rectos', 'H-A', 'partes corresp.'], fichas: ['bisectriz', 'ángulos rectos', 'H-A', 'partes corresp.', 'C-C', 'mediatriz', 'L-L-L'],
+      mira: ['OP parte el ángulo O en dos congruentes: eso hace una bisectriz.', 'PM y PN son perpendiculares a los lados.', 'OP es hipotenusa de los dos triángulos, y hay un ángulo agudo congruente.', 'PM y PN ocupan el mismo lugar en dos triángulos congruentes.'], trampas: { '2:C-C': 'No se conoce ningún par de catetos congruentes: eso es lo que se quiere demostrar.', '0:mediatriz': 'La mediatriz es de un segmento; aquí se parte un ángulo.' }, ok: 'Bisectriz, ángulos rectos, hipotenusa-ángulo y partes correspondientes.' },
+      'La bisectriz da un ángulo agudo congruente, las perpendiculares dan los rectos y OP es hipotenusa común: H-A. Luego PM y PN se corresponden.', 'El lado OP queda frente al ángulo recto en los dos triángulos. ¿Qué nombre tiene ese lado?'),
+    x('nombra-criterio', 'Los tres pares son de triángulos **rectángulos**. Pon el criterio que asegura la congruencia de cada par, o «ninguno».', { casos: [{ r: 1, l: [2, 1] }, { r: 1, l: [0], a: [1] }, { r: 1, a: [0, 1] }], fichas: ['H-C', 'C-A', 'ninguno', 'H-A', 'C-C', 'L-L-L'] },
+      'Par 1: hipotenusa y un cateto, H-C. Par 2: un cateto y un ángulo agudo, C-A. Par 3: solo ángulos, que no fijan el tamaño: ninguno.', 'Nombra lo marcado: H para la hipotenusa (frente al ángulo recto), C para un cateto y A para un ángulo agudo.'),
+    x('sube-movimiento', 'Sube a la cantidad que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'P está en la **mediatriz** de AB y $PA = 18$. ¿Cuánto mide PB?', r: 18, c: 'PB = PA', e: { 36: 'No se duplica: P está igual de lejos de A que de B.', 10: 'La mediatriz parte a AB, no a PA.' } },
+      { q: 'Q está en la **bisectriz** de un ángulo, a 14 de uno de sus lados. ¿A cuánto está del otro lado?', r: 14, c: 'd_1 = d_2', e: { 28: 'No se suman: está a la misma distancia de los dos lados.' } },
+      { q: 'Dos triángulos rectángulos son congruentes por **H-C**: hipotenusas de 26 y un cateto de 10 en cada uno. El otro cateto de uno mide 24. ¿Y el del otro?', r: 24, c: 'DF = AC', e: { 26: 'Esa es la hipotenusa.', 10: 'Ese es el cateto que ya se conocía.' } }] },
+      'Un punto de la mediatriz equidista de los extremos (18); uno de la bisectriz, de los lados (14); y en triángulos congruentes las partes correspondientes miden lo mismo (24).', 'Mediatriz: misma distancia a los extremos. Bisectriz: misma distancia a los lados. Congruentes: todo se repite.'),
+    sol('P es un punto de la mediatriz del segmento AB, y M es el punto medio de AB. Demuestra que $PA \\cong PB$.', ['$AM \\cong MB$, porque M es [[punto medio]]', '$\\angle PMA \\cong \\angle PMB$, porque son [[ángulos rectos]]', '$PM \\cong PM$, porque es un [[lado común]]', '$\\triangle PMA \\cong \\triangle PMB$ por [[C-C]]', '$PA \\cong PB$, por ser [[partes correspondientes]]'], ['H-A', 'bisectriz', 'L-L-L'],
+      'Los dos triángulos son rectángulos en M y tienen sus dos catetos congruentes (AM con MB y PM común): cateto-cateto. PA y PB son sus hipotenusas.', 'La mediatriz es perpendicular a AB en su punto medio: de ahí salen el ángulo recto y los dos trozos congruentes.'),
+    err('De los triángulos ABC y DEF se sabe que $\\angle A \\cong \\angle D$, $\\angle B \\cong \\angle E$ y $BC \\cong EF$. ¿Son congruentes?', ['Hay dos pares de ángulos congruentes', 'Hay un par de lados congruentes: BC con EF', 'El lado BC está comprendido entre los ángulos A y B', 'Con esos datos se busca el criterio que aplica'], 2, ['El lado BC es opuesto al ángulo A: se aplica L-A-A', 'El lado BC está comprendido entre los ángulos A y C', 'El lado BC es opuesto al ángulo B: se aplica L-L-A'],
+      'BC no toca al vértice A: es su lado opuesto. Dos ángulos y un lado opuesto a uno de ellos es L-A-A, y los triángulos sí son congruentes.', 'El lado comprendido entre A y B es AB. ¿Dónde queda BC respecto al ángulo A?'),
+    opc('Dos triángulos rectángulos tienen las hipotenusas congruentes y un cateto del primero congruente con un cateto del segundo. Entonces:', ['no se puede asegurar que sean congruentes, porque es L-L-A', 'son congruentes por H-C', 'son congruentes por C-C', 'son congruentes por A-A-A'], 1, 'Hipotenusa y cateto es un criterio para triángulos rectángulos: el ángulo recto hace que L-L-A sí funcione.', 'Recuerda la lista de criterios propios de los triángulos rectángulos: uno de ellos usa la hipotenusa y un cateto.'),
+  ]);
+
+  return mundo('euc-triangulo', [l1, l2, l3, l4], [
+    ['euc-triangulo-1', 'La bisectriz parte el ángulo del vértice en dos ángulos congruentes.', x('pie-notable', 'El lado BC mide **28**. Mueve el pie P hasta que AP sea la **bisectriz** del ángulo A.', { A: [18, 24], c: 28, pide: 'bisectriz', ini: 3 },
+      'La bisectriz deja dos ángulos congruentes en A: eso pasa con P a 15 de B.', 'De las medidas que ves, usa la que habla de los ángulos en A.')],
+    ['euc-triangulo-1', 'Cada triángulo tiene un nombre por sus lados y otro por sus ángulos.', x('dos-apellidos', 'Ponle al triángulo su nombre por los lados y su nombre por los ángulos.', { pts: [[0, 0], [6, 0], [0, 4]], fichas: TIPOS },
+      'Tres marcas distintas: escaleno. Una esquina recta: rectángulo.', 'Cuenta las rayitas de cada lado y busca la esquina marcada.')],
+    ['euc-triangulo-1', 'La altura es perpendicular al lado opuesto o a su prolongación.', opc('En el triángulo ABC, el segmento AH llega al lado BC formando con él un ángulo recto. AH es:', ['una mediana', 'una bisectriz', 'un lado', 'una altura'], 3, 'Caer a escuadra sobre el lado opuesto es lo que define a la altura.', 'Piensa cuál segmento notable se define con una perpendicular.')],
+    ['euc-triangulo-2', 'L-A-L: dos lados y el ángulo comprendido entre ellos.', x('arma-lal', 'Arma DEF congruente con ABC usando L-A-L. El lado DE ya mide lo mismo que AB.', { c: 8, b: 3, g: 60, a: 7 },
+      'Se copian el ángulo en A, de 60°, y el lado AC, de 3.', 'Copia los dos lados que forman el ángulo conocido.')],
+    ['euc-triangulo-2', 'En triángulos congruentes, las partes correspondientes son congruentes.', x('partes-correspondientes', 'Los triángulos son congruentes y llevan las mismas marcas. Pon la parte que corresponde a cada una.', { corr: 'FDE', pide: ['∠B', 'AC', 'AB'], fichas: ['∠D', '∠E', '∠F', 'DE', 'EF', 'DF'], esp: true, gira: 40 },
+      'A va con F, B con D y C con E: ∠B ≅ ∠D, AC ≅ FE y AB ≅ FD.', 'Sigue el color de los arcos y el número de rayitas.')],
+    ['euc-triangulo-2', 'A-L-A: un lado y los dos ángulos adyacentes a él.', opc('De dos triángulos se sabe que $\\angle A \\cong \\angle D$, $AB \\cong DE$ y $\\angle B \\cong \\angle E$. Son congruentes por:', ['L-A-L', 'A-L-A', 'L-L-L', 'no se puede asegurar'], 1, 'El lado AB une los vértices A y B: está entre los dos ángulos. Es A-L-A.', 'Mira si el lado conocido une los dos ángulos conocidos.')],
+    ['euc-triangulo-3', 'Cada lado es menor que la suma y mayor que la diferencia de los otros dos.', x('tercer-lado', 'Dos varillas miden **10** y **6**. ¿Entre qué enteros puede medir la tercera para que el triángulo cierre?', { a: 10, b: 6, max: 16 },
+      'Más que $10 - 6 = 4$ y menos que $10 + 6 = 16$: de 5 a 15.', 'Halla la diferencia y la suma: la tercera queda entre ellas.')],
+    ['euc-triangulo-3', 'A mayor lado se opone mayor ángulo, y viceversa.', x('angulos-por-lados', 'Los lados miden 7, 12 y 8 (la figura no está a escala). Ordena los ángulos.', { l: [7, 12, 8], fichas: RANGO },
+      'Frente a 12 (AC) está B, el mayor; frente a 8 está C; frente a 7 está A, el menor.', 'Cada ángulo mira al lado que no lo toca.')],
+    ['euc-triangulo-3', 'El ángulo exterior es mayor que cada interior no adyacente.', opc('Un ángulo exterior de un triángulo mide 100°. Uno de los ángulos interiores no adyacentes a él podría medir:', ['64°', '100°', '115°', '180°'], 0, 'Tiene que ser menor que 100°: de las opciones, solo 64°.', 'El exterior le gana a cada interior no adyacente.')],
+    ['euc-triangulo-4', 'Todo punto de la mediatriz equidista de los extremos del segmento.', x('punto-equidista', 'Arrastra P hasta un punto a igual distancia de A y de B que no sea el punto medio.', { A: [3, 6], B: [9, 2], ini: [2, 2], sol: [4, 1] },
+      'La mediatriz pasa por el punto medio y es perpendicular a AB.', 'Desde el punto medio, cambia de lugar los pasos de A a B.')],
+    ['euc-triangulo-4', 'L-A-A, C-C, C-A, H-A y H-C; L-L-A y A-A-A no son criterios.', x('nombra-criterio', 'Pon el criterio que asegura la congruencia de cada par, o «ninguno». Solo el par 2 es de triángulos rectángulos.', { casos: [{ l: [0], a: [0, 1] }, { r: 1, l: [0, 1] }, { l: [0, 2], a: [0] }], fichas: ['L-A-A', 'C-C', 'ninguno', 'A-L-A', 'H-C', 'L-A-L'] },
+      'Par 1: lado fuera de los dos ángulos, L-A-A. Par 2: dos catetos. Par 3: L-L-A, ninguno.', 'Mira si el lado está entre los ángulos, o el ángulo entre los lados.')],
+    ['euc-triangulo-4', 'Todo punto de la bisectriz equidista de los lados del ángulo.', opc('Un punto T está en la bisectriz del ángulo XOY, a 9 cm del lado OX. Su distancia al lado OY es:', ['4.5 cm', '18 cm', '9 cm', 'no se puede saber'], 2, 'Los puntos de la bisectriz equidistan de los dos lados: 9 cm.', 'Recuerda qué propiedad tienen los puntos de la bisectriz.')],
+  ]);
+})());
+;
+//#archivo js/courses/euclidiana-cuadrilateros.js
+// Geometría Euclidiana · mundo 4 «Paralelas y Cuadriláteros» (spec 2026-11-26-curso-euclidiana). Números y contextos propios.
+EUC_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = EUC;
+
+  // ------------------------------------------------------------------------------------------- 1 · paralelas y perpendiculares
+  const l1 = leccion('euc-cuadrilateros-1', 'Paralelas y perpendiculares', guion(
+    ['Una sola perpendicular', 'Por un punto pasa una y solo una recta perpendicular a una recta dada.'],
+    ['La distancia', 'La distancia de un punto a una recta es el segmento perpendicular: es más corto que cualquier oblicua.'],
+    ['Paralelas', 'Dos rectas de un plano que no se cortan son paralelas. Por un punto exterior a una recta pasa una sola paralela a ella.'],
+    ['Perpendiculares a la misma recta', 'Dos rectas perpendiculares a una misma recta son paralelas entre sí.'],
+    ['Paralelas a una tercera', 'Dos rectas paralelas a una tercera son paralelas entre sí; y una perpendicular a una de dos paralelas lo es a la otra.']), [
+    x('pie-perpendicular', 'Desde el punto **P** se tiende un cable hasta la recta **r**. Corre el pie **F** hasta que el cable sea el **más corto** posible.', { o: [0, 1], d: [1, 0.5], n: 12, P: [4, 8], t0: 1 },
+      'El segmento más corto de un punto a una recta es el de la perpendicular: cae a escuadra sobre r y mide $\\sqrt{20} \\approx 4.5$ cuadros. Cualquier oblicua mide más.', 'Mira los dos ángulos que el cable forma con la recta, a un lado y al otro del pie: ¿en qué posición quedan iguales?'),
+    x('traza-paralela', 'La recta **r** pasa por los dos puntos marcados. Arrastra **D** para que la recta que pasa por **P** y por D sea **paralela** a r.', { A: [1, 1], B: [4, 2], P: [3, 5], ini: [8, 4] },
+      'La recta r sube 1 cuadro por cada 3 que avanza. La paralela por P repite ese paso: de (3, 5) llega a (6, 6). Por P no pasa ninguna otra paralela a r.', 'Cuenta cuánto avanza y cuánto sube la recta r entre sus dos puntos, y repite ese mismo paso saliendo de P.'),
+    x('traza-perpendicular', 'La recta dorada **r** es perpendicular a **t**. Sin copiar a r, arrastra **D** para trazar por **P** otra perpendicular a t.', { A: [1, 2], B: [5, 4], Q: [3, 3], P: [7, 5], ini: [10, 6] },
+      'La recta t sube 1 por cada 2; la perpendicular gira ese paso un cuarto de vuelta: avanza 1 y baja 2, de (7, 5) a (8, 3) (o retrocede 1 y sube 2). Como las dos son perpendiculares a t, quedan paralelas.', 'Un cuarto de vuelta intercambia lo que se avanza con lo que se sube. Cuenta el paso de t y gíralo.'),
+    x('paralelas-seguro', 'En un plano hay tres rectas distintas: **r**, **s** y **t**. Toca **todas** las condiciones que garantizan que r y s son **paralelas**.', { casos: [
+      { t: 'r ⊥ t  y  s ⊥ t', si: true },
+      { t: 'r corta a t  y  s corta a t', no: 'Cortar a la misma recta no basta: r y s pueden cortarse entre sí.' },
+      { t: 'r ∥ t  y  s ∥ t', si: true },
+      { t: 'r ⊥ t  y  s ∥ t', no: 'Si s es paralela a t y r es perpendicular a t, entonces r también es perpendicular a s.' },
+      { t: 'r y s no tienen ningún punto común', si: true }],
+    falta: 'Falta alguna condición que sí lo garantiza.', ok: 'Perpendiculares a una misma recta, paralelas a una tercera, o sin puntos comunes.' },
+      'Dos perpendiculares a una misma recta son paralelas; dos paralelas a una tercera también; y no tener puntos comunes es la definición de paralelas en un plano.', 'Imagina cada caso con tres lápices sobre la mesa y pregúntate si r y s podrían llegar a cortarse.'),
+    x('cuantas-rectas', 'En un plano, **r** es una recta y **P** un punto. Pon **cuántas** rectas hay de cada clase.', {
+      et: ['Perpendiculares a r por P', 'Paralelas a r por P, exterior a r', 'Rectas por P que cortan a r', 'Perpendiculares a r, en total'],
+      metas: ['una', 'una', 'infinitas', 'infinitas'], fichas: ['una', 'una', 'infinitas', 'infinitas', 'ninguna', 'dos'],
+      mira: ['Por un punto pasa una sola perpendicular a una recta dada.', 'Postulado de las paralelas: por un punto exterior pasa una sola.', 'Cada punto de r, unido con P, da una recta distinta.', 'Por cada punto de r se levanta una perpendicular distinta.'],
+      trampas: { '1:infinitas': 'Si la paralela se gira un poco, termina cortando a r: solo sirve una posición.', '1:ninguna': 'Siempre existe una paralela por un punto exterior, y es única.', '0:dos': 'Si hubiera dos perpendiculares por P, formarían un triángulo con dos ángulos rectos.' },
+      ok: 'Una perpendicular y una paralela por cada punto; secantes, las que se quiera.' },
+      'Por P pasa una sola perpendicular y, si P es exterior, una sola paralela. En cambio hay infinitas secantes por P, e infinitas perpendiculares a r (una por cada punto).', 'Fíjate en si la pregunta amarra la recta a un punto fijo o la deja libre.'),
+    x('relacion-rectas', 'De cinco rectas de un plano solo se sabe lo que dice la tarjeta. Deduce la relación de cada pareja: **∥** o **⊥**.', {
+      da: ['a ⊥ t', 'b ⊥ t', 'c ∥ b', 'd ⊥ c'], et: ['a y b', 'a y c', 'c y t', 'd y t'], metas: ['∥', '∥', '⊥', '∥'], fichas: ['∥', '∥', '∥', '⊥', '⊥', '∥'],
+      lin: [[14, 104, 314, 104, 't'], [70, 124, 70, 14, 'a', 'la gr'], [150, 124, 150, 14, 'b', 'la gr'], [230, 124, 230, 14, 'c', 'lg gr'], [196, 44, 300, 44, 'd', 'lf gr']], esc: [[70, 104], [150, 104], [230, 104], [230, 44]],
+      mira: ['Las dos son perpendiculares a t: dos perpendiculares a una misma recta son paralelas.', 'c es paralela a b, y b es paralela a la recta a: paralelas a una tercera.', 't es perpendicular a b; entonces también lo es a su paralela c.', 'd y t son perpendiculares a la misma recta, c.'],
+      trampas: {}, ok: 'Todo sale de dos ideas: perpendiculares a una misma recta y paralelas a una tercera.' },
+      'a ∥ b (perpendiculares a t); a ∥ c (paralelas a b); c ⊥ t (t es perpendicular a una de dos paralelas); d ∥ t (las dos perpendiculares a c).', 'Haz un dibujo aparte: empieza por t y ve agregando una recta por cada dato.'),
+    x('sube-distancia', 'Sube a la distancia que responde cada pregunta. Puedes fallar **una** vez.', { tiros: [
+      { q: 'De **P** salen hacia una recta tres segmentos, de 17, 15 y 19. Solo el de 15 llega a escuadra. ¿Cuál es la distancia de P a la recta?', r: 15, c: 'd(P, r)', e: { 17: 'Ese es una oblicua: mide más que la perpendicular.', 19: 'Ese es una oblicua: mide más que la perpendicular.' } },
+      { q: 'Tres rectas paralelas: de **r** a **s** hay 8 y de **s** a **t** hay 13, con s en medio. ¿Qué distancia hay de r a t?', r: 21, c: '8 + 13', e: { 5: 'Con s en medio, las dos distancias se suman.' } },
+      { q: 'Dos paralelas están a 34 de distancia. Un punto **entre** ellas queda a 9 de una. ¿A cuánto queda de la otra?', r: 25, c: '34 - 9', e: { 43: 'El punto está entre las dos: se resta.' } }] },
+      'La distancia es el segmento perpendicular: 15. Entre paralelas la distancia es la misma en todas partes: $8 + 13 = 21$ y $34 - 9 = 25$.', 'La distancia siempre se mide a escuadra. Dibuja las paralelas y marca cada dato sobre una misma perpendicular.'),
+    sol('En un plano, las rectas distintas r y s son perpendiculares a la recta t. Demuestra que r y s son paralelas.', [
+      'Supongamos lo contrario, que r y s se cortan en un punto P: es el método [[indirecto]]',
+      'Entonces por P pasarían [[dos]] rectas perpendiculares a t',
+      'Pero por un punto pasa [[una sola]] perpendicular a una recta dada',
+      'La suposición lleva a una contradicción: r y s son [[paralelas]]'], ['directo', 'infinitas', 'perpendiculares'],
+      'Si se cortaran en P, por P habría dos perpendiculares a t, lo que contradice la unicidad de la perpendicular. Luego no se cortan.', 'Supón que sí se cortan y busca qué teorema conocido quedaría contradicho.'),
+    err('Desde un punto P se mide hasta una pared recta en tres direcciones: 5 m, 4 m y 4.2 m. Solo la medida de 4 m forma ángulo recto con la pared. ¿Cuál es la distancia de P a la pared?', [
+      'La distancia de un punto a una recta se mide sobre la perpendicular', 'El segmento perpendicular es el de 4 m', 'Las otras dos medidas son de segmentos oblicuos', 'Como hay tres medidas, la distancia es su promedio: 4.4 m'], 3,
+      ['La distancia es 4 m: el segmento perpendicular es el más corto', 'La distancia es 5 m: se toma la medida mayor', 'La distancia es 4.2 m: se toma la medida del medio'],
+      'La distancia es la medida del segmento perpendicular, 4 m; las oblicuas siempre miden más y no entran en la cuenta.', '¿Cuál de las tres medidas corresponde a la definición de distancia de un punto a una recta?'),
+    opc('En un plano, la recta m es perpendicular a la recta k, y la recta n es paralela a m. Entonces las rectas n y k:', ['son paralelas', 'son perpendiculares', 'forman un ángulo de 45°', 'no se cortan'], 1,
+      'Si una recta es perpendicular a una de dos paralelas, también es perpendicular a la otra: k ⊥ m y m ∥ n dan k ⊥ n.', 'Dibuja primero las dos paralelas y luego la recta que cae a escuadra sobre una de ellas.'),
+  ]);
+
+  // ------------------------------------------------------------------------------------------- 2 · ángulos entre paralelas y en polígonos
+  const l2 = leccion('euc-cuadrilateros-2', 'Ángulos entre paralelas y en polígonos', guion(
+    ['Los pares de ángulos', 'Una transversal que corta dos rectas forma ángulos alternos internos, alternos externos, correspondientes y colaterales.'],
+    ['Si son paralelas', 'Entre paralelas, los alternos y los correspondientes son congruentes, y los colaterales son suplementarios.'],
+    ['Y al revés', 'Si un par de alternos o de correspondientes es congruente, o los colaterales son suplementarios, las rectas son paralelas.'],
+    ['El triángulo', 'Los ángulos interiores de un triángulo suman 180°, y un exterior mide la suma de los dos interiores no adyacentes.'],
+    ['Polígonos', 'Los ángulos interiores de un polígono de n lados suman (n − 2) · 180°; los exteriores, uno por vértice, suman 360°.']), [
+    x('cruce-ocho', 'Las dos rectas horizontales son **paralelas**. Con el ángulo que se da, pon los cuatro que faltan.', { a: 68, fichas: ['68°', '68°', '68°', '112°', '112°', '22°'] },
+      'Correspondientes, alternos internos y opuestos por el vértice son congruentes: 68°. El colateral interior es su suplemento: $180^\\circ - 68^\\circ = 112^\\circ$.', 'Nombra cada pareja antes de poner la ficha: ¿es de las que son congruentes o de las que son suplementarias?'),
+    x('nombra-pares', 'Una transversal corta dos rectas y forma ocho ángulos. Pon el **nombre** de cada pareja.', { pares: [[3, 6], [1, 5], [4, 6], [2, 7]], fichas: ['alternos internos', 'correspondientes', 'colaterales', 'alternos externos', 'op. por el vértice', 'correspondientes'] },
+      '3 y 6 están adentro y a lados distintos: alternos internos. 1 y 5 ocupan la misma esquina: correspondientes. 4 y 6, adentro y del mismo lado: colaterales. 2 y 7, afuera y a lados distintos: alternos externos.', 'Para cada pareja responde dos cosas: ¿están entre las rectas o fuera?, ¿del mismo lado de la transversal o a lados distintos?'),
+    x('endereza-paralela', 'El ángulo de arriba mide $100^\\circ$ y el de abajo es su **colateral interior**. Gira la recta ℓ₂ hasta que se pueda asegurar que ℓ₁ y ℓ₂ son **paralelas**.', { t: 80, modo: 'col', b0: 10 },
+      'Si los colaterales interiores son suplementarios, las rectas son paralelas: el de abajo debe medir $180^\\circ - 100^\\circ = 80^\\circ$.', 'Los colaterales interiores no se comparan como los alternos. ¿Qué deben cumplir juntos los dos ángulos?'),
+    x('tercer-angulo', 'Una cercha tiene forma de triángulo con los dos ángulos de la base **congruentes**, y el de arriba debe medir $96^\\circ$. Ajústala.', { top: 96 },
+      'Los tres suman 180°: para los dos de la base quedan $180^\\circ - 96^\\circ = 84^\\circ$, es decir, 42° cada uno.', 'Quita el ángulo de arriba de la suma de los tres y reparte lo que queda.'),
+    x('exterior-alcanza', 'Corre el vértice de la derecha hasta que el ángulo **exterior** mida $120^\\circ$.', { a: 65, ext: 120 },
+      'El exterior mide la suma de los dos interiores no adyacentes: $65^\\circ + 55^\\circ = 120^\\circ$.', 'El exterior se arma con los dos ángulos interiores que no lo tocan.'),
+    x('poligono-regular', 'El marco de un reloj es un polígono **regular** con ángulos interiores de $144^\\circ$. Elige cuántos lados tiene.', { ang: 144 },
+      'Cada exterior mide $180^\\circ - 144^\\circ = 36^\\circ$ y todos suman 360°: $360 \\div 36 = 10$ lados. También $(10 - 2) \\cdot 180^\\circ \\div 10 = 144^\\circ$.', 'Piensa en el ángulo exterior de cada vértice: todos juntos completan una vuelta.'),
+    x('lanza-angulo', 'El faro gira desde la derecha. Dale el ángulo que se pide y suéltalo. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Entre dos paralelas, un ángulo mide $55^\\circ$. Su **colateral interior**', r: 125, c: '180^\\circ - 55^\\circ', e: { 55: 'Los colaterales no son congruentes: son suplementarios.' } },
+      { q: 'Cada ángulo **exterior** de un polígono regular de 18 lados', r: 20, c: '360^\\circ \\div 18', e: { 160: 'Ese es el interior: el exterior es lo que le falta para 180°.' } },
+      { q: 'Un exterior de un triángulo mide $150^\\circ$ y un interior no adyacente, $85^\\circ$. El **otro** no adyacente', r: 65, c: '150^\\circ - 85^\\circ', e: { 30: 'Ese es el interior adyacente al exterior.' } }] },
+      '$180 - 55 = 125$; $360 \\div 12 = 30$; $150 - 85 = 65$.', 'Colaterales: suplementarios. Exteriores de un polígono: suman 360°. Exterior de un triángulo: suma de los dos no adyacentes.'),
+    sol('Demuestra que los ángulos interiores del triángulo ABC suman $180^\\circ$. Por C se traza la recta m paralela a AB; sobre m, a los lados del ángulo C, quedan los ángulos 1 y 2.', [
+      'Por C pasa una sola paralela a AB: postulado de las [[paralelas]]',
+      '$\\angle 1 \\cong \\angle A$ por ser [[alternos internos]] entre paralelas',
+      '$\\angle 2 \\cong \\angle B$ por la misma razón',
+      '$\\angle 1 + \\angle C + \\angle 2 =$ [[180°]] porque forman un ángulo [[llano]]',
+      'Al sustituir: $\\angle A + \\angle C + \\angle B = 180^\\circ$'], ['correspondientes', 'recto', '360°', 'colaterales'],
+      'La paralela por C copia los ángulos A y B como alternos internos; los tres juntos llenan un ángulo llano.', 'Los ángulos 1 y A quedan entre las paralelas, a lados distintos de la transversal AC.'),
+    err('Se quiere hallar la suma de los ángulos interiores de un octágono partiéndolo en triángulos.', [
+      'Desde un vértice se trazan todas las diagonales', 'Se forman tantos triángulos como lados: 8', 'Cada triángulo aporta $180^\\circ$ a la suma'], 1,
+      ['Se forman dos triángulos menos que lados: 6', 'Se forman tantos triángulos como diagonales: 5', 'Se forma un triángulo más que lados: 9'],
+      'Desde un vértice salen $n - 3$ diagonales y quedan $n - 2$ triángulos: $6 \\cdot 180^\\circ = 1\\,080^\\circ$.', 'Dibuja un cuadrilátero y un pentágono y cuenta los triángulos que salen desde un vértice.'),
+    opc('Una transversal corta dos rectas y forma ángulos colaterales interiores de 72° y 108°. De las dos rectas se puede asegurar que:', ['son perpendiculares', 'se cortan del lado de esos ángulos', 'son paralelas', 'coinciden'], 2,
+      '$72^\\circ + 108^\\circ = 180^\\circ$: si los colaterales interiores son suplementarios, las rectas son paralelas.', 'Suma los dos ángulos y recuerda el recíproco del teorema de los colaterales.'),
+  ]);
+
+  // ------------------------------------------------------------------------------------------- 3 · paralelogramos y trapecios
+  const l3 = leccion('euc-cuadrilateros-3', 'Paralelogramos y trapecios', guion(
+    ['Paralelogramo', 'Tiene los lados opuestos paralelos. Por eso sus lados y ángulos opuestos son congruentes, los consecutivos son suplementarios y las diagonales se bisecan.'],
+    ['Cómo reconocerlo', 'Basta una de estas: lados opuestos congruentes, ángulos opuestos congruentes, diagonales que se bisecan, o un par de lados paralelos y congruentes.'],
+    ['Rectángulo y rombo', 'En el rectángulo las diagonales son congruentes; en el rombo son perpendiculares y bisectrices de sus ángulos.'],
+    ['Cuadrado', 'Es rectángulo y rombo a la vez: sus diagonales son congruentes, perpendiculares y se bisecan.'],
+    ['Trapecio', 'Tiene un solo par de lados paralelos. En el isósceles, los lados no paralelos, los ángulos de cada base y las diagonales son congruentes.']), [
+    x('cuarto-vertice', 'A, B y C son tres vértices seguidos de un **paralelogramo**. Arrastra el cuarto vértice, **D**, a su lugar.', { A: [-4, -1], B: [1, -3], C: [3, 2] },
+      'Los lados opuestos son paralelos y congruentes: de B a A se retrocede 5 y se sube 2; lo mismo desde C lleva a D = (−2, 4).', 'El lado CD debe ser una copia del lado BA: mismo largo y misma inclinación.'),
+    x('paralelogramo-especial', 'ABCD es un paralelogramo con la base AB fija, de 5 cuadros. Arrastra **C** hasta que sea un **rombo** sin ángulos rectos.', { A: [1, 1], B: [6, 1], ini: [8, 3], tipo: 'rombo' },
+      'En el rombo los cuatro lados son congruentes: BC debe medir 5. Con 3 cuadros a la derecha y 4 hacia arriba, $\\sqrt{9 + 16} = 5$.', 'El lado BC debe medir lo mismo que AB. ¿Qué triángulo rectángulo de lados enteros tiene hipotenusa 5?'),
+    x('diagonales-cruce', 'AC y BD son las diagonales de un cuadrilátero. Mueve el cruce **M** y desliza la diagonal BD hasta que ABCD sea un **paralelogramo**.', { n: 10, m: 8, g: 60, t0: 3, s0: 6 },
+      'Si las diagonales se cortan en sus puntos medios, el cuadrilátero es un paralelogramo: $AM = MC = 5$ y $BM = MD = 4$.', 'En un paralelogramo, ¿en qué punto de cada diagonal queda el cruce? Cuenta las marcas a cada lado.'),
+    x('angulos-paralelogramo', 'En el paralelogramo ABCD, el ángulo A mide $64^\\circ$. Pon la medida de los otros tres.', { a: 64, fichas: ['64°', '116°', '116°', '26°', '64°', '126°'] },
+      'El opuesto es congruente: C = 64°. Los consecutivos son suplementarios: B = D = $180^\\circ - 64^\\circ = 116^\\circ$.', 'Los lados AD y BC son paralelos y AB es una transversal: ¿qué pareja de ángulos forman A y B?'),
+    x('trapecio-isosceles', 'AB es la base mayor y D ya está puesto. Arrastra **C** para que ABCD sea un **trapecio isósceles**.', { A: [1, 1], B: [11, 1], D: [3, 6], ini: [7, 4] },
+      'DC debe ser paralela a AB (a la misma altura que D) y BC congruente con AD: D está 2 cuadros adentro desde A, así que C queda 2 adentro desde B, en (9, 6).', 'Dos condiciones: una base paralela a la otra y los lados no paralelos congruentes. El trapecio isósceles tiene un eje de simetría.'),
+    x('siempre-paralelogramo', 'De un cuadrilátero solo se sabe lo que dice cada tarjeta. Toca **todas** las que garantizan que es un **paralelogramo**.', { casos: [
+      { t: 'Los lados opuestos son congruentes', si: true },
+      { t: 'Las diagonales son congruentes', no: 'Un trapecio isósceles tiene las diagonales congruentes y no es un paralelogramo.' },
+      { t: 'Las diagonales se bisecan', si: true },
+      { t: 'Un par de lados paralelos y congruentes', si: true },
+      { t: 'Un par paralelo y el otro congruente', no: 'Eso también lo cumple un trapecio isósceles: bases paralelas y lados congruentes.' },
+      { t: 'Los ángulos opuestos son congruentes', si: true }],
+    falta: 'Falta alguna condición que sí lo garantiza.', ok: 'Son los cuatro recíprocos que caracterizan al paralelogramo.' },
+      'Lados opuestos congruentes, ángulos opuestos congruentes, diagonales que se bisecan, o un par de lados paralelos y congruentes: cada una basta. Las otras dos las cumple un trapecio isósceles.', 'Para descartar una tarjeta basta un contraejemplo: prueba con un trapecio isósceles.'),
+    x('que-cuadrilatero', 'Cada renglón describe un cuadrilátero por sus lados o sus diagonales. Pon el nombre **más preciso**.', {
+      et: ['Paralelogramo, diagonales ≅', 'Paralelogramo, diagonales ⊥', 'Un solo par de lados paralelos', 'Diagonales ≅, ⊥ y se bisecan'],
+      metas: ['rectángulo', 'rombo', 'trapecio', 'cuadrado'], fichas: ['rectángulo', 'rombo', 'trapecio', 'cuadrado', 'paralelogramo', 'trapezoide'],
+      mira: ['Un paralelogramo con diagonales congruentes es un rectángulo.', 'Un paralelogramo con diagonales perpendiculares es un rombo.', 'Con un solo par de lados paralelos es un trapecio.', 'Si se bisecan es paralelogramo; congruentes y perpendiculares: cuadrado.'],
+      trampas: { '0:rombo': 'En el rombo las diagonales son perpendiculares; las congruentes son las del rectángulo.', '1:rectángulo': 'En el rectángulo las diagonales son congruentes; las perpendiculares son las del rombo.', '3:rombo': 'Además de perpendiculares son congruentes: es más que un rombo.', '3:rectángulo': 'Además de congruentes son perpendiculares: es más que un rectángulo.' },
+      ok: 'Las diagonales delatan al cuadrilátero.' },
+      'Diagonales congruentes en un paralelogramo: rectángulo. Perpendiculares: rombo. Las dos cosas: cuadrado. Un solo par de lados paralelos: trapecio.', 'Piensa en las diagonales de cada figura: ¿cuáles miden lo mismo?, ¿cuáles se cortan a escuadra?'),
+    x('abre-marco', 'El marco articulado se abre con el ángulo que le des. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un ángulo de un paralelogramo mide $115^\\circ$. Abre el marco con el ángulo **consecutivo**.', r: 65, c: '180^\\circ - 115^\\circ', e: { 115: 'Ese es el opuesto: el consecutivo es su suplemento.' } },
+      { q: 'En un rombo, un ángulo mide $50^\\circ$. Abre el marco con el ángulo que forma la **diagonal** con un lado en ese vértice.', r: 25, c: '50^\\circ \\div 2', e: { 50: 'La diagonal del rombo es bisectriz: parte ese ángulo en dos.' } },
+      { q: 'En un trapecio isósceles, un ángulo de la base mayor mide $70^\\circ$. Abre el marco con un ángulo de la **base menor**.', r: 110, c: '180^\\circ - 70^\\circ', e: { 70: 'Ese es el otro ángulo de la misma base: los de bases distintas son suplementarios.' } }] },
+      '$180 - 115 = 65$; la diagonal del rombo biseca: $50 \\div 2 = 25$; entre las bases paralelas, colaterales: $180 - 70 = 110$.', 'Busca en cada figura las paralelas y la transversal: los ángulos consecutivos son colaterales interiores.'),
+    sol('En el paralelogramo ABCD se traza la diagonal AC. Demuestra que los lados opuestos AB y CD son congruentes.', [
+      '$\\angle BAC \\cong \\angle DCA$ por ser [[alternos internos]] entre $AB \\parallel CD$',
+      '$\\angle BCA \\cong \\angle DAC$ por la misma razón, entre $BC \\parallel AD$',
+      'AC es lado [[común]] de los triángulos ABC y CDA',
+      '$\\triangle ABC \\cong \\triangle CDA$ por el criterio [[A-L-A]]',
+      '$AB \\cong CD$ por ser lados [[correspondientes]] de triángulos congruentes'], ['L-L-L', 'colaterales', 'opuestos por el vértice'],
+      'La diagonal es transversal de los dos pares de paralelas: da dos pares de alternos internos con el lado común entre ellos, que es A-L-A.', 'La diagonal parte al paralelogramo en dos triángulos: busca qué ángulos y qué lado comparten.'),
+    err('Las dos diagonales de un cuadrilátero miden 10 cm. ¿Se puede asegurar que el cuadrilátero es un rectángulo?', [
+      'En todo rectángulo las diagonales son congruentes', 'Este cuadrilátero tiene las diagonales congruentes', 'Por lo tanto, el cuadrilátero es un rectángulo'], 2,
+      ['No se puede asegurar: falta saber que es un paralelogramo', 'Por lo tanto, el cuadrilátero es un rombo', 'Por lo tanto, el cuadrilátero es un cuadrado'],
+      'El recíproco pide que sea un paralelogramo: un trapecio isósceles también tiene diagonales congruentes y no es rectángulo.', 'Se está usando un teorema al revés. ¿Con qué hipótesis vale su recíproco?'),
+    opc('Las diagonales de un rombo miden 16 cm y 12 cm. Como se cortan perpendicularmente en sus puntos medios, cada lado del rombo mide:', ['14 cm', '20 cm', '28 cm', '10 cm'], 3,
+      'Las mitades de las diagonales, 8 y 6, son catetos de un triángulo rectángulo cuya hipotenusa es el lado: $\\sqrt{64 + 36} = 10$.', 'Las diagonales parten al rombo en cuatro triángulos rectángulos congruentes.'),
+  ]);
+
+  // ------------------------------------------------------------------------------------------- 4 · rectas y puntos notables
+  const l4 = leccion('euc-cuadrilateros-4', 'Rectas y puntos notables', guion(
+    ['Paralela media', 'El segmento que une los puntos medios de dos lados de un triángulo es paralelo al tercer lado y mide la mitad.'],
+    ['En el triángulo rectángulo', 'La mediana sobre la hipotenusa mide la mitad de ella; y si un ángulo mide 30°, el cateto opuesto es la mitad de la hipotenusa.'],
+    ['Mediana del trapecio', 'Une los puntos medios de los lados no paralelos: es paralela a las bases y mide su semisuma.'],
+    ['Baricentro', 'Las tres medianas se cortan en un punto situado a dos tercios de cada una, contando desde el vértice.'],
+    ['Circuncentro, incentro y ortocentro', 'Las mediatrices se cortan en el punto que equidista de los vértices; las bisectrices, en el que equidista de los lados; las alturas, en el ortocentro.']), [
+    x('paralela-media', 'En el triángulo ABC, **M** es el punto medio de AC y el lado AB mide **26**. Desliza **N** por CB hasta que MN sea **paralela** a AB.', { c: 26, n: 12, s0: 3 },
+      'La paralela a un lado trazada por el punto medio de otro pasa por el punto medio del tercero: N parte a CB en 6 y 6, y MN mide $26 \\div 2 = 13$.', 'M parte su lado en dos partes iguales. ¿Cómo debe partir N al suyo para que MN no se incline?'),
+    x('baricentro-desliza', 'La mediana **AM** mide **12**. Desliza **G** por ella hasta el **baricentro** del triángulo.', { n: 12, s0: 3 },
+      'El baricentro está a dos tercios de la mediana desde el vértice: $AG = \\tfrac23 \\cdot 12 = 8$ y $GM = 4$.', 'El baricentro parte cada mediana en dos tramos, uno el doble del otro. ¿Cuál queda junto al vértice?'),
+    x('centro-equidista', 'Tres antenas están en los vértices del triángulo. Arrastra la central hasta el punto que queda a **igual distancia de los tres vértices**.', { V: [[2, 2], [10, 2], [4, 8]], tipo: 'vertices', ini: [5, 5] },
+      'Es el circuncentro, donde se cortan las mediatrices: la de AB es la vertical por (6, 2), y sobre ella el punto (6, 4) queda a $\\sqrt{20}$ de A, de B y de C.', 'Los puntos que equidistan de A y de B están en la mediatriz de AB. Empieza por ahí y luego compara con C.'),
+    x('treinta-sesenta', 'Una rampa de **16** m se apoya en el piso. Sube o baja su punta hasta que forme $30^\\circ$ con el piso.', { c: 16, h0: 12 },
+      'En el triángulo 30°-60°-90°, el cateto opuesto a 30° mide la mitad de la hipotenusa: $16 \\div 2 = 8$.', 'Ese triángulo es la mitad de uno equilátero: compara la altura de la punta con el largo de la rampa.'),
+    x('medios-miden', 'Tres segmentos dorados: la mediana sobre la hipotenusa, una paralela media y la mediana de un trapecio. Pon cuánto mide cada uno.', {
+      h: 34, b: 22, B: 15, b2: 9, et: ['mediana', 'paralela media', 'base media'], metas: ['17', '11', '12'], fichas: ['17', '11', '12', '24', '44', '6', '68'],
+      mira: ['La mediana sobre la hipotenusa mide la mitad de la hipotenusa.', 'La paralela media mide la mitad del tercer lado.', 'La mediana del trapecio es la semisuma de las bases.'],
+      trampas: { '2:24': 'Esa es la suma de las bases: falta partirla en dos.', '2:6': 'Esa es la diferencia de las bases: la mediana es la semisuma.', '0:68': 'Es la mitad de la hipotenusa, no el doble.', '1:44': 'Es la mitad del tercer lado, no el doble.' },
+      ok: 'Dos mitades y un promedio.' },
+      '$34 \\div 2 = 17$; $22 \\div 2 = 11$; $(15 + 9) \\div 2 = 12$.', 'En los dos triángulos el segmento dorado es una mitad; en el trapecio, un promedio.'),
+    x('punto-de-que', 'Cada renglón describe un punto notable del triángulo. Pon su **nombre**.', {
+      et: ['Corte de las medianas', 'Equidista de los vértices', 'Equidista de los lados', 'Corte de las alturas'],
+      metas: ['baricentro', 'circuncentro', 'incentro', 'ortocentro'], fichas: ['baricentro', 'circuncentro', 'incentro', 'ortocentro', 'punto medio'],
+      mira: ['Las medianas se cortan en el baricentro.', 'Está en las tres mediatrices: es el circuncentro.', 'Está en las tres bisectrices: es el incentro.', 'Las alturas se cortan en el ortocentro.'],
+      trampas: { '1:incentro': 'El incentro equidista de los lados; de los vértices equidista el circuncentro.', '2:circuncentro': 'El circuncentro equidista de los vértices; de los lados equidista el incentro.', '0:ortocentro': 'El ortocentro es el corte de las alturas, no de las medianas.' },
+      ok: 'Medianas, mediatrices, bisectrices y alturas: cada terna tiene su punto.' },
+      'Medianas: baricentro. Mediatrices: circuncentro, que equidista de los vértices. Bisectrices: incentro, que equidista de los lados. Alturas: ortocentro.', 'La mediatriz reúne los puntos que equidistan de dos vértices; la bisectriz, los que equidistan de dos lados.'),
+    x('trapecio-base', 'La base menor de un trapecio mide **7** y su mediana debe medir **12**. Estira la base mayor.', { b: 7, m: 12, B0: 9 },
+      'La mediana es la semisuma de las bases: $\\tfrac{B + 7}{2} = 12$, así que $B = 24 - 7 = 17$.', 'La mediana es el promedio de las dos bases: si una está 5 por debajo de 12, ¿dónde debe estar la otra?'),
+    x('lanza-escala', 'Manda el dron al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'La hipotenusa de un triángulo rectángulo mide 26. ¿Cuánto mide la **mediana** que llega a ella?', r: 13, c: '26 \\div 2', e: { 26: 'La mediana sobre la hipotenusa mide la mitad de ella.' } },
+      { q: 'Una mediana de un triángulo mide 27. ¿A qué distancia del **vértice** está el baricentro?', r: 18, c: '\\tfrac23 \\cdot 27', e: { 9: 'Ese es el tramo que va del baricentro al lado.' } },
+      { q: 'En un triángulo 30°-60°-90°, el cateto opuesto a $30^\\circ$ mide 14. ¿Cuánto mide la **hipotenusa**?', r: 28, c: '2 \\cdot 14', e: { 7: 'Al revés: la hipotenusa es el doble de ese cateto.' } }] },
+      '$26 \\div 2 = 13$; $\\tfrac23 \\cdot 27 = 18$; $2 \\cdot 14 = 28$.', 'Mitad de la hipotenusa, dos tercios de la mediana y el doble del cateto opuesto a 30°.'),
+    sol('En el triángulo ABC, M y N son los puntos medios de AB y AC, y BC mide 38 cm. La mediana AD mide 24 cm y G es el baricentro. Halla MN, AG y GD.', [
+      'MN une dos puntos medios: es la [[paralela media]] y es paralela a BC',
+      'Mide la mitad de BC: $38 \\div 2 =$ [[19]] cm',
+      'G está a dos tercios desde el vértice: $AG = \\tfrac23 \\cdot 24 =$ [[16]] cm',
+      'El resto de la mediana: $GD = 24 - 16 =$ [[8]] cm'], ['mediatriz', '76', '12'],
+      'Paralela media: mitad del tercer lado, 19. Baricentro: 16 desde el vértice y 8 hasta el lado.', 'Una medida es una mitad; la otra, dos tercios contados desde el vértice.'),
+    err('Las bases de un trapecio miden 10 cm y 18 cm. ¿Cuánto mide su mediana, el segmento que une los puntos medios de los lados no paralelos?', [
+      'La mediana del trapecio es paralela a las bases', 'Su medida es la semidiferencia de las bases', 'Se reemplazan las dos bases en esa regla'], 1,
+      ['Su medida es la semisuma de las bases: $\\tfrac{10 + 18}{2} = 14$ cm', 'Su medida es la suma de las bases: 28 cm', 'Su medida es la de la base mayor: 18 cm'],
+      'La mediana mide la semisuma, 14 cm. La semidiferencia, 4 cm, es el segmento que une los puntos medios de las diagonales.', 'La mediana queda entre las dos bases: ¿puede medir menos que la base menor?'),
+    opc('El punto de un triángulo que está a la misma distancia de sus tres lados es el:', ['incentro', 'circuncentro', 'baricentro', 'ortocentro'], 0,
+      'Los puntos de una bisectriz equidistan de los lados del ángulo; el corte de las tres bisectrices, el incentro, equidista de los tres lados.', '¿Qué recta reúne a los puntos que equidistan de los dos lados de un ángulo?'),
+  ]);
+
+  return mundo('euc-cuadrilateros', [l1, l2, l3, l4], [
+    ['euc-cuadrilateros-1', 'La distancia de un punto a una recta se mide sobre la perpendicular.', x('pie-perpendicular', 'Corre el pie **F** hasta que el segmento PF mida la **distancia** de P a la recta r.', { o: [0, 7], d: [1, -0.5], n: 12, P: [3, 3], t0: 10 },
+      'La distancia es el segmento perpendicular: cae a escuadra sobre r y mide $\\sqrt5 \\approx 2.2$.', 'El segmento más corto forma ángulos iguales con la recta a ambos lados del pie.')],
+    ['euc-cuadrilateros-1', 'Por un punto exterior a una recta pasa una sola paralela.', x('traza-paralela', 'Arrastra **D** para que la recta que pasa por **P** y por D sea **paralela** a r.', { A: [2, 7], B: [6, 5], P: [5, 2], ini: [9, 3] },
+      'La recta r baja 1 por cada 2 que avanza; la paralela por P hace lo mismo: de (5, 2) a (7, 1).', 'Copia el paso de r, lo que avanza y lo que baja, saliendo desde P.')],
+    ['euc-cuadrilateros-1', 'El segmento perpendicular es más corto que cualquier oblicua.', opc('Desde un punto exterior a una recta se trazan el segmento perpendicular, de 12 cm, y un segmento oblicuo. El oblicuo puede medir:', ['13 cm', '12 cm', '11 cm', '6 cm'], 0,
+      'Toda oblicua mide más que la perpendicular: solo 13 cm supera a 12 cm.', 'Compara cada opción con la medida del segmento perpendicular.')],
+    ['euc-cuadrilateros-2', 'Entre paralelas, los colaterales interiores son suplementarios.', x('conjugados-justos', 'Las rectas son paralelas. Inclina la transversal hasta que el colateral interior de arriba mida **30° más** que el de abajo.', { dif: 30 },
+      '$x + (x + 30^\\circ) = 180^\\circ$: miden 75° y 105°.', 'Los dos colaterales suman 180°: reparte esa suma con 30° de diferencia.')],
+    ['euc-cuadrilateros-2', 'Alternos internos congruentes obligan a que las rectas sean paralelas.', x('endereza-paralela', 'Los dos ángulos marcados son **alternos internos**. Gira la recta ℓ₂ hasta que se pueda asegurar que ℓ₁ y ℓ₂ son paralelas.', { t: 65, modo: 'alt', rot: -8, b0: -15 },
+      'Si los alternos internos son congruentes, las rectas son paralelas: el de abajo debe medir 65°.', 'Compara las dos medidas: ¿qué deben cumplir los alternos internos?')],
+    ['euc-cuadrilateros-2', 'Los ángulos interiores de un polígono suman (n − 2) · 180°.', opc('La suma de los ángulos interiores de un polígono es 1 980°. El polígono tiene:', ['11 lados', '13 lados', '12 lados', '15 lados'], 1,
+      '$(n - 2) \\cdot 180^\\circ = 1\\,980^\\circ$ da $n - 2 = 11$: 13 lados.', 'Divide la suma entre 180° para saber cuántos triángulos hay.')],
+    ['euc-cuadrilateros-3', 'Un paralelogramo con un ángulo recto es un rectángulo.', x('paralelogramo-especial', 'ABCD es un paralelogramo con el lado AB fijo. Arrastra **C** hasta que sea un **rectángulo**.', { A: [2, 1], B: [6, 3], ini: [7, 6], tipo: 'rectangulo' },
+      'AB avanza 2 y sube 1; BC debe caer a escuadra: retrocede 1 y sube 2, hasta (5, 5).', 'Gira un cuarto de vuelta el paso de AB para trazar BC.')],
+    ['euc-cuadrilateros-3', 'Si las diagonales se bisecan, el cuadrilátero es un paralelogramo.', x('diagonales-cruce', 'Mueve el cruce **M** y desliza la diagonal BD hasta que ABCD sea un **paralelogramo**.', { n: 12, m: 6, g: 110, t0: 9, s0: 2 },
+      'El cruce debe ser punto medio de las dos: $AM = MC = 6$ y $BM = MD = 3$.', 'Cuenta las marcas a cada lado del cruce, en las dos diagonales.')],
+    ['euc-cuadrilateros-3', 'El cuadrado reúne las propiedades del rectángulo y del rombo.', opc('Un paralelogramo cuyas diagonales son congruentes y además perpendiculares es un:', ['trapecio isósceles', 'rombo que no es cuadrado', 'cuadrado', 'rectángulo que no es cuadrado'], 2,
+      'Diagonales congruentes: rectángulo. Perpendiculares: rombo. Las dos cosas a la vez: cuadrado.', 'Mira qué figura cumple cada propiedad por separado.')],
+    ['euc-cuadrilateros-4', 'El incentro equidista de los tres lados del triángulo.', x('centro-equidista', 'Arrastra el punto hasta el lugar que queda a **igual distancia de los tres lados** del triángulo.', { V: [[2, 1], [10, 1], [2, 7]], tipo: 'lados', ini: [6, 2] },
+      'Es el incentro: en (4, 3) queda a 2 cuadros de cada cateto y también a 2 de la hipotenusa.', 'Empieza por quedar a la misma distancia de los dos catetos y avanza por esa bisectriz.')],
+    ['euc-cuadrilateros-4', 'El baricentro está a dos tercios de la mediana desde el vértice.', x('baricentro-desliza', 'La mediana **AM** mide **15**. Desliza **G** hasta el **baricentro**.', { n: 15, s0: 4 },
+      '$AG = \\tfrac23 \\cdot 15 = 10$ y $GM = 5$.', 'El tramo junto al vértice es el doble del otro.')],
+    ['euc-cuadrilateros-4', 'La mediana sobre la hipotenusa mide la mitad de la hipotenusa.', opc('Los catetos de un triángulo rectángulo miden 18 y 24. La mediana relativa a la hipotenusa mide:', ['21', '30', '12', '15'], 3,
+      'La hipotenusa mide $\\sqrt{324 + 576} = 30$ y su mediana, la mitad: 15.', 'Halla primero la hipotenusa.')],
+  ]);
+})());
+;
+//#archivo js/courses/euclidiana-circunferencia.js
+// Geometría Euclidiana · mundo 5 «euc-circunferencia» (spec 2026-11-26-curso-euclidiana). Números y contextos propios.
+// Juegos en js/games/euc-escena-5.js; explicaciones en js/explora-euc-5.js.
+EUC_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = EUC;
+
+  const l1 = leccion('euc-circunferencia-1', 'Cuerdas, tangentes y posiciones relativas', guion(
+    ['Radio, cuerda y diámetro', 'La circunferencia reúne los puntos a una misma distancia del centro: el radio. Una cuerda une dos de sus puntos, y la mayor de las cuerdas es el diámetro.'],
+    ['Arcos', 'Un arco mide lo mismo que el ángulo central que lo interseca. Dos arcos seguidos se suman, y el arco mayor es lo que falta para 360°.'],
+    ['La cuerda y el centro', 'El radio perpendicular a una cuerda la biseca, y biseca su arco. Cuerdas congruentes equidistan del centro.'],
+    ['Tangente', 'Una recta es exterior, tangente o secante según su distancia al centro. La tangente es perpendicular al radio en el punto de tangencia, y los dos segmentos tangentes desde un punto exterior son congruentes.'],
+    ['Dos circunferencias', 'Se comparan la distancia entre los centros con la suma y la resta de los radios: exteriores, tangentes, secantes, interiores o concéntricas.']), [
+    x('nombra-circunferencia', 'En la figura hay cinco trazos numerados. Pon a cada número su **nombre**.', { pide: ['radio', 'diametro', 'cuerda', 'secante', 'tangente'], fichas: ['radio', 'diámetro', 'cuerda', 'secante', 'tangente', 'arco', 'apotema'] },
+      'El radio sale del centro; la cuerda une dos puntos de la circunferencia y el diámetro es la que pasa por el centro; la secante corta en dos puntos y la tangente toca en uno solo.', 'Fíjate en cuántos puntos de la circunferencia toca cada trazo y en si pasa por el centro.'),
+    x('arcos-suman', 'Los ángulos centrales $\\angle AOB$ y $\\angle BOC$ miden **75°** y **60°**. Pon la medida de cada arco.', { a: 75, b: 60, et: ['arco AB', 'arco BC', 'arco ABC', 'el resto'], ops: ['+', '=', ''], metas: ['75°', '60°', '135°', '225°'], fichas: ['75°', '60°', '135°', '225°', '150°', '285°', '15°'],
+      mira: ['Un arco mide lo mismo que su ángulo central.', 'El arco BC mide lo que el ángulo BOC.', 'Dos arcos seguidos se suman.', 'El arco mayor es lo que le falta al menor para 360°.'], trampas: { '2:15°': 'Los arcos seguidos se suman, no se restan.', '3:285°': 'Quita de 360° el arco ABC completo, no solo un trozo.' }, ok: 'Cada arco mide lo que su ángulo central, y los arcos se suman.' },
+      'Cada arco mide lo que su ángulo central: 75° y 60°. Juntos, $75^\\circ + 60^\\circ = 135^\\circ$, y el resto de la circunferencia mide $360^\\circ - 135^\\circ = 225^\\circ$.', 'El arco y su ángulo central tienen la misma medida; la circunferencia entera son 360°.'),
+    x('cuerda-distancia', 'La circunferencia tiene radio **10**. Baja la cuerda hasta que mida **16**.', { r: 10, cuerda: 16 },
+      'El radio perpendicular biseca la cuerda: media cuerda mide 8. Con el radio 10 de hipotenusa, la distancia es $\\sqrt{10^2 - 8^2} = 6$.', 'Traza el radio hasta un extremo de la cuerda: aparece un triángulo rectángulo con media cuerda.'),
+    x('acerca-circulo', 'Un aro de radio **5** está fijo. Arrastra el centro de otro aro, de radio **3**, hasta donde los dos quedarían **tangentes interiores**.', { R: 5, r: 3, pos: 'ti' },
+      'Tocarse por dentro exige que los centros estén a la resta de los radios: $5 - 3 = 2$. El punto de tangencia queda alineado con los dos centros.', 'El punto donde se tocan está en la misma recta que los dos centros: mide desde ahí cada radio.'),
+    x('posicion-centros', 'Dos circunferencias tienen radios **7** y **4**. Según la distancia entre sus centros, pon cómo quedan.', { et: ['centros a 14', 'centros a 11', 'centros a 6', 'centros a 3', 'centros a 1'], metas: ['exteriores', 'tangentes ext.', 'secantes', 'tangentes int.', 'interiores'], fichas: ['exteriores', 'tangentes ext.', 'secantes', 'tangentes int.', 'interiores', 'concéntricas'],
+      mira: ['14 es más que la suma de los radios, 11: ni se tocan.', '11 es justo la suma de los radios: se tocan por fuera.', '6 está entre la resta, 3, y la suma, 11: se cortan en dos puntos.', '3 es justo la resta de los radios: se tocan por dentro.', '1 es menos que la resta, 3: una queda dentro de la otra sin tocarla.'],
+      trampas: { '4:concéntricas': 'Concéntricas solo si los centros coinciden: distancia 0.', '3:secantes': 'A distancia 3, que es 7 − 4, se tocan en un solo punto.' }, ok: 'Todo se decide comparando con la suma, 11, y la resta, 3.' },
+      'La suma de los radios es 11 y la resta 3. Más de 11: exteriores; 11: tangentes exteriores; entre 3 y 11: secantes; 3: tangentes interiores; menos de 3: interiores.', 'Calcula primero la suma y la resta de los radios, y compara cada distancia con esos dos números.'),
+    x('tangente-desde', 'El radio mide **5**. Aleja el punto P hasta que el segmento tangente PT mida **12**.', { r: 5, t: 12 },
+      'La tangente es perpendicular al radio en T: el triángulo OTP es rectángulo y $OP = \\sqrt{5^2 + 12^2} = 13$.', 'El radio y la tangente forman un ángulo recto en T: OP es el lado que queda enfrente.'),
+    x('tangentes-gemelas', 'La circunferencia toca los lados del triángulo en D, E y F. Se sabe que $AD = 4$, $BE = 6$ y $CF = 3$. Pon lo que falta.', { x: 4, y: 6, z: 3, et: ['AF', 'BD', 'CE', 'perímetro'], metas: ['4', '6', '3', '26'], fichas: ['4', '6', '3', '26', '13', '7', '10'],
+      mira: ['AF y AD son los dos segmentos tangentes que salen de A: son congruentes.', 'BD y BE salen los dos de B: son congruentes.', 'CE y CF salen los dos de C: son congruentes.', 'Cada medida aparece dos veces en el borde del triángulo.'], trampas: { '3:13': 'Eso es la mitad: cada segmento tangente aparece dos veces.' }, ok: 'De cada vértice salen dos segmentos tangentes congruentes.' },
+      'Los segmentos tangentes desde un mismo punto son congruentes: $AF = 4$, $BD = 6$, $CE = 3$. El perímetro es $2 \\cdot (4 + 6 + 3) = 26$.', 'Mira cada vértice como un punto exterior del que salen dos tangentes a la circunferencia.'),
+    x('sube-distancia', 'Sube a la medida que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Radio **25**; una cuerda está a **7** del centro. ¿Cuánto mide la cuerda?', r: 48, c: '2\\sqrt{25^2 - 7^2}', e: { 24: 'Esa es media cuerda: el radio perpendicular la parte en dos mitades.', 18: 'Restaste: radio, media cuerda y distancia forman un triángulo rectángulo.' } },
+      { q: 'P está a **17** del centro de una circunferencia de radio **8**. ¿Cuánto mide el segmento tangente desde P?', r: 15, c: '\\sqrt{17^2 - 8^2}', e: { 9: 'Restaste: la tangente y el radio son catetos, va Pitágoras.', 25: 'Sumaste: la distancia al centro es la hipotenusa.' } },
+      { q: 'Dos circunferencias de radios **9** y **4** son tangentes interiores. ¿A qué distancia están sus centros?', r: 5, c: '9 - 4', e: { 13: 'Esa distancia es para las tangentes exteriores.' } }] },
+      '$625 - 49 = 576 = 24^2$, y la cuerda es el doble: 48. $289 - 64 = 225 = 15^2$. Y por dentro, la resta de los radios: 5.', 'En los dos primeros hay un triángulo rectángulo con el radio; en el tercero, piensa en la recta de los centros.'),
+    sol('Desde un punto exterior P se trazan los segmentos tangentes PA y PB a una circunferencia de centro O. Demuestra que $PA \\cong PB$.',
+      ['$OA \\cong OB$, porque los dos son [[radios]]', 'Los ángulos $\\angle OAP$ y $\\angle OBP$ son [[rectos]]: la tangente es perpendicular al radio en el punto de tangencia', 'El lado $OP$ es [[común]] a los triángulos $OAP$ y $OBP$', 'Los triángulos rectángulos son congruentes por [[H-C]], y por eso $PA \\cong PB$'],
+      ['cuerdas', 'agudos', 'L-L-L'], 'Dos triángulos rectángulos con la hipotenusa OP común y un cateto congruente (el radio) son congruentes por hipotenusa-cateto: los otros catetos, PA y PB, también lo son.', 'Une O con A, con B y con P: salen dos triángulos. Busca qué tienen congruente.'),
+    err('Una cuerda de 30 cm está en una circunferencia de 17 cm de radio. ¿A qué distancia del centro queda?',
+      ['El radio perpendicular a la cuerda la biseca: cada mitad mide 15 cm', 'Radio, media cuerda y distancia forman un triángulo rectángulo de hipotenusa 17', 'Distancia: $17 - 15 = 2$ cm'], 2,
+      ['Distancia: $\\sqrt{17^2 - 15^2} = 8$ cm', 'Distancia: $\\sqrt{17^2 + 15^2} \\approx 22.7$ cm', 'Distancia: $\\sqrt{30^2 - 17^2} \\approx 24.7$ cm'], 'En un triángulo rectángulo los lados no se restan: $289 - 225 = 64$, y la distancia es 8 cm.', 'Si es un triángulo rectángulo, ¿qué relación cumplen sus tres lados?'),
+    opc('Una circunferencia tiene 12 cm de diámetro. Una recta pasa a 6 cm de su centro. Respecto a la circunferencia, la recta es:', ['secante', 'exterior', 'tangente', 'un diámetro'], 2,
+      'El radio mide 6 cm. Una recta cuya distancia al centro es igual al radio toca la circunferencia en un solo punto: es tangente.', 'Compara la distancia de la recta al centro con el radio, no con el diámetro.'),
+  ]);
+
+  const l2 = leccion('euc-circunferencia-2', 'Ángulo central e inscrito', guion(
+    ['Ángulo central', 'Tiene el vértice en el centro y mide lo mismo que el arco que interseca.'],
+    ['Ángulo inscrito', 'Tiene el vértice sobre la circunferencia y sus lados son cuerdas. Mide la mitad del arco que interseca.'],
+    ['El mismo arco', 'Todos los ángulos inscritos que intersecan el mismo arco son congruentes.'],
+    ['Semicircunferencia', 'Un ángulo inscrito en una semicircunferencia es recto: interseca un arco de 180°.'],
+    ['Cuadrilátero inscrito', 'Sus ángulos opuestos son suplementarios, porque entre los dos abarcan toda la circunferencia.']), [
+    x('tres-miradas', 'El arco AB mide **100°**. Pon cuánto mide el ángulo $\\angle AOB$ (O es el centro), el $\\angle APB$ y el $\\angle AQB$.', { arco: 100, et: ['en O', 'en P', 'en Q'], metas: ['100°', '50°', '130°'], fichas: ['100°', '50°', '130°', '200°', '260°', '80°'],
+      mira: ['O es el centro: el ángulo central mide lo que su arco.', 'P está en la circunferencia y abarca el arco AB: mide la mitad.', 'Q abarca el otro arco, el de 260°: mide su mitad.'], trampas: { '2:50°': 'Q no abarca el arco de 100°, sino el resto de la circunferencia.', '1:100°': 'Ese es el central. El inscrito mide la mitad.', '2:260°': 'Ese es el arco que abarca Q: falta la mitad.' }, ok: 'Central: el arco. Inscrito: la mitad del arco que abarca.' },
+      'El central mide el arco: 100°. El inscrito en P, la mitad: 50°. Y Q abarca el arco restante, $360^\\circ - 100^\\circ = 260^\\circ$: mide 130°.', 'Para cada vértice, pregúntate dónde está y qué arco queda dentro del ángulo.'),
+    x('inscrito-mitad', 'Mueve B hasta que el ángulo inscrito $\\angle APB$ mida **70°**.', { ang: 70 },
+      'El inscrito mide la mitad del arco que interseca: para 70° hace falta un arco, y un central, de $2 \\cdot 70^\\circ = 140^\\circ$.', 'Lo que ves cambiar es el ángulo central, que mide lo mismo que el arco AB.'),
+    x('mismo-arco', 'El ángulo dorado es inscrito y abarca el arco AB. Toca **todos** los vértices desde los que el arco AB se ve con ese mismo ángulo.', { A: 205, B: 335, P: 95, pts: [{ g: 40, si: true }, { c: true, no: 'R es el centro: ahí el ángulo es central y mide el arco entero, el doble.' }, { g: 152, si: true }, { g: 270, no: 'T está sobre el propio arco AB: desde ahí se abarca el otro arco, y el ángulo cambia.' }, { d: [0.32, -0.46], no: 'U no está sobre la circunferencia: ese ángulo no es inscrito, y abre más.' }],
+      falta: 'Falta alguno: todo vértice sobre la circunferencia, del mismo lado de la cuerda AB, ve el arco igual.', ok: 'Los inscritos que abarcan el mismo arco son congruentes.' },
+      'Los ángulos inscritos que intersecan el mismo arco son congruentes: sirven los vértices sobre la circunferencia, del lado opuesto al arco. El centro ve el doble.', 'Para medir la mitad del arco AB, el vértice debe estar sobre la circunferencia y fuera de ese arco.'),
+    x('semicirculo-recto', 'Mueve B por la circunferencia hasta que el ángulo $\\angle APB$ sea **recto**.', { A: 210, P: 75 },
+      'Un inscrito es recto cuando interseca un arco de 180°: la cuerda AB tiene que ser un diámetro, así que B queda opuesto a A.', 'Un ángulo de 90° es la mitad de 180°: ¿qué cuerda deja media circunferencia a cada lado?'),
+    x('triangulo-arcos', 'Los vértices del triángulo parten la circunferencia en arcos de **100°**, **140°** y **120°**. Pon cada ángulo del triángulo.', { arcos: [100, 140, 120], fichas: ['70°', '60°', '50°', '100°', '140°', '120°'] },
+      'Cada ángulo es inscrito y abarca el arco de enfrente: $\\angle A = 140^\\circ \\div 2 = 70^\\circ$, $\\angle B = 60^\\circ$ y $\\angle C = 50^\\circ$. Suman 180°.', 'El arco que abarca un ángulo es el que queda entre sus lados, lejos del vértice.'),
+    x('cuadrilatero-inscrito', 'El cuadrilátero ABCD está inscrito en la circunferencia. Pon los dos ángulos que faltan.', { arcos: [90, 70, 80, 120], fichas: ['105°', '80°', '75°', '100°', '95°', '90°'] },
+      'Los opuestos son suplementarios: $\\angle C = 180^\\circ - 75^\\circ = 105^\\circ$ y $\\angle D = 180^\\circ - 100^\\circ = 80^\\circ$.', 'Un ángulo y su opuesto abarcan, entre los dos, la circunferencia completa.'),
+    x('razones-inscrito', 'PA es un diámetro. Pon la **razón** de cada paso para probar que $\\angle AOB = 2\\,\\angle P$.', { et: ['OP = OB', '∠P = ∠B', '∠AOB = ∠P + ∠B', '∠AOB = 2∠P'], metas: ['radios', 'triáng. isósceles', 'ángulo exterior', 'sustitución'], fichas: ['radios', 'triáng. isósceles', 'ángulo exterior', 'sustitución', 'alternos internos', 'L-A-L'],
+      mira: ['OP y OB van del centro a la circunferencia.', 'En el triángulo POB dos lados son congruentes: a ellos se oponen ángulos congruentes.', '∠AOB es exterior al triángulo POB: vale la suma de los dos interiores no adyacentes.', 'Como ∠B mide lo mismo que ∠P, se reemplaza uno por otro.'], trampas: { '1:radios': 'Los radios son los lados; la igualdad de los ángulos sale de que el triángulo es isósceles.' }, ok: 'Radios, triángulo isósceles y ángulo exterior: el central es el doble del inscrito.' },
+      'OP y OB son radios, así que el triángulo POB es isósceles y $\\angle P = \\angle B$. El ángulo AOB es exterior a ese triángulo: $\\angle P + \\angle B = 2\\,\\angle P$.', 'Mira el triángulo POB: ¿qué lados tiene congruentes y qué ángulo queda por fuera de él?'),
+    x('lanza-angulo', 'Dale al faro el ángulo que se pide y suéltalo. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un ángulo inscrito que interseca un arco de $150^\\circ$', r: 75, c: '150^\\circ \\div 2', e: { 150: 'Ese es el arco: el inscrito mide la mitad.' } },
+      { q: 'El arco que interseca un ángulo inscrito de $55^\\circ$', r: 110, c: '2 \\cdot 55^\\circ', e: { 55: 'Ese es el ángulo: el arco es el doble.' } },
+      { q: 'En un cuadrilátero inscrito, el ángulo opuesto a uno de $115^\\circ$', r: 65, c: '180^\\circ - 115^\\circ', e: { 115: 'Los opuestos no son iguales: son suplementarios.' } }] },
+      '$150^\\circ \\div 2 = 75^\\circ$; $2 \\cdot 55^\\circ = 110^\\circ$; $180^\\circ - 115^\\circ = 65^\\circ$.', 'Inscrito: la mitad del arco. Arco: el doble del inscrito. Opuestos de un cuadrilátero inscrito: suman 180°.'),
+    sol('AB es un diámetro de una circunferencia y C es otro de sus puntos. Si $\\angle ABC = 35^\\circ$, ¿cuánto mide el arco BC?',
+      ['El ángulo $\\angle ACB$ está inscrito en una semicircunferencia: mide [[90]]°', 'En el triángulo ABC: $\\angle BAC = 180^\\circ - 90^\\circ - 35^\\circ =$ [[55]]°', 'El ángulo $\\angle BAC$ es inscrito e interseca el arco BC, que mide [[110]]°'],
+      ['70', '27.5', '145'], 'El triángulo es rectángulo en C, así que $\\angle BAC = 55^\\circ$, y el arco que interseca es el doble: 110°.', 'Empieza por el ángulo en C: sus lados llegan a los extremos de un diámetro.'),
+    err('Un ángulo central y un ángulo inscrito intersecan el mismo arco. El central mide 84°. ¿Cuánto mide el inscrito?',
+      ['El central mide lo mismo que su arco: el arco es de 84°', 'El inscrito interseca ese mismo arco de 84°', 'Inscrito: $84^\\circ \\cdot 2 = 168^\\circ$'], 2,
+      ['Inscrito: $84^\\circ \\div 2 = 42^\\circ$', 'Inscrito: $180^\\circ - 84^\\circ = 96^\\circ$', 'Inscrito: $84^\\circ$, igual que el central'], 'El inscrito mide la mitad del arco: 42°. El que es el doble es el central respecto al inscrito.', 'El vértice del inscrito está más lejos del arco que el centro: ¿abre más o abre menos?'),
+    opc('En un cuadrilátero inscrito en una circunferencia, tres ángulos consecutivos miden 70°, 95° y 110°. El cuarto ángulo mide:', ['85°', '95°', '75°', '105°'], 0,
+      'El cuarto ángulo es opuesto al de 95°, y los opuestos son suplementarios: $180^\\circ - 95^\\circ = 85^\\circ$.', 'Ubica cuál de los tres ángulos queda enfrente del que falta.'),
+  ]);
+
+  const l3 = leccion('euc-circunferencia-3', 'Ángulos interiores, exteriores y semiinscritos', guion(
+    ['Semiinscrito', 'Lo forman una tangente y una cuerda que sale del punto de tangencia. Mide la mitad del arco que interseca.'],
+    ['Ángulo interior', 'Lo forman dos cuerdas que se cortan dentro del círculo. Mide la semisuma de los arcos que intersecan él y su opuesto por el vértice.'],
+    ['Ángulo exterior', 'Tiene el vértice fuera del círculo: dos secantes, una secante y una tangente, o dos tangentes. Mide la semidiferencia de los arcos intersecados.'],
+    ['Dónde está el vértice', 'En el centro: el arco. Sobre la circunferencia: la mitad. Adentro: semisuma. Afuera: semidiferencia.']), [
+    x('donde-vertice', 'Según dónde esté el vértice, el ángulo se calcula distinto con los arcos que interseca. Pon cada regla.', { et: ['en el centro', 'sobre la circunferencia', 'dentro del círculo', 'fuera del círculo'], metas: ['el arco', 'mitad del arco', 'semisuma', 'semidiferencia'], fichas: ['el arco', 'mitad del arco', 'semisuma', 'semidiferencia', 'doble del arco', 'suma de arcos'],
+      mira: ['Con el vértice en el centro, el ángulo es central: mide lo que su arco.', 'Inscritos y semiinscritos tienen el vértice en la circunferencia: miden la mitad del arco.', 'Dos cuerdas que se cortan adentro: se promedian los dos arcos.', 'Con el vértice afuera, al arco lejano se le resta el cercano, y se saca la mitad.'], trampas: { '2:semidiferencia': 'Adentro los arcos se promedian; la resta es para el vértice de afuera.', '3:semisuma': 'Afuera se restan los arcos; la suma es para el vértice de adentro.' }, ok: 'Cuanto más lejos del arco está el vértice, menos abre el ángulo.' },
+      'Central: el arco. Inscrito o semiinscrito: la mitad del arco. Interior: la semisuma de los dos arcos. Exterior: la semidiferencia.', 'Imagina que el vértice se aleja del arco: el ángulo se va cerrando.'),
+    x('semiinscrito-abre', 'La recta es **tangente** en A. Mueve B hasta que el ángulo semiinscrito, entre la tangente y la cuerda AB, mida **80°**.', { ang: 80 },
+      'El semiinscrito mide la mitad del arco que interseca: el arco AB debe medir $2 \\cdot 80^\\circ = 160^\\circ$.', 'El arco que cuenta es el que queda dentro del ángulo, entre la tangente y la cuerda.'),
+    x('cuerdas-cruzan', 'Las cuerdas AC y BD se cortan dentro del círculo. El arco AB mide **50°**. Mueve D hasta que el ángulo que mira al arco AB mida **65°**.', { ab: 50, ang: 65 },
+      'El ángulo interior es la semisuma: $\\tfrac{50^\\circ + x}{2} = 65^\\circ$, así que el arco CD mide $130^\\circ - 50^\\circ = 80^\\circ$.', 'Los dos arcos juntos deben sumar el doble del ángulo pedido.'),
+    x('interior-o-exterior', 'En las dos figuras los arcos miden **100°** y **40°**. Pon el ángulo que forman las cuerdas (vértice adentro) y el que forman las secantes (vértice afuera).', { m: 100, n: 40, et: ['interior', 'exterior'], metas: ['70°', '30°'], fichas: ['70°', '30°', '140°', '60°', '50°'],
+      mira: ['Adentro se promedian los arcos: suma y mitad.', 'Afuera se restan los arcos y se saca la mitad.'], trampas: { '0:140°': 'Sumaste los arcos, pero falta sacar la mitad.', '1:60°': 'Restaste los arcos, pero falta sacar la mitad.', '0:30°': 'Con el vértice adentro los arcos se suman: semisuma.', '1:70°': 'Con el vértice afuera los arcos se restan: semidiferencia.', '0:50°': 'Esa es la mitad de un solo arco: adentro cuentan los dos.' }, ok: 'Adentro, semisuma; afuera, semidiferencia.' },
+      'Interior: $\\tfrac{100^\\circ + 40^\\circ}{2} = 70^\\circ$. Exterior: $\\tfrac{100^\\circ - 40^\\circ}{2} = 30^\\circ$.', 'Con los mismos arcos, el vértice de afuera está más lejos: su ángulo es el más cerrado.'),
+    x('secantes-abren', 'Desde P salen dos secantes. El arco cercano mide **40°**. Ábrelas hasta que el ángulo en P mida **50°**.', { n: 40, ang: 50 },
+      'El exterior es la semidiferencia: $\\tfrac{x - 40^\\circ}{2} = 50^\\circ$, así que el arco lejano mide $100^\\circ + 40^\\circ = 140^\\circ$.', 'La resta de los dos arcos debe ser el doble del ángulo pedido.'),
+    x('tangentes-abren', 'Desde P salen dos tangentes. Mueve P hasta que el ángulo entre ellas mida **70°**.', { ang: 70 },
+      'Los arcos suman 360° y su semidiferencia debe ser 70°: miden 250° y 110°, porque $\\tfrac{250^\\circ - 110^\\circ}{2} = 70^\\circ$.', 'Los dos arcos completan la circunferencia: busca la pareja cuya resta sea el doble del ángulo.'),
+    x('gira-arco', 'Haz girar el punto hasta completar el arco que se pide. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un ángulo semiinscrito mide $75^\\circ$. ¿Qué arco interseca?', r: 150, c: '2 \\cdot 75^\\circ', e: { 75: 'Ese es el ángulo: el arco es el doble.' } },
+      { q: 'Dos cuerdas se cortan formando $80^\\circ$; uno de los arcos mide $60^\\circ$. ¿Y el otro?', r: 100, c: '2 \\cdot 80^\\circ - 60^\\circ', e: { 20: 'Restaste sin duplicar: el ángulo es la mitad de la suma.', 140: 'Sumaste: los dos arcos juntos hacen el doble del ángulo, 160°.' } },
+      { q: 'Dos secantes forman $35^\\circ$ y el arco cercano mide $50^\\circ$. ¿Cuánto mide el lejano?', r: 120, c: '2 \\cdot 35^\\circ + 50^\\circ', e: { 85: 'Sumaste sin duplicar: el ángulo es la mitad de la resta.', 20: 'El arco lejano es el mayor de los dos.' } }] },
+      '$2 \\cdot 75^\\circ = 150^\\circ$; $160^\\circ - 60^\\circ = 100^\\circ$; $70^\\circ + 50^\\circ = 120^\\circ$.', 'Duplica primero el ángulo: ese número es el arco, la suma de los arcos o su resta, según dónde esté el vértice.'),
+    sol('Desde un punto exterior P se trazan dos tangentes a una circunferencia. El arco menor entre los puntos de tangencia mide 130°. ¿Cuánto mide el ángulo en P?',
+      ['El arco mayor mide $360^\\circ - 130^\\circ =$ [[230]]°', 'El vértice está fuera del círculo: el ángulo es la [[semidiferencia]] de los arcos', 'Ángulo en P: $(230^\\circ - 130^\\circ) \\div 2 =$ [[50]]°'],
+      ['semisuma', '100', '180'], 'Los arcos miden 230° y 130°; su semidiferencia es 50°. (También: el ángulo y el arco menor son suplementarios.)', 'Halla primero el otro arco: entre los dos completan la circunferencia.'),
+    err('Dos cuerdas se cortan dentro de un círculo. El ángulo que forman y su opuesto por el vértice intersecan arcos de 110° y 50°. ¿Cuánto mide ese ángulo?',
+      ['El vértice está dentro del círculo: es un ángulo interior', 'Interseca, con su opuesto por el vértice, los arcos de 110° y 50°', 'Ángulo: $(110^\\circ - 50^\\circ) \\div 2 = 30^\\circ$'], 2,
+      ['Ángulo: $(110^\\circ + 50^\\circ) \\div 2 = 80^\\circ$', 'Ángulo: $110^\\circ + 50^\\circ = 160^\\circ$', 'Ángulo: $110^\\circ \\div 2 = 55^\\circ$'], 'Con el vértice adentro va la semisuma: 80°. La semidiferencia es para el vértice de afuera.', 'Compara con un ángulo inscrito: el vértice de adentro está más cerca del arco, así que abre más.'),
+    opc('Una recta es tangente a una circunferencia en A, y AB es una cuerda. El arco AB que queda dentro del ángulo entre la tangente y la cuerda mide 136°. Ese ángulo mide:', ['136°', '44°', '272°', '68°'], 3,
+      'Es un ángulo semiinscrito: mide la mitad del arco que interseca, $136^\\circ \\div 2 = 68^\\circ$.', 'El vértice está sobre la circunferencia, como en un ángulo inscrito.'),
+  ]);
+
+  return mundo('euc-circunferencia', [l1, l2, l3], [
+    ['euc-circunferencia-1', 'El radio perpendicular a una cuerda la biseca: radio, media cuerda y distancia forman un triángulo rectángulo.',
+      x('cuerda-distancia', 'La circunferencia tiene radio **13**. Baja la cuerda hasta que mida **10**.', { r: 13, cuerda: 10 }, 'Media cuerda mide 5: la distancia es $\\sqrt{13^2 - 5^2} = 12$.', 'Media cuerda, distancia y radio forman un triángulo rectángulo.')],
+    ['euc-circunferencia-1', 'La tangente es perpendicular al radio en el punto de tangencia: la distancia al centro es una hipotenusa.',
+      x('tangente-desde', 'El radio mide **8**. Aleja el punto P hasta que el segmento tangente PT mida **15**.', { r: 8, t: 15 }, 'Radio y tangente son catetos: $OP = \\sqrt{8^2 + 15^2} = 17$.', 'En el punto de tangencia hay un ángulo recto.')],
+    ['euc-circunferencia-1', 'Dos circunferencias: compara la distancia entre los centros con la suma y la resta de los radios.',
+      opc('Dos circunferencias de radios 8 cm y 3 cm tienen sus centros a 5 cm de distancia. Las circunferencias son:', ['tangentes interiores', 'secantes', 'tangentes exteriores', 'concéntricas'], 0, 'La distancia, 5, es justo la resta de los radios, $8 - 3$: se tocan por dentro.', 'Calcula la suma y la resta de los radios y compara.')],
+    ['euc-circunferencia-2', 'El ángulo inscrito mide la mitad del arco que interseca; el central, el arco entero.',
+      x('inscrito-mitad', 'Mueve B hasta que el ángulo inscrito $\\angle APB$ mida **50°**.', { ang: 50 }, 'El arco, y el central, deben medir $2 \\cdot 50^\\circ = 100^\\circ$.', 'El central que ves mide lo mismo que el arco AB.')],
+    ['euc-circunferencia-2', 'En un cuadrilátero inscrito, los ángulos opuestos son suplementarios.',
+      x('cuadrilatero-inscrito', 'El cuadrilátero ABCD está inscrito en la circunferencia. Pon los dos ángulos que faltan.', { arcos: [100, 60, 110, 90], fichas: ['95°', '80°', '85°', '100°', '90°', '105°'] }, '$\\angle C = 180^\\circ - 85^\\circ = 95^\\circ$ y $\\angle D = 180^\\circ - 100^\\circ = 80^\\circ$.', 'Cada ángulo y su opuesto suman 180°.')],
+    ['euc-circunferencia-2', 'Un ángulo inscrito en una semicircunferencia es recto.',
+      opc('AB es un diámetro de una circunferencia y C es otro de sus puntos, con $\\angle CAB = 28^\\circ$. El ángulo $\\angle CBA$ mide:', ['28°', '56°', '152°', '62°'], 3, 'El ángulo en C es recto, así que los otros dos suman 90°: $90^\\circ - 28^\\circ = 62^\\circ$.', 'Mira primero el ángulo en C: está inscrito en una semicircunferencia.')],
+    ['euc-circunferencia-3', 'Ángulo interior (dos cuerdas que se cortan): semisuma de los arcos intersecados.',
+      x('cuerdas-cruzan', 'Las cuerdas AC y BD se cortan dentro del círculo. El arco AB mide **70°**. Mueve D hasta que el ángulo que mira al arco AB mida **80°**.', { ab: 70, ang: 80 }, 'Los arcos deben sumar 160°: el arco CD mide $160^\\circ - 70^\\circ = 90^\\circ$.', 'La suma de los dos arcos es el doble del ángulo.')],
+    ['euc-circunferencia-3', 'Ángulo exterior (secantes o tangentes): semidiferencia de los arcos intersecados.',
+      x('tangentes-abren', 'Desde P salen dos tangentes. Mueve P hasta que el ángulo entre ellas mida **50°**.', { ang: 50 }, 'Los arcos miden 230° y 130°: $\\tfrac{230^\\circ - 130^\\circ}{2} = 50^\\circ$.', 'Los arcos completan 360° y su resta es el doble del ángulo.')],
+    ['euc-circunferencia-3', 'Con el vértice afuera, los arcos se restan y se saca la mitad.',
+      opc('Dos secantes trazadas desde un punto exterior intersecan en una circunferencia arcos de 124° y 38°. El ángulo que forman mide:', ['81°', '43°', '86°', '162°'], 1, 'Semidiferencia: $(124^\\circ - 38^\\circ) \\div 2 = 43^\\circ$.', 'El vértice está fuera del círculo: los arcos se restan.')],
+  ]);
+})());
+;
+//#archivo js/courses/euclidiana-metricas.js
+// Geometría Euclidiana · mundo 6 «euc-metricas» Semejanza y Relaciones Métricas (spec 2026-11-26-curso-euclidiana). Números y contextos propios.
+EUC_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = EUC;
+
+  const l1 = leccion('euc-metricas-1', 'Segmentos proporcionales y Tales', guion(
+    ['Razón y proporción', 'La razón entre dos segmentos es el cociente de sus medidas. Una proporción es la igualdad de dos razones.'],
+    ['Extremos y medios', 'En toda proporción el producto de los extremos es igual al de los medios. Si los medios son iguales, ese valor es la media proporcional.'],
+    ['Paralela a un lado', 'Una paralela a un lado de un triángulo divide los otros dos en segmentos proporcionales. Y si una recta los divide así, es paralela.'],
+    ['Tales', 'Tres o más paralelas determinan segmentos proporcionales en dos transversales.'],
+    ['Bisectriz', 'La bisectriz de un ángulo de un triángulo divide el lado opuesto en la razón de los lados adyacentes.']), [
+    x('forman-proporcion', 'Cuatro segmentos forman una proporción cuando las dos razones son iguales. Toca **todas** las parejas que la forman.', { casos: [
+      { t: '6 y 9 con 10 y 15', si: true },
+      { t: '4 y 6 con 6 y 8', no: 'Entre 4 y 6 la razón es dos tercios; entre 6 y 8, tres cuartos. Sumar 2 no conserva la razón.' },
+      { t: '8 y 12 con 14 y 21', si: true },
+      { t: '5 y 10 con 9 y 20', no: '5 es la mitad de 10, pero 9 no es la mitad de 20.' },
+      { t: '12 y 9 con 20 y 15', si: true }], falta: 'Falta alguna: simplifica cada razón y compara.', ok: 'En todas, las dos razones se simplifican a la misma fracción.' },
+      '$\\tfrac69 = \\tfrac{10}{15} = \\tfrac23$, $\\tfrac{8}{12} = \\tfrac{14}{21} = \\tfrac23$ y $\\tfrac{12}{9} = \\tfrac{20}{15} = \\tfrac43$. En las otras dos, los productos en cruz no coinciden.',
+      'Multiplica en cruz: en una proporción, extremos y medios dan el mismo producto.'),
+    x('proporcion-propiedades', 'Se sabe que $\\tfrac{a}{b} = \\tfrac{c}{d}$. Completa cada igualdad que se deduce de ella.', { da: 'a/b = c/d',
+      et: ['a·d =', 'a/c =', 'b/a =', '(a+b)/b ='], metas: ['b·c', 'b/d', 'd/c', '(c+d)/d'], fichas: ['b·c', 'b/d', 'd/c', '(c+d)/d', 'a·c', 'd/b', '(c+d)/c', 'c/d'],
+      mira: ['El producto de los extremos es igual al de los medios.', 'Se pueden intercambiar los medios: lo de arriba sigue arriba.', 'Se pueden invertir las dos razones a la vez.', 'Si a un antecedente se le suma su consecuente, al otro también.'],
+      trampas: { '0:a·c': 'Los extremos son a y d; los medios, b y c.', '1:d/b': 'Al intercambiar los medios queda a sobre c igual a b sobre d: nada se voltea.', '3:(c+d)/c': 'Abajo quedó b, que es un consecuente: en la otra razón va d.' },
+      ok: 'De una proporción salen otras: productos en cruz, alternar, invertir y componer.' },
+      'Productos en cruz: $a \\cdot d = b \\cdot c$. Alternando los medios, $\\tfrac{a}{c} = \\tfrac{b}{d}$; invirtiendo, $\\tfrac{b}{a} = \\tfrac{d}{c}$; componiendo, $\\tfrac{a+b}{b} = \\tfrac{c+d}{d}$.',
+      'Prueba con números: 2/3 = 4/6. Mira cuáles de las igualdades siguen siendo ciertas con ellos.'),
+    x('media-segmento', 'Ajusta **x** para que sea **media proporcional** entre los segmentos de 2 y 18: 2 es a x como x es a 18.', { a: 2, b: 18, max: 18 },
+      'Los medios son iguales: $x \\cdot x = 2 \\cdot 18 = 36$, así que $x = 6$. Se comprueba: $\\tfrac26 = \\tfrac{6}{18}$.',
+      'En una proporción, el producto de los medios es igual al de los extremos. Aquí los dos medios son x.'),
+    x('paralela-lado', 'En el triángulo, D parte el lado AB en **6** y **4**, y el lado AC mide **15**. Lleva E hasta que DE quede **paralela** a BC.', { ad: 6, db: 4, ac: 15 },
+      'La paralela conserva la razón: $\\tfrac{AD}{DB} = \\tfrac{AE}{EC} = \\tfrac64$. De 10 partes, 6 quedan arriba: $AE = \\tfrac{6}{10} \\cdot 15 = 9$ y $EC = 6$.',
+      'Una paralela a un lado parte los otros dos en la misma razón. ¿En cuántas partes iguales queda cada lado?'),
+    x('tales-corte', 'Tres paralelas cortan una transversal en trozos de **10** y **15**; en la otra, el primer trozo mide **6**. Pon el punto por donde pasa la **tercera** paralela.', { a: 10, b: 15, c: 6 },
+      'Por Tales, $\\tfrac{10}{15} = \\tfrac{6}{x}$: $x = \\tfrac{15 \\cdot 6}{10} = 9$.',
+      'La razón entre los dos trozos es la misma en las dos transversales, aunque los trozos no midan igual.'),
+    x('bisectriz-corta', 'AB mide **6**, AC mide **9** y BC mide **10**. Lleva D al punto donde la **bisectriz** del ángulo A corta al lado BC.', { ab: 6, ac: 9, bc: 10 },
+      '$\\tfrac{BD}{DC} = \\tfrac{AB}{AC} = \\tfrac69 = \\tfrac23$: de 5 partes, 2 son de BD. $BD = \\tfrac25 \\cdot 10 = 4$ y $DC = 6$.',
+      'La bisectriz no llega al punto medio: reparte el lado opuesto según los dos lados que forman el ángulo.'),
+    x('sube-distancia', 'Sube a la medida que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Halla la cuarta proporcional: $\\tfrac{4}{10} = \\tfrac{14}{x}$.', r: 35, c: '\\tfrac{10 \\cdot 14}{4}', e: { 20: 'Sumaste 6 a cada término: en una proporción se multiplica.' } },
+      { q: 'Una paralela a la base de un triángulo deja en un lado **8** arriba y **12** abajo; en el otro lado quedan **14** arriba. ¿Cuánto queda abajo?', r: 21, c: '\\tfrac{12 \\cdot 14}{8}', e: { 18: 'Sumaste 4: los trozos guardan la razón, no la diferencia.' } },
+      { q: 'Dos lados de un triángulo miden **12** y **18**, y el tercero, **25**. La bisectriz del ángulo que forman lo corta. ¿Cuánto mide el trozo junto al lado de 18?', r: 15, c: '\\tfrac{18}{30} \\cdot 25', e: { 10: 'Ese es el trozo junto al lado de 12.' } }] },
+      '$140 \\div 4 = 35$; $168 \\div 8 = 21$; el tercer lado queda en 30 partes y 18 son del trozo junto al lado de 18: 15.',
+      'En los tres casos hay una proporción: escribe las dos razones y multiplica en cruz.'),
+    sol('En el triángulo $ABC$, D está en AB, E está en AC y $DE \\parallel BC$. Si $AD = 9$, $DB = 6$ y $EC = 8$, ¿cuánto mide AC?',
+      ['Como $DE \\parallel BC$, vale el teorema [[fundamental]] de la proporcionalidad: $\\tfrac{AD}{DB} = \\tfrac{AE}{EC}$', 'Entonces $\\tfrac{9}{6} = \\tfrac{AE}{8}$, y $AE =$ [[12]]', 'Por tanto $AC = AE + EC =$ [[20]]'], ['de la bisectriz', '11', '17'],
+      '$AE = \\tfrac{9 \\cdot 8}{6} = 12$ y $AC = 12 + 8 = 20$.', 'La paralela a un lado divide los otros dos en segmentos proporcionales: arma la proporción con los cuatro trozos.'),
+    err('En el triángulo $PQR$, la bisectriz del ángulo P corta a QR en S. Si $PQ = 8$, $PR = 12$ y $QR = 15$, halla QS.',
+      ['Por el teorema de la bisectriz, $\\tfrac{QS}{SR} = \\tfrac{PQ}{PR} = \\tfrac{8}{12}$', 'La razón se simplifica: $\\tfrac{QS}{SR} = \\tfrac23$', 'Entonces QS son 2 de las 3 partes de QR: $QS = \\tfrac23 \\cdot 15 = 10$'], 2,
+      ['QR queda en $2 + 3 = 5$ partes: $QS = \\tfrac25 \\cdot 15 = 6$', 'Entonces $QS = 15 - 12 = 3$', 'S es el punto medio de QR: $QS = 7.5$'],
+      'La razón 2 a 3 compara los dos trozos entre sí, no un trozo con el lado entero: son 5 partes, $QS = 6$ y $SR = 9$.', 'Si dos trozos están en razón 2 a 3, ¿en cuántas partes iguales queda dividido el lado completo?'),
+    opc('Tres calles paralelas cortan dos avenidas. En la primera avenida, los tramos entre calles miden 60 m y 90 m. En la segunda, el tramo que corresponde al de 60 m mide 80 m. El otro tramo de la segunda avenida mide:', ['110 m', '120 m', '53.3 m', '135 m'], 1,
+      '$\\tfrac{60}{90} = \\tfrac{80}{x}$: $x = \\tfrac{90 \\cdot 80}{60} = 120$ m.', 'Por Tales, la razón entre los dos tramos es la misma en las dos avenidas.'),
+  ]);
+
+  const l2 = leccion('euc-metricas-2', 'Semejanza de triángulos', guion(
+    ['Misma forma', 'Dos polígonos son semejantes si sus ángulos correspondientes son congruentes y sus lados correspondientes son proporcionales.'],
+    ['Razón de semejanza', 'Es el cociente entre dos lados homólogos: el número por el que se multiplica cada lado.'],
+    ['Criterio A-A', 'Dos triángulos con dos ángulos respectivamente congruentes son semejantes.'],
+    ['L-A-L y L-L-L', 'También lo son si tienen un ángulo congruente comprendido entre lados proporcionales, o los tres lados proporcionales.'],
+    ['Lo que hereda la razón', 'Alturas, medianas y perímetros homólogos guardan la misma razón que los lados.']), [
+    x('foto-fiel', 'Un rectángulo mide 4 de ancho por 3 de alto. Estira la copia hasta que mida **7.5 de alto** y siga siendo **semejante** al original.', { w0: 4, h0: 3, h: 7.5 },
+      'La razón de semejanza es $7.5 \\div 3 = 2.5$: el ancho debe medir $4 \\cdot 2.5 = 10$.',
+      'En polígonos semejantes todos los lados se multiplican por el mismo número. Hállalo con los dos altos.'),
+    x('criterio-semejanza', 'Con los datos marcados, ¿qué criterio asegura que cada pareja de triángulos es **semejante**? Los dibujos no están a escala.', {
+      pares: [{ a: { g: ['50°', '60°'] }, b: { g: ['50°', '', '70°'] } }, { a: { l: ['4', '', '6'], g: ['40°'] }, b: { l: ['6', '', '9'], g: ['40°'] } }, { a: { l: ['4', '5', '6'] }, b: { l: ['10', '12.5', '15'] } }],
+      metas: ['A-A', 'L-A-L', 'L-L-L'], fichas: ['A-A', 'L-A-L', 'L-L-L', 'ninguno', 'L-L-A'],
+      mira: ['Calcula el tercer ángulo de cada triángulo: resultan los mismos tres.', 'El ángulo de 40° está entre los dos lados dados, y esos lados son proporcionales.', 'No hay ángulos marcados: compara las tres razones entre lados.'],
+      trampas: { '0:ninguno': 'Sí lo son: al primero le falta 70° y al segundo, 60°. Tienen los mismos ángulos.', '1:L-L-A': 'Ese no es un criterio. Aquí el ángulo queda entre los dos lados: lado, ángulo, lado.' },
+      ok: 'Dos ángulos; un ángulo entre lados proporcionales; o los tres lados proporcionales.' },
+      'En la primera los ángulos son 50°, 60° y 70° en ambos (A-A). En la segunda, $\\tfrac46 = \\tfrac69$ con el mismo ángulo comprendido (L-A-L). En la tercera, $\\tfrac{10}{4} = \\tfrac{12.5}{5} = \\tfrac{15}{6}$ (L-L-L).',
+      'Mira qué se conoce de cada pareja: solo ángulos, solo lados o dos lados con el ángulo que forman.'),
+    x('siempre-semejantes', 'Toca **todas** las parejas de figuras que son semejantes **siempre**, sin necesidad de más datos.', { casos: [
+      { t: 'Dos triángulos equiláteros', si: true },
+      { t: 'Dos triángulos isósceles', no: 'Un isósceles puede ser puntiagudo y otro achatado: falta un ángulo congruente.' },
+      { t: 'Dos triángulos rectángulos con 35°', si: true },
+      { t: 'Dos rectángulos', no: 'Tienen los mismos ángulos, pero sus lados pueden no ser proporcionales.' },
+      { t: 'Dos cuadrados', si: true },
+      { t: 'Dos rombos', no: 'Sus lados son proporcionales, pero sus ángulos pueden ser distintos.' }], falta: 'Falta alguna: busca las que tienen los ángulos fijos y los lados proporcionales.', ok: 'Ángulos congruentes y lados proporcionales: las dos condiciones a la vez.' },
+      'Los equiláteros siempre tienen tres ángulos de 60°; los rectángulos con 35° comparten dos ángulos (A-A); los cuadrados tienen ángulos rectos y lados iguales. A las demás parejas les puede fallar una de las dos condiciones.',
+      'Semejantes: ángulos correspondientes congruentes y lados correspondientes proporcionales. Busca un contraejemplo para cada pareja.'),
+    x('arma-semejante', 'El triángulo pequeño tiene lados **4**, **5** y **6**. La base del grande mide **9** y es homóloga a la de 6. Ajusta los otros dos lados hasta que sea **semejante**.', { t: [4, 5, 6], c1: 9, min: 3, max: 10, v: [5, 5] },
+      'La razón de semejanza es $9 \\div 6 = 1.5$: los otros lados miden $4 \\cdot 1.5 = 6$ y $5 \\cdot 1.5 = 7.5$. Con los tres lados proporcionales, los ángulos coinciden (L-L-L).',
+      'Compara las dos bases para hallar la razón de semejanza; después aplícala a cada lado.'),
+    x('sombra-poste', 'Una vara de **2 m** proyecta una sombra de **3 m**. A la misma hora, la sombra de un poste mide **9 m**. Dale al poste su altura.', { h0: 2, s0: 3, s: 9 },
+      'Los rayos del sol son paralelos: los dos triángulos rectángulos tienen los mismos ángulos (A-A). $\\tfrac{h}{9} = \\tfrac{2}{3}$, así que $h = 6$ m.',
+      'Vara y poste forman con sus sombras triángulos semejantes: compara lados homólogos.'),
+    x('semejantes-partes', 'Los dos triángulos son **semejantes** y sus bases homólogas miden **10** y **15**. Del pequeño se conocen la altura, la mediana y el perímetro. Pon los del grande.', { l0: 10, l1: 15, h0: 4.8, m0: 5, p0: 24, fichas: ['7.2', '7.5', '36', '9.8', '10', '29', '54'] },
+      'La razón de semejanza es $\\tfrac{15}{10} = 1.5$: altura $4.8 \\cdot 1.5 = 7.2$, mediana $5 \\cdot 1.5 = 7.5$ y perímetro $24 \\cdot 1.5 = 36$.',
+      'En triángulos semejantes, las alturas, las medianas y los perímetros guardan la misma razón que los lados.'),
+    x('lanza-escala', 'Manda el dron al número que responde. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Dos triángulos semejantes tienen lados homólogos de **6** y **15**. Otro lado del pequeño mide 8: ¿cuánto mide su homólogo?', r: 20, c: '8 \\cdot \\tfrac{15}{6}', e: { 17: 'Sumaste 9: los lados homólogos se multiplican por la razón.' } },
+      { q: 'La razón de semejanza es $\\tfrac32$ y el perímetro del triángulo pequeño es **18**. ¿Cuál es el perímetro del grande?', r: 27, c: '18 \\cdot \\tfrac32', e: { 12: 'Ese sería más pequeño: el grande sale de multiplicar por tres medios.' } },
+      { q: 'Las alturas homólogas de dos triángulos semejantes miden **4** y **10**. La mediana del pequeño mide 6: ¿y la del grande?', r: 15, c: '6 \\cdot \\tfrac{10}{4}', e: { 12: 'Sumaste 6: la mediana va en la misma razón que las alturas.' } }] },
+      '$8 \\cdot 2.5 = 20$; $18 \\cdot 1.5 = 27$; $6 \\cdot 2.5 = 15$.',
+      'Halla primero la razón de semejanza con el par de medidas homólogas que conoces.'),
+    sol('En el triángulo $ABC$ se traza $DE \\parallel BC$, con D en AB y E en AC. Demuestra que $\\triangle ADE \\sim \\triangle ABC$ y halla DE si $AD = 4$, $AB = 10$ y $BC = 15$.',
+      ['El ángulo A es [[común]] a los dos triángulos', '$\\angle ADE \\cong \\angle ABC$ por ser [[correspondientes]] entre paralelas', 'Entonces los triángulos son semejantes por el criterio [[A-A]]', 'Lados homólogos: $\\tfrac{DE}{BC} = \\tfrac{AD}{AB}$, así que $DE = \\tfrac{4}{10} \\cdot 15 =$ [[6]]'], ['alternos internos', 'L-L-L', '9', 'recto'],
+      'Con un ángulo común y un par de correspondientes congruentes basta (A-A). La razón es $\\tfrac{4}{10}$, y $DE = 6$.', 'Para la semejanza bastan dos ángulos. Busca uno que compartan y otro que repitan las paralelas.'),
+    err('Un triángulo tiene lados 6, 8 y 12; otro, lados 9, 12 y 16. ¿Son semejantes?',
+      ['Se comparan los lados homólogos, de menor a mayor', '$\\tfrac{9}{6} = 1.5$ y $\\tfrac{12}{8} = 1.5$', '$\\tfrac{16}{12} = 1.5$, así que son semejantes por L-L-L'], 2,
+      ['$\\tfrac{16}{12} \\approx 1.33$: la tercera razón es distinta, así que no son semejantes', '$\\tfrac{16}{12} = 1.5$, así que son semejantes por L-A-L', '$\\tfrac{12}{16} = 0.75$, así que son semejantes por A-A'],
+      'Para L-L-L las tres razones deben coincidir, y $16 \\div 12$ no da 1.5: no son semejantes.', 'Dos razones iguales no bastan cuando solo se conocen lados: revisa la tercera división.'),
+    opc('Un triángulo tiene lados 5, 7 y 9. Otro triángulo, semejante a él, tiene perímetro 63. El lado mayor del segundo triángulo mide:', ['21', '15', '27', '51'], 2,
+      'El primero tiene perímetro 21 y $63 \\div 21 = 3$: el lado mayor mide $9 \\cdot 3 = 27$.', 'Los perímetros guardan la misma razón que los lados homólogos.'),
+  ]);
+
+  const l3 = leccion('euc-metricas-3', 'Pitágoras y el triángulo rectángulo', guion(
+    ['Proyecciones', 'La altura sobre la hipotenusa la divide en dos segmentos: las proyecciones de los catetos.'],
+    ['La altura', 'La altura sobre la hipotenusa es media proporcional entre las dos proyecciones.'],
+    ['Cada cateto', 'Cada cateto es media proporcional entre la hipotenusa y su proyección sobre ella.'],
+    ['Pitágoras', 'El cuadrado de la hipotenusa es la suma de los cuadrados de los catetos; y si tres lados lo cumplen, el triángulo es rectángulo.'],
+    ['Dos triángulos notables', 'En el de 45°-45°-90° la hipotenusa es el cateto por raíz de 2; en el de 30°-60°-90° los lados son x, x por raíz de 3 y 2x.']), [
+    x('altura-hipotenusa', 'La hipotenusa mide **13**. Mueve el vértice del ángulo recto hasta que la altura sobre la hipotenusa mida **6**, con la proyección menor a la izquierda.', { c: 13, h: 6 },
+      '$h^2 = m \\cdot n$: se buscan dos números que sumen 13 y cuyo producto sea 36. Son 4 y 9.',
+      'El cuadrado de la altura es el producto de las dos proyecciones, y las dos juntas completan la hipotenusa.'),
+    x('cateto-proyeccion', 'La hipotenusa mide **25**. Mueve el vértice del ángulo recto hasta que el cateto de la izquierda mida **15**.', { c: 25, a: 15 },
+      '$a^2 = c \\cdot m$: $225 = 25 \\cdot m$, así que su proyección mide 9. La otra mide 16 y el otro cateto, 20, porque $20^2 = 25 \\cdot 16$.',
+      'El cuadrado de un cateto es la hipotenusa por la proyección de ese cateto sobre ella.'),
+    x('cuadrado-catetos', 'El cuadrado construido sobre la hipotenusa debe valer **89**, y los dos catetos deben ser mayores que 2. Mueve las puntas de los catetos.', { c2: 89, mas: 2 },
+      '$5^2 + 8^2 = 25 + 64 = 89$: los cuadrados de los catetos llenan el de la hipotenusa.',
+      'Haz la lista de los cuadrados perfectos y busca dos que sumen lo pedido.'),
+    x('cateto-falta', 'Un cable de **29 m** baja tenso desde la punta de un mástil hasta un punto del suelo a **20 m** del pie. Dale al mástil su altura.', { c: 29, b: 20 },
+      'El cable es la hipotenusa: $29^2 - 20^2 = 841 - 400 = 441 = 21^2$. El mástil mide 21 m.',
+      'El cable es el lado opuesto al ángulo recto: para hallar un cateto se restan los cuadrados.'),
+    x('que-triangulo-es', 'Con solo los tres lados se sabe qué clase de triángulo es. Pon a cada terna su nombre.', {
+      et: ['lados 9, 12 y 15', 'lados 5, 6 y 7', 'lados 4, 7 y 9', 'lados 8, 15 y 17'], metas: ['rectángulo', 'acutángulo', 'obtusángulo', 'rectángulo'], fichas: ['rectángulo', 'rectángulo', 'acutángulo', 'obtusángulo', 'acutángulo', 'no cierra'],
+      mira: ['81 + 144 da justo 225: se cumple Pitágoras.', '25 + 36 es 61, más que 49: el ángulo mayor no alcanza a ser recto.', '16 + 49 es 65, menos que 81: el ángulo mayor se pasa de recto.', '64 + 225 da justo 289: se cumple Pitágoras.'],
+      trampas: { '2:no cierra': 'Sí cierra: 4 + 7 es más que 9.', '1:no cierra': 'Sí cierra: 5 + 6 es más que 7.' },
+      ok: 'El cuadrado del lado mayor: si iguala la suma, rectángulo; si es menor, acutángulo; si es mayor, obtusángulo.' },
+      '$15^2 = 81 + 144$ y $17^2 = 64 + 225$: rectángulos, por el recíproco de Pitágoras. $7^2 = 49 < 61$: acutángulo. $9^2 = 81 > 65$: obtusángulo.',
+      'Compara el cuadrado del lado mayor con la suma de los cuadrados de los otros dos.'),
+    x('equilatero-partes', 'Un triángulo equilátero de perímetro **48** se parte por una altura: queda un triángulo de 30°, 60° y 90°. Pon el lado, la media base y la altura.', { per: 48, fichas: ['16', '8', '8√3', '16√3', '8√2', '24'] },
+      'El lado mide $48 \\div 3 = 16$; la media base, 8; y la altura, $\\sqrt{16^2 - 8^2} = \\sqrt{192} = 8\\sqrt3$.',
+      'El cateto menor es la mitad de la hipotenusa; el otro cateto sale de Pitágoras.'),
+    x('diagonal-cuadrado', 'Una baldosa cuadrada mide **7** de lado. Corta la cinta que va de una esquina a la **opuesta**, lo más justa que puedas.', { lado: 7 },
+      'La diagonal forma dos triángulos de 45°-45°-90°: mide $7\\sqrt2 \\approx 9.9$.',
+      'La diagonal es la hipotenusa de un triángulo rectángulo con los dos catetos iguales.'),
+    x('lanza-cuerda', 'Lanza la cuerda con el largo justo del lado que falta. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Catetos 10 y 24: lanza la hipotenusa', a: 10, b: 24, r: 26 }, { q: 'Hipotenusa 41 y cateto 40: lanza el otro cateto', h: 41, b: 40, r: 9 }, { q: 'Hipotenusa 35 y cateto 28: lanza el otro cateto', h: 35, b: 28, r: 21 }] },
+      '$100 + 576 = 26^2$; $1681 - 1600 = 9^2$; $1225 - 784 = 21^2$.',
+      'Para la hipotenusa se suman los cuadrados de los catetos; para un cateto, se restan.'),
+    sol('En un triángulo rectángulo, la altura sobre la hipotenusa la divide en segmentos de 18 cm y 32 cm. Halla la altura y los dos catetos.',
+      ['La hipotenusa mide $18 + 32 =$ [[50]] cm', 'Altura: $h^2 = 18 \\cdot 32 = 576$, así que $h =$ [[24]] cm', 'Cateto menor: $a^2 = 50 \\cdot 18 = 900$, así que $a =$ [[30]] cm', 'Cateto mayor: $b^2 = 50 \\cdot 32 = 1600$, así que $b =$ [[40]] cm'], ['25', '14', '576'],
+      'La altura es media proporcional entre las proyecciones; cada cateto, entre la hipotenusa y su proyección. Se comprueba: $30^2 + 40^2 = 50^2$.', 'Hay tres relaciones: una para la altura y una para cada cateto. Todas son productos.'),
+    err('Los lados de un triángulo miden 7, 24 y 26 cm. ¿Es rectángulo?',
+      ['El lado mayor, 26, tendría que ser la hipotenusa', '$7^2 + 24^2 = 49 + 576 = 625$', 'Como $26^2 = 625$, por el recíproco de Pitágoras es rectángulo'], 2,
+      ['Como $26^2 = 676$ es mayor que 625, no es rectángulo: es obtusángulo', 'Como $26^2 = 676$ es mayor que 625, es acutángulo', 'Como $26^2 = 52$, no es rectángulo'],
+      '$26^2 = 676$, no 625 (ese es $25^2$). El cuadrado del lado mayor supera la suma de los otros dos: el triángulo es obtusángulo.', 'Vuelve a calcular el cuadrado del lado mayor antes de comparar.'),
+    opc('En un triángulo rectángulo con ángulos agudos de 30° y 60°, el cateto opuesto al ángulo de 30° mide 7 cm. La hipotenusa y el otro cateto miden, en ese orden:', ['$7\\sqrt2$ cm y 7 cm', '14 cm y $7\\sqrt2$ cm', '$7\\sqrt3$ cm y 14 cm', '14 cm y $7\\sqrt3$ cm'], 3,
+      'Es medio triángulo equilátero: la hipotenusa es el doble del cateto menor, 14, y el otro cateto mide $7\\sqrt3$.', 'El cateto opuesto a 30° es la mitad de la hipotenusa.'),
+  ]);
+
+  const l4 = leccion('euc-metricas-4', 'Potencia de un punto y polígonos regulares', guion(
+    ['Dos cuerdas', 'Si dos cuerdas se cortan dentro de la circunferencia, el producto de los segmentos de una es igual al producto de los segmentos de la otra.'],
+    ['Dos secantes', 'Desde un punto exterior, cada secante multiplicada por su segmento exterior da el mismo producto: la potencia del punto.'],
+    ['Tangente y secante', 'El segmento tangente es media proporcional entre la secante y su segmento exterior.'],
+    ['Polígonos regulares inscritos', 'Sus vértices reparten la circunferencia en arcos iguales: el ángulo central mide 360° entre el número de lados.'],
+    ['Lado y apotema', 'El lado del hexágono es el radio; el del cuadrado, el radio por raíz de 2; el del triángulo equilátero, el radio por raíz de 3. La apotema va del centro al punto medio de un lado.']), [
+    x('potencia-cuerdas', 'Dos cuerdas se cortan en P. En una, $PA = 6$ y $PB = 8$; en la otra, $PC = 4$. La circunferencia está oculta: lleva D al punto donde la segunda cuerda termina.', { pa: 6, pb: 8, pc: 4, max: 14 },
+      '$PA \\cdot PB = PC \\cdot PD$: $6 \\cdot 8 = 4 \\cdot PD$, así que $PD = 12$.',
+      'Los dos trozos de una cuerda, multiplicados, dan lo mismo que los dos trozos de la otra.'),
+    x('potencia-secantes', 'Desde P salen dos secantes. En una, $PA = 6$ y $PB = 10$, medidos desde P; en la otra, $PC = 4$. La circunferencia está oculta: lleva D al punto lejano de la segunda secante.', { pa: 6, pb: 10, pc: 4, max: 16 },
+      '$PA \\cdot PB = PC \\cdot PD$: $6 \\cdot 10 = 4 \\cdot PD$, así que $PD = 15$.',
+      'Cada secante entera por su segmento exterior, los dos medidos desde P, da el mismo producto.'),
+    x('tangente-media', 'Desde P, una secante corta a la circunferencia en A y B: $PA = 4$ y $PB = 16$. La circunferencia está oculta: lleva T al punto donde la otra recta es **tangente**.', { pa: 4, pb: 16, max: 14 },
+      '$PT^2 = PA \\cdot PB = 4 \\cdot 16 = 64$, así que $PT = 8$.',
+      'La tangente es una secante cuyos dos puntos se juntaron: en el producto, PT aparece dos veces.'),
+    x('inscribe-regular', 'Inscribe en la circunferencia un polígono regular cuyo **ángulo central** mida $40^\\circ$.', { meta: 9, ver: 'central' },
+      'Los ángulos centrales se reparten la vuelta por igual: $360^\\circ \\div 40^\\circ = 9$ lados.',
+      'Todos los ángulos centrales de un polígono regular son iguales y juntos completan una vuelta.'),
+    x('lados-inscritos', 'Un triángulo equilátero, un cuadrado y un hexágono regular están inscritos en circunferencias de radio **10**. Pon el lado de cada uno.', { r: 10, fichas: ['10√3', '10√2', '10', '20', '5√3', '5√2'] },
+      '$l_3 = r\\sqrt3 = 10\\sqrt3$, $l_4 = r\\sqrt2 = 10\\sqrt2$ y $l_6 = r = 10$.',
+      'Empieza por el hexágono: dos radios y un lado forman un triángulo con un ángulo de 60° en el centro.'),
+    x('apotema-lado', 'Un hexágono regular está inscrito en una circunferencia de radio **8**. Pon su ángulo central, su lado y su apotema.', { n: 6, r: 8, fichas: ['60°', '8', '4√3', '4', '120°', '8√3', '4√2'] },
+      '$360^\\circ \\div 6 = 60^\\circ$. Dos radios y un lado forman un triángulo equilátero: el lado mide 8, y la apotema, que es su altura, $4\\sqrt3$.',
+      'La apotema parte el triángulo de dos radios y un lado en dos triángulos rectángulos.'),
+    x('tiro-al-circulo', 'El punto sale de P por la recta punteada y debe caer justo en la circunferencia. Dale la distancia PD y suéltalo. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Dos cuerdas se cortan en P: $PA = 3$, $PB = 12$ y $PC = 4$. Lanza hasta D.', pa: 3, pb: 12, pc: 4, r: 9, c: '\\tfrac{3 \\cdot 12}{4}', e: { 11: 'Sumaste y restaste: los trozos de las cuerdas se multiplican.' } },
+      { q: 'P es exterior: $PA = 5$, $PB = 12$ y $PC = 6$, medidos desde P. Lanza hasta el punto lejano D.', ext: true, pa: 5, pb: 12, pc: 6, r: 10, c: '\\tfrac{5 \\cdot 12}{6}', e: { 11: 'Sumaste y restaste: se multiplica cada secante por su parte exterior.', 6: 'Ahí está C: D es el otro punto de la secante.' } },
+      { q: 'Dos cuerdas se cortan en P: $PA = 8$, $PB = 9$ y $PC = 6$. Lanza hasta D.', pa: 8, pb: 9, pc: 6, r: 12, c: '\\tfrac{8 \\cdot 9}{6}', e: { 11: 'Sumaste y restaste: aquí se multiplica.' } }] },
+      '$36 \\div 4 = 9$; $60 \\div 6 = 10$; $72 \\div 6 = 12$.',
+      'En los tres, el producto de las dos distancias desde P por una recta es igual al producto por la otra.'),
+    sol('Desde un punto P exterior a una circunferencia se trazan una tangente PT y una secante que la corta en A y B, con $PA = 5$ cm y $AB = 15$ cm. Halla PT.',
+      ['La secante entera mide $PB = 5 + 15 =$ [[20]] cm', 'Por la potencia del punto, $PT^2 = PA \\cdot PB =$ [[100]]', 'Entonces $PT =$ [[10]] cm'], ['75', '15', '8.7'],
+      'Se multiplica el segmento exterior por la secante entera, no por la cuerda: $5 \\cdot 20 = 100$ y $PT = 10$.', 'Las dos medidas de la secante se toman desde P: hasta el punto cercano y hasta el lejano.'),
+    err('Un cuadrado está inscrito en una circunferencia de radio 6 cm. Halla su lado y su apotema.',
+      ['El ángulo central mide $360^\\circ \\div 4 = 90^\\circ$', 'Dos radios y un lado forman un triángulo rectángulo: $l^2 = 6^2 + 6^2 = 72$', 'El lado mide $l = 6\\sqrt2$ cm', 'La apotema mide lo mismo que el radio: 6 cm'], 3,
+      ['La apotema es la mitad del lado: $3\\sqrt2$ cm', 'La apotema es la mitad del radio: 3 cm', 'La apotema mide $6\\sqrt3$ cm'],
+      'La apotema llega al punto medio del lado, no al vértice: en el cuadrado es medio lado, $3\\sqrt2 \\approx 4.2$ cm, menos que el radio.', 'El radio llega a un vértice; la apotema, al punto medio de un lado. ¿Cuál de los dos es más corto?'),
+    opc('Dos cuerdas AB y CD de una circunferencia se cortan en el punto P. Si $PA = 4$ cm, $PB = 9$ cm y P es el punto medio de CD, la cuerda CD mide:', ['12 cm', '6 cm', '13 cm', '6.5 cm'], 0,
+      '$PC \\cdot PD = 4 \\cdot 9 = 36$ con $PC = PD$: cada mitad mide 6 y la cuerda, 12 cm.', 'Los productos de los segmentos de las dos cuerdas son iguales; en CD los dos segmentos miden lo mismo.'),
+  ]);
+
+  return mundo('euc-metricas', [l1, l2, l3, l4], [
+    ['euc-metricas-1', 'Tales: varias paralelas determinan segmentos proporcionales en dos transversales.', x('tales-corte', 'Tres paralelas cortan una transversal en trozos de **9** y **12**; en la otra, el primer trozo mide **6**. Pon el punto por donde pasa la **tercera** paralela.', { a: 9, b: 12, c: 6 },
+      '$\\tfrac{9}{12} = \\tfrac{6}{x}$: $x = \\tfrac{12 \\cdot 6}{9} = 8$.', 'La razón entre los trozos es igual en las dos transversales.')],
+    ['euc-metricas-1', 'La bisectriz divide el lado opuesto en la razón de los lados adyacentes.', x('bisectriz-corta', 'AB mide **12**, AC mide **8** y BC mide **10**. Lleva D al punto donde la **bisectriz** del ángulo A corta al lado BC.', { ab: 12, ac: 8, bc: 10 },
+      '$\\tfrac{BD}{DC} = \\tfrac{12}{8} = \\tfrac32$: de 5 partes, 3 son de BD. $BD = 6$ y $DC = 4$.', 'El trozo mayor queda junto al lado mayor.')],
+    ['euc-metricas-1', 'Una paralela a un lado divide los otros dos en segmentos proporcionales.', opc('En el triángulo $ABC$, una paralela a BC corta a AB en D y a AC en E. Si $AD = 6$, $DB = 9$ y $AE = 8$, entonces EC mide:', ['11', '5.3', '14', '12'], 3,
+      '$\\tfrac{6}{9} = \\tfrac{8}{EC}$: $EC = \\tfrac{9 \\cdot 8}{6} = 12$.', 'Arma la proporción con los cuatro trozos.')],
+    ['euc-metricas-2', 'A-A: triángulos con dos ángulos congruentes tienen lados proporcionales.', x('sombra-poste', 'Una vara de **2.5 m** proyecta una sombra de **2 m**. A la misma hora, la sombra de un poste mide **6 m**. Dale al poste su altura.', { h0: 2.5, s0: 2, s: 6 },
+      'La sombra del poste es 3 veces la de la vara: $2.5 \\cdot 3 = 7.5$ m.', 'A la misma hora, vara y poste forman triángulos semejantes.')],
+    ['euc-metricas-2', 'L-L-L: tres lados proporcionales, y la razón sale de un par de homólogos.', x('arma-semejante', 'El triángulo de la izquierda tiene lados **6**, **8** y **10**. La base del otro mide **5** y es homóloga a la de 10. Ajusta sus otros dos lados hasta que sea **semejante**.', { t: [6, 8, 10], c1: 5, min: 2, max: 9, v: [6, 6] },
+      'La razón es $5 \\div 10 = 0.5$: los otros lados miden 3 y 4.', 'Halla la razón con las dos bases y aplícala a cada lado.')],
+    ['euc-metricas-2', 'Los perímetros guardan la razón de semejanza.', opc('Los lados de un triángulo miden 4, 6 y 8. En un triángulo semejante, el lado menor mide 10. El perímetro de este último es:', ['45', '36', '30', '112.5'], 0,
+      'La razón es $10 \\div 4 = 2.5$ y $18 \\cdot 2.5 = 45$.', 'El perímetro crece por la misma razón que cada lado.')],
+    ['euc-metricas-3', 'La altura sobre la hipotenusa es media proporcional entre las proyecciones.', x('altura-hipotenusa', 'La hipotenusa mide **20**. Mueve el vértice del ángulo recto hasta que la altura sobre la hipotenusa mida **8**, con la proyección menor a la izquierda.', { c: 20, h: 8 },
+      'Dos números que suman 20 y cuyo producto es 64: 4 y 16.', 'El cuadrado de la altura es el producto de las proyecciones.')],
+    ['euc-metricas-3', 'Pitágoras: para un cateto se restan los cuadrados.', x('cateto-falta', 'Un cable de **25 m** baja tenso desde la punta de un mástil hasta un punto del suelo a **7 m** del pie. Dale al mástil su altura.', { c: 25, b: 7 },
+      '$25^2 - 7^2 = 625 - 49 = 576 = 24^2$.', 'El cable es la hipotenusa del triángulo.')],
+    ['euc-metricas-3', 'Con las proyecciones se hallan la altura y la hipotenusa.', opc('La altura sobre la hipotenusa de un triángulo rectángulo determina en ella segmentos de 4 cm y 9 cm. El área del triángulo es:', ['36 cm²', '39 cm²', '78 cm²', '18 cm²'], 1,
+      '$h^2 = 4 \\cdot 9$, así que $h = 6$; la hipotenusa mide 13 y el área, $\\tfrac{13 \\cdot 6}{2} = 39$ cm².', 'Halla primero la altura con las dos proyecciones.')],
+    ['euc-metricas-4', 'Cuerdas que se cortan: los productos de sus segmentos son iguales.', x('potencia-cuerdas', 'Dos cuerdas se cortan en P. En una, $PA = 5$ y $PB = 12$; en la otra, $PC = 6$. La circunferencia está oculta: lleva D al punto donde la segunda cuerda termina.', { pa: 5, pb: 12, pc: 6, max: 14 },
+      '$5 \\cdot 12 = 6 \\cdot PD$, así que $PD = 10$.', 'Multiplica los dos trozos de la cuerda que conoces completa.')],
+    ['euc-metricas-4', 'El lado del hexágono regular inscrito mide lo mismo que el radio.', x('inscribe-regular', 'Inscribe en la circunferencia un polígono regular cuyo **lado** mida lo mismo que el **radio**.', { meta: 6, ver: 'lado' },
+      'Con seis lados, dos radios y un lado forman un triángulo equilátero.', 'Si el lado es igual al radio, ¿qué triángulo forman dos radios y un lado?')],
+    ['euc-metricas-4', 'Tangente y secante: el cuadrado de la tangente es la secante por su parte exterior.', opc('Desde un punto exterior P se trazan a una circunferencia una tangente PT y una secante que la corta en A y B. Si $PA = 3$ cm y $AB = 9$ cm, PT mide:', ['$3\\sqrt3$ cm', '7.5 cm', '6 cm', '27 cm'], 2,
+      '$PB = 12$ y $PT^2 = 3 \\cdot 12 = 36$: $PT = 6$ cm.', 'La secante entera se mide desde P hasta el punto lejano.')],
+  ]);
+})());
+;
+//#archivo js/courses/euclidiana-areas.js
+// Geometría Euclidiana · mundo 7 «euc-areas» (spec 2026-11-26-curso-euclidiana): áreas básicas, relaciones entre áreas y áreas
+// sombreadas. Juegos propios en js/games/euc-escena-7.js; los demás, del catálogo de geometría con datos nuevos.
+EUC_MUNDOS.push((() => {
+  const { leccion, mundo, x, sol, err, opc, guion } = EUC;
+
+  // ------------------------------------------------------------------------------------------------------- 1 · Áreas básicas
+  const l1 = leccion('euc-areas-1', 'Áreas básicas', guion(
+    ['Medir un área', 'Medir un área es contar cuántos cuadrados unidad caben en la figura. Dos figuras con la misma área se llaman **equivalentes**, aunque no tengan la misma forma.'],
+    ['De base por altura', 'El rectángulo y el paralelogramo valen base por altura; el triángulo, la mitad. Si solo se conocen los tres lados, la fórmula de Herón usa el semiperímetro $p$: $\\sqrt{p(p-a)(p-b)(p-c)}$.'],
+    ['Rombo y trapecio', 'El rombo vale el semiproducto de sus diagonales, $\\tfrac{D \\cdot d}{2}$, y el trapecio la semisuma de las bases por la altura, $\\tfrac{(B + b) \\cdot h}{2}$.'],
+    ['Polígono regular', 'Un polígono regular se parte en triángulos iguales desde el centro, con la apotema por altura: su área es el semiperímetro por la apotema. El triángulo equilátero de lado $l$ vale $\\tfrac{l^2\\sqrt3}{4}$.'],
+    ['Círculo y sus partes', 'El círculo vale $\\pi r^2$. Al sector circular le toca la misma parte del área que su ángulo de la vuelta; el segmento circular es el sector menos el triángulo, y la corona, el círculo grande menos el chico.'],
+  ), [
+    x('misma-area', 'El rectángulo dorado mide **9 por 4**. Sube el vértice del triángulo de base **12** hasta que las dos figuras sean **equivalentes**.', { w: 9, H: 4, b: 12 },
+      'El rectángulo vale $9 \\cdot 4 = 36$. El triángulo vale la mitad de base por altura: $\\tfrac{12 \\cdot h}{2} = 36$ da $h = 6$.', 'Equivalentes quiere decir con la misma área. Recuerda que el triángulo es la mitad de un paralelogramo.'),
+    x('inclina-marco', 'Un marco articulado tiene base **11** y lados de **13**. Inclínalo hasta que el paralelogramo tenga área **132**.', { b: 11, l: 13, area: 132 },
+      'El área es base por altura: $132 \\div 11 = 12$ de altura. Con el lado de 13, el corrimiento es $\\sqrt{13^2 - 12^2} = 5$.', 'Al inclinarlo los lados no cambian, pero la altura sí. Busca primero qué altura hace falta.'),
+    x('trapecio-gemelo', 'El trapecio tiene bases **17** y **9**. Estira el rectángulo, de la misma altura, hasta que sean **equivalentes**.', { B: 17, b: 9 },
+      'El trapecio vale la semisuma de las bases por la altura: $\\tfrac{17 + 9}{2} = 13$. Un rectángulo de base 13 y la misma altura tiene su misma área.', 'Lo que al trapecio le sobra abajo puede llenar lo que le falta arriba. ¿Qué base queda en el medio?'),
+    x('rombo-diagonales', 'Una diagonal del rombo mide **10**. Estira la otra hasta que el área sea **65**.', { d: 10, area: 65 },
+      'El rombo vale el semiproducto de sus diagonales: $\\tfrac{10 \\cdot D}{2} = 65$ da $D = 13$.', 'El rombo ocupa la mitad de la caja que forman sus dos diagonales. Piensa cuánto vale esa caja.'),
+    x('heron-raiz', 'De un lote triangular solo se conocen los lados: **21**, **20** y **13**. Completa la fórmula de **Herón**: el semiperímetro $p$, las tres diferencias y el área.', {
+      t: [21, 20, 13], et: ['p', 'p − 21', 'p − 20', 'p − 13', 'área'], metas: ['27', '6', '7', '14', '126'], fichas: ['27', '6', '7', '14', '126', '54', '252', '8'],
+      mira: ['El semiperímetro es la mitad de la suma de los tres lados.', 'A p quítale el lado de 21.', 'A p quítale el lado de 20.', 'A p quítale el lado de 13.', 'El área es la raíz del producto de las cuatro casillas anteriores.'],
+      trampas: { '0:54': 'Ese es el perímetro entero: p es la mitad.', '4:252': 'Eso es base por altura sin partir entre 2: el triángulo vale la mitad.' }, ok: 'La raíz de 27 · 6 · 7 · 14 es 126.' },
+      'Semiperímetro: $p = \\tfrac{21 + 20 + 13}{2} = 27$. Área: $\\sqrt{27 \\cdot 6 \\cdot 7 \\cdot 14} = \\sqrt{15\\,876} = 126$.', 'Empieza por el semiperímetro, que es la mitad del perímetro. Las diferencias salen restándole cada lado.'),
+    x('regular-apotema', 'Un hexágono regular tiene lado **8**. Pon su **semiperímetro**, su **apotema** y su **área**.', { l: 8, fichas: ['24', '4√3', '96√3', '48', '192√3', '8√3', '96'] },
+      'Semiperímetro: $\\tfrac{6 \\cdot 8}{2} = 24$. La apotema es la altura de un equilátero de lado 8: $4\\sqrt3$. Área: $24 \\cdot 4\\sqrt3 = 96\\sqrt3$.', 'El hexágono regular está hecho de seis triángulos equiláteros. La apotema es la altura de uno de ellos.'),
+    x('sector-area', 'En un círculo de radio **6**, abre el sector circular hasta que su área sea $8\\pi$.', { r: 6, area: 8 },
+      'El círculo entero vale $36\\pi$. El sector es $\\tfrac{8}{36} = \\tfrac{2}{9}$ del círculo, y esa parte de la vuelta es $\\tfrac{2}{9} \\cdot 360^\\circ = 80^\\circ$.', 'Compara el área pedida con la del círculo entero: al sector le toca esa misma parte de los 360°.'),
+    x('sube-distancia', 'Sube a la cantidad que responde cada pregunta. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un trapecio tiene bases **9** y **5** y altura **6**. ¿Cuál es su área?', r: 42, c: '\\tfrac{(9 + 5) \\cdot 6}{2}', e: { 54: 'Multiplicaste la base mayor por la altura: va la semisuma de las dos bases.', 28: 'Sumaste las bases y las doblaste, pero falta la altura.' } },
+      { q: 'Una corona circular tiene radios **8** y **5**. Su área es $k\\pi$: sube a $k$.', r: 39, c: '8^2 - 5^2', e: { 9: 'Restaste los radios y elevaste: se restan las áreas de los dos círculos.', 3: 'Esa es la diferencia de los radios, el ancho de la corona.' } },
+      { q: 'Un sector circular de radio **12** abre $90^\\circ$. Su área es $k\\pi$: sube a $k$.', r: 36, c: '\\tfrac{90}{360} \\cdot 12^2', e: { 6: 'Con 6π mediste el arco. El área usa el radio por el radio.', 24: '24π es toda la circunferencia, 2πr; se pide un cuarto del área.' } },
+    ] }, 'Trapecio: $\\tfrac{(9 + 5) \\cdot 6}{2} = 42$. Corona: $64\\pi - 25\\pi = 39\\pi$. Sector: un cuarto de $144\\pi$, es decir, $36\\pi$.', 'En el trapecio usa la semisuma de las bases; en la corona resta áreas; en el sector toma la parte de la vuelta.'),
+    sol('Un mosaico tiene forma de hexágono regular de lado 4 cm. ¿Cuál es su área?', [
+      'El hexágono regular se parte, desde su centro, en [[6]] triángulos equiláteros de lado 4 cm',
+      'Cada equilátero vale $\\tfrac{l^2\\sqrt3}{4} = \\tfrac{16\\sqrt3}{4} =$ [[4√3]] cm²',
+      'El hexágono vale $6 \\cdot 4\\sqrt3 =$ [[24√3]] cm²',
+    ], ['16√3', '8√3', '4'], 'Seis equiláteros de lado 4: cada uno vale $\\tfrac{16\\sqrt3}{4} = 4\\sqrt3$ y entre todos $24\\sqrt3$ cm². Es lo mismo que semiperímetro por apotema: $12 \\cdot 2\\sqrt3$.', 'El radio de un hexágono regular mide lo mismo que su lado: por eso los seis triángulos son equiláteros.'),
+    err('En un círculo de radio 6 cm, una cuerda subtiende un ángulo central de $90^\\circ$. ¿Cuál es el área del segmento circular menor que determina la cuerda?', [
+      'El sector de $90^\\circ$ es un cuarto del círculo: $\\tfrac14 \\cdot 36\\pi = 9\\pi$ cm²',
+      'Los dos radios y la cuerda forman un triángulo rectángulo: $\\tfrac{6 \\cdot 6}{2} = 18$ cm²',
+      'El segmento es el sector más el triángulo: $9\\pi + 18$ cm²',
+    ], 2, ['El segmento es el sector menos el triángulo: $9\\pi - 18$ cm²', 'El segmento es el triángulo menos el sector: $18 - 9\\pi$ cm²', 'El segmento es el círculo menos el triángulo: $36\\pi - 18$ cm²'],
+    'El segmento circular es lo que queda entre la cuerda y el arco: al sector se le quita el triángulo de los dos radios. $9\\pi - 18$ cm².', 'Dibuja el sector y dentro de él el triángulo: ¿qué parte queda entre la cuerda y el arco?'),
+    opc('Las diagonales de un rombo miden 16 cm y 12 cm. Su área y su perímetro son, en ese orden:', ['96 cm² y 40 cm', '192 cm² y 40 cm', '96 cm² y 56 cm', '192 cm² y 28 cm'], 0,
+      'Área: $\\tfrac{16 \\cdot 12}{2} = 96$ cm². Las diagonales se cortan perpendicularmente en su punto medio: el lado es $\\sqrt{8^2 + 6^2} = 10$ y el perímetro, 40 cm.', 'El área sale del semiproducto de las diagonales; para el lado, mira el triángulo rectángulo que forman las medias diagonales.'),
+  ]);
+
+  // --------------------------------------------------------------------------------------------- 2 · Relaciones entre áreas
+  const l2 = leccion('euc-areas-2', 'Relaciones entre áreas', guion(
+    ['Misma altura, misma base', 'Dos triángulos con la misma altura tienen áreas proporcionales a sus bases; con la misma base, proporcionales a sus alturas.'],
+    ['Entre paralelas', 'Si dos triángulos tienen la misma base y sus vértices opuestos están sobre una paralela a esa base, tienen la misma altura: son equivalentes.'],
+    ['Las medianas', 'Una mediana parte el triángulo en dos triángulos equivalentes. Las tres medianas, que se cortan en el baricentro, lo parten en seis triángulos equivalentes.'],
+    ['Figuras semejantes', 'Si dos figuras son semejantes con razón $k$, sus áreas están en razón $k^2$: lados al triple, área nueve veces mayor.'],
+    ['Un ángulo congruente', 'Si dos triángulos tienen un ángulo congruente, sus áreas son entre sí como los productos de los lados que forman ese ángulo.'],
+  ), [
+    x('parte-base', 'La base BC mide **10**. Mueve D sobre ella hasta que el área de △ABD sea a la de △ADC como **3 es a 2**.', { L: 10, m: 3, n: 2, ap: 4 },
+      'Los dos triángulos tienen la misma altura desde A, así que sus áreas son como sus bases: $BD : DC = 3 : 2$. De 10 unidades, $BD = \\tfrac{3}{5} \\cdot 10 = 6$.', 'Los dos triángulos comparten la altura que baja desde A. Entonces, ¿de qué depende cuál tiene más área?'),
+    x('desliza-paralela', 'El triángulo dorado tiene base AB. Arrastra P hasta que △ABP sea **equivalente** al dorado y además **isósceles**, con $PA = PB$.', { a: 2, b: 8, c: [3, 5], tipo: 'iso' },
+      'Para conservar el área sobre la misma base, P debe quedar a la misma altura, 5: sobre la paralela a AB por el vértice dorado. Y para que $PA = PB$, encima del punto medio de AB.', 'Si la base no cambia, lo único que decide el área es la altura. ¿Por dónde puede moverse P sin cambiarla?'),
+    x('mediana-seis', 'El triángulo ABC tiene área **54**. Se trazan sus tres medianas, que se cortan en G. Pon el área de cada triángulo.', { area: 54, fichas: ['27', '9', '18', '6', '36', '13.5'] },
+      'La mediana AM deja dos mitades: $54 \\div 2 = 27$. Las tres medianas forman seis triángulos equivalentes: $54 \\div 6 = 9$. Y △BGC son dos de ellos: 18.', 'Una mediana parte la base en dos trozos congruentes con la misma altura. Las tres juntas dejan seis partes equivalentes.'),
+    x('equivalentes-o-no', 'Toca **todas** las afirmaciones que son verdaderas.', { casos: [
+      { t: 'Una mediana parte el área en dos mitades', si: true },
+      { t: 'Lados al doble: área al doble', no: 'Con los lados al doble el área se multiplica por 4: la razón de las áreas es k².' },
+      { t: 'Igual altura: áreas como las bases', si: true },
+      { t: 'Igual perímetro: igual área', no: 'Un rectángulo de 1 por 5 y un cuadrado de lado 3 tienen perímetro 12, pero áreas 5 y 9.' },
+      { t: 'Misma base entre paralelas: equivalentes', si: true },
+    ], falta: 'Falta alguna verdadera: piensa en base y altura.', ok: 'Base y altura deciden; la semejanza eleva al cuadrado.' },
+    'Son verdaderas la de la mediana, la de igual altura y la de las paralelas. Con lados al doble el área se cuadruplica, y el perímetro no decide el área.', 'Para cada afirmación piensa en la base y la altura de los triángulos, o busca un ejemplo con números pequeños.'),
+    x('papel-factor', 'Un cuadrado se amplía a otro semejante cuya área es **49 veces** mayor. ¿Por cuánto se multiplicó cada lado?', { veces: 49 },
+      'En figuras semejantes la razón de las áreas es el cuadrado de la razón de los lados: $k^2 = 49$, así que $k = 7$.', 'Si el lado se multiplica por k, caben k filas de k copias. ¿Qué número por sí mismo da las veces pedidas?'),
+    x('semejantes-area', 'Dos triángulos **semejantes** tienen lados correspondientes de **6** y **15**. El chico tiene área **8**. Pon la razón de los lados, la de las áreas y el área del grande.', {
+      t: { a: 6, b: 15, s: 8 }, et: ['razón de lados', 'razón de áreas', 'área grande'], metas: ['5/2', '25/4', '50'], fichas: ['5/2', '25/4', '50', '20', '5/4', '25/2'],
+      mira: ['Divide el lado grande entre su correspondiente: 15 entre 6, simplificado.', 'La razón de las áreas es el cuadrado de la razón de los lados.', 'Multiplica el área chica por la razón de las áreas.'],
+      trampas: { '2:20': 'Multiplicaste por la razón de los lados: las áreas crecen con su cuadrado.', '1:5/2': 'Esa es la razón de los lados: la de las áreas es su cuadrado.', '1:25/2': 'Se eleva al cuadrado arriba y abajo: 5² sobre 2².' }, ok: 'Lados por 5/2, área por 25/4.' },
+      'Razón de los lados: $\\tfrac{15}{6} = \\tfrac{5}{2}$. Razón de las áreas: $\\left(\\tfrac{5}{2}\\right)^2 = \\tfrac{25}{4}$. Área del grande: $8 \\cdot \\tfrac{25}{4} = 50$.', 'Primero compara los lados correspondientes. Las áreas no crecen igual que los lados: crecen con el cuadrado.'),
+    x('angulo-compartido', 'En △ABC, $AB = 12$ y $AC = 10$; D está en AB con $AD = 6$. Mueve E sobre AC hasta que el área de △ADE sea $\\tfrac{3}{10}$ de la de △ABC.', { c: 12, b: 10, d: 6, m: 3, n: 10 },
+      'Los dos triángulos comparten el ángulo A: $\\tfrac{AD \\cdot AE}{AB \\cdot AC} = \\tfrac{6 \\cdot AE}{120} = \\tfrac{3}{10}$ da $AE = 6$.', 'Con un ángulo común, compara el producto de los dos lados que lo forman en cada triángulo.'),
+    x('lanza-escala', 'Lanza el número que responde cada pregunta. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Dos triángulos tienen la **misma altura**; sus bases miden 6 y 15. El primero tiene área 12: ¿y el segundo?', r: 30, c: '12 \\cdot \\tfrac{15}{6}', e: { 21: 'Sumaste la diferencia de las bases: las áreas son proporcionales a ellas.' } },
+      { q: 'Las tres medianas parten un triángulo de área 84 en seis triángulos. ¿Cuánto vale cada uno?', r: 14, c: '84 \\div 6', e: { 28: 'Son seis triángulos equivalentes, no tres.' } },
+      { q: 'Dos triángulos **semejantes** tienen lados correspondientes 4 y 6. El chico tiene área 12: ¿y el grande?', r: 27, c: '12 \\cdot \\left(\\tfrac{6}{4}\\right)^2', e: { 18: 'Multiplicaste por la razón de los lados; las áreas van con su cuadrado.' } },
+    ] }, 'Misma altura: $12 \\cdot \\tfrac{15}{6} = 30$. Medianas: $84 \\div 6 = 14$. Semejantes: $12 \\cdot \\tfrac{9}{4} = 27$.', 'Misma altura: las áreas van como las bases. Semejantes: van como el cuadrado de la razón de los lados.'),
+    sol('En el triángulo ABC, M es el punto medio del lado BC. Demuestra que los triángulos ABM y AMC son equivalentes.', [
+      '$BM = MC$, porque M es [[punto medio]] de BC',
+      'La altura $h$ trazada desde A a la recta BC es la [[misma]] para los dos triángulos',
+      'Área de △ABM $= \\tfrac{BM \\cdot h}{2}$ y área de △AMC $= \\tfrac{MC \\cdot h}{2}$: bases [[congruentes]] y la misma altura',
+      'Luego las dos áreas son [[iguales]]: la mediana parte el triángulo en dos equivalentes',
+    ], ['bisectriz', 'semejantes', 'distinta'], 'M parte la base en dos segmentos congruentes y la altura desde A es común: las dos áreas, $\\tfrac{BM \\cdot h}{2}$ y $\\tfrac{MC \\cdot h}{2}$, son iguales.', 'Para comparar áreas de triángulos compara sus bases y sus alturas: aquí una de las dos es compartida.'),
+    err('Dos terrenos triangulares semejantes tienen lados correspondientes de 20 m y 30 m. El menor tiene 180 m² de área. ¿Cuál es el área del mayor?', [
+      'La razón de semejanza es $k = \\tfrac{30}{20} = \\tfrac32$',
+      'La razón de las áreas también es $\\tfrac32$',
+      'El área del mayor es la del menor por esa razón',
+    ], 1, ['La razón de las áreas es $k^2 = \\tfrac94$: el mayor mide $180 \\cdot \\tfrac94 = 405$ m²', 'La razón de las áreas es $2k = 3$: el mayor mide $540$ m²', 'La razón de las áreas es $\\tfrac{1}{k} = \\tfrac23$: el mayor mide $120$ m²'],
+    'En figuras semejantes las áreas están en razón $k^2$: $\\left(\\tfrac32\\right)^2 = \\tfrac94$ y $180 \\cdot \\tfrac94 = 405$ m².', 'Si cada lado crece una vez y media, ¿crece igual el área? Piensa en un cuadrado al que se le duplica el lado.'),
+    opc('En el triángulo ABC, D está en AB y E en AC, con AD = 4, AB = 10, AE = 5 y AC = 8. La razón entre el área de △ADE y la de △ABC es:', ['1/2', '5/8', '1/4', '2/5'], 2,
+      'Comparten el ángulo A: la razón de las áreas es $\\tfrac{AD \\cdot AE}{AB \\cdot AC} = \\tfrac{4 \\cdot 5}{10 \\cdot 8} = \\tfrac{20}{80} = \\tfrac14$.', 'Los dos triángulos tienen el ángulo A en común: compara los productos de los lados que lo forman.'),
+  ]);
+
+  // ------------------------------------------------------------------------------------------------- 3 · Áreas sombreadas
+  const l3 = leccion('euc-areas-3', 'Áreas sombreadas', guion(
+    ['Sumar y restar', 'Una región sombreada casi nunca tiene fórmula propia: se arma sumando y restando áreas conocidas. Lo de afuera menos lo de adentro.'],
+    ['Cuadrado y círculo', 'El círculo inscrito en un cuadrado tiene por radio medio lado. Si el cuadrado es el inscrito, su diagonal es el diámetro del círculo.'],
+    ['Cuartos de círculo', 'Un cuarto de círculo menos el triángulo de sus dos radios es un segmento circular. Dos segmentos iguales forman un pétalo.'],
+    ['Simetría y piezas que se mueven', 'Si una pieza que sobra es congruente con una que falta, se traslada y la figura queda más sencilla. Las figuras simétricas se calculan por mitades.'],
+    ['En función de π', 'Las respuestas se dejan exactas: $100 - 25\\pi$, $18\\pi - 36$. No se reemplaza π por 3.14.'],
+  ), [
+    x('marco-hueco', 'A una lámina de **13 por 9** se le recorta un hueco cuadrado en el centro. Ajusta el hueco para que queden **68** cuadros de lámina.', { w: 13, h: 9, area: 68 },
+      'La lámina entera vale $13 \\cdot 9 = 117$. Para que queden 68 hay que quitar $117 - 68 = 49$: un cuadrado de lado 7.', 'Lo sombreado es la lámina entera menos el hueco. ¿Cuánta área hay que quitar?'),
+    x('cuadrado-circulo', 'Un cuadrado de lado **10** tiene su círculo **inscrito**. Pon el área del cuadrado, la del círculo y la de la región sombreada.', { modo: 'inscrito', l: 10, fichas: ['100', '25π', '100 − 25π', '100π', '10π', '25π − 100', '100 − 10π'] },
+      'Cuadrado: $10^2 = 100$. El radio del círculo inscrito es medio lado: $\\pi \\cdot 5^2 = 25\\pi$. Sombreada: $100 - 25\\pi$.', 'El círculo inscrito toca los cuatro lados del cuadrado. ¿Cuánto mide entonces su diámetro?'),
+    x('corona-borde', 'El hueco de una arandela tiene radio **3**. Agranda el borde de afuera, con el mismo centro, hasta que la **corona** mida $16\\pi$.', { r: 3, area: 16 },
+      'El hueco vale $9\\pi$. El círculo de afuera debe valer $16\\pi + 9\\pi = 25\\pi$: su radio es 5.', 'La corona es el círculo grande menos el chico. Se restan las áreas, no los radios.'),
+    x('esquinas-cuarto', 'A una baldosa cuadrada de lado **10** se le quitan cuatro cuartos de círculo iguales, uno en cada esquina. Ábrelos hasta que lo sombreado mida $100 - 9\\pi$.', { l: 10, k: 9 },
+      'Los cuatro cuartos juntos hacen un círculo entero de radio $r$: se quita $\\pi r^2 = 9\\pi$, así que $r = 3$.', 'Junta mentalmente las cuatro esquinas que se quitan. ¿Qué figura completa forman?'),
+    x('petalo-cuartos', 'En un cuadrado de lado **6** se trazan dos cuartos de círculo de radio 6, con centros en vértices opuestos. Pon el área de cada parte hasta llegar al **pétalo**.', { l: 6, fichas: ['9π', '18', '9π − 18', '18π − 36', '36π', '36', '18π − 18', '9π − 36'] },
+      'Cuarto de círculo: $\\tfrac14 \\cdot 36\\pi = 9\\pi$. Triángulo: medio cuadrado, 18. Segmento: $9\\pi - 18$. El pétalo son dos segmentos: $18\\pi - 36$.', 'La diagonal del cuadrado parte el pétalo en dos segmentos circulares iguales. Empieza por uno solo.'),
+    x('bandera-onda', 'A una bandera de **14 por 6** le sobra medio círculo a un lado y le falta uno igual al otro. Estira el rectángulo hasta que tenga su **misma área**.', { w: 14, h: 6 },
+      'La pieza que sobra es congruente con la que falta: al trasladarla queda el rectángulo de $14 \\cdot 6 = 84$. No hace falta π.', 'Compara la pieza que sobresale con el hueco del otro lado. ¿Qué pasa si la mueves hasta allá?'),
+    x('pi-lanza', 'Lanza las partes de π de cada figura. Puedes fallar **una** vez.', { tiros: [
+      { q: 'Un cuadrado de lado **12** con su círculo inscrito: lo sombreado mide $144 - k\\pi$. Lanza $k$.', f: { t: 'cc', l: 12 }, r: 36, c: '144 - \\pi \\cdot 6^2 = 144 - 36\\pi', e: { 12: 'Con 12π mediste el borde del círculo: el área es el radio por el radio, por π.', 6: 'Ese es el radio: falta elevarlo al cuadrado.' } },
+      { q: 'Un sector de radio **9** y ángulo $120^\\circ$: su área es $k\\pi$. Lanza $k$.', f: { t: 'sector', r: 9, g: 120 }, r: 27, c: '\\tfrac{120}{360} \\cdot 81\\pi = 27\\pi', e: { 6: 'Con 6π mediste el arco. El área usa el radio por el radio.' } },
+      { q: 'A un rectángulo de **12 por 6** se le quita medio círculo de radio 6: queda $72 - k\\pi$. Lanza $k$.', f: { t: 'medio', r: 6 }, r: 18, c: '72 - \\tfrac12 \\cdot 36\\pi = 72 - 18\\pi', e: { 36: 'Quitaste el círculo entero: es solo la mitad.' } },
+    ] }, 'Círculo inscrito: radio 6, $36\\pi$. Sector: un tercio de $81\\pi$, $27\\pi$. Medio círculo: la mitad de $36\\pi$, $18\\pi$.', 'En cada figura busca el radio, calcula el círculo entero y toma solo la parte que aparece.'),
+    sol('Un hexágono regular está inscrito en un círculo de radio 6 cm. Halla el área de la región del círculo que queda fuera del hexágono.', [
+      'Círculo: $\\pi \\cdot 6^2 =$ [[36π]] cm²',
+      'El lado del hexágono regular inscrito mide lo mismo que el radio: [[6]] cm',
+      'Hexágono: seis triángulos equiláteros de $\\tfrac{36\\sqrt3}{4} = 9\\sqrt3$ cm², en total [[54√3]] cm²',
+      'Región sombreada: [[36π − 54√3]] cm²',
+    ], ['12π', '9√3', '54√3 − 36π', '12'], 'Círculo menos polígono inscrito: $36\\pi - 6 \\cdot 9\\sqrt3 = 36\\pi - 54\\sqrt3$ cm².', 'Lo de afuera menos lo de adentro. El hexágono regular inscrito se parte en seis equiláteros de lado igual al radio.'),
+    err('En un cuadrado de lado 8 cm se dibujan, hacia adentro, dos semicírculos cuyos diámetros son dos lados opuestos. ¿Cuál es el área del cuadrado que queda fuera de los semicírculos?', [
+      'Cada semicírculo tiene por diámetro un lado: su radio es 4 cm',
+      'Los dos semicírculos juntos valen $2 \\cdot \\pi \\cdot 4^2 = 32\\pi$ cm²',
+      'Área pedida: la del cuadrado, 64 cm², menos la de los semicírculos',
+    ], 1, ['Los dos semicírculos juntos forman un círculo: $\\pi \\cdot 4^2 = 16\\pi$ cm², y quedan $64 - 16\\pi$ cm²', 'Los dos semicírculos juntos valen $\\pi \\cdot 8^2 = 64\\pi$ cm², y quedan $64 - 64\\pi$ cm²', 'Los dos semicírculos juntos valen $2 \\cdot \\pi \\cdot 4 = 8\\pi$ cm², y quedan $64 - 8\\pi$ cm²'],
+    'Dos semicírculos de radio 4 hacen un círculo entero: $16\\pi$. Queda $64 - 16\\pi$ cm². Además, $64 - 32\\pi$ sería negativo: una señal de error.', 'Dos mitades iguales hacen un entero. Revisa también si la respuesta final puede ser un área.'),
+    opc('En un cuadrado de lado 4 cm se traza un cuarto de círculo con centro en un vértice y radio 4 cm. El área de la parte del cuadrado que queda fuera del cuarto de círculo, en cm², es:', ['16 − 8π', '16 − 4π', '4π − 16', '16 − 16π'], 1,
+      'Cuadrado: 16. Cuarto de círculo: $\\tfrac14 \\cdot \\pi \\cdot 4^2 = 4\\pi$. Queda $16 - 4\\pi$ cm².', 'Calcula el cuadrado y el cuarto de círculo por separado, y resta lo de adentro a lo de afuera.'),
+  ]);
+
+  return mundo('euc-areas', [l1, l2, l3], [
+    ['euc-areas-1', 'Círculo: del área πr² se despeja el radio.', x('radio-area', 'Una fuente circular ocupa $81\\pi$ m². Arrastra el borde hasta el radio que le corresponde.', { area: 81 },
+      'El área del círculo es $\\pi r^2 = 81\\pi$: $r^2 = 81$ y $r = 9$.', 'El área usa el radio por el radio.')],
+    ['euc-areas-1', 'Trapecio: semisuma de las bases por la altura.', x('trapecio-gemelo', 'El trapecio tiene bases **15** y **7**. Estira el rectángulo de igual altura hasta que sean **equivalentes**.', { B: 15, b: 7 },
+      'La semisuma de las bases es $\\tfrac{15 + 7}{2} = 11$: esa es la base del rectángulo equivalente.', 'Busca la base que queda a medio camino.')],
+    ['euc-areas-1', 'Fórmula de Herón: empieza por el semiperímetro.', opc('Los lados de un triángulo miden 13 cm, 14 cm y 15 cm. Su área, en cm², es:', ['42', '168', '91', '84'], 3,
+      'Semiperímetro: $p = 21$. Herón: $\\sqrt{21 \\cdot 8 \\cdot 7 \\cdot 6} = \\sqrt{7056} = 84$.', 'Usa el semiperímetro y las tres diferencias.')],
+    ['euc-areas-2', 'Con la misma altura, las áreas son como las bases.', x('parte-base', 'La base BC mide **12**. Mueve D hasta que el área de △ABD sea a la de △ADC como **1 es a 2**.', { L: 12, m: 1, n: 2, ap: 7, d0: 6 },
+      'Misma altura desde A: $BD : DC = 1 : 2$. De 12 unidades, $BD = \\tfrac13 \\cdot 12 = 4$.', 'Reparte la base como se reparten las áreas.')],
+    ['euc-areas-2', 'Figuras semejantes: las áreas están en razón k².', x('achica-area', 'Un cartel de **9 por 6** se copia a escala con la **novena parte** del área. Arrastra la esquina de la copia.', { w: 9, h: 6, div: 9 },
+      'Área entre 9 quiere decir lados entre 3: la copia mide 3 por 2.', '¿Qué número al cuadrado da la reducción del área?')],
+    ['euc-areas-2', 'Las tres medianas dejan seis triángulos equivalentes.', opc('Las tres medianas de un triángulo de 72 cm² se cortan en G. El área del triángulo que forman G y dos de los vértices es:', ['12 cm²', '24 cm²', '36 cm²', '18 cm²'], 1,
+      'Cada uno de los seis triángulos vale 12 cm²; el que forman G y dos vértices tiene dos de ellos: 24 cm².', 'Cuenta cuántos de los seis triangulitos lo forman.')],
+    ['euc-areas-3', 'Cuadrado inscrito: su diagonal es el diámetro.', x('cuadrado-circulo', 'Un cuadrado está **inscrito** en un círculo de radio **4**. Pon el área del círculo, la del cuadrado y la de la región sombreada.', { modo: 'circunscrito', r: 4, fichas: ['16π', '32', '16π − 32', '64', '16', '32 − 16π', '16π − 64'] },
+      'Círculo: $16\\pi$. El cuadrado es un rombo de diagonales 8 y 8: $\\tfrac{8 \\cdot 8}{2} = 32$. Sombreada: $16\\pi - 32$.', 'Las diagonales del cuadrado son diámetros.')],
+    ['euc-areas-3', 'Restar: la figura de afuera menos la de adentro.', x('esquinas-cuarto', 'A un cuadrado de lado **12** se le quitan cuatro cuartos de círculo iguales en las esquinas. Ábrelos hasta que lo sombreado mida $144 - 16\\pi$.', { l: 12, k: 16 },
+      'Los cuatro cuartos hacen un círculo de radio $r$: $\\pi r^2 = 16\\pi$ da $r = 4$.', 'Las cuatro esquinas juntas forman un círculo.')],
+    ['euc-areas-3', 'Corona circular: se restan las áreas, no los radios.', opc('Dos circunferencias concéntricas tienen radios 9 cm y 6 cm. El área de la corona circular que determinan es:', ['9π cm²', '15π cm²', '45π cm²', '117π cm²'], 2,
+      'Se restan las áreas: $81\\pi - 36\\pi = 45\\pi$ cm².', 'Calcula cada círculo y resta el chico al grande.')],
+  ]);
+})());

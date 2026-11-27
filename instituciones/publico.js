@@ -3,7 +3,7 @@
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const sb = window.supabase ? window.supabase.createClient(SUPA_URL, SUPA_KEY, { auth: { persistSession: false, storageKey: 'zuka-publico' } }) : null;
-const COLOR = { preuda: '#a3e635', preicfes: '#f08cff', algebra: '#b3a7ff', trig: '#5fdcf2', calc: '#ff9dcb', geo: '#8fb8ff', fis: '#ffcf5c', int: '#6ee7a8', lin: '#ffb27a' };
+const COLOR = { preuda: '#a3e635', preicfes: '#f08cff', algebra: '#b3a7ff', trig: '#5fdcf2', calc: '#ff9dcb', geo: '#8fb8ff', euc: '#5eead4', fis: '#ffcf5c', int: '#6ee7a8', lin: '#ffb27a' };
 const TXT = { preuda: 'El examen de admisión a la UdeA: razonamiento lógico y comprensión lectora.', preicfes: 'Las cinco pruebas de Saber 11.', algebra: 'De los conjuntos a los logaritmos, desde cero.', trig: 'Ángulos, triángulos y ondas.' };
 let CURSOS = [['preuda', 'Preuniversitario UdeA'], ['preicfes', 'Preicfes Saber 11'], ['algebra', 'Álgebra'], ['trig', 'Trigonometría']].map(([id, nombre]) => ({ id, nombre })), PRODUCTOS = null, AJUSTES = {};
 const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -1675,6 +1675,51 @@ const GUIDE_TYPES = {
 for (const [id, game] of Object.entries(typeof GAMES === 'undefined' ? {} : GAMES)) {
   if (game.algebraScene) GUIDES[id] = [['drag', game.instruction + '.', {}]];
 }
+// Juegos con escena de Geometría Euclidiana (js/games/euc-escena-<n>.js): la guía de su armazón. Van por nombre (no se
+// calculan con GAMES) porque esos juegos se cargan después, con el curso (js/carga.js).
+const GUIDE_ARMAZON = {
+  figura: [['drag', 'Arrastra el punto que brilla: la figura cambia con él. Al comprobar verás si cumple.', { tile: 'punto', slot: 'figura' }]],
+  rotula: [['drag', 'Arrastra cada ficha al lugar de la figura que le toca.', { tile: 'ficha', slot: 'lugar' }]],
+  tiros: [['slide', 'Estira hasta el valor que crees y suelta.', { label: 'valor' }]],
+  marca: [['tap', 'Toca los que cumplen; otro toque los quita.', { items: ['A', 'B', 'C'], pick: [1] }]],
+};
+const GUIDE_EUC = {
+  figura: [
+    'arma-hipotesis', 'rombo-no-cuadrado', 'equidista-fuera', 'segmento-reparte', 'mitad-segmento', 'rectas-por-puntos',
+    'bisectriz-traza', 'parte-angulo', 'mediatriz-pasa', 'regular-arma', 'vertice-tipo', 'pie-notable', 'arma-lal', 'abre-ala',
+    'base-iguales', 'compas-bisagra', 'punto-equidista', 'rayo-equidista', 'pie-perpendicular', 'traza-paralela',
+    'traza-perpendicular', 'endereza-paralela', 'paralelogramo-especial', 'diagonales-cruce', 'trapecio-isosceles',
+    'paralela-media', 'baricentro-desliza', 'centro-equidista', 'treinta-sesenta', 'trapecio-base', 'cuerda-distancia',
+    'acerca-circulo', 'tangente-desde', 'inscrito-mitad', 'semicirculo-recto', 'semiinscrito-abre', 'cuerdas-cruzan',
+    'secantes-abren', 'tangentes-abren', 'media-segmento', 'paralela-lado', 'bisectriz-corta', 'arma-semejante',
+    'altura-hipotenusa', 'cateto-proyeccion', 'potencia-cuerdas', 'potencia-secantes', 'tangente-media', 'inscribe-regular',
+    'sector-area', 'desliza-paralela', 'parte-base', 'angulo-compartido', 'corona-borde', 'esquinas-cuarto', 'lugar-distancias',
+    'lugar-equidista', 'centro-tres-puntos', 'bisectriz-cruce', 'centro-inscrita', 'triangulo-tres-lados', 'compas-mediatriz',
+    'divide-tales',
+  ],
+  rotula: [
+    'clasifica-enunciado', 'razon-de-paso', 'propiedad-igualdad', 'afirmacion-de-paso', 'regla-usada', 'absurdo-pasos',
+    'cadena-flechas', 'suficiente-necesaria', 'nombra-figuras', 'tramos-suma', 'clase-angulo', 'nombre-poligono',
+    'poligono-cuenta', 'circulo-partes', 'dos-apellidos', 'nombra-segmentos', 'partes-correspondientes', 'nombra-criterio',
+    'razones-paso', 'angulos-por-lados', 'lados-por-angulos', 'cuantas-rectas', 'relacion-rectas', 'nombra-pares',
+    'angulos-paralelogramo', 'que-cuadrilatero', 'medios-miden', 'punto-de-que', 'nombra-circunferencia', 'arcos-suman',
+    'posicion-centros', 'tangentes-gemelas', 'cuadrilatero-inscrito', 'tres-miradas', 'triangulo-arcos', 'razones-inscrito',
+    'donde-vertice', 'interior-o-exterior', 'proporcion-propiedades', 'criterio-semejanza', 'semejantes-partes',
+    'que-triangulo-es', 'lados-inscritos', 'apotema-lado', 'heron-raiz', 'regular-apotema', 'mediana-seis', 'semejantes-area',
+    'cuadrado-circulo', 'petalo-cuartos', 'razon-del-paso', 'pasos-construccion',
+  ],
+  tiros: [
+    'cinta-deduce', 'abanico-refuta', 'lanza-diagonales', 'abre-marco', 'gira-arco', 'tiro-al-circulo', 'pi-lanza',
+    'lanza-compas', 'cuenta-cruces',
+  ],
+  marca: [
+    'toca-hipotesis', 'razon-vale', 'marca-dato', 'conclusion-valida', 'caza-contraejemplo', 'orden-afirma', 'angulos-toca',
+    'poligonos-toca', 'clasifica-triangulos', 'opuesto-comprendido', 'pares-marcados', 'pares-rectangulos', 'marca-que-falta',
+    'exterior-cabe', 'paralelas-seguro', 'siempre-paralelogramo', 'mismo-arco', 'forman-proporcion', 'siempre-semejantes',
+    'equivalentes-o-no', 'radios-sin-cruce', 'datos-determinan',
+  ],
+};
+for (const [k, l] of Object.entries(GUIDE_EUC)) for (const id of l) GUIDES[id] = GUIDE_ARMAZON[k];
 
 const guideKey = ex => (ex?.type === 'play' ? ex.game : ex?.type);
 const practiceGuideLines = ex => (ex?.type === 'play' ? GUIDES[ex.game] : GUIDE_TYPES[ex?.type])?.map(([, text]) => text) ?? [];

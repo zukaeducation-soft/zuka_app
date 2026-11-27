@@ -933,6 +933,7 @@ const ART_PAL = {
   geo:     { blue: '#4f93f0', deep: '#2a62bd', soft: '#8dbdfc', pale: '#c5dcfd', sun: '#5eead4', sunDeep: '#2bb39c' },   // azul + turquesa
   fis:     { blue: '#f2b705', deep: '#b48200', soft: '#fbd94a', pale: '#fde99a', sun: '#fb7a3c', sunDeep: '#cf541c' },   // amarillo + naranja
   int:     { blue: '#22c087', deep: '#11845a', soft: '#6ee7b7', pale: '#b6f3da', sun: '#d9f25e', sunDeep: '#a4bd2c' },   // verde + lima
+  euc:     { blue: '#14b8a6', deep: '#0f766e', soft: '#5eead4', pale: '#ccfbf1', sun: '#fb923c', sunDeep: '#c2540a' },   // turquesa + naranja
   preuda:  { blue: '#84cc16', deep: '#4d7c0f', soft: '#bef264', pale: '#d9f99d', sun: '#38bdf8', sunDeep: '#0284c7' },   // lima + celeste
   preicfes: { blue: '#e879f9', deep: '#a21caf', soft: '#f0abfc', pale: '#fae8ff', sun: '#fbbf24', sunDeep: '#d97706' },   // fucsia + ámbar
   lin:     { blue: '#f5822a', deep: '#b9580f', soft: '#fdb070', pale: '#fed3ab', sun: '#ff5d7a', sunDeep: '#d23a58' },   // naranja + rojo rosado
@@ -1032,6 +1033,17 @@ const COURSE_ART_BASE = {
     <path d="M10 50l38.2-8.3" stroke="${ART_C.sun}" stroke-width="4.5" stroke-linecap="round"/>
     <path d="M56 40l-6.8 6.6-2.1-9.8z" fill="${ART_C.sun}" stroke="${ART_C.sun}" stroke-width="2" stroke-linejoin="round"/>
     <circle cx="10" cy="50" r="4" fill="${ART_C.deep}"/>`),
+  // Geometría Euclidiana: un triángulo inscrito en su circunferencia y el compás que la traza.
+  euc: artSvg(`
+    <circle cx="30" cy="35" r="23" fill="none" stroke="${ART_C.pale}" stroke-width="2.5" stroke-dasharray="3 4" stroke-linecap="round"/>
+    <path d="M13 53.5L50 49.5L27.5 15z" fill="${ART_C.deep}" transform="translate(3 3)"/>
+    <path d="M13 53.5L50 49.5L27.5 15z" fill="${ART_C.blue}" stroke="${ART_C.soft}" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M27.5 15L30 35" stroke="${ART_C.pale}" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+    <path d="M30 35L52 9" stroke="${ART_C.sun}" stroke-width="4" stroke-linecap="round"/>
+    <path d="M52 9L57 41" stroke="${ART_C.sun}" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="52" cy="9" r="4.5" fill="${ART_C.sun}" stroke="${ART_C.sunDeep}" stroke-width="2"/>
+    <circle cx="30" cy="35" r="3" fill="${ART_C.pale}"/>`),
+
   // Preicfes Saber 11: la hoja de respuestas, con una burbuja rellena por fila, y un lápiz.
   preicfes: artSvg(`
     <rect x="12" y="9" width="38" height="50" rx="4" fill="${ART_C.deep}"/>
@@ -1615,6 +1627,31 @@ const WORLDS = (() => {
     'icf-cn-cts': { name: 'Ciencia y Sociedad', art: plate('icf-cn-cts', TEAL, `
       ${C(68, 30, 13, INK, 1.1)}${C(92, 30, 13, TEAL, 1.2)}${C(80, 50, 13, INK, 1.1)}${D(80, 37, 2.2, TEAL)}${L('M46 66h68', INK, .8)}${L('M62 30h12M86 30h12M80 46v10', TEAL, .9)}
       ${T(28, 42, 'control', INK, 6)}${T(134, 42, 'decidir', TEAL, 6)}`) },
+    // ---------- Geometría Euclidiana (spec 2026-11-26-curso-euclidiana): un mundo por capítulo del libro ----------
+    'euc-demostrar': { name: 'Lógica de la Demostración', art: plate('euc-demostrar', TEAL, `
+      ${L('M50 22h26v12H50z', INK, 1.1)}${L('M84 46h26v12H84z', TEAL, 1.3)}${L('M76 28h12v18', INK, 1)}${L('M84 42l4 4 4-4', INK, 1)}${L('M56 28h14', INK, .8)}${L('M90 52h14', TEAL, .9)}${L('M50 52l5 5 9-10', TEAL, 1.4)}
+      ${T(28, 42, 'p ⇒ q', INK, 7)}${T(134, 42, '∴', TEAL, 10)}`) },
+    'euc-elementos': { name: 'Puntos, Rectas y Ángulos', art: plate('euc-elementos', TEAL, `
+      ${L('M48 60h64', INK, 1.1)}${L('M60 60L98 20', TEAL, 1.4)}${L('M78 60a18 18 0 0 0-5.6-13', TEAL, 1)}${D(60, 60, 2, TEAL)}${D(104, 60, 1.6)}${D(92.3, 26, 1.6, TEAL)}${L('M52 24h22', INK, 1)}${D(52, 24, 1.5)}${D(74, 24, 1.5)}
+      ${T(28, 42, 'AB', INK, 8)}${T(134, 42, '∠', TEAL, 10)}`) },
+    'euc-triangulo': { name: 'Triángulos Congruentes', art: plate('euc-triangulo', TEAL, `
+      ${L('M46 58h30L58 24z', INK, 1.2)}${L('M84 58h30L96 24z', TEAL, 1.4)}${L('M59 60.5v-5M63 60.5v-5M97 60.5v-5M101 60.5v-5', INK, .8)}${L('M50 40l4 2M88 40l4 2', INK, .8)}${L('M52 58a6 6 0 0 0-2.7-5M90 58a6 6 0 0 0-2.7-5', TEAL, .9)}
+      ${T(28, 42, 'L-A-L', INK, 6.5)}${T(136, 42, '≅', TEAL, 10)}`) },
+    'euc-cuadrilateros': { name: 'Paralelas y Cuadriláteros', art: plate('euc-cuadrilateros', TEAL, `
+      ${L('M52 58h44l14-34H66z', INK, 1.2)}${L('M52 58l58-34M96 58L66 24', TEAL, 1)}${D(81, 41, 1.8, TEAL)}${L('M72 60l3-2-3-2M86 26l3-2-3-2', INK, .8)}${D(52, 58, 1.5)}${D(110, 24, 1.5)}${L('M58 58a6 6 0 0 0-1.6-5.2', TEAL, .9)}
+      ${T(28, 42, 'ℓ ∥ m', INK, 7)}${T(136, 42, '360°', TEAL, 7)}`) },
+    'euc-circunferencia': { name: 'La Circunferencia', art: plate('euc-circunferencia', TEAL, `
+      ${C(80, 40, 24, INK, 1.2)}${L('M60 53.3L96 22.1L100 53.3', TEAL, 1.4)}${L('M60 53.3L80 40L100 53.3', INK, .9)}${D(80, 40, 1.8)}${D(96, 22.1, 1.8, TEAL)}${L('M46 64.3h68', INK, .8)}
+      ${T(28, 42, '2α', INK, 8)}${T(136, 42, 'α', TEAL, 9)}`) },
+    'euc-metricas': { name: 'Semejanza y Métricas', art: plate('euc-metricas', TEAL, `
+      ${L('M48 60h64L48 20z', INK, 1.2)}${L('M48 60l28.8-22', TEAL, 1.4)}${L('M48 54h6v6', INK, .8)}${L('M72.3 40.5l3.7 4.5 4.5-3.5', TEAL, .8)}${D(76.8, 38, 1.8, TEAL)}
+      ${T(28, 42, 'a² + b²', INK, 6)}${T(136, 42, 'h² = mn', TEAL, 5.5)}`) },
+    'euc-areas': { name: 'Áreas de Figuras Planas', art: plate('euc-areas', TEAL, `
+      ${L('M50 60V22h44v38z', INK, 1.1)}${F('M50 60V22a38 38 0 0 1 38 38z', TEAL, .3)}${L('M50 22a38 38 0 0 1 38 38', TEAL, 1.4)}${L('M100 60l12-24 0 24z', INK, 1)}${Ld('M50 41h44M72 22v38', INK, .7)}
+      ${T(28, 42, 'b · h', INK, 7)}${T(136, 42, 'πr²', TEAL, 8)}`) },
+    'euc-construcciones': { name: 'Regla y Compás', art: plate('euc-construcciones', TEAL, `
+      ${L('M52 46h56', INK, 1.2)}${D(52, 46, 1.8)}${D(108, 46, 1.8)}${L('M72.6 18.1a40 40 0 0 1 0 55.8', TEAL, 1.1)}${L('M87.4 18.1a40 40 0 0 0 0 55.8', TEAL, 1.1)}${Ld('M80 12v62', INK, .9)}${D(80, 17.4, 1.6, TEAL)}${D(80, 74.6, 1.6, TEAL)}${L('M80 42v4h4', INK, .8)}
+      ${T(28, 42, 'compás', INK, 6)}${T(136, 42, '⊥', TEAL, 10)}`) },
   };
 })();
 
@@ -1983,6 +2020,17 @@ const COURSE_PALETTES = {
     light: {
       brand: '#0B7D5C', bg: '#F0F8F5', card: '#FFFFFF', line: '#CDE3DB', ink: '#0D2A22', mute: '#4C6F64',
       sky: '#22A9B8', creamD: '#C4DCD3', night: '#0D2A22', star: '#D6E9E2', halo: '#E3F1EC',
+    },
+  },
+  // Geometría Euclidiana: turquesa sobre azul petróleo, con azul de apoyo.
+  euc: {
+    dark: {
+      brand: '#2DD4BF', bg: '#0B1D22', card: '#142D34', line: '#2C535C', ink: '#E9FBF8', mute: '#93B8BC',
+      mint: '#5EEAD4', sky: '#7CC4F5', cream: '#E4F3F1', creamD: '#A8C8C6', night: '#0B1D22', star: '#21434A', halo: '#153038',
+    },
+    light: {
+      brand: '#0F766E', bg: '#EFF8F7', card: '#FFFFFF', line: '#CBE2DF', ink: '#0B2A2C', mute: '#4A6C6E',
+      mint: '#14B8A6', sky: '#2B8AC9', creamD: '#C2DAD7', night: '#0B2A2C', star: '#D5E8E5', halo: '#E2F0EE',
     },
   },
   // Preuniversitario UdeA: el lima solo como acento. Fondo, fichas y bordes neutros (grafito / gris muy claro) y sin brillo de

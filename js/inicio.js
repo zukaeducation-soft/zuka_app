@@ -73,7 +73,7 @@ function continueCardHTML(c, cur, ls) {
 // Saludo según la hora. Pura.
 const hmSaludo = h => (h < 5 ? 'Buenas noches' : h < 12 ? 'Buenos días' : h < 19 ? 'Buenas tardes' : 'Buenas noches');
 // Filtros del Inicio: para qué sirve cada curso. Pura.
-const HM_FILTROS = [['todos', 'Todos'], ['entrar', 'Entrar a la U', ['preuda', 'preicfes']], ['carrera', 'Para la carrera', ['algebra', 'trig', 'calc', 'geo', 'int', 'lin', 'fis']]];
+const HM_FILTROS = [['todos', 'Todos'], ['entrar', 'Entrar a la U', ['preuda', 'preicfes']], ['carrera', 'Para la carrera', ['algebra', 'trig', 'calc', 'geo', 'euc', 'int', 'lin', 'fis']]];
 const hmPasa = (c, f) => { const x = HM_FILTROS.find(y => y[0] === f); return !x || !x[2] || x[2].includes(c.id); };
 let hmFiltro = 'todos';
 // Aro de avance alrededor de una figura.

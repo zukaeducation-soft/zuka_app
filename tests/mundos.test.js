@@ -7,7 +7,8 @@ const { loadScripts, get, ROOT } = require('./load');
 
 const ctx = loadScripts(['js/content.js', 'js/courses/algebra.js', 'js/courses/trig.js', 'js/courses/trig-juegos.js', 'js/courses/calculo.js',
   'js/courses/geometria.js', 'js/courses/preuda-razonamiento.js', 'js/courses/preuda-lectura.js', 'js/courses/preuda.js', 'js/courses/preicfes-base.js', ...fs.readdirSync(path.join(ROOT, 'js/courses')).filter(f => /^preicfes-(?!base)/.test(f)).map(f => `js/courses/${f}`),
-  'js/data.js', 'js/courses/preicfes.js', 'js/worlds.js']);
+  'js/courses/euclidiana-base.js', ...fs.readdirSync(path.join(ROOT, 'js/courses')).filter(f => /^euclidiana-(?!base)/.test(f)).map(f => 'js/courses/' + f),
+  'js/data.js', 'js/courses/preicfes.js', 'js/courses/euclidiana.js', 'js/worlds.js']);
 const COURSES = get(ctx, 'COURSES'), WORLDS = get(ctx, 'WORLDS'), worldTrail = get(ctx, 'worldTrail');
 
 test('cada unidad de cada curso tiene su propio mundo', () => {

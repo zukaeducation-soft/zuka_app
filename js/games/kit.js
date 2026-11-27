@@ -103,6 +103,17 @@ const COURSE_PALETTES = {
       sky: '#22A9B8', creamD: '#C4DCD3', night: '#0D2A22', star: '#D6E9E2', halo: '#E3F1EC',
     },
   },
+  // Geometría Euclidiana: turquesa sobre azul petróleo, con azul de apoyo.
+  euc: {
+    dark: {
+      brand: '#2DD4BF', bg: '#0B1D22', card: '#142D34', line: '#2C535C', ink: '#E9FBF8', mute: '#93B8BC',
+      mint: '#5EEAD4', sky: '#7CC4F5', cream: '#E4F3F1', creamD: '#A8C8C6', night: '#0B1D22', star: '#21434A', halo: '#153038',
+    },
+    light: {
+      brand: '#0F766E', bg: '#EFF8F7', card: '#FFFFFF', line: '#CBE2DF', ink: '#0B2A2C', mute: '#4A6C6E',
+      mint: '#14B8A6', sky: '#2B8AC9', creamD: '#C2DAD7', night: '#0B2A2C', star: '#D5E8E5', halo: '#E2F0EE',
+    },
+  },
   // Preuniversitario UdeA: el lima solo como acento. Fondo, fichas y bordes neutros (grafito / gris muy claro) y sin brillo de
   // fondo (flat): el verde teñido detrás de los juegos tapaba botones y gráficas (pedido del usuario, 2026-11-19).
   preuda: {
