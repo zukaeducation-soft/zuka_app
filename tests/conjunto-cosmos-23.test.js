@@ -9,7 +9,7 @@ const { loadScripts, get } = require('./load');
 const root = path.join(__dirname, '..');
 const read = (d, f) => fs.readFileSync(path.join(root, 'video', d, f), 'utf8').replace(/\r\n/g, '\n');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const files = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds/.test(f));
+const files = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds/.test(f));
 const LESSONS = get(loadScripts(files), 'COURSES')[0].units[0].lessons;
 const word = (txt, w) => new RegExp(`(^|[^a-záéíóúñ])${w}([^a-záéíóúñ]|$)`).test(txt);
 

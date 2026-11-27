@@ -7,7 +7,7 @@ const path = require('path');
 const { loadScripts, get, ROOT, shell } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), sw = shell();
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
 const exp = [...html.matchAll(/src="(js\/explora[^"]*)"/g)].map(m => m[1]).filter(f => !/voces/.test(f));
 const ctx = loadScripts([...all, ...exp]);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), EXPLORA = get(ctx, 'EXPLORA'), MUNDOS = get(ctx, 'PU_LEC_EXPLORA'), HOJA = get(ctx, 'HOJA');

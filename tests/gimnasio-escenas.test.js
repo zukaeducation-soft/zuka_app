@@ -7,7 +7,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio/.test(f));
 const ctx = loadScripts(all);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), gymRetos = get(ctx, 'gymRetos'), HOJA = get(ctx, 'HOJA');
 const PU = get(ctx, 'COURSES').find(c => c.id === 'preuda'), grupos = gymRetos(PU), RETOS = grupos.flatMap(g => g.retos);

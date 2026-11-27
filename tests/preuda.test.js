@@ -7,8 +7,8 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
-const html = read('index.html'), sw = require('./load').shell(), app = read('js/app.js');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso/.test(f));
+const html = require('./load').htmlRepo(), sw = require('./load').shell(true), app = read('js/app.js');
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso/.test(f));
 const ctx = loadScripts(all);
 const COURSES = get(ctx, 'COURSES'), WORLDS = get(ctx, 'WORLDS'), GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES');
 const C = COURSES.find(c => c.id === 'preuda');

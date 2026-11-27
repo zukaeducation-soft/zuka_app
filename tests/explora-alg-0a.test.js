@@ -85,7 +85,7 @@ test('explicaciones: momentos que se pueden leer y que solo usan fichas de su es
 });
 
 test('los ejemplos de la explicación no salen en los ejercicios de la lección', () => {
-  const lc = loadScripts([...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f)));
+  const lc = loadScripts(require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f)));
   const l = get(lc, 'COURSES').find(c => c.id === 'algebra').units[0].lessons[0];
   assert.equal(l.id, 'alg-0a');
   const ex = JSON.stringify(l.ex).toLowerCase();

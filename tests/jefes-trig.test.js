@@ -6,7 +6,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js/.test(f));
 const ctx = loadScripts(all), GAMES = get(ctx, 'GAMES'), course = get(ctx, 'COURSE_TRIG'), boss = GAMES['jefe-rueda'];
 
 test('cada mundo de Trigonometría tiene su jefe final, con nombre, escenas y tres fases', () => {

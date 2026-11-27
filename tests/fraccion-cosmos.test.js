@@ -10,7 +10,7 @@ const { loadScripts, get } = require('./load');
 const root = path.join(__dirname, '..'), dir = path.join(root, 'video', 'fraccion-cosmos');
 const read = f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/\r\n/g, '\n');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const files = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds/.test(f));
+const files = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds/.test(f));
 const LESSONS = get(loadScripts(files), 'COURSES').flatMap(c => c.units.flatMap(u => u.lessons));
 const word = (txt, w) => new RegExp(`(^|[^a-záéíóúñ])${w}([^a-záéíóúñ]|$)`).test(txt);
 

@@ -5,7 +5,7 @@ const path = require('node:path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
-const scripts = [...read('index.html').matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1])
+const scripts = require('./load').enRepo(read('index.html'))
   .filter(f => /content|games\/|courses\/|data\.js|guia/.test(f));
 const ctx = loadScripts(scripts);
 const { units } = get(ctx, 'COURSE_ALGEBRA');

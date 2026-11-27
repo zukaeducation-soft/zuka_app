@@ -106,13 +106,13 @@ test('está conectado: fichas y textos de los juegos, guías y respuestas', () =
   assert.match(read('js/games/kit.js'), /formulaWanted\(txt\).*drawFormula\(p, txt, x, y, maxW, size, maxH\)/);
   assert.match(read('js/guia.js'), /formulaWanted\(txt\)\) \{ ctx\.fillStyle = col; drawFormulaCtx/);
   assert.ok(read('js/app.js').includes('texify(r.solution)')); assert.ok(read('js/exam.js').includes('texify(examSolution(it.ex))'));
-  const html = read('index.html');
+  const html = require('./load').htmlRepo();
   assert.ok(html.indexOf('js/games/formula.js') > html.indexOf('js/games/kit.js') && html.indexOf('js/games/formula.js') < html.indexOf('js/games/cajas-numericas.js'));
-  assert.ok(require('./load').shell().includes("'js/games/formula.js'"));
+  assert.ok(require('./load').shell(true).includes("'js/games/formula.js'"));
 });
 
 test('lo que texify entrega lo entiende KaTeX: llaves parejas y solo órdenes conocidas', () => {
-  const files = [...read('index.html').matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js/.test(f));
+  const files = require('./load').enRepo(read('index.html')).filter(f => /content|games\/|courses\/|data\.js/.test(f));
   const app = loadScripts(files), G = get(app, 'GAMES'), tf = get(app, 'texify');
   const known = /^(frac|tfrac|sqrt|text|operatorname|circ|times|div|pi|ln|log|wedge|,)$/;
   let n = 0;

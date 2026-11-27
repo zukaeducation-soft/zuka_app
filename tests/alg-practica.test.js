@@ -6,7 +6,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|explora|alg-practica/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|explora|alg-practica/.test(f));
 const ctx = loadScripts(all), GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), K = get(ctx, 'XPK');
 const L = get(ctx, 'COURSE_ALGEBRA').units.flatMap(u => u.lessons);
 

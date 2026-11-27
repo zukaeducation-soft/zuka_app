@@ -6,8 +6,8 @@ const fs = require('fs');
 const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
-const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const files = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|guia/.test(f));
+const html = require('./load').htmlRepo();
+const files = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|guia/.test(f));
 const ctx = loadScripts(files);
 const GAMES = get(ctx, 'GAMES'), ALG = get(ctx, 'COURSE_ALGEBRA'), GUIDES = get(ctx, 'GUIDES');
 const WORLDS = ['polinomios', 'cuadraticas', 'grado-superior', 'racionales', 'exp-log'];
@@ -188,7 +188,7 @@ test('juegos nuevos: lógica pura', () => {
 });
 
 test('están registrados y no apuran: sin reloj', () => {
-  const sw = require('./load').shell();
+  const sw = require('./load').shell(true);
   for (const g of ['bloques-area', 'division-sintetica', 'cancela-factores', 'jefe-ruta']) {
     assert.ok(html.includes(`js/games/${g}.js`) && sw.includes(`js/games/${g}.js`), g);
     assert.ok(!/clock|timer|countdown/i.test(fs.readFileSync(path.join(ROOT, `js/games/${g}.js`), 'utf8')), `${g}: sin reloj`);

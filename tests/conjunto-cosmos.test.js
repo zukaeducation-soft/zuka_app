@@ -54,7 +54,7 @@ test('la historia abre y cierra con Plutón, y trae naturaleza e historia', () =
 
 test('los ejemplos del video no salen en los ejercicios de la lección', () => {
   const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-  const files = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds/.test(f));
+  const files = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds/.test(f));
   const L = get(loadScripts(files), 'COURSES')[0].units[0].lessons.find(l => l.id === 'alg-0a'), ex = JSON.stringify(L.ex).toLowerCase();
   for (const w of ['plutón', 'planeta', 'marte', 'adn', 'estrella', 'eris']) assert.ok(!new RegExp(`(^|[^a-záéíóúñ])${w}([^a-záéíóúñ]|$)`).test(ex), w);
 });

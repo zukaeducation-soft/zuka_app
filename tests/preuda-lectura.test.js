@@ -9,8 +9,8 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
-const html = read('index.html'), sw = require('./load').shell(), css = read('css/styles.css');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
+const html = require('./load').htmlRepo(), sw = require('./load').shell(true), css = read('css/styles.css');
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
 const ctx = loadScripts(all);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), EXPL = get(ctx, 'PU_LEC_EXPLORA'), TODOS = get(ctx, 'PU_LEC_HECHOS'), DONE = TODOS.filter(w => !EXPL.includes(w)), LEC = get(ctx, 'LEC');
 const units = get(ctx, 'COURSES').find(c => c.id === 'preuda').units.filter(u => u.block === 'lectura');

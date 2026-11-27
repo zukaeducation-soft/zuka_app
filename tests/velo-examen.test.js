@@ -26,7 +26,7 @@ test('la demostración se dibuja sin velo, el pie y el rótulo no comentan la re
 
 test('los juegos por rondas de las evaluaciones tapan su comprobación y la calificación no cambia', () => {
   const html = read('index.html');
-  const all = [...new Set([...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]))].filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio|explora(?!-voces)/.test(f) && fs.existsSync(path.join(ROOT, f)));
+  const all = [...new Set(require('./load').enRepo(html))].filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio|explora(?!-voces)/.test(f) && fs.existsSync(path.join(ROOT, f)));
   const ctx = loadScripts(['js/art.js', ...all]), GAMES = get(ctx, 'GAMES'), VELO = get(ctx, 'VELO');
   assert.equal(VELO.on, false);
   const usados = new Set(get(ctx, 'COURSES').flatMap(c => c.units.flatMap(u => (u.exam?.items || []).map(i => i.ex.game))).filter(Boolean));

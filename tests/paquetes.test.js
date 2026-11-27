@@ -25,7 +25,7 @@ test('cada script propio de index.html va en un paquete, una sola vez y en el mi
   const dentro = Object.keys(empaqueta()).flatMap(f => [...lee(f).matchAll(/^\/\/#archivo (\S+)/gm)].map(m => m[1]));
   assert.equal(dentro.join('\n'), fuentes().join('\n'));
   assert.equal(new Set(dentro).size, dentro.length, 'un archivo repetido');
-  assert.ok(dentro.length > 700);
+  assert.ok(dentro.length > 600);
 });
 
 test('cada paquete es JavaScript válido', () => {

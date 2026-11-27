@@ -7,9 +7,9 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
-const html = read('index.html');
+const html = require('./load').htmlRepo();
 // Estos casos también prueban niveles de la versión original. La secuencia actual se prueba en algebra-taller.test.js.
-const files = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/algebra\.js$/.test(f));
+const files = require('./load').enRepo(html).filter(f => /content|games\/|courses\/algebra\.js$/.test(f));
 const ctx = loadScripts(files);
 const unit = get(ctx, 'COURSE_ALGEBRA').units[0], GAMES = get(ctx, 'GAMES');
 const lesson = id => unit.lessons.find(l => l.id === id);
@@ -134,7 +134,7 @@ test('descifra-zona (alg-0c): toda zona pedida tiene respuesta, no empieza resue
 });
 
 test('los juegos del mundo dibujan con las piezas de la lámina (SK) y están registrados', () => {
-  const sw = require('./load').shell();
+  const sw = require('./load').shell(true);
   for (const f of ['conjuntos-kit', ...Object.values(NUEVOS), 'cubo-partes']) {
     assert.ok(html.includes(`src="js/games/${f}.js"`), `${f} en index.html`);
     assert.ok(sw.includes(`'js/games/${f}.js'`), `${f} en el service worker`);

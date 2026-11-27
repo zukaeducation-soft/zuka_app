@@ -8,7 +8,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso/.test(f));
 const ctx = loadScripts(all);
 const C = get(ctx, 'COURSES').find(c => c.id === 'preuda');
 // El mundo 1 (Cálculo mental) tiene su propio formato y su prueba (preuda-videos-mundo-1.test.js).

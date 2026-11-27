@@ -6,7 +6,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds/.test(f));
 const ctx = loadScripts(all), WORLDS = get(ctx, 'WORLDS'), COURSES = get(ctx, 'COURSES');
 const CHILDISH = /Pradera|Valle|Mercado|Torres|Escalera|Taller|Fuente de|Cordillera|Río|Selva|Mar de|Faro|Galaxia|Sendero|Fábrica|Puente|Cumbre|Mirador|Cruce|Templo|Archipiélago|Forja|Puerto|Órbita|Pista|Rampa|Campos|Plano Transformado/;
 

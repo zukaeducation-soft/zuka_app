@@ -10,7 +10,7 @@ const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
 const html = read('index.html'), sw = require('./load').shell();
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio/.test(f));
 const exp = [...html.matchAll(/src="(js\/explora[^"]*)"/g)].map(m => m[1]).filter(f => !/voces/.test(f));
 const ctx = loadScripts(['js/art.js', ...all, ...exp]);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), HOJA = get(ctx, 'HOJA'), EXPLORA = get(ctx, 'EXPLORA'), EXQ = get(ctx, 'EXQ'), WORLDS = get(ctx, 'WORLDS');

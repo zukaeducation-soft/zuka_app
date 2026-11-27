@@ -11,7 +11,7 @@ const { loadScripts, get, ROOT } = require('./load');
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
 const dir = 'video/preuda-cosmos';
 const html = read('index.html');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
 const ctx = loadScripts(all);
 const C = get(ctx, 'COURSES').find(c => c.id === 'preuda');
 const lesson = id => C.units.flatMap(u => u.lessons).find(l => l.id === id);

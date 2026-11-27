@@ -7,7 +7,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js/.test(f));
 const transition = all.filter(f => !/courses\/(algebra-(taller|revision)|trig-escenas)\.js$/.test(f));
 const before = loadScripts(transition.filter(f => !/sin-escribir/.test(f)));
 const converted = loadScripts(transition);

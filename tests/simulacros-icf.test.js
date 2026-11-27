@@ -8,7 +8,7 @@ const { loadScripts, get, ROOT, shell } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
 const html = read('index.html');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia|acceso|conceptos|gimnasio/.test(f));
 const sims = [...html.matchAll(/src="(js\/simulacro-icf-\d+\.js)"/g)].map(m => m[1]);
 const ctx = loadScripts(['js/art.js', ...all, 'js/simulacros-icf.js', ...sims]);
 const g = n => get(ctx, n);

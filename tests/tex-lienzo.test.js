@@ -8,7 +8,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const all = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
+const all = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f));
 const ctx = loadScripts(all);
 const SYM = get(ctx, 'TEX_SYM'), SPACE = get(ctx, 'TEX_SPACE');
 const KNOWN = new Set([...Object.keys(SYM), ...Object.keys(SPACE), 'frac', 'tfrac', 'dfrac', 'sqrt', 'text', 'mathrm', 'textbf', 'mathbf',

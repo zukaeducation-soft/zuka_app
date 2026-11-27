@@ -8,7 +8,7 @@ const { loadScripts, get, ROOT } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 // Estos casos también prueban niveles de la versión original. La secuencia actual se prueba en algebra-taller.test.js.
-const files = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/algebra\.js$/.test(f));
+const files = require('./load').enRepo(html).filter(f => /content|games\/|courses\/algebra\.js$/.test(f));
 const ctx = loadScripts(files);
 const unit = get(ctx, 'COURSE_ALGEBRA').units.find(u => u.world === 'progresiones'), GAMES = get(ctx, 'GAMES');
 const lesson = id => unit.lessons.find(l => l.id === id);

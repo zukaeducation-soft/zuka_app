@@ -6,7 +6,7 @@ const path = require('path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const files = [...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|guia/.test(f));
+const files = require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|guia/.test(f));
 const ctx = loadScripts(files);
 const GAMES = get(ctx, 'GAMES'), GUIDES = get(ctx, 'GUIDES'), SCENES = get(ctx, 'GUIDE_SCENES'), PALETTES = get(ctx, 'PALETTES');
 const guideSteps = get(ctx, 'guideSteps'), drawGuideScene = get(ctx, 'drawGuideScene'), guideButton = get(ctx, 'guideButton');

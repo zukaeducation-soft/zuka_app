@@ -93,7 +93,7 @@ test('explicaciones: momentos que se pueden leer, giros dentro de la rueda y cue
 test('no se dice cuántos grados mide un radián (lo calcula un ejercicio) y los ejemplos no son los de los ejercicios', () => {
   const todo = JSON.stringify(L, (k, v) => (typeof v === 'number' ? undefined : v));   // solo lo que se lee
   assert.ok(!/57[.,]\d/.test(todo), 'nada de 57.3');
-  const lc = loadScripts([...html.matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1]).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f)));
+  const lc = loadScripts(require('./load').enRepo(html).filter(f => /content|games\/|courses\/|data\.js|worlds|guia/.test(f)));
   const l = get(lc, 'COURSES').find(c => c.id === 'trig').units[0].lessons[0];
   assert.equal(l.id, 'trig-41a');
   // Los ángulos que piden los ejercicios (los valores de referencia como 30°, 45° o 60° salen en sus explicaciones).

@@ -5,7 +5,7 @@ const path = require('node:path');
 const { loadScripts, get, ROOT } = require('./load');
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
-const files = [...read('index.html').matchAll(/src="(js\/[^"]+)"/g)].map(m => m[1])
+const files = require('./load').enRepo(read('index.html'))
   .filter(f => /content|games\/|courses\/|data\.js|guia/.test(f));
 const ctx = loadScripts(files), games = get(ctx, 'GAMES');
 
