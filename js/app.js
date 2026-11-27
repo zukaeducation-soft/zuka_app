@@ -417,7 +417,7 @@ function renderLearn() {
           <span class="dk mini-bar" aria-hidden="true"><i style="width:${(wDone / u.lessons.length) * 100}%"></i></span></div>`;
       }).join('')}
     </div>
-    ${soonHTML(c, block)}
+    ${soonHTML(c, block)}${typeof gvaPruebasHTML === 'function' ? gvaPruebasHTML(c) : ''}
     ${cur ? '' : block ? `<div class="course-done">${ICON.star}<div><b>${soonOf(c, block).length ? 'Vas al día: terminaste los mundos publicados' : '¡Componente completado!'}</b><p>Repasa cualquier lección o vuelve a los componentes.</p></div></div>`
       : `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>`}</div>
     ${gymFabHTML(c, courseLevelUi(c, block, { done: S.done, last: S.lastLesson }))}
@@ -433,7 +433,7 @@ function renderLearn() {
   });
   $('[data-install]', view)?.addEventListener('click', promptInstall);
   $('[data-hide-install]', view)?.addEventListener('click', () => { S.hideInstall = true; save(); renderLearn(); });
-  bindCourseHead(); bindAccesoAviso(); bindGymFab(c);
+  bindCourseHead(); bindAccesoAviso(); bindGymFab(c); if (typeof gvaPruebasBind === 'function') gvaPruebasBind(view, c);
   view.scrollTop = 0;   // arriba queda «Sigue aquí»; el mapa de mundos está debajo
 }
 

@@ -57,8 +57,23 @@ movimiento (`tiros`), pistas y explicaciones, nada que nombre la fuente; evaluac
 distintos, datos distintos a los de la lección), claves A–D repartidas; calidad de las escenas (las mismas exigencias del curso
 euclidiano); archivos registrados y que vienen con la app. `tests/contenido-geometria.test.js` sigue probando el curso viejo.
 
+## Gimnasio y simulacros (pedido del 2026-11-27, segunda parte)
+
+- **Gimnasio**: `js/gimnasio-gva-<n>.js` (uno por mundo, después de los del Preicfes): dos retos de Fuerza y dos de Élite por mundo
+  (ids `gym-gva-…`), de 2 a 4 pasos con los juegos del curso y datos nuevos. El Calentamiento sale solo.
+- **Simulacros de parciales y quices**: `GVA_CORTES` (vectorial-base.js) fija los cuatro cortes del cronograma y `GVA.prueba(tipo, n,
+  items)` los escribe en `js/courses/vectorial-pruebas-<n>.js`: el parcial n (10 a 14 preguntas, 1 h 40 min, todas las lecciones del
+  corte) y el quiz n (4 a 6 preguntas, el tema del quiz). Se presentan con el motor de las evaluaciones (`startExam` sobre una unidad
+  armada con las lecciones del corte; `exam.js` numera cada lección por su mundo) y salen en la pantalla del curso, sección «Parciales y
+  quices» (`gvaPruebasHTML`, `gvaPruebasBind` en `vectorial.js`; mejor resultado en `S.exams[id]`; candado = el de las evaluaciones).
+- **Guías**: `node tools/guia-gva.js` rehace `GUIDE_GVA` de `js/guia.js` con los juegos de `js/games/gva-escena-*.js` según su armazón.
+- Los juegos viejos de p5 del curso (`fila-a-fila`, `afina-sistema`, `flecha-vector`, `conica-viva`) ya no van en la app
+  (`juegos-en-uso --quita`); siguen en el repositorio y en `tests/contenido-geometria.test.js`.
+
 ## Estado
 
-- Hecho (2026-11-27): estructura completa (6 mundos, 23 lecciones con escenas de respaldo); mundo 1 `sistemas` rehecho entero
-  (`geo-1` a `geo-4`) con explicaciones, ejercicios con escena y su evaluación.
-- Pendiente: mundos 2 a 6 (`geo-5` a `geo-23`) con el mismo estándar; videos; resúmenes en PDF; gimnasio; voz.
+- Hecho (2026-11-27): los seis mundos y las 23 lecciones rehechas con Explora, 8 juegos con escena cada una (184 juegos nuevos, ninguno
+  repetido) y zona de examen; las seis evaluaciones; el gimnasio de los seis mundos (24 retos); los simulacros de los cuatro parciales y
+  de los cuatro quices.
+- Pendiente: videos; resúmenes en PDF; voz; diferir por curso los datos de las lecciones (el arranque subió unos 450 KB; la prueba de
+  paquetes admite hoy 5800 KB).

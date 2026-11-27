@@ -153,7 +153,7 @@ function startExam(c, u) {
     S.exams[E.id] = { best: Math.max(prev?.best ?? 0, rep.pct), last: rep.pct, at: Date.now() };
     addXP(xp); markStreak(); save();
     const title = id => findLesson(id)?.l.title || id;
-    const lessonNo = id => { const k = u.lessons.findIndex(l => l.id === id); return k >= 0 ? `Nivel ${c.units.indexOf(u) + 1}-${k + 1}` : ''; };
+    const lessonNo = id => { const uu = c.units.find(x => x.lessons.some(l => l.id === id)) || u, k = uu.lessons.findIndex(l => l.id === id); return k >= 0 ? `Nivel ${c.units.indexOf(uu) + 1}-${k + 1}` : ''; };   // en los simulacros, u junta lecciones de varios mundos
     const ICONS = { ok: ICON.check, hint: '½', bad: ICON.x, blank: '–' };
     const LABEL = { ok: 'Correcta', hint: 'Correcta con pista', bad: 'Incorrecta', blank: 'Sin responder' };
     const R = 54, L = 2 * Math.PI * R;

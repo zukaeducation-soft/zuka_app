@@ -4746,3 +4746,953 @@ PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
         'Ubica la frase «no es un favor» y mira quién la explica y dónde.')],
   ]);
 });
+;
+//#archivo js/courses/preuda-l-inferencia.js
+// Preuniversitario · Comprensión lectora · mundo 4 «Inferencia» con textos de verdad (spec 2026-11-19-preuda-lectura-textos): una
+// panadería donde casi nada se dice y todo se ve (ideas implícitas), una columna llena de «por fin», «todavía» y «otra vez»
+// (presupuestos), un pueblo que se vacía y una causa equivocada (causa y efecto) y un testimonio sobre una máquina de coser
+// (actitudes y motivos). La evaluación usa la crónica de un cartero rural. Textos escritos para Zuka.
+PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
+  const PAN = {
+    id: 'lec-panaderia', title: 'Las tres de la mañana',
+    ficha: { autor: 'Relato de un escritor de Medellín', fuente: 'Antología de relatos de barrio', fecha: '2023' },
+    paras: [
+      'A las tres de la mañana, cuando el barrio todavía duerme, en la panadería de don Aurelio ya huele a levadura. Él llega primero, prende el horno y pone a hervir el agua del tinto. Su hijo Camilo llega media hora después, con los ojos a medio abrir, y se lava las manos sin decir palabra. Hace cuatro años que trabajan juntos, y en ese tiempo han aprendido a hablar poco antes de que salga la primera bandeja.',
+      'Don Aurelio amasa como si estuviera escuchando la masa. Hunde los dedos, la dobla, la vuelve a hundir y de pronto se detiene. «Todavía no», dice, y la deja reposar bajo un trapo. Camilo, en cambio, mira el reloj del celular cada tanto. Ha visto en internet unas máquinas que amasan solas en diez minutos y ya ha dejado sobre el mostrador, más de una vez, el folleto de una de ellas.',
+      'A las cinco y media empiezan a llegar los primeros clientes: los celadores que terminan su turno, las enfermeras que lo empiezan, un señor que compra siempre seis panes de queso y nunca saluda. Don Aurelio los conoce a todos por lo que piden. A la señora Inés le guarda el pan más tostado sin que ella tenga que pedirlo, desde que una mañana la vio devolver uno porque estaba pálido.',
+      'Hace dos meses abrió un supermercado a tres cuadras, con una panadería que vende el pan más barato. Desde entonces, don Aurelio hornea dos bandejas menos cada mañana. No ha dicho nada en la casa, pero la libreta donde anota las ventas ya no queda abierta sobre el mostrador: ahora la guarda en el bolsillo del delantal.',
+      'Esta mañana, cuando salió la última bandeja, Camilo se quedó mirando a su papá mientras contaba los billetes. Después recogió el folleto de la máquina, lo dobló en cuatro y lo metió en la basura. «Mañana llego a las tres», dijo. Don Aurelio no contestó. Siguió contando, pero se le perdió la cuenta y tuvo que empezar otra vez.',
+    ],
+  };
+
+  const CICLO = {
+    id: 'lec-ciclorruta', title: 'La ciclorruta, por fin (y a medias)',
+    ficha: { autor: 'Columna de opinión', fuente: 'Periódico de una ciudad intermedia', fecha: 'Agosto de 2025' },
+    paras: [
+      'Por fin, después de tres alcaldías y otras tantas promesas, la ciclorruta que une el barrio La Floresta con el centro dejó de ser un dibujo en un plano. Desde el lunes, quienes van en bicicleta al trabajo ya no tienen que disputarles el carril a los buses en la avenida. Es una buena noticia, y vale la pena decirlo antes de cualquier queja.',
+      'Pero las quejas también hay que decirlas. La ciclorruta vuelve a terminar donde terminan casi todas las obras de esta ciudad: en el borde de lo difícil. Recorre once kilómetros planos y bien iluminados y se interrumpe justo antes de la loma de San Antonio, donde viven los trabajadores que más la necesitan, los que todavía suben a pie porque el bus les cuesta medio día de jornal.',
+      'La secretaría de movilidad explica que el tramo de la loma quedó para una segunda etapa. Lo malo es que esta ciudad ya sabe lo que significa una segunda etapa: el parque de la quebrada sigue esperando la suya desde 2015, y el puente peatonal del colegio dejó de aparecer en los presupuestos hace dos años, aunque nadie lo haya cancelado oficialmente. Los niños de ese colegio siguen cruzando la avenida entre los carros, como lo hacían sus hermanos mayores cuando se anunció el puente.',
+      'Tampoco es cierto, como repiten algunos funcionarios, que la gente de las lomas no usa bicicleta. La usa menos porque nadie le ha construido por dónde subir con ella. Pedir que primero aparezcan los ciclistas para después hacer la vía es como exigir que alguien aprenda a nadar antes de dejarlo meterse al agua. En los barrios planos tampoco había ciclistas antes de la ciclorruta; aparecieron cuando tuvieron por dónde andar.',
+      'La ciclorruta que se inauguró el lunes demuestra que la ciudad sí puede hacer bien una obra cuando decide hacerla. Ahora falta que decida hacerla completa, empezando por donde la cuesta es más dura y el bolsillo más corto. Ojalá esta vez la segunda etapa no tenga que esperar a otra alcaldía.',
+    ],
+  };
+
+  const PUEBLO = {
+    id: 'lec-casas-candado', title: 'Las casas con candado',
+    ficha: { autor: 'Reportaje de una periodista regional', fuente: 'Revista de un periódico del Eje Cafetero', fecha: 'Mayo de 2025' },
+    paras: [
+      'En San José de las Nieblas, de cada diez casas de la calle principal, tres tienen candado en la puerta y una mata de helecho que nadie riega. Sus dueños no murieron ni se perdieron: viven en Medellín, en Bogotá o en Madrid, y vuelven, si acaso, para las fiestas de diciembre.',
+      'La historia empezó a cambiar hace unos veinte años, cuando el precio de la leche cayó y varias familias vendieron sus vacas. Con menos ordeño hubo menos trabajo para los jóvenes, que antes se empleaban en las fincas desde los catorce. Muchos se fueron a estudiar o a buscar empleo a la ciudad. Al principio volvían cada mes; después, cada año. En diciembre todavía se nota: durante dos semanas las calles se llenan de carros con placas de otras ciudades, y en enero el pueblo se vacía de nuevo.',
+      'La escuela de la vereda La Esperanza cerró en 2019 porque quedaban seis niños. Los que quedaron empezaron a viajar una hora en chiva hasta el colegio del pueblo, y algunas familias prefirieron mudarse más cerca o irse del todo. Así, la falta de niños cerró la escuela, y el cierre de la escuela se llevó a más niños.',
+      'Hay quien culpa a la carretera pavimentada, que se terminó en 2010, justo cuando más gente se estaba yendo. Pero la carretera no expulsó a nadie: los que se iban ya tenían razones para irse, y lo único que cambió fue que el viaje se hizo más corto. De hecho, la misma carretera trajo el año pasado a los primeros turistas, y con ellos dos hostales y una tienda de quesos.',
+      'La alcaldía ofrece ahora un subsidio para jóvenes que quieran volver y montar un negocio. Todavía es pronto para saber si funcionará: hasta ahora, dos jóvenes han preguntado por él, una para abrir una panadería y otro para montar un taller de motos. Lo que sí parece claro es que no bastará con el dinero: quien vuelve necesita también una escuela para sus hijos, señal en el celular y alguien con quien hablar en la tarde.',
+    ],
+  };
+
+  const MAQUINA = {
+    id: 'lec-maquina-coser', title: 'La máquina del comedor',
+    ficha: { autor: 'Testimonio de una lectora de Bello', fuente: 'Concurso de relatos «Historias de mi casa»', fecha: '2024' },
+    paras: [
+      'La máquina de coser de mi mamá sigue en el rincón del comedor, con su forro de tela de flores. Nadie la usa desde hace seis años, pero todos los domingos alguien le quita el polvo. Mis hermanas dicen que soy yo; yo digo que son ellas. Ninguna lo ha visto, y ninguna lo pregunta.',
+      'Mi mamá cosió en esa máquina durante treinta años. Hacía uniformes para dos colegios del barrio, y en diciembre se acostaba a la una de la mañana con los dedos llenos de curitas. Cuando alguien le decía que descansara, contestaba: «Descansar es para los ricos», y se reía, pero no paraba. Cosía con la radio prendida, tarareando boleros, y solo se callaba cuando tenía que contar los botones. Con esos uniformes pagó el estudio de las tres.',
+      'Yo nunca quise aprender. Me daba rabia el ruido del pedal cuando quería ver televisión, y me daba más rabia que ella me pidiera ayuda para hacer los ojales. Le decía que yo iba a ser abogada y que las abogadas no hacían ojales. Ella me miraba por encima de las gafas y seguía cosiendo. Cuando entré a la universidad, me hizo una carpeta de tela para los apuntes, con mis iniciales bordadas. La usé un mes y la cambié por una de plástico.',
+      'El año pasado se me descosió la toga el día de mi grado. Faltaba una hora para la ceremonia. Mis hermanas estaban peinándose, nadie tenía aguja, y yo me encontré abriendo el forro de flores, enhebrando la máquina como la había visto hacerlo diez mil veces y pisando el pedal. Me temblaban las manos, como si ella estuviera mirándome por encima de las gafas. La costura quedó torcida. No me importó.',
+      'En la foto del grado salgo sonriendo, con la toga torcida a la altura del hombro. La tengo en la mesa de noche. Cuando alguien me pregunta por qué no la mandé arreglar con un fotógrafo, le digo que me gusta así. No le explico más.',
+    ],
+  };
+
+  // ---------------- Lección 1 · Ideas implícitas ----------------
+  setLesson('pu-in-1', [
+    play('pista-tipo', 'Ata cada inferencia a la oración que la deja ver.', { doc: PAN, lineas: ['Desde entonces, don Aurelio hornea dos bandejas menos cada mañana.', 'La libreta ahora la guarda en el bolsillo del delantal.', 'A la señora Inés le guarda el pan más tostado sin que ella tenga que pedirlo.', 'Camilo ha dejado sobre el mostrador, más de una vez, el folleto de una máquina.'], tarjetas: ['Vende menos que antes', 'No quiere que vean las cuentas', 'Está pendiente de sus clientes', 'Quiere convencer a alguien'], va: [0, 1, 2, 3],
+      mira: ['¿Qué haría con el pan alguien que vende menos?', '¿Qué haría con los números alguien que los quiere tapar?', '¿Qué oración muestra un detalle con una persona?', '¿Qué hace quien insiste sin decirlo?'], bien: 'Nadie lo dijo: se ve en lo que hacen.' },
+      'Hornear menos muestra que vende menos; guardar la libreta, que esconde las cuentas; apartar el pan tostado, su atención; y dejar el folleto varias veces, que insiste.',
+      { hint: 'Por cada inferencia pregúntate qué gesto la delataría y búscalo en las oraciones.' }),
+    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: PAN, nums: [1, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['Trabajan juntos hace cuatro años.', 'Las ventas bajaron desde que abrió el supermercado.', 'El supermercado vende el pan más barato.', 'El pan del supermercado es de peor calidad.', 'Don Aurelio piensa cerrar la panadería.'], va: [0, 1, 0, 2, 2],
+      mira: ['Búscala tal cual en el párrafo 1.', 'Nadie lo dice así. ¿Qué cambió en las bandejas?', 'Búscala tal cual en el párrafo 4.', 'El texto habla del precio: ¿juzga el sabor?', '¿Hay alguna pista de que vaya a cerrar, o la pones tú?'], luz: [[1, 'Hace cuatro años que trabajan juntos'], [4, 'vende el pan más barato'], [4, 'hornea dos bandejas menos cada mañana']], bien: 'Inferir se apoya en una pista; suponer, en uno mismo.' },
+      'Los cuatro años y el precio están escritos. Las bandejas menos dejan ver que vende menos. Que el otro pan sea peor o que vaya a cerrar no tiene ninguna pista.',
+      { hint: 'Primero búscala tal cual. Si no está, señala la pista; si no hay pista, es una suposición.' }),
+    play('genero-o-cita', '¿Inferencia con pista o pura suposición?', { doc: PAN, rot: ['inferencia: hay pista', 'suposición: la pone uno'], fichas: ['Camilo quería comprar la máquina.', 'Camilo va a trabajar en el supermercado.', 'A Camilo le cuesta madrugar.', 'La señora Inés es familiar de don Aurelio.'], va: [0, 1, 0, 1],
+      mira: ['Busca qué dejaba sobre el mostrador.', '¿Algún gesto suyo apunta al supermercado?', 'Busca cómo tiene los ojos al llegar.', 'Que la atienda bien, ¿prueba que sean familia?'], luz: [[1, 'con los ojos a medio abrir'], [2, 'ha dejado sobre el mostrador']], bien: 'Sin pista, no hay inferencia.' },
+      'El folleto delata que quería la máquina y los ojos a medio abrir, que le cuesta madrugar. Lo del supermercado y la familia no tiene de dónde salir.',
+      { hint: 'Intenta señalar con el dedo la frase que la sostiene. Si no hay frase, la idea la pusiste tú.' }),
+    play('voz-de-la-fuente', 'El relato muestra lo que sienten sin nombrarlo. Ata cada gesto a lo que deja ver.', { portadas: [['Paciencia', 'sabe esperar'], ['Emoción', 'algo lo conmueve'], ['Prisa', 'quiere que pase rápido'], ['Preocupación', 'algo anda mal']], tarjetas: ['«Todavía no», dice, y deja reposar la masa.', 'Se le perdió la cuenta y tuvo que empezar otra vez.', 'Mira el reloj del celular cada tanto.', 'Guarda la libreta de las ventas.'], va: [0, 1, 2, 3],
+      mira: ['¿Qué tiene quien deja que la masa se tome su tiempo?', 'Acaba de oír algo de su hijo: ¿qué le pasa?', '¿Qué siente quien mira la hora una y otra vez?', '¿Por qué se guarda algo que antes estaba a la vista?'], bien: 'El gesto habla por la persona.' },
+      'Esperar a la masa es paciencia; perder la cuenta después de oír a su hijo, emoción; mirar el reloj, prisa; esconder la libreta, preocupación.',
+      { hint: 'Imagina a alguien haciendo ese gesto y pregúntate qué le pasa por dentro.' }),
+    play('comprueba-apuesta', 'Subraya en el párrafo 4 la oración que mejor prueba esta inferencia.', { doc: PAN, nums: [4], n: 1, apuesta: 'Don Aurelio está preocupado, aunque no lo diga.', va: ['4.2'],
+      mira: { '4.0': 'Cuenta lo que abrió: ¿muestra lo que él siente?', '4.1': 'Dice qué hace con el pan; puede ser solo un ajuste.' }, bien: 'Lo que antes estaba a la vista ahora se esconde.' },
+      'No decir nada en la casa y pasar la libreta del mostrador al bolsillo muestran que se guarda algo. Las otras cuentan el hecho y el ajuste de las bandejas.',
+      { hint: 'Preocuparse sin decirlo se nota en algo que se calla o se esconde. Búscalo.' }),
+    play('subraya-rasgo', 'Camilo cambió de idea sobre la máquina. Subraya las **dos** oraciones que lo muestran.', { doc: PAN, nums: [5], n: 2, va: ['5.1', '5.2'],
+      mira: { '5.0': 'Ahí apenas mira: todavía no hace nada con su idea.', '5.3': 'Habla de don Aurelio.', '5.4': 'Muestra lo que le pasa a don Aurelio.' }, bien: 'Bota el folleto y promete llegar más temprano.', falta: 'Faltó otra cosa que hace o dice Camilo.' },
+      'Doblar el folleto y botarlo muestra que renuncia a la máquina; «Mañana llego a las tres», que va a ayudar de otra manera.',
+      { hint: 'Busca lo que hace y lo que dice Camilo después de mirar a su papá.' }),
+    play('pasos-del-proceso', 'Ordena la cadena de hechos que cuenta el párrafo 4.', { que: 'lo que pasó', de: 'Del supermercado a la libreta escondida', fija: 0, ini: [1, 3, 0, 2], tiras: ['Abre un supermercado a tres cuadras.', 'Allí venden el pan más barato.', 'Don Aurelio hornea dos bandejas menos.', 'La libreta pasa al bolsillo.'],
+      mira: ['Es lo primero que cambia.', 'Para que vendan allí, algo tuvo que abrir.', 'Hornea menos por algo que pasó afuera.', 'La libreta se esconde cuando ya hay algo que esconder.'], bien: '«Desde entonces» une los hechos.' },
+      'Abre el supermercado, vende más barato, don Aurelio hornea menos y al final guarda la libreta.',
+      { hint: 'Empieza por «Hace dos meses» y sigue lo que cambió «desde entonces».' }),
+    play('cambia-palabra', 'Pon en cada hueco la palabra que dice lo mismo. Sobran dos.', { doc: PAN, frases: [[2, 'Don Aurelio amasa como si estuviera ', 'escuchando', ' la masa.'], [3, 'la vio devolver uno porque estaba ', 'pálido', '.']], fichas: ['atendiendo a', 'poco tostado', 'enfermo', 'vendiendo'], va: [0, 1, null, null],
+      mira: ['¿Qué hace con la masa quien sabe cuándo parar?', 'Le guarda el más tostado: ¿cómo estaba el que devolvió?', 'Es otro sentido de la palabra: ¿sirve para un pan?', 'Nada en la oración habla de venta.'], bien: 'También el sentido de una palabra se infiere.' },
+      'Amasar «escuchando» es estar atento a la masa; un pan «pálido» está poco tostado, por eso le guarda el más tostado.',
+      { hint: 'Lee lo que viene antes y después: ahí está la pista de lo que quiso decir.' }),
+  ]);
+
+  // ---------------- Lección 2 · Presupuestos ----------------
+  setLesson('pu-in-2', [
+    play('pista-tipo', 'Ata cada idea que se da por hecha a la oración que la supone.', { doc: CICLO, lineas: ['Ya no tienen que disputarles el carril a los buses.', 'El puente dejó de aparecer en los presupuestos.', 'Los trabajadores todavía suben a pie.', 'La ciudad sí puede hacer bien una obra.'], tarjetas: ['Antes tenían que disputarlo', 'Antes aparecía', 'Se esperaba que eso ya hubiera cambiado', 'Alguien lo dudaba'], va: [0, 1, 2, 3],
+      mira: ['Busca la palabra que dice que algo se acabó para alguien.', 'Busca lo que se interrumpió.', 'Busca la palabra que dice que algo sigue igual.', 'Busca la palabra que insiste, como quien responde.'], bien: '«Ya no», «dejó de», «todavía», «sí»: cada una supone algo.' },
+      '«Ya no» supone que antes sí; «dejó de», que aparecía; «todavía», que debería haber cambiado; y el «sí» que insiste, que alguien lo duda.',
+      { hint: 'En cada oración, pregunta qué tiene que haber sido cierto antes para que se diga así.' }),
+    play('todo-o-parte', 'El autor da por hechas estas ideas. ¿Qué las delata?', { doc: CICLO, rot: ['una palabra como «ya no» o «dejó de»', 'otra cosa: una comparación o un verbo'], fichas: ['Antes compartían el carril con los buses.', 'Los hermanos mayores también cruzaban entre los carros.', 'El puente estuvo en los presupuestos.', 'Las segundas etapas no suelen llegar.'], va: [0, 1, 0, 1],
+      mira: ['Busca «ya no tienen que».', 'Busca «como lo hacían»: ¿qué está haciendo esa frase?', 'Busca «dejó de aparecer».', 'Busca «esta ciudad ya sabe lo que significa».'], luz: [[1, 'ya no tienen que'], [3, 'como lo hacían sus hermanos mayores'], [3, 'esta ciudad ya sabe lo que significa una segunda etapa'], [3, 'dejó de aparecer']], bien: 'No siempre hay palabra de la lista.' },
+      '«Ya no» y «dejó de» son palabras delatoras. Las otras salen de comparar con los hermanos mayores y del verbo «sabe».',
+      { hint: 'Busca en el texto la frase que supone cada idea y mira si lleva una palabra de la lista.' }),
+    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CICLO, nums: [2, 3], rot: ['lo dice', 'lo da por hecho', 'ni lo dice ni lo supone'], fichas: ['La ciclorruta recorre once kilómetros planos.', 'Los niños llevan años cruzando entre los carros.', 'El bus de la loma pasa pocas veces al día.', 'El puente fue cancelado oficialmente.', 'El parque espera su segunda etapa desde 2015.'], va: [0, 1, 2, 2, 0],
+      mira: ['Búscala en el párrafo 2.', 'Busca a los hermanos mayores: ¿qué suponen?', 'El texto dice cuánto les cuesta el bus: ¿dice cada cuánto pasa?', 'Compárala con «aunque nadie…».', 'Búscala en el párrafo 3.'], luz: [[2, 'once kilómetros planos'], [3, 'desde 2015'], [3, 'como lo hacían sus hermanos mayores'], [3, 'aunque nadie lo haya cancelado oficialmente']], bien: '«Como lo hacían sus hermanos» supone años.' },
+      'Los kilómetros y el parque están escritos. «Como lo hacían sus hermanos mayores» da por hecho que llevan años. De cada cuánto pasa el bus no se habla y el puente no fue cancelado oficialmente.',
+      { hint: 'Dar por hecho es que la frase no tendría sentido si eso fuera falso.' }),
+    play('sella-parrafo', '«Quedaron a medias o sin hacer todas estas obras, **EXCEPTO**:» Ata cada una a su párrafo.', { doc: CICLO, tarjetas: ['El tramo de la loma', 'El parque de la quebrada', 'El puente del colegio', 'La ampliación de la avenida'], va: [[1, 2, 4], 2, 2, 5],
+      mira: ['Busca la loma de San Antonio.', 'Busca la quebrada.', 'Busca el puente peatonal.', 'La avenida se nombra, pero ¿alguien habla de ampliarla?'], luz: [[2, 'se interrumpe justo antes de la loma de San Antonio'], [3, 'el parque de la quebrada'], [3, 'el puente peatonal del colegio']], bien: 'Nombrar la avenida no es hablar de ampliarla.' },
+      'La loma está en los párrafos 2, 3 y 5; el parque y el puente, en el 3. De ampliar la avenida no se habla.',
+      { hint: 'Una opción usa una palabra del texto para contar algo que no está. Busca cada obra.' }),
+    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: CICLO, nums: [2, 4], pregunta: 'Queda en pie', queda: 'Donde hay por dónde andar, aparecen ciclistas.', tarjetas: ['La ciclorruta llega hasta la cima de la loma.', 'En las lomas no usan bicicleta porque no les gusta.', 'En los barrios planos siempre hubo ciclistas.'], va: [[2, 1], [3, 4], 6],
+      mira: ['Busca dónde termina o se interrumpe.', 'Busca qué dice el autor de lo que repiten los funcionarios.', 'Busca qué pasaba antes de la ciclorruta.'], bien: 'Cada falsa tiene su oración en contra.' },
+      'Se interrumpe antes de la loma; no es cierto que no usen bicicleta: no tienen por dónde; y en los barrios planos tampoco había ciclistas antes.',
+      { hint: 'Busca por cada opción la oración que habla de lo mismo y lee con cuidado lo que niega.' }),
+    play('comprueba-apuesta', 'Subraya en el párrafo 3 la oración que mejor prueba lo que el autor da por sentado.', { doc: CICLO, nums: [3], n: 1, apuesta: 'El autor da por sentado que las segundas etapas no se cumplen.', va: ['3.1'],
+      mira: { '3.0': 'Es la explicación de la secretaría, no del autor.', '3.2': 'Cuenta una consecuencia de que no haya puente.' }, bien: '«Ya sabe lo que significa» lo da por sabido.' },
+      '«Esta ciudad ya sabe lo que significa una segunda etapa», con el parque y el puente como ejemplos, da por sentado que no llegan.',
+      { hint: 'Busca la oración en la que el autor habla de las segundas etapas y trae ejemplos que todos conocen.' }),
+    play('talla-idea', 'Tres resúmenes del párrafo 2: pon cada uno en su talla.', { doc: CICLO, p: 2, rot: ['se queda en un detalle', 'justa', 'dice de más'], fichas: ['El tramo está bien iluminado.', 'La vía se detiene justo donde más la necesitan.', 'La ciclorruta no le sirve a nadie.'], va: [0, 1, 2],
+      mira: ['Es un dato del recorrido: ¿es la queja del párrafo?', 'Mira dónde se interrumpe y quién vive allí.', 'Compárala con lo que dice el párrafo 1.'], luz: [[2, 'se interrumpe justo antes de la loma de San Antonio'], [2, 'los trabajadores que más la necesitan']], bien: 'Criticar una parte no es rechazarlo todo.' },
+      'La luz es un detalle; «a nadie» exagera, porque el autor celebra la obra. La justa dice dónde se detiene y a quién deja por fuera.',
+      { hint: 'La justa tiene que recoger la queja del párrafo sin convertirla en algo más grande.' }),
+    play('pilares', 'El techo es lo que pide el autor. Lleva abajo lo que lo sostiene y al patio lo que no.', { doc: CICLO, idea: 'Hay que construir ya el tramo de la loma', fichas: ['Allí viven quienes más la necesitan.', 'Las segundas etapas suelen no llegar.', 'Usan poco la bicicleta por falta de vía.', 'El tramo plano está bien iluminado.', 'La obra se inauguró el lunes.'], va: [0, 0, 0, 1, 1],
+      mira: ['Si la necesitan más, ¿es razón para no esperar?', 'Si las segundas etapas no llegan, ¿conviene esperar?', 'Si les falta vía, ¿es razón para hacerla?', '¿La luz del tramo plano dice algo de la loma?', '¿El día de la inauguración es una razón?'], bien: 'Quedan las razones; caen los datos sueltos.' },
+      'La necesidad, las segundas etapas que no llegan y la falta de vía sostienen la petición. La iluminación y el lunes son datos que no la apoyan.',
+      { hint: 'Pregunta de cada una: ¿le daría a alguien una razón para no esperar?' }),
+  ]);
+
+  // ---------------- Lección 3 · Causa y efecto ----------------
+  setLesson('pu-in-3', [
+    play('pasos-del-proceso', 'Ordena la cadena de causas del párrafo 2.', { que: 'el efecto final', de: 'Los jóvenes se van', fija: 0, ini: [2, 3, 0, 1], tiras: ['Cae el precio de la leche.', 'Varias familias venden sus vacas.', 'Hay menos trabajo en las fincas.', 'Los jóvenes buscan empleo en la ciudad.'],
+      mira: ['Es lo que empieza todo.', 'Vender las vacas responde a algo.', 'Sin ordeño no hay trabajo: ¿qué tuvo que pasar antes?', 'Se van por algo que les faltó.'], bien: 'Cada hecho empuja al siguiente.' },
+      'Cae la leche, venden las vacas, hay menos trabajo y los jóvenes se van. El párrafo lo encadena con «cuando», «con menos ordeño» y lo que pasó después.',
+      { hint: 'De cada hecho pregunta: ¿qué tuvo que pasar antes para que esto pasara?' }),
+    play('pinta-voces', '¿La primera parte **causa** la segunda, o solo pasó antes o al tiempo?', { doc: PUEBLO, plumas: ['la causa', 'solo coincide'], lineas: ['Quedaban seis niños; la escuela cerró.', 'Se terminó la carretera; el pueblo se estaba vaciando.', 'Con menos ordeño, hubo menos trabajo para los jóvenes.', 'El parque abrió un martes; ese martes llovió.', 'La escuela cerró; algunas familias se mudaron más cerca de otra.'], va: [0, 1, 0, 1, 0],
+      mira: ['¿Puede funcionar una escuela casi sin niños?', 'Busca qué dice el texto de la carretera.', 'Si hay menos ordeño, ¿qué pasa con quienes ordeñaban?', '¿Un parque puede hacer llover?', '¿Por qué se mudaría alguien con hijos?'], bien: 'Después no es por.' },
+      'Pocos niños cierran la escuela, menos ordeño quita trabajo y el cierre hace mudarse. La carretera y el parque solo coincidieron.',
+      { hint: 'Quita lo primero con la imaginación: ¿lo segundo habría pasado igual? Entonces no es la causa.' }),
+    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: PUEBLO, pares: [['La escuela cerró', 'quedaban seis niños.'], ['Hubo menos ordeño;', 'hubo menos trabajo.'], ['Algunos culpan a la carretera,', 'ella no expulsó a nadie.']], fichas: ['porque', 'por eso', 'pero', 'además', 'por ejemplo'], va: [0, 1, 2, null, null],
+      mira: ['¿Dónde la causa va en la segunda parte?', '¿Dónde el efecto va en la segunda parte?', '¿Dónde la segunda parte le lleva la contraria a la primera?', 'En ninguna la segunda solo se suma.', 'En ninguna la segunda es un caso de la primera.'], bien: 'La causa puede ir antes o después.' },
+      '«Porque» presenta la causa; «por eso», el efecto; «pero» desmiente lo que algunos creen.',
+      { hint: 'En cada par, señala cuál es la causa y cuál el efecto, o si una le lleva la contraria a la otra.' }),
+    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: PUEBLO, nums: [3, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['La escuela cerró en 2019.', 'La carretera les facilitó la salida a quienes ya se iban.', 'La carretera trajo turistas.', 'Sin carretera, nadie se habría ido.', 'Los hostales son de los que se fueron.'], va: [0, 1, 0, 2, 2],
+      mira: ['Búscala en el párrafo 3.', 'Si «el viaje se hizo más corto», ¿qué se saca?', 'Búscala al final del párrafo 4.', 'Compárala con «ya tenían razones para irse».', '¿El texto dice de quién son?'], luz: [[3, 'cerró en 2019'], [4, 'el viaje se hizo más corto'], [4, 'trajo el año pasado a los primeros turistas'], [4, 'ya tenían razones para irse']], bien: 'Mencionar una causa no es afirmarla.' },
+      'El cierre y los turistas están escritos. Un viaje más corto permite deducir que salir fue más fácil. Que sin carretera nadie se iría lo niega el texto, y de quién son los hostales no se habla.',
+      { hint: 'Ojo con la idea que el texto nombra para descartarla.' }),
+    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: PUEBLO, nums: [4, 5], pregunta: 'Queda en pie', queda: 'La gente se iba por razones que ya tenía.', tarjetas: ['La carretera vació el pueblo.', 'Desde la carretera no ha llegado nadie.', 'Con dinero basta para que vuelvan.'], va: [1, 2, 5],
+      mira: ['Busca «no expulsó».', 'Busca a los primeros turistas.', 'Busca «no bastará».'], bien: 'Cada falsa tiene su oración en contra.' },
+      'La carretera «no expulsó a nadie»; trajo turistas; y «no bastará con el dinero».',
+      { hint: 'Busca la oración del párrafo 4 o 5 que habla de lo mismo y dice lo contrario.' }),
+    play('pilares', 'El techo es lo que sostiene la periodista. Lleva abajo lo que lo apoya y al patio lo que no.', { doc: PUEBLO, idea: 'La carretera no fue la causa de que se fueran', fichas: ['Ya tenían razones para irse.', 'La salida empezó antes de 2010.', 'La carretera solo acortó el viaje.', 'La escuela cerró en 2019.', 'Hay helechos que nadie riega.'], va: [0, 0, 0, 1, 1],
+      mira: ['Si ya querían irse, ¿hace falta la carretera para explicarlo?', 'Si empezó antes, ¿pudo causarla la carretera?', 'Acortar un viaje, ¿es hacer que alguien se vaya?', '¿Eso dice algo de la carretera?', '¿Eso dice algo de la carretera?'], bien: 'Lo que pasó antes no pudo ser causado después.' },
+      'Las razones que ya tenían, el comienzo anterior y el viaje más corto apoyan la idea. La escuela y los helechos no hablan de la carretera.',
+      { hint: 'Pregunta de cada una si le quita o le da culpa a la carretera. Si no hace ninguna, es adorno.' }),
+    play('sella-parrafo', '«Según el texto, se necesita para volver todo lo siguiente, **EXCEPTO**:» Ata cada opción a su párrafo.', { doc: PUEBLO, tarjetas: ['Una escuela para los hijos', 'Señal en el celular', 'Alguien con quien hablar', 'Una carretera más ancha'], va: [4, 4, 4, 5],
+      mira: ['Busca «quien vuelve necesita».', 'Busca el celular.', 'Busca la tarde.', 'La carretera se nombra: ¿alguien pide ensancharla?'], luz: [[5, 'una escuela para sus hijos, señal en el celular y alguien con quien hablar en la tarde']], bien: 'Las tres están en una sola oración.' },
+      'La escuela, la señal y la compañía están en la última oración del párrafo 5. Ensanchar la carretera no lo pide nadie.',
+      { hint: 'Tres opciones pueden estar en el mismo lugar. La que no, es la respuesta.' }),
+    play('tacha-resumen', 'Tacha las tres oraciones que no hacen falta para entender por qué se vació el pueblo y qué haría falta.', { doc: PUEBLO, n: 3, lineas: ['El pueblo se ha ido quedando sin gente.', 'Los helechos nadie los riega.', 'Cayó la leche y los jóvenes perdieron el trabajo.', 'Sin niños cerró la escuela, y sin escuela se fueron más.', 'Hay una tienda de quesos.', 'Con dinero no basta para que vuelvan.', 'Una joven quiere abrir una panadería.'], va: [1, 4, 6],
+      mira: { 0: 'Es lo que el texto quiere explicar.', 2: 'Es la causa de fondo.', 3: 'Es el círculo del párrafo 3.', 5: 'Es lo que concluye el texto.' }, bien: 'Qué pasó, por qué y qué haría falta.' },
+      'Los helechos, la tienda y la panadería ilustran, pero se pueden quitar. Quedan el problema, sus causas y lo que haría falta.',
+      { hint: 'Si la oración cuenta un caso o un objeto suelto, probablemente es un detalle.' }),
+  ]);
+
+  // ---------------- Lección 4 · Actitudes y motivos ----------------
+  setLesson('pu-in-4', [
+    play('ordena-texto', 'Se desordenó el relato. Las dos primeras tiras están en su puesto.', { doc: { title: MAQUINA.title, ficha: MAQUINA.ficha }, fija: 2, ini: [0, 1, 4, 2, 3], tiras: ['La máquina de coser de mi mamá sigue en el rincón del comedor, con su forro de tela de flores.', 'Mi mamá cosió en esa máquina durante treinta años.', 'Yo nunca quise aprender.', 'El año pasado se me descosió la toga el día de mi grado. Mis hermanas estaban peinándose, nadie tenía aguja, y yo me encontré abriendo el forro de flores, enhebrando la máquina como la había visto hacerlo diez mil veces y pisando el pedal.', 'En la foto del grado salgo sonriendo, con la toga torcida a la altura del hombro.'],
+      mira: ['', '«Esa máquina» ya se había nombrado.', 'Aprender ¿qué? Tiene que haberse contado antes.', 'Aquí termina cosiendo: ¿quedó debajo lo de no querer aprender?', 'La toga torcida y la foto son de un día que ya se contó.'], bien: 'La máquina, la mamá, el rechazo, el grado y la foto.' },
+      'La mamá cose en «esa máquina»; ella no quiso aprender «eso»; un día la necesita; y la foto muestra la toga de ese día.',
+      { hint: 'Busca en cada tira lo que da por conocido: «esa máquina», «aprender», «la toga torcida».' }),
+    play('voz-de-la-fuente', 'Nadie nombra lo que siente. Ata cada gesto a lo que deja ver.', { portadas: [['Nostalgia', 'extraña algo que ya no está'], ['Desdén', 'cree que algo es poca cosa'], ['Reserva', 'se guarda lo que siente'], ['Orgullo', 'le gusta lo que hizo']], tarjetas: ['«Las abogadas no hacían ojales.»', '«Le digo que me gusta así. No le explico más.»', '«La costura quedó torcida. No me importó.»', '«Todos los domingos alguien le quita el polvo.»'], va: [1, 2, 3, 0],
+      mira: ['¿Cómo mira el oficio de su mamá?', '¿Cuenta lo que significa para ella o se lo calla?', 'Quedó mal y no le importa: ¿qué le importa entonces?', '¿Por qué se limpia algo que nadie usa?'], bien: 'Cada emoción deja su huella.' },
+      'Despreciar los ojales es desdén; no explicar, reserva; no importarle que quedara torcida, orgullo de haberla cosido; y limpiar lo que nadie usa, nostalgia.',
+      { hint: 'Pregunta de cada gesto: ¿qué siente alguien que hace o dice eso?' }),
+    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: MAQUINA, nums: [1, 2], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['La mamá cosió treinta años.', 'Alguna de las tres limpia la máquina sin admitirlo.', 'La mamá cosía hasta muy tarde en diciembre.', 'Las hermanas saben coser.', 'La mamá ganaba mucho dinero.'], va: [0, 1, 0, 2, 2],
+      mira: ['Búscala en el párrafo 2.', 'Alguien la limpia y ninguna dice que sí: ¿qué se saca?', 'Búscala en el párrafo 2.', '¿Alguna frase las muestra cosiendo?', 'Compárala con «Descansar es para los ricos».'], luz: [[1, 'Mis hermanas dicen que soy yo; yo digo que son ellas'], [2, 'durante treinta años'], [2, 'se acostaba a la una de la mañana']], bien: 'Lo que se calla también dice.' },
+      'Los treinta años y la una de la mañana están escritos. Que alguna la limpia se deduce de que nadie lo admite. Lo demás no tiene pista.',
+      { hint: 'Para deducir hace falta una pista en la página. Si no la encuentras, es suposición.' }),
+    play('pista-tipo', 'Ata cada motivo a la oración que lo deja ver.', { doc: MAQUINA, lineas: ['Con esos uniformes pagó el estudio de las tres.', 'La usé un mes y la cambié por una de plástico.', 'Me temblaban las manos, como si ella estuviera mirándome.', 'La tengo en la mesa de noche.'], tarjetas: ['Cosía por sus hijas', 'Le daba pena lo hecho en casa', 'Sentía cerca a su mamá', 'Esa foto le importa mucho'], va: [0, 1, 2, 3],
+      mira: ['Busca para qué sirvió lo que ganaba.', 'Busca qué hizo con un regalo cosido.', 'Busca un temblor.', 'Busca dónde se guarda lo que uno quiere ver.'], bien: 'El motivo se ve en lo que se hace.' },
+      'Pagar el estudio dice por qué cosía; cambiar la carpeta, que le daba pena; temblar, que la sentía cerca; tener la foto en la mesa de noche, cuánto le importa.',
+      { hint: 'De cada motivo pregunta: ¿qué haría alguien que siente o quiere eso?' }),
+    play('comprueba-apuesta', 'Subraya en el párrafo 3 la oración que mejor prueba esta inferencia.', { doc: MAQUINA, nums: [3], n: 1, apuesta: 'De joven, no valoró un regalo que su mamá le hizo.', va: ['3.5'],
+      mira: { '3.0': 'Habla de no querer aprender, no de un regalo.', '3.1': 'Habla del ruido y de ayudar, no de un regalo.', '3.2': 'Desprecia los ojales, pero ahí no hay regalo.', '3.3': 'Muestra lo que hace la mamá.', '3.4': 'Cuenta el regalo; falta lo que ella hizo con él.' }, bien: 'Un mes y una de plástico: eso lo dice todo.' },
+      'La carpeta bordada se usó un mes y se cambió por una de plástico: ahí se ve que no la valoró. La oración anterior solo cuenta el regalo.',
+      { hint: 'La prueba no es que hubo un regalo, sino qué hizo ella con él.' }),
+    play('genero-o-cita', '¿El sentimiento se **muestra** o se **nombra**?', { rot: ['se muestra', 'se nombra'], doc: MAQUINA, fichas: ['Guarda el último boleto que compró con su padre.', 'Escribe: «Siento mucho miedo».', 'Sigue poniendo un plato de más en la mesa.', 'Dice que siente un orgullo enorme.'], va: [0, 1, 0, 1],
+      mira: ['¿Alguna palabra de la ficha es el nombre de un sentimiento?', 'Busca si está el nombre del sentimiento.', '¿Alguna palabra de la ficha es el nombre de un sentimiento?', 'Busca si está el nombre del sentimiento.'], bien: 'Mostrar es dejar que se vea.' },
+      'El boleto y el plato dejan ver el cariño sin nombrarlo, como la foto torcida. «Miedo» y «orgullo» lo nombran.',
+      { hint: 'Busca en cada ficha la palabra que nombra un sentimiento. Si no está, se muestra.' }),
+    play('tira-referente', 'Ata la palabra a aquello a lo que apunta.', { doc: MAQUINA, texto: 'En |la foto del grado| salgo sonriendo, con |la toga| torcida a la altura |del hombro|. La tengo en |la mesa de noche|.', tarjetas: ['«La» de «La tengo»'], va: [0],
+      mira: ['La oración siguiente habla de un fotógrafo: ¿qué se le llevaría?'], bien: 'Lo que sigue ayuda a decidir.' },
+      '«La» es la foto: enseguida alguien pregunta por qué no la mandó arreglar con un fotógrafo. «La toga» también es femenina, pero no es eso lo que se lleva allá.',
+      { hint: 'Abre el texto y lee la oración que sigue: dice qué se podría mandar arreglar y con quién.' }),
+    play('cambia-palabra', 'Pon en cada hueco la palabra que dice lo mismo. Sobran dos.', { doc: MAQUINA, frases: [[1, 'con su ', 'forro', ' de tela de flores.'], [2, 'y se reía, pero no ', 'paraba', '.'], [4, 'La costura quedó ', 'torcida', '.']], fichas: ['funda', 'dejaba de coser', 'chueca', 'cajón', 'escondida'], va: [0, 1, 2, null, null],
+      mira: ['Es de tela y se abre: ¿qué cubre?', 'Le pedían que descansara: ¿qué no hacía?', 'En la foto se nota a la altura del hombro: ¿cómo quedó?', 'No es de tela.', 'La costura se ve en la foto.'], bien: 'El contexto da el sentido.' },
+      'El forro es la funda que cubre la máquina; no paraba es no dejaba de coser; torcida es chueca.',
+      { hint: 'Busca en el texto otra frase que hable de lo mismo y prueba con ella cada ficha.' }),
+  ]);
+
+  // ---------------- Evaluación: formato real, texto nuevo ----------------
+  const CARTERO = {
+    id: 'lec-cartero', title: 'El cartero de los jueves',
+    paras: [
+      'Todos los jueves, a las ocho de la mañana, Rubén Darío Gallego cuelga en la bicicleta un bolso de lona y sale del pueblo por la carretera destapada que sube a la vereda El Carmen. Lleva veintiocho años haciendo ese recorrido. Antes cargaba cartas; ahora carga, sobre todo, recibos de servicios, citas médicas impresas y, de vez en cuando, un paquete que alguien pidió por internet.',
+      'Las cartas dejaron de llegar poco a poco. Primero dejaron de escribir los hijos que se habían ido a la ciudad, cuando en las casas de la vereda empezaron a aparecer celulares. Después dejaron de llegar las postales de diciembre. La última carta escrita a mano que entregó, dice, fue hace tres años, para doña Gilma, de una hermana que vive en Chile y que no tiene celular.',
+      'Aun así, Rubén no ha dejado de detenerse en cada casa. En la de don Jesús, que vive solo, se toma un tinto aunque no lleve nada para él. En la de los Ospina, les cuenta a los niños cómo va el partido del domingo. A doña Gilma le pregunta siempre por la hermana de Chile, y ella saca la carta, que guarda dentro de una Biblia, y se la vuelve a leer en voz alta.',
+      'La empresa de correos anunció que el próximo año los envíos a la vereda se harán con una empresa de mensajería que pasará cuando haya paquetes, no todos los jueves. Rubén no ha opinado en público. Solo le pidió a su jefe que le dejara hacer el recorrido de los jueves hasta diciembre, «para despedirme bien».',
+    ],
+  };
+  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: CARTERO, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
+  setExam('pu-inferencia', 'Evaluación · Inferencia', [
+    ['pu-in-1', 'Una inferencia válida se apoya en una pista del texto, no en lo que uno supone.',
+      Q('Del párrafo 1 se puede inferir que:', ['Hoy Rubén lleva menos cartas personales que antes', 'Rubén quiere jubilarse pronto y dejar la bicicleta', 'En la vereda nadie usa internet ni pide paquetes', 'La carretera a El Carmen ya está pavimentada del todo'], 0,
+        '«Antes cargaba cartas; ahora carga, sobre todo, recibos…» deja ver que las cartas personales disminuyeron. El paquete pedido por internet desmiente la opción C, y la carretera es destapada.',
+        'Compara lo que Rubén cargaba antes con lo que carga ahora.')],
+    ['pu-in-1', 'Un gesto que no tiene una razón práctica suele revelar un motivo afectivo.',
+      Q('Que Rubén se tome un tinto en casa de don Jesús «aunque no lleve nada para él» permite inferir que:', ['Don Jesús le paga por la visita', 'Don Jesús espera una carta importante', 'Rubén considera que su visita acompaña a don Jesús', 'Rubén tiene que entrar a todas las casas por reglamento'], 2,
+        'Don Jesús vive solo y Rubén entra sin tener nada que entregarle: su visita es compañía. Nada habla de pagos ni de reglamentos.',
+        'Fíjate en el detalle que el texto da sobre don Jesús.')],
+    ['pu-in-2', 'Las expresiones «no ha dejado de», «ya no», «otra vez» dan por hecho algo anterior.',
+      Q('La frase «Rubén no ha dejado de detenerse en cada casa» presupone que:', ['Nunca se había detenido en las casas', 'Antes también se detenía en cada casa', 'Pronto dejará de hacerlo', 'Las casas están muy lejos unas de otras'], 1,
+        '«No ha dejado de» supone que lo hacía antes y lo sigue haciendo.',
+        'Para dejar de hacer algo, primero hay que haberlo hecho.')],
+    ['pu-in-2', '«El último» presupone que hubo otros antes; no dice que no habrá más.',
+      Q('La expresión «La última carta escrita a mano que entregó» presupone que:', ['Doña Gilma no sabe leer la letra de su hermana', 'La hermana de Chile escribe cada mes', 'No volverá a entregar ninguna carta', 'Antes entregó otras cartas escritas a mano'], 3,
+        'Si hubo una última, hubo otras antes. Que no vuelva a entregar ninguna es una suposición, y doña Gilma lee la carta en voz alta.',
+        'Pregúntate qué tiene que haber pasado para que algo sea «el último».')],
+    ['pu-in-2', '«Da por sentado» pregunta lo mismo que «presupone»: qué tiene que ser cierto para que la frase tenga sentido, aunque no haya palabra pista.',
+      Q('Al pedir hacer el recorrido de los jueves «hasta diciembre», Rubén da por sentado que:', ['después de diciembre ya no hará ese recorrido', 'su jefe le va a negar el permiso que le pidió', 'en diciembre llegarán otra vez muchas cartas', 'la mensajería pasará por la vereda todos los jueves'], 0,
+        'Si pide seguir «hasta diciembre» y quiere «despedirse», supone que después el recorrido se acaba: lo hará la mensajería. No hay «ya no» ni «dejó de»: el presupuesto sale de «hasta» y de la despedida. La mensajería pasará «cuando haya paquetes», no cada jueves.',
+        'No busques una palabra de la lista. Pregúntate qué tiene que ser cierto para que alguien pida algo «hasta» una fecha y hable de despedirse.')],
+    ['pu-in-1', 'Una inferencia también puede ser una crítica que el texto no dice: sale del contraste entre dos datos.',
+      Q('Al contraponer «cuando haya paquetes» con «todos los jueves» (párrafo 4), el texto sugiere que la empresa:', ['solo ve en el recorrido una entrega, no la visita que es para la vereda', 'quiere despedir a Rubén porque ya casi no entrega cartas escritas a mano', 'va a cobrarles más a las familias de la vereda por cada envío', 'ya no tendrá paquetes que llevar a la vereda El Carmen'], 0,
+        'El texto no critica a la empresa con palabras, pero el párrafo 3 mostró lo que hace Rubén en cada casa aunque no lleve nada. Pasar solo «cuando haya paquetes» deja por fuera justo eso. Nada habla de despidos, de cobros ni de que se acaben los paquetes.',
+        'Relaciona el párrafo 4 con lo que Rubén hace en el párrafo 3 cuando no lleva nada para entregar.')],
+    ['pu-in-3', 'Una causa puede ir marcada solo por «cuando» y por el orden de los hechos.',
+      Q('Según el párrafo 2, los hijos que se fueron a la ciudad dejaron de escribir cartas porque:', ['Olvidaron a sus padres cuando se fueron a vivir a la ciudad', 'En las casas de la vereda empezaron a aparecer celulares', 'El correo subió de precio y ya no podían pagar el envío', 'Rubén dejó de subir a la vereda'], 1,
+        'El texto une las dos cosas: dejaron de escribir «cuando» aparecieron los celulares; es decir, empezaron a comunicarse por teléfono.',
+        'Busca qué cambió en las casas de la vereda justo cuando dejaron de llegar las cartas.')],
+    ['pu-in-3', 'Para explicar una excepción, se busca qué la hace distinta de los demás casos.',
+      Q('La carta para doña Gilma siguió llegando cuando las demás ya no llegaban porque:', ['La hermana de Chile no tiene celular', 'Doña Gilma prefiere las cartas a las llamadas', 'Chile queda muy lejos', 'Rubén se la pidió a la hermana'], 0,
+        'Las cartas se acabaron por los celulares; la hermana de Chile «no tiene celular», por eso siguió escribiendo.',
+        'Relaciona el dato sobre la hermana con la causa de que las demás cartas desaparecieran.')],
+    ['pu-in-4', 'El lugar donde alguien guarda algo dice cuánto lo valora.',
+      Q('Que doña Gilma guarde la carta dentro de una Biblia muestra que:', ['Quiere esconderla de Rubén', 'La carta habla de religión', 'La considera algo valioso', 'No le importa la carta'], 2,
+        'La guarda en un lugar especial y la vuelve a leer en voz alta cada vez que Rubén pregunta: la valora.',
+        'Piensa en qué objetos se guardan en un lugar así y en lo que hace doña Gilma con la carta.')],
+    ['pu-in-4', 'Los motivos se infieren de las acciones y de las palabras elegidas.',
+      Q('La petición de Rubén de hacer el recorrido hasta diciembre, «para despedirme bien», revela sobre todo:', ['Enojo con la empresa de correos', 'Cariño por la gente de su recorrido', 'Interés en ganar más dinero antes de irse', 'Deseo de cambiar de trabajo'], 1,
+        'No protesta en público: solo quiere despedirse de las personas que visita cada jueves. Eso muestra cariño.',
+        'Fíjate en lo que Rubén no hace (opinar en público) y en lo que pide.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-l-vocabulario.js
+// Preuniversitario · Comprensión lectora · mundo 5 «Vocabulario en contexto» con textos de verdad (spec
+// 2026-11-19-preuda-lectura-textos): una huerta escolar con palabras que cambian de sentido según la frase (sinónimos), una planta
+// de secado de café donde «planta», «banco», «nota», «salvar» y «tiempo» significan otra cosa (polisemia), el testimonio de un
+// primer semestre lleno de colombianismos (frases hechas) y una cueva de guácharos con palabras que se entienden por sus piezas
+// (prefijos y raíces). La evaluación usa la crónica de un remendón. Textos escritos para Zuka.
+PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
+  const HUERTA = {
+    id: 'lec-huerta-colegio', title: 'Una huerta en el patio de atrás',
+    ficha: { autor: 'Nota del periódico escolar', fuente: 'Gaceta de un colegio público de Envigado', fecha: 'Noviembre de 2025' },
+    paras: [
+      'Hace tres años, el patio de atrás del colegio Simón Bolívar era un terreno árido donde solo crecían piedras y bolsas de papas fritas. Los estudiantes de décimo lo miraban desde la ventana del laboratorio y, un día, la profesora de biología les propuso convertirlo en una huerta. La idea parecía un chiste: la tierra estaba tan dura que había que romperla con barra.',
+      'El primer semestre fue de pura preparación. Los muchachos recogieron cascarones de huevo, borra de café y hojas secas en sus casas, y armaron una compostera al lado de la cancha. Tardó cuatro meses en dar abono, y durante ese tiempo más de uno se cansó de revolver una montaña que olía a cebolla podrida. Pero cuando por fin la mezclaron con la tierra del patio, el suelo cambió de color: se volvió oscuro, suelto y húmedo.',
+      'Hoy la huerta tiene doce eras de lechuga, cilantro, tomate y frijol, y una cosecha sólida que alcanza para el restaurante escolar dos veces por semana. Los estudiantes llevan un registro de cada siembra: la fecha, la semilla, cuánta agua recibió y qué plagas aparecieron. Con esos datos han aprendido más estadística, dice el profesor de matemáticas, que con todos los ejercicios del libro.',
+      'No todo ha salido bien. El año pasado una plaga de babosas arrasó con las lechugas en una sola semana, y una sequía larga obligó a racionar el agua del tanque. Los estudiantes probaron trampas de cerveza para las babosas y aprendieron a regar al amanecer, cuando el sol todavía no evapora el agua. De cada fracaso quedó una anotación en el registro, y la anotación sirvió al año siguiente.',
+      'Lo que más sorprende a los profesores no es la cosecha, sino lo que cambió en los estudiantes. Algunos que apenas hablaban en clase ahora les explican a los visitantes cómo se hace el abono. Otros, que se escapaban por la malla, llegan temprano para regar. «La huerta no les enseñó a sembrar», dice la profesora de biología; «les enseñó a esperar».',
+      'Para el próximo año, el colegio quiere vender en la tienda escolar lo que sobre y usar el dinero en semillas y herramientas. Los de décimo ya hicieron las cuentas: si la huerta sigue produciendo como hasta ahora, en dos años se pagará sola.',
+    ],
+  };
+
+  const CAFE = {
+    id: 'lec-planta-cafe', title: 'El primer año de la planta',
+    ficha: { autor: 'Crónica de un periodista del suroeste', fuente: 'Revista de una federación de productores', fecha: 'Septiembre de 2025' },
+    paras: [
+      'Cuando la asociación de caficultores de Tablazo inauguró su planta de secado, en enero, nadie en la vereda había visto una máquina tan grande. Hasta entonces, cada familia secaba el café en el patio, sobre lonas, y lo recogía a la carrera cada vez que amenazaba el aguacero. Bastaba un descuido para que la humedad dañara el grano de toda una semana, y con él buena parte de lo que una familia ganaba en el mes.',
+      'La planta costó más de lo que la asociación tenía. El banco agrario prestó una parte, y el resto salió de una vaca que hicieron las cuarenta familias socias: cada una puso según lo que había cosechado el año anterior. Don Hernán, el presidente, todavía guarda en el bolsillo la libreta donde anotó cada aporte, con nombres, fechas y cifras que repasa en voz alta cuando alguien duda.',
+      'Al cabo de seis meses, los resultados se ven en la taza. Un catador que vino de Medellín probó el café de la asociación y le dio una nota de 86 sobre 100, la más alta que ha recibido la vereda. Describió notas de panela y de mandarina, palabras que hicieron reír a más de uno, porque en Tablazo el café siempre había sabido simplemente a café.',
+      'Con ese puntaje, la asociación entró a una red de productores que vende directamente, sin intermediarios, a tostadores de Europa y Asia. El precio por kilo casi se duplicó. Algunos socios, sin embargo, desconfían: dicen que el gusto de los compradores extranjeros cambia como el tiempo y que no conviene sembrar pensando solo en ellos.',
+      'Mientras tanto, la planta ya salvó una cosecha. En mayo llovió tres semanas seguidas, y las familias que antes habrían perdido el grano lo llevaron a secar a la máquina. Doña Fabiola, que lleva cuarenta años en el café, se sentó en el banco de la entrada a ver girar el tambor, y dijo que por primera vez no había rezado para que dejara de llover.',
+    ],
+  };
+
+  const SEMESTRE = {
+    id: 'lec-primer-semestre', title: 'Aguanten el primer golpe',
+    ficha: { autor: 'Testimonio de un estudiante de ingeniería', fuente: 'Blog de bienvenida de una universidad pública', fecha: 'Febrero de 2026' },
+    paras: [
+      'El primer día de clases en la universidad llegué con una hora de anticipación, porque mi mamá me había dicho que en la ciudad uno no puede dar papaya. Me senté en la última fila, con el bolso abrazado, y no me lo quité ni para escribir. Venía de un colegio de pueblo donde todos nos conocíamos desde el kínder, y aquí no conocía ni al celador.',
+      'Las primeras semanas no di pie con bola. Confundía los bloques, llegaba a clases que no eran las mías y en el primer parcial de cálculo saqué 1.8. Esa noche llamé a mi papá para decirle que me devolvía. Él me escuchó sin interrumpir y al final me dijo: «Mijo, póngase las pilas, que usted no se fue hasta allá para tirar la toalla en el primer asalto».',
+      'Lo que me salvó fue un grupo de estudio. Lo armaron tres compañeros que también venían de pueblos y que también estaban en la olla. Nos reuníamos en la biblioteca hasta que nos echaban, y cuando alguien entendía algo se lo explicaba a los demás con dibujos en una servilleta. Para las fotocopias hacíamos vaca, y para el almuerzo también.',
+      'También metí la pata varias veces. Una vez le respondí mal a un profesor delante de todos, creyendo que se estaba burlando de mi acento, y resultó que solo me estaba pidiendo que hablara más duro. Me tocó ir a su oficina a pedirle disculpas con la cara roja. Él se rio y me dijo que no me preocupara, que él también había llegado del campo con las botas embarradas.',
+      'Terminé el semestre con un promedio de 3.6. No es para echar voladores, pero tampoco es para llorar. Lo que aprendí, más que cálculo, es que en la universidad nadie se salva solo, y que pedir ayuda no es de débiles. A los que entran este año les digo lo mismo que me dijo mi papá, aunque con otras palabras: aguanten el primer golpe, que el segundo ya no duele tanto.',
+    ],
+  };
+
+  const CUEVA = {
+    id: 'lec-cueva-guacharos', title: 'Los habitantes de la oscuridad',
+    ficha: { autor: 'Artículo de divulgación', fuente: 'Revista de ciencia para jóvenes', fecha: 'Abril de 2025' },
+    paras: [
+      'A la entrada de la cueva, el guía apaga la linterna y pide silencio. Lleva quince años recorriendo esta cueva con grupos reducidos de visitantes. Al principio no se oye nada. Luego, desde el fondo, llega un chillido largo, después otro, y en pocos segundos la oscuridad se llena de un ruido que parece de mil puertas oxidadas. Son guácharos, unas aves nocturnas que pasan el día dentro de las cuevas y salen de noche a buscar frutos.',
+      'Los guácharos son frugívoros: se alimentan casi solo de frutos, sobre todo de palmas y de laureles silvestres, que tragan enteros. Las semillas que no digieren caen al suelo de la cueva, y algunas alcanzan a germinar en la penumbra. Por eso el piso de muchas cuevas donde viven está cubierto de plántulas pálidas y delgadas, que crecen unos días buscando una luz que nunca llega y luego mueren.',
+      'Para moverse en la oscuridad total, los guácharos usan un sistema parecido al de los murciélagos: emiten chasquidos y se orientan por el eco que rebota en las paredes. A diferencia de los murciélagos, que usan sonidos agudísimos, inaudibles para nosotros, los chasquidos del guácharo se oyen perfectamente. Fuera de la cueva, en cambio, se guían sobre todo por la vista y el olfato, que les permite encontrar de noche los frutos maduros desde lejos.',
+      'La cueva no solo alberga aves. En sus aguas subterráneas viven peces ciegos, sin pigmento, y en sus paredes, comunidades de microorganismos que los científicos estudian con atención: algunos producen sustancias capaces de frenar a otras bacterias, y podrían servir algún día para fabricar antibióticos nuevos. Cada cueva es, en ese sentido, un laboratorio que todavía nadie ha terminado de explorar.',
+      'Por eso los biólogos insisten en que las visitas se hagan con reglas: grupos pequeños, sin linternas potentes y sin tocar las paredes. Un exceso de luz o de ruido puede hacer que las aves abandonen la cueva, y una mano con bloqueador solar puede alterar en minutos comunidades de microorganismos que tardaron siglos en formarse. Quien entra a una cueva, dicen, entra a la casa de otros.',
+    ],
+  };
+
+  // ---------------- Lección 1 · Sinónimos según el contexto ----------------
+  setLesson('pu-vo-1', [
+    play('cambia-palabra', 'Pon en cada hueco la palabra que deja la oración diciendo lo mismo. Sobran tres.', { doc: HUERTA, frases: [[1, 'era un terreno ', 'árido', ' donde solo crecían piedras'], [3, 'y una cosecha ', 'sólida', ' que alcanza para el restaurante'], [4, 'una plaga de babosas ', 'arrasó', ' con las lechugas']], fichas: ['seco', 'abundante y segura', 'acabó', 'aburrido', 'dura', 'se paseó'], va: [0, 1, 2, null, null, null],
+      mira: ['¿Cómo es un suelo donde solo hay piedras?', 'Alcanza para el restaurante: ¿cómo es esa cosecha?', 'Pasó «en una sola semana»: ¿qué quedó?', 'Es un sentido de «árido», pero para un libro.', 'Es un sentido de «sólida», pero para una piedra.', 'Las lechugas no se salvaron.'], bien: 'El primer sentido del diccionario no siempre encaja.' },
+      'Un terreno árido es seco; una cosecha sólida es abundante y segura; arrasar es acabar. «Aburrido» y «dura» son otros sentidos de esas palabras.',
+      { hint: 'Reemplaza y lee la oración entera: si se vuelve rara, ese sentido no es.' }),
+    play('pista-tipo', 'Estos verbos concretos se usan con un sentido de ideas. Ata cada significado a la oración donde está.', { doc: HUERTA, lineas: ['La profesora sembró en ellos la curiosidad.', 'Con datos, desarmó el argumento de los que se burlaban.', 'Tejieron un acuerdo con la tienda escolar.', 'La noticia encendió los ánimos del grupo.'], tarjetas: ['refutar, mostrar que no se sostiene', 'construir poco a poco', 'provocar, hacer nacer', 'despertar con fuerza'], va: [1, 2, 0, 3],
+      mira: ['¿Qué se hace con una idea equivocada?', '¿Qué se hace con hilos, uno por uno?', '¿Qué pasa con algo que se siembra?', '¿Qué pasa con algo que se enciende?'], bien: 'Del uso concreto se saltó a la idea.' },
+      'Desarmar un argumento es refutarlo; tejer un acuerdo, construirlo poco a poco; sembrar curiosidad, provocarla; encender los ánimos, despertarlos con fuerza.',
+      { hint: 'Piensa qué hace ese verbo con una cosa y busca lo parecido que haría con una idea.' }),
+    play('pinta-voces', '¿La palabra en mayúscula puede cambiarse por la que va entre paréntesis sin cambiar lo dicho?', { plumas: ['sí encaja', 'cambia el sentido'], lineas: ['Dio una RAZÓN clara para aplazar el viaje. (motivo)', 'Tiene RAZÓN: el bus sale a las seis. (motivo)', 'La decisión fue FIRME. (definitiva)', 'La escalera está FIRME. (definitiva)', 'Hizo un comentario AGUDO. (perspicaz)'], va: [0, 1, 0, 1, 0],
+      mira: ['Léela con «motivo»: ¿dice lo mismo?', 'Léela con «motivo»: ¿se puede «tener motivo» que el bus salga a las seis?', 'Léela con «definitiva»: ¿dice lo mismo?', 'Léela con «definitiva»: ¿una escalera puede serlo?', 'Léela con «perspicaz»: ¿dice lo mismo?'], bien: 'La misma palabra encaja en una oración y en otra no.' },
+      '«Motivo», «definitiva» y «perspicaz» encajan en la primera, la tercera y la quinta. Tener razón es acertar y una escalera firme no se mueve: ahí cambian el sentido.',
+      { hint: 'Haz la prueba del reemplazo: pon la palabra del paréntesis y lee en voz alta.' }),
+    play('sella-parrafo', '«Los estudiantes hicieron todo lo siguiente, **EXCEPTO**:» Ata cada opción a su párrafo.', { doc: HUERTA, tarjetas: ['Armar una compostera', 'Anotar las plagas de cada siembra', 'Poner trampas con cerveza', 'Construir un invernadero'], va: [1, 2, 3, 6],
+      mira: ['Busca los cascarones y la borra.', 'Busca el registro y lo que se anota.', 'Busca las babosas.', 'Búscalo: ¿algún párrafo lo nombra?'], luz: [[2, 'armaron una compostera'], [3, 'qué plagas aparecieron'], [4, 'probaron trampas de cerveza']], bien: 'Otras palabras, el mismo hecho.' },
+      'La compostera está en el 2, el registro de plagas en el 3 y las trampas en el 4. El invernadero no aparece.',
+      { hint: 'Las opciones pueden decirlo con otras palabras. Busca el hecho, no la palabra exacta.' }),
+    play('comprueba-apuesta', 'Subraya en el párrafo 5 la oración que mejor prueba esta conclusión.', { doc: HUERTA, nums: [5], n: 1, apuesta: 'La huerta hizo que algunos quisieran estar en el colegio.', va: ['5.2'],
+      mira: { '5.0': 'Anuncia un cambio, pero no dice cuál.', '5.1': 'Habla de los que ahora explican, no de querer estar.', '5.3': 'Habla de aprender a esperar.' }, bien: 'De escaparse a llegar temprano.' },
+      'Los que «se escapaban por la malla» ahora «llegan temprano para regar»: eso muestra que quieren estar. Los que explican muestran otro cambio.',
+      { hint: 'Hay dos grupos de estudiantes que cambiaron de manera distinta. ¿Cuál cambió sus ganas de estar?' }),
+    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: HUERTA, pares: [['La compostera olía a podrido;', 'su abono mejoró el suelo.'], ['Riegan al amanecer', 'el sol todavía no evapora el agua.'], ['Anotaron cada fracaso;', 'al año siguiente supieron qué hacer.']], fichas: ['sin embargo,', 'porque', 'por eso,', 'además,', 'por ejemplo,'], va: [0, 1, 2, null, null],
+      mira: ['¿Dónde lo segundo es mejor de lo que se esperaba?', '¿Dónde lo segundo dice por qué?', '¿Dónde lo segundo resulta de lo primero?', 'En ninguna la segunda solo se suma.', 'En ninguna la segunda es un caso.'], bien: 'Se opone, da la causa y trae el efecto.' },
+      'El mal olor contrasta con el buen suelo; el sol es la causa de regar temprano; saber qué hacer es efecto de anotar.',
+      { hint: 'Pregunta si lo segundo contradice lo esperado, explica lo primero o resulta de él.' }),
+    play('talla-idea', '¿Qué quiso decir la profesora con «les enseñó a esperar»? Pon cada versión en su talla.', { doc: HUERTA, p: 5, rot: ['se queda corta', 'justa', 'dice de más'], fichas: ['Esperan su turno para regar.', 'Aprendieron que las cosas buenas toman tiempo.', 'Ahora son pacientes en todo lo que hacen.'], va: [0, 1, 2],
+      mira: ['¿Eso es todo lo que enseña una huerta de meses?', 'Compárala con lo que tardó el abono.', '«En todo»: ¿alguien dijo tanto?'], luz: [[5, 'les enseñó a esperar']], bien: 'Ni al pie de la letra ni de más.' },
+      'Esperar el turno es quedarse corto y «en todo» exagera. La justa recoge lo que cuenta el texto: meses de abono, siembra y cosecha.',
+      { hint: 'Piensa qué tuvo que esperar el grupo, según los párrafos 2 y 3, y hasta dónde se puede decir que cambió.' }),
+    play('pasos-del-proceso', 'Ordena cómo el patio se volvió huerta.', { que: 'lo que cuentan los párrafos 2 y 3', de: 'De los cascarones a la cosecha', fija: 0, ini: [2, 0, 3, 1], tiras: ['Recogen cascarones, borra y hojas.', 'La compostera da abono.', 'El suelo se vuelve oscuro y suelto.', 'La cosecha alcanza para el restaurante.'],
+      mira: ['Es lo que empieza todo.', 'El abono sale de algo que se recogió.', 'El suelo cambia por el abono: ¿quedó debajo?', 'La cosecha necesita buen suelo.'], bien: 'Cada paso prepara el siguiente.' },
+      'Recogen, la compostera da abono, el abono cambia el suelo y el suelo da la cosecha.',
+      { hint: 'Empieza por lo que trajeron de sus casas y pregunta en qué se volvió.' }),
+  ]);
+
+  // ---------------- Lección 2 · Palabras con varios sentidos ----------------
+  setLesson('pu-vo-2', [
+    play('cambia-palabra', 'La misma palabra cambia con la oración. Pon en cada hueco el sentido que tiene ahí. Sobran dos.', { doc: CAFE, frases: [[1, 'inauguró su ', 'planta', ' de secado'], [3, 'y le dio una ', 'nota', ' de 86 sobre 100'], [3, 'Describió ', 'notas', ' de panela y de mandarina'], [5, 'la planta ya ', 'salvó', ' una cosecha']], fichas: ['instalación', 'calificación', 'sabores', 'rescató', 'mata', 'aprobó'], va: [0, 1, 2, 3, null, null],
+      mira: ['Tiene una máquina muy grande: ¿qué es?', 'Es un número sobre cien: ¿qué es?', 'Son de panela y mandarina: ¿qué son?', '¿Qué hizo con lo que se iba a perder?', 'Es otro sentido de «planta»: ¿una mata seca café?', 'Es otro sentido de «salvar»: ¿se aprueba una cosecha?'], bien: 'Las palabras vecinas eligen el sentido.' },
+      '«De secado», «sobre 100», «de panela» y «una cosecha» eligen: instalación, calificación, sabores y rescató.',
+      { hint: 'Mira las palabras que van pegadas a la tachada: ellas deciden.' }),
+    play('pista-tipo', 'La palabra «banco» tiene varios sentidos. Ata cada uno a la oración donde está.', { doc: CAFE, lineas: ['El banco agrario prestó una parte.', 'Se sentó en el banco de la entrada.', 'El barco encalló en un banco de arena.', 'Vieron pasar un banco de sardinas.'], tarjetas: ['entidad que maneja dinero', 'asiento', 'montón bajo el agua', 'grupo de peces'], va: [0, 1, 2, 3],
+      mira: ['¿Cuál presta?', '¿En cuál se puede uno sentar?', '¿En cuál se atasca algo que navega?', '¿Cuál se mueve nadando?'], bien: 'Lo que acompaña a la palabra dice cuál es.' },
+      'Presta una entidad, se sienta uno en un asiento, un barco encalla en un montón de arena y las sardinas forman un grupo.',
+      { hint: 'En cada oración busca el verbo o la palabra que solo sirve para uno de los sentidos.' }),
+    play('pinta-voces', '¿Qué «tiempo» es? Pinta cada oración.', { plumas: ['el clima', 'lo que dura'], lineas: ['El gusto de los compradores cambia como el tiempo: hoy sol, mañana lluvia.', 'Tardó mucho tiempo en secarse.', 'Con este tiempo no se puede tender la ropa.', 'No hubo tiempo de recoger el grano.', 'El tiempo está de aguacero.'], va: [0, 1, 0, 1, 0],
+      mira: ['¿Qué es lo que hoy es sol y mañana lluvia?', 'Se mide en horas o en días: ¿cuál es?', '¿Qué impide tender la ropa?', '¿Qué faltó para alcanzar a hacerlo?', '¿Qué puede estar «de aguacero»?'], bien: 'El contexto elige: cielo o reloj.' },
+      'El sol, la ropa y el aguacero hablan del clima. Tardar y no alcanzar hablan de lo que dura.',
+      { hint: 'Prueba a cambiarla por «clima» y por «rato». Solo una de las dos tiene sentido.' }),
+    play('ordena-texto', 'Se desordenó el reportaje. Las dos primeras tiras están en su puesto.', { doc: { title: CAFE.title, ficha: CAFE.ficha }, fija: 2, ini: [0, 1, 4, 2, 3], tiras: ['Cuando la asociación de caficultores de Tablazo inauguró su planta de secado, en enero, nadie en la vereda había visto una máquina tan grande.', 'La planta costó más de lo que la asociación tenía.', 'Al cabo de seis meses, los resultados se ven en la taza. Un catador que vino de Medellín probó el café de la asociación y le dio una nota de 86 sobre 100, la más alta que ha recibido la vereda.', 'Con ese puntaje, la asociación entró a una red de productores que vende directamente, sin intermediarios, a tostadores de Europa y Asia.', 'Algunos socios, sin embargo, desconfían: dicen que el gusto de los compradores extranjeros cambia como el tiempo y que no conviene sembrar pensando solo en ellos.'],
+      mira: ['', '«La planta» ya se había presentado.', 'Habla de resultados: ¿quedó debajo cómo se pagó?', '«Ese puntaje» necesita una nota ya contada.', 'Habla de compradores extranjeros: ¿ya se contó que les venden?'], bien: 'Se inaugura, se paga, resulta, abre mercado y aparecen dudas.' },
+      'Se inaugura; se cuenta cómo se pagó; a los seis meses llega la nota; «Con ese puntaje» entra a la red; y «sin embargo» trae la duda sobre esos compradores.',
+      { hint: 'Busca qué retoman «ese puntaje» y «los compradores extranjeros».' }),
+    play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: CAFE, texto: 'el resto salió de una vaca que hicieron las cuarenta familias socias|:| cada una puso según lo que había cosechado. Una red que vende directamente|,| sin intermediarios, a tostadores de Europa y Asia|.|', tarjetas: ['anuncia cómo se hizo algo', 'abre una aclaración'], va: [0, 1],
+      mira: ['Busca el signo después del cual se explica la vaca.', 'Busca el signo que abre algo que se puede quitar.'], bien: 'Hacer vaca: cada uno pone una parte.' },
+      'Los dos puntos anuncian cómo funcionó la vaca. La coma abre la aclaración «sin intermediarios», que se puede quitar.',
+      { hint: 'Lee la oración sin lo que sigue al signo: si se sostiene, era una aclaración.' }),
+    play('tira-referente', 'Ata la palabra a aquello a lo que apunta.', { doc: CAFE, texto: 'Algunos |socios| dicen que el gusto de |los compradores extranjeros| cambia como |el tiempo| y que no conviene sembrar pensando solo en ellos.', tarjetas: ['«ellos»'], va: [1],
+      mira: ['Quien habla no suele ser aquel de quien habla: ¿en quiénes piensa al sembrar?'], bien: 'Se siembra pensando en quien compra.' },
+      '«Ellos» son los compradores extranjeros: los socios dicen que no conviene sembrar pensando solo en esos compradores.',
+      { hint: 'Pon cada opción en vez de «ellos». ¿En quién se podría pensar al sembrar?' }),
+    play('pasos-del-proceso', 'Ordena la cadena del párrafo 4 y lo que la trajo.', { que: 'lo que pasó', de: 'Del catador al precio', fija: 0, ini: [3, 1, 0, 2], tiras: ['Un catador prueba el café.', 'Le da una nota de 86.', 'La asociación entra a una red sin intermediarios.', 'El precio por kilo casi se duplica.'],
+      mira: ['Es lo que empieza todo.', 'Para calificarlo hay que haberlo probado.', '«Con ese puntaje»: ¿de dónde salió?', 'El precio sube por cómo se vende.'], bien: '«Con ese puntaje» une la cadena.' },
+      'Prueba, nota, red y precio: «con ese puntaje» entra a la red, y vender sin intermediarios sube el precio.',
+      { hint: 'Pregunta de cada hecho qué tuvo que pasar antes.' }),
+    play('tacha-resumen', 'Tacha las tres oraciones que no hacen falta para entender qué cambió en la vereda.', { doc: CAFE, n: 3, lineas: ['Cuarenta familias hicieron una planta para secar café.', 'Don Hernán guarda una libreta en el bolsillo.', 'Su café ganó calidad y se vende casi al doble.', 'El catador habló de mandarina.', 'La planta ya protegió una cosecha de la lluvia.', 'Doña Fabiola lleva cuarenta años en el café.'], va: [1, 3, 5],
+      mira: { 0: 'Dice qué hicieron.', 2: 'Dice qué ganaron.', 4: 'Dice qué evitó la planta.' }, bien: 'Qué hicieron, qué ganaron y qué evitaron.' },
+      'La libreta, la mandarina y los años de doña Fabiola dan color. Quedan la planta, lo que ganó el café y la cosecha protegida.',
+      { hint: 'Si una oración solo describe a una persona o un sabor, se puede quitar.' }),
+  ]);
+
+  // ---------------- Lección 3 · Expresiones y frases hechas ----------------
+  setLesson('pu-vo-3', [
+    play('antes-de-leer', 'El texto está tapado. Con sus bordes, completa la apuesta. Sobran fichas.', { doc: SEMESTRE, frase: 'Es [0] sobre [1], para [2].', rot: ['¿qué clase de texto?', '¿qué tema?', '¿para qué?'], fichas: ['un testimonio', 'el primer semestre', 'animar a los que entran', 'una noticia', 'un partido de boxeo', 'explicar un reglamento'], va: [0, 1, 2, null, null, null],
+      mira: ['Mira qué dice el autor.', 'Es un estudiante en un blog de bienvenida: ¿de qué hablará?', 'El título le habla a alguien: «Aguanten».', 'Los bordes nombran otra clase de texto.', '«Golpe» no se lee al pie de la letra.', 'El título da ánimo, no reglas.'], luz: [[1, 'El primer día de clases en la universidad'], [5, 'aguanten el primer golpe']], bien: 'El «golpe» del título no era de boxeo.' },
+      'Es el testimonio de un estudiante, en un blog de bienvenida, y el título les habla a otros: «Aguanten». El golpe es una manera de decir.',
+      { hint: 'La clase de texto está en los bordes; el tema sale de quién firma y dónde se publica.' }),
+    play('pista-tipo', 'Ata cada expresión a la situación en que la dirías.', { doc: SEMESTRE, lineas: ['Dejó el celular a la vista en una calle oscura.', 'Se equivocó de salón, de hora y de cuaderno.', 'Entre todos juntaron para el regalo.', 'No tiene plata ni para el bus.'], tarjetas: ['dio papaya', 'no dio pie con bola', 'hicieron vaca', 'está en la olla'], va: [0, 1, 2, 3],
+      mira: ['¿Quién le facilitó algo a un ladrón?', '¿Quién no acertó en nada?', '¿Quiénes pusieron de a poco?', '¿Quién pasa por un mal momento?'], bien: 'El sentido no sale de sumar las palabras.' },
+      'Dar papaya es descuidarse; no dar pie con bola, no acertar; hacer vaca, juntar dinero; estar en la olla, pasarla mal.',
+      { hint: 'Busca en el texto qué le pasaba al narrador cuando usó cada expresión.' }),
+    play('cambia-palabra', 'Pon en cada hueco lo que quiere decir la expresión. Sobran dos.', { doc: SEMESTRE, frases: [[2, 'Las primeras semanas no ', 'di pie con bola', '.'], [2, 'para ', 'tirar la toalla', ' en el primer asalto'], [4, 'También ', 'metí la pata', ' varias veces.']], fichas: ['acerté en nada', 'rendirse', 'me equivoqué', 'jugué fútbol', 'limpiar'], va: [0, 1, 2, null, null],
+      mira: ['Confundía los bloques y sacó 1.8: ¿cómo le iba?', 'Quería devolverse: ¿qué iba a hacer?', 'Luego tuvo que pedir disculpas: ¿qué había hecho?', 'Nadie jugaba a nada.', 'No hay ninguna toalla de verdad.'], bien: 'La situación explica la expresión.' },
+      'No dar pie con bola es no acertar; tirar la toalla, rendirse; meter la pata, equivocarse.',
+      { hint: 'Lee la oración que sigue a cada expresión: cuenta lo que pasó y ahí está el sentido.' }),
+    play('genero-o-cita', '¿Se lee al pie de la letra o es una manera de decir?', { rot: ['al pie de la letra', 'una manera de decir'], doc: SEMESTRE, fichas: ['Hacíamos dibujos en una servilleta.', 'Se tomó un río de jugo.', 'Llegó con las botas embarradas.', 'Tiene más vidas que un gato.', 'No es para echar voladores.'], va: [0, 1, 0, 1, 1],
+      mira: ['¿Se puede dibujar de verdad en una servilleta?', '¿Alguien puede tomarse un río?', '¿Unas botas pueden tener barro?', '¿Alguien tiene siete vidas?', '¿Alguien iba a echar pólvora por esa nota?'], bien: 'Exagerar también es una manera de decir.' },
+      'La servilleta y el barro pasaron. El río y el gato exageran, y los voladores son una frase hecha: nadie iba a echar pólvora.',
+      { hint: 'Imagínatelo tal cual: si resulta imposible o absurdo, no se lee al pie de la letra.' }),
+    play('voz-de-la-fuente', 'Ata cada frase a lo que siente quien la dice.', { portadas: [['Vergüenza', 'algo hizo mal'], ['Conformidad', 'ni bien ni mal'], ['Desánimo', 'quiere rendirse'], ['Ánimo', 'empuja a otro']], tarjetas: ['«Fui a pedirle disculpas con la cara roja.»', '«No es para echar voladores, pero tampoco es para llorar.»', '«Le dije que me devolvía.»', '«Póngase las pilas.»'], va: [0, 1, 2, 3],
+      mira: ['¿Cuándo se le pone roja la cara a alguien?', 'Ni fiesta ni llanto: ¿cómo está?', '¿Quién quiere devolverse a su casa?', '¿A quién se le dice eso?'], bien: 'La expresión también muestra el ánimo.' },
+      'La cara roja es vergüenza; ni voladores ni llanto, conformidad; devolverse, desánimo; «póngase las pilas», ánimo para otro.',
+      { hint: 'Busca en qué momento del texto se dice cada una y cómo estaba la persona.' }),
+    play('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: SEMESTRE, texto: 'Lo que me salvó fue |un grupo de estudio|. Lo armaron |tres compañeros| que también venían de |pueblos|. Esa noche llamé a |mi papá|. Él me escuchó sin interrumpir.', tarjetas: ['«Lo» de «Lo armaron»', '«Él»'], va: [0, 3],
+      mira: ['¿Qué se arma entre varios?', '¿Quién puede escuchar una llamada?'], bien: 'El verbo ayuda: se arma un grupo, escucha una persona.' },
+      'Se armó el grupo de estudio y quien escuchó fue el papá.',
+      { hint: 'Mira el verbo que acompaña a cada palabra y pregunta quién o qué puede hacer o recibir eso.' }),
+    play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: SEMESTRE, texto: 'y al final me dijo: |«|Mijo, póngase las pilas». Les digo lo mismo, aunque con otras palabras|:| aguanten el primer golpe|.|', tarjetas: ['abre palabras exactas', 'anuncia un consejo dicho a su manera'], va: [0, 1],
+      mira: ['Busca el signo que abre lo que dijo el papá.', 'Busca el signo que va después de «con otras palabras».'], bien: '«Con otras palabras» no lleva comillas.' },
+      'Las comillas abren las palabras exactas del papá. Los dos puntos anuncian el consejo del autor, que lo dice con otras palabras.',
+      { hint: '¿Dónde se repite lo dicho tal cual y dónde se dice de otra manera?' }),
+    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: SEMESTRE, nums: [4, 5], pregunta: 'Queda en pie', queda: 'Pedir ayuda no es de débiles.', tarjetas: ['El profesor se burló de su acento.', 'Perdió el semestre.', 'Aprendió que hay que arreglárselas solo.'], va: [1, [4, 5], 6],
+      mira: ['Busca qué le estaba pidiendo el profesor en realidad.', 'Busca con qué promedio terminó.', 'Busca lo que dice que aprendió.'], bien: 'Lo que creyó no era lo que pasó.' },
+      'El profesor «solo me estaba pidiendo que hablara más duro»; terminó con 3.6; y aprendió que «nadie se salva solo».',
+      { hint: 'Busca por cada opción la oración que habla de lo mismo y mira cómo termina.' }),
+  ]);
+
+  // ---------------- Lección 4 · Prefijos y raíces ----------------
+  setLesson('pu-vo-4', [
+    play('cambia-tipo', 'Arma con piezas la palabra que significa eso. Sobran fichas.', { de: 'significa', antes: 'que no se puede oír', frase: '[0] [1] [2]', rot: ['¿comienzo?', '¿raíz?', '¿final?'], fichas: ['in-', 'aud-', '-ible', 're-', 'vis-', '-logía'], va: [0, 1, 2, null, null, null],
+      mira: ['Hace falta una pieza que niegue.', 'Hace falta una pieza que tenga que ver con oír.', 'Hace falta una pieza que diga «que se puede».', 'Esa pieza suele decir «de nuevo».', 'Esa tiene que ver con mirar.', 'Esa habla de estudiar algo.'], bien: 'in + aud + ible: inaudible.' },
+      'In- niega, aud- tiene que ver con oír (audífono, audiencia) e -ible es «que se puede»: inaudible, que no se puede oír.',
+      { hint: 'Busca palabras que conozcas con cada pieza: ¿qué tienen en común audífono y audiencia?' }),
+    play('pista-tipo', 'Ata cada significado a la palabra que lo lleva en sus piezas.', { doc: CUEVA, lineas: ['frugívoro', 'subterráneo', 'microorganismo', 'espeleología', 'fotofobia'], tarjetas: ['que come frutos', 'bajo tierra', 'ser vivo muy pequeño', 'estudio de las cuevas', 'rechazo a la luz'], va: [0, 1, 2, 3, 4],
+      mira: ['Busca la pieza de «herbívoro» y «carnívoro».', 'Busca la pieza de «submarino».', 'Busca la pieza de «microscopio».', 'Busca la pieza de «biología».', 'Busca la pieza de «claustrofobia».'], bien: 'Cada pieza trae su parte del sentido.' },
+      'Frugi- (fruto) y -voro (que come); sub- (bajo) y terra; micro- (pequeño); espeleo- (cueva) y -logía (estudio); foto- (luz) y -fobia (rechazo).',
+      { hint: 'De cada palabra piensa en otra que conozcas con el mismo comienzo o el mismo final.' }),
+    play('genero-o-cita', '¿Las piezas ayudan o engañan? En todas se ve «re-».', { rot: ['re- es «otra vez»', 're- engaña'], doc: CUEVA, fichas: ['releer una carta', 'recorrer la cueva', 'reabrir la tienda', 'un grupo reducido', 'reconstruir el muro'], va: [0, 1, 0, 1, 0],
+      mira: ['¿Se lee otra vez?', '¿Se corre otra vez?', '¿Se abre otra vez?', '¿Se conduce otra vez?', '¿Se construye otra vez?'], bien: 'Manda el contexto.' },
+      'Releer, reabrir y reconstruir son hacer otra vez. Recorrer es andar de un lado a otro y reducido es pequeño: ahí la pieza engaña.',
+      { hint: 'Pon «otra vez» después del verbo sin re-. Si no dice lo mismo, la pieza engaña.' }),
+    play('cambia-palabra', 'Pon en cada hueco lo que significa la palabra en esa oración. Sobran dos.', { doc: CUEVA, frases: [[1, 'Lleva quince años ', 'recorriendo', ' esta cueva'], [1, 'con grupos ', 'reducidos', ' de visitantes'], [3, 'sonidos agudísimos, ', 'inaudibles', ' para nosotros']], fichas: ['andando por', 'pequeños', 'que no se oyen', 'corriendo otra vez por', 'que se ven bien'], va: [0, 1, 2, null, null],
+      mira: ['¿Qué hace un guía con una cueva durante años?', '¿Cómo son los grupos que entran con cuidado?', 'Son tan agudos que… ¿qué pasa con ellos?', 'Las piezas te engañaron: ¿un guía corre?', 'Se habla de sonidos.'], bien: 'Unas piezas ayudan; otras, no.' },
+      'Recorrer es andar por todas partes; reducidos, pequeños; inaudibles, que no se oyen. En las dos primeras, re- no es «otra vez».',
+      { hint: 'Arma el sentido por piezas y ponlo en la oración. Si suena absurdo, decide el contexto.' }),
+    play('sella-parrafo', '«En la cueva viven todos estos, **EXCEPTO**:» Ata cada uno a su párrafo.', { doc: CUEVA, tarjetas: ['Aves que salen de noche', 'Peces sin pigmento', 'Microorganismos en las paredes', 'Murciélagos que comen frutos'], va: [[0, 2], 3, [3, 4], 5],
+      mira: ['Busca quiénes chillan al fondo.', 'Busca las aguas subterráneas.', 'Busca las paredes.', 'Los murciélagos se nombran: ¿para decir que viven allí?'], luz: [[1, 'unas aves nocturnas'], [4, 'peces ciegos, sin pigmento'], [4, 'comunidades de microorganismos']], bien: 'Nombrar para comparar no es decir que viven ahí.' },
+      'Los guácharos están en el 1; los peces y microorganismos, en el 4. Los murciélagos solo aparecen como comparación.',
+      { hint: 'Que algo se nombre no quiere decir que viva ahí. Mira para qué se nombra.' }),
+    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CUEVA, nums: [2, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['Los guácharos tragan los frutos enteros.', 'Los guácharos llevan semillas a la cueva.', 'Las plántulas mueren por falta de luz.', 'Ya se hizo un antibiótico con lo de la cueva.', 'Los guácharos son ciegos.'], va: [0, 1, 1, 2, 2],
+      mira: ['Búscala en el párrafo 2.', 'Las semillas caen dentro: ¿quién las trajo?', 'Buscan algo que «nunca llega»: ¿qué les falta?', 'Compárala con «podrían servir algún día».', '¿De quién se dice que es ciego?'], luz: [[2, 'que tragan enteros'], [2, 'caen al suelo de la cueva'], [2, 'una luz que nunca llega'], [4, 'podrían servir algún día']], bien: '«Podrían» no es «ya».' },
+      'Tragar enteros está escrito. Si las semillas caen dentro, ellos las llevan; si buscan una luz que nunca llega y luego mueren, es por falta de luz. El antibiótico «podría» hacerse y los ciegos son los peces.',
+      { hint: 'Mira el verbo de cada afirmación y de quién se habla.' }),
+    play('pasos-del-proceso', 'Ordena lo que le pasa a una semilla en la cueva.', { que: 'lo que cuenta el párrafo 2', de: 'Del fruto a la plántula', fija: 0, ini: [2, 3, 1, 0], tiras: ['El guácharo traga el fruto entero.', 'La semilla cae sin digerir.', 'Germina en la penumbra.', 'La plántula muere buscando luz.'],
+      mira: ['Es lo que empieza todo.', 'Para caer tuvo que haber sido tragada.', 'Para germinar tuvo que haber caído.', 'Para morir tuvo que haber crecido.'], bien: 'De un fruto a una planta que no alcanza la luz.' },
+      'Traga el fruto, la semilla cae sin digerir, germina en la penumbra y la plántula muere sin luz.',
+      { hint: 'Sigue a una sola semilla desde que está en el fruto.' }),
+    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: CUEVA, pares: [['Los sonidos del murciélago no se oyen;', 'los del guácharo se oyen perfectamente.'], ['Mucha luz espanta a las aves;', 'se entra sin linternas potentes.'], ['Son frugívoros,', 'comen casi solo frutos.']], fichas: ['en cambio,', 'por eso,', 'es decir,', 'por ejemplo,', 'además,'], va: [0, 1, 2, null, null],
+      mira: ['¿Dónde se comparan dos cosas distintas?', '¿Dónde la regla resulta del riesgo?', '¿Dónde la segunda parte aclara la primera?', 'En ninguna la segunda es un caso de la primera.', 'En ninguna la segunda solo se suma.'], bien: '«Es decir» traduce la palabra difícil.' },
+      'Los animales se comparan («en cambio»), la regla resulta del riesgo («por eso») y «comen frutos» aclara «frugívoros» («es decir»).',
+      { hint: 'Pregunta si la segunda parte se opone, resulta o aclara.' }),
+  ]);
+
+  // ---------------- Evaluación: formato real, texto nuevo ----------------
+  const REMENDON = {
+    id: 'lec-remendon', title: 'El último remendón de la plaza',
+    paras: [
+      'En la esquina de la plaza de mercado, debajo de un parasol desteñido, don Isaías Mejía remienda zapatos desde 1979. Tiene una lezna, un martillo, tres hormas y una paciencia que no se compra. Por su banco han pasado botas de policía, zapatillas de bailarina y unos tacones que, según él, «tenían más kilómetros que un bus intermunicipal».',
+      'Hace veinte años, en la misma cuadra trabajaban seis remendones. Hoy queda él solo. Los zapatos baratos, que se botan cuando se dañan, acabaron con el oficio más rápido que cualquier impuesto. «Ahora la gente prefiere comprar otro par que arreglar el que tiene», dice sin rabia, como quien describe el clima.',
+      'Sin embargo, en los últimos años algo ha empezado a cambiar. Estudiantes de diseño vienen a preguntarle cómo se cose una suela, y una tienda de ropa reutilizada le manda cada semana una caja de botas para restaurar. Sin proponérselo, van desarmando la idea de que lo remendado es cosa de pobres. Él cobra lo mismo que antes y trabaja más que nunca. «Me tocó vivir para ver que lo viejo se volviera moda», dice, y se ríe.',
+      'Don Isaías no cree que el oficio vaya a desaparecer, pero tampoco que vuelva a ser lo que fue. Lo que sí le preocupa es que nadie aprenda. Ha ofrecido enseñar gratis los sábados, y hasta ahora solo han ido dos muchachos. Uno se cansó al tercer día; el otro ya cose suelas mejor que él, asegura, aunque nadie le crea.',
+    ],
+  };
+  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: REMENDON, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
+  setExam('pu-vocabulario', 'Evaluación · Vocabulario en contexto', [
+    ['pu-vo-1', 'El sinónimo correcto es el que, puesto en la frase, conserva su sentido.',
+      Q('En el párrafo 1, la palabra «remienda» puede reemplazarse por:', ['arregla', 'vende', 'fabrica', 'limpia'], 0,
+        'Remendar es arreglar algo roto o gastado; don Isaías trabaja con hormas y lezna para reparar zapatos.',
+        'Reemplaza la palabra por cada opción y relee la frase con las herramientas que tiene don Isaías.')],
+    ['pu-vo-1', 'Una expresión se entiende con el sentido de toda la frase, no palabra por palabra.',
+      Q('En «una paciencia que no se compra», se quiere decir que la paciencia de don Isaías:', ['es tan cara que pocos la pueden pagar', 'no se consigue con dinero', 'está prohibida', 'se vende en la plaza'], 1,
+        'Algo que «no se compra» no se obtiene pagando: se forma con los años, como la paciencia del oficio.',
+        'Piensa en qué cosas no se pueden comprar aunque uno tenga dinero.')],
+    ['pu-vo-1', 'Un verbo concreto puede tener un sentido abstracto: desarmar una idea es refutarla.',
+      Q('En el párrafo 3, «van desarmando la idea de que lo remendado es cosa de pobres» quiere decir que los estudiantes y la tienda:', ['van mostrando que esa idea no se sostiene', 'van reforzando la idea con sus compras', 'van desbaratando los zapatos viejos', 'van repitiendo esa idea entre sus clientes'], 0,
+        'Una idea no se desarma con las manos: se desarma mostrando que no se sostiene, es decir, refutándola. Que los jóvenes de diseño y una tienda de moda busquen lo remendado contradice que sea «cosa de pobres».',
+        'Reemplaza «desarmando» por cada opción y lee la frase entera. Recuerda que lo que se desarma aquí es una idea, no un objeto.')],
+    ['pu-vo-2', 'Una palabra con varios sentidos se interpreta por las demás palabras de la frase.',
+      Q('En el párrafo 1, la palabra «banco» se refiere a:', ['una entidad que presta dinero a los vecinos', 'el asiento y la mesa donde trabaja', 'un grupo de peces', 'un lugar donde se guarda sangre'], 1,
+        'Por el banco «han pasado» botas y zapatillas: es el lugar de trabajo del remendón, no una entidad financiera.',
+        'Lee qué ha pasado «por su banco».')],
+    ['pu-vo-2', 'El sentido más común de una palabra suele ser la trampa.',
+      Q('En «Los zapatos baratos, que se botan cuando se dañan», la palabra «botan» significa:', ['rebotan contra el piso', 'fabrican', 'calzan', 'tiran a la basura'], 3,
+        'Botar, en Colombia, es tirar a la basura: los zapatos baratos se desechan en vez de arreglarse.',
+        'Lee la oración siguiente: la gente prefiere comprar otro par.')],
+    ['pu-vo-3', 'La exageración es una manera de decir algo con fuerza.',
+      Q('«Tenían más kilómetros que un bus intermunicipal» quiere decir que los tacones:', ['estaban muy usados', 'habían viajado en bus', 'eran muy rápidos', 'eran nuevos'], 0,
+        'Comparar los tacones con un bus que viaja todo el día exagera para decir que habían caminado muchísimo: estaban muy gastados.',
+        'Piensa en cuánto anda un bus que va de un municipio a otro y en cómo quedan unos zapatos que caminan tanto.')],
+    ['pu-vo-3', 'Una frase hecha expresa una actitud; el contexto dice cuál.',
+      Q('Con la expresión «me tocó vivir para ver que lo viejo se volviera moda», don Isaías expresa:', ['tristeza por el pasado', 'obligación de trabajar más que antes por la moda', 'sorpresa ante algo que no esperaba', 'miedo al futuro'], 2,
+        '«Me tocó vivir para ver» se dice ante algo inesperado; y él se ríe: le sorprende que su oficio vuelva a interesar.',
+        'Fíjate en lo que hace don Isaías justo después de decirlo.')],
+    ['pu-vo-4', 'Los prefijos dan pistas del sentido: re- (de nuevo), sub- (debajo), inter- (entre).',
+      Q('En «ropa reutilizada», el prefijo re- significa:', ['antes', 'contra', 'por debajo', 'de nuevo'], 3,
+        'Reutilizar es utilizar de nuevo: la tienda vende ropa que ya tuvo otro dueño.',
+        'Piensa en otras palabras con re-: releer, rehacer, reconstruir.')],
+    ['pu-vo-4', 'Las piezas orientan, pero el contexto manda: re- no siempre es «de nuevo» (restaurar, recorrer, reducir).',
+      Q('En «una caja de botas para restaurar» (párrafo 3), «restaurar» significa:', ['volver a guardar en la tienda', 'reparar hasta dejar en buen estado', 'servir como en un restaurante', 'volver a vender sin arreglarlas'], 1,
+        'Por las piezas, re- invita a leer «otra vez», pero no hay ningún «staurar» que se repita: lo que decide es el contexto. Don Isaías es remendón y la tienda le manda botas gastadas: restaurarlas es repararlas. Con la prueba del reemplazo, solo «reparar» deja la frase con sentido.',
+        'No te quedes con lo que sugiere el re-. Pon cada opción en la frase y piensa en el oficio de don Isaías.')],
+    ['pu-vo-4', 'Inter- significa «entre»: internacional, intercambio.',
+      Q('Un bus «intermunicipal» es uno que:', ['circula dentro de un solo municipio', 'viaja de un municipio a otro', 'pertenece a la alcaldía', 'pasa por debajo de la ciudad'], 1,
+        'Inter- es «entre»: el bus intermunicipal va entre municipios.',
+        'Piensa en «internacional»: ¿dentro de un país o entre países?')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-l-aplicacion.js
+// Preuniversitario · Comprensión lectora · mundo 6 «Aplicación y analogía» con textos de verdad (spec
+// 2026-11-19-preuda-lectura-textos): los senderos de deseo de los parques, una idea que sirve para mil casos (aplicar a un caso
+// nuevo), y el sistema de defensa del cuerpo explicado como una ciudad con murallas y archivos (analogías). La evaluación usa un
+// mecánico que pregunta antes de tocar el carro. Textos escritos para Zuka.
+PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
+  const SENDEROS = {
+    id: 'lec-senderos-deseo', title: 'Los caminos que nadie diseñó',
+    ficha: { autor: 'Columna de un urbanista', fuente: 'Revista de arquitectura y ciudad', fecha: 'Marzo de 2025' },
+    paras: [
+      'En casi todos los parques hay uno: un caminito de tierra pelada que cruza el pasto en diagonal, justo al lado del sendero de cemento que los arquitectos dibujaron con tanto cuidado. Nadie lo trazó en un plano. Lo hicieron los pies de cientos de personas que, día tras día, eligieron el camino más corto. Los urbanistas los llaman «senderos de deseo».',
+      'Durante décadas, la respuesta de muchas administraciones fue la misma: poner una cerca, sembrar arbustos espinosos o clavar un letrero de «No pise el césped». Casi nunca funcionó. La gente saltaba la cerca, rodeaba los arbustos o simplemente ignoraba el letrero, y al cabo de unos meses el caminito volvía a aparecer, a veces un poco más allá.',
+      'Algunos diseñadores decidieron hacer lo contrario. Cuando una universidad estrenaba un campus, por ejemplo, dejaban todo el terreno sembrado de pasto durante el primer año y esperaban. Al final del año, los estudiantes ya habían marcado con sus pasos por dónde querían caminar, y solo entonces se pavimentaban esos trazos. El resultado eran senderos que la gente sí usaba, porque eran los que ya usaba.',
+      'La idea va mucho más allá de los parques. Detrás de cada sendero de deseo hay una lección incómoda para quien diseña: la gente no hace lo que uno espera, sino lo que le resulta más fácil o más útil. Se puede pelear contra eso con prohibiciones, o se puede observar primero y diseñar después. Lo segundo suele salir más barato y dura más.',
+      'Eso no significa que todo atajo deba volverse camino. Hay senderos que cruzan zonas frágiles, como un humedal o el lugar donde anidan unas aves, y ahí sí hace falta proteger el terreno. Pero incluso en esos casos, quien observa por qué la gente toma el atajo puede ofrecerle otra ruta igual de corta, en vez de limitarse a prohibirle la que ya escogió.',
+      'La próxima vez que vea un caminito de tierra en un parque, no lo mire como un daño. Mírelo como un mensaje: alguien, muchas veces, le está diciendo a la ciudad por dónde necesita pasar.',
+    ],
+  };
+
+  const DEFENSA = {
+    id: 'lec-ciudad-defensas', title: 'Una ciudad con murallas y archivos',
+    ficha: { autor: 'Artículo de divulgación', fuente: 'Revista de ciencia para colegios', fecha: 'Agosto de 2024' },
+    paras: [
+      'Explicar cómo se defiende el cuerpo de una infección es difícil, porque intervienen miles de células y sustancias con nombres largos. Por eso muchos profesores recurren a una comparación: el cuerpo es como una ciudad antigua, con murallas, guardias, mensajeros y un archivo donde se guardan los retratos de los enemigos.',
+      'La primera defensa es la muralla. La piel y las mucosas de la nariz y la garganta impiden que la mayoría de los microbios entre. Así como una muralla no distingue entre un ladrón y un comerciante, la piel tampoco elige: simplemente cierra el paso. Cuando hay una herida, se abre una brecha en la muralla, y por ahí pueden colarse los invasores.',
+      'Detrás de la muralla patrullan los guardias: ciertos glóbulos blancos que recorren la sangre y los tejidos y atacan cualquier cosa que no reconocen como propia. Son rápidos pero poco precisos, como una patrulla que detiene a todo el que parezca sospechoso. Muchas veces el enrojecimiento y la hinchazón alrededor de una herida son la huella de esa pelea.',
+      'Si la invasión continúa, entra en acción una defensa más lenta y más precisa. Algunas células fabrican anticuerpos, unas proteínas que encajan en una parte específica del invasor como una llave en su cerradura. Cada anticuerpo sirve para un solo tipo de enemigo, y por eso esta defensa tarda días en organizarse: primero hay que fabricar la llave adecuada.',
+      'Lo más asombroso viene después. Cuando la infección termina, el cuerpo conserva células de memoria, una especie de archivo con los retratos de los enemigos ya vencidos. Si el mismo microbio vuelve, la respuesta es mucho más rápida, porque la llave ya existe. En esa memoria se apoyan las vacunas: le muestran al cuerpo el retrato de un enemigo, sin la enfermedad, para que lo archive antes de conocerlo.',
+      'Toda comparación tiene límites, y esta también. Una ciudad no fabrica sus guardias según el enemigo que llega, y el cuerpo sí. Pero la imagen ayuda a recordar lo esencial: hay defensas que cierran el paso, otras que atacan sin preguntar y otras que aprenden.',
+    ],
+  };
+
+  // ---------------- Lección 1 · Aplicar a un caso nuevo ----------------
+  setLesson('pu-ap-1', [
+    play('talla-idea', 'Del párrafo 4 se saca un **principio**. Pon cada versión en su talla.', { doc: SENDEROS, p: 4, rot: ['se queda en el caso', 'principio general', 'dice de más'], fichas: ['En los parques hay caminos de tierra.', 'Antes de diseñar, conviene observar lo que la gente ya hace.', 'Nunca hay que prohibirle nada a nadie.'], va: [0, 1, 2],
+      mira: ['¿Serviría para algo que no sea un parque?', 'Mira «observar primero y diseñar después».', 'Compárala con el párrafo 5: ¿el autor diría «nunca»?'], luz: [[4, 'se puede observar primero y diseñar después']], bien: 'El principio sirve aunque cambie el tema.' },
+      'El camino de tierra es el caso; «nunca» exagera, porque el párrafo 5 pone límites. El principio sirve para parques, tiendas o aplicaciones.',
+      { hint: 'Un principio no nombra el caso: se puede llevar a otro tema. Prueba cada uno con una tienda.' }),
+    play('genero-o-cita', '¿En qué casos se cumple el principio: observar lo que la gente hace y facilitarlo?', { rot: ['se cumple', 'no se cumple'], doc: SENDEROS, fichas: ['Ponen bancas en la escalera donde todos se reúnen.', 'Multan a quien cruza la zona verde.', 'Mueven el botón a donde la gente ya tocaba.', 'Cambian los precios sin avisar.', 'Ponen enchufes donde ya se sentaban a cargar el celular.'], va: [0, 1, 0, 1, 0],
+      mira: ['¿Miraron primero qué hacía la gente?', '¿Alguien preguntó por qué la cruzan?', '¿Miraron primero dónde tocaba la gente?', '¿Se facilitó algo que la gente ya hacía?', '¿Miraron primero dónde se sentaban?'], bien: 'Cambia el tema, la estructura es la misma.' },
+      'Las bancas, el botón y los enchufes llegaron donde la gente ya estaba. La multa prohíbe sin observar y los precios no tienen que ver.',
+      { hint: 'Busca dos pasos: primero se observa, después se facilita. Si falta uno, no se cumple.' }),
+    play('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: SENDEROS, fichas: ['presenta el fenómeno', 'cuenta lo que no funcionó', 'cuenta lo que sí funcionó', 'saca el principio general', 'le pone un límite', 'invita al lector', 'da cifras'], va: [0, 1, 2, 3, 4, 5, null],
+      mira: ['Busca dónde se dice qué es.', 'Busca la cerca y el letrero.', 'Busca «hacer lo contrario».', 'Busca «va mucho más allá».', 'Busca «Eso no significa».', 'Busca a quién le habla el final.', 'No hay ningún número que comparar.'],
+      luz: [[1, '«senderos de deseo»'], [2, 'Casi nunca funcionó'], [3, 'hacer lo contrario'], [4, 'La idea va mucho más allá'], [5, 'Eso no significa'], [6, 'no lo mire como un daño']], bien: 'Del caso al principio, y del principio a su límite.' },
+      'Presenta los senderos, cuenta lo que falló y lo que funcionó, saca el principio, le pone un límite y le habla al lector.',
+      { hint: 'Mira las primeras palabras: «Durante décadas», «lo contrario», «más allá», «Eso no significa».' }),
+    play('balanza-tesis', 'Tesis: es mejor convertir los senderos en caminos que prohibirlos. ¿Qué hace cada dato?', { doc: SENDEROS, tesis: 'Es mejor convertirlos en caminos que prohibirlos', fichas: ['Las cercas casi nunca funcionaron.', 'Los senderos pavimentados sí se usaban.', 'Algunos cruzan un humedal.', 'Los urbanistas les pusieron un nombre.'], va: [0, 0, 1, 2],
+      mira: ['Si prohibir no sirve, ¿la tesis gana o pierde?', 'Si se usan, ¿la tesis gana o pierde?', 'Si ahí no conviene un camino, ¿la tesis gana o pierde?', 'Un nombre, ¿le da o le quita razón?'], bien: 'Un dato curioso no pesa.' },
+      'Que prohibir no funcione y que los pavimentados se usen apoyan la tesis; el humedal la limita; el nombre no pesa.',
+      { hint: 'Supón que cada dato es cierto: ¿la tesis queda más fuerte, más débil o igual?' }),
+    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: SENDEROS, nums: [2, 3], pregunta: 'Queda en pie', queda: 'Los senderos hechos después de observar sí se usaban.', tarjetas: ['Los letreros acabaron con los atajos.', 'Pavimentaron antes de que llegaran los estudiantes.', 'Nadie usó los senderos nuevos del campus.'], va: [[1, 2], [4, 5], 6],
+      mira: ['Busca si funcionó.', 'Busca cuándo se pavimentaban.', 'Busca el resultado.'], bien: 'Cada falsa cae con una oración.' },
+      'Los letreros «casi nunca» funcionaron; se esperaba un año y «solo entonces» se pavimentaba; y eran senderos «que la gente sí usaba».',
+      { hint: 'Busca la oración que habla de lo mismo y fíjate en el orden de los hechos.' }),
+    play('sella-parrafo', '«Para frenar los senderos intentaron todo, **EXCEPTO**:» Ata cada opción a su párrafo.', { doc: SENDEROS, tarjetas: ['Una cerca', 'Arbustos con espinas', 'Un letrero', 'Multas'], va: [1, 1, 1, 6],
+      mira: ['Busca la cerca.', 'Busca los arbustos.', 'Busca el césped.', 'Suena posible, pero búscala.'], luz: [[2, 'poner una cerca, sembrar arbustos espinosos o clavar un letrero']], bien: 'Las multas las puso la imaginación.' },
+      'La cerca, los arbustos y el letrero están en el párrafo 2. Las multas no aparecen.',
+      { hint: 'Tres opciones pueden estar en la misma oración. La que no, es la respuesta.' }),
+    play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: SENDEROS, texto: 'Los urbanistas los llaman |«|senderos de deseo». Mírelo como un mensaje|:| alguien, muchas veces, le está diciendo a la ciudad por dónde necesita pasar|.|', tarjetas: ['presenta un nombre técnico', 'anuncia qué dice el mensaje'], va: [0, 1],
+      mira: ['Busca el signo que va junto a un nombre especial.', 'Busca el signo después de «mensaje».'], bien: 'Las comillas no siempre citan a alguien.' },
+      'Las comillas presentan el nombre que usan los urbanistas; los dos puntos anuncian qué dice el mensaje.',
+      { hint: 'Mira qué viene después de cada signo: ¿un nombre o una explicación?' }),
+    play('ordena-texto', 'Se desordenó la columna. La primera tira está en su puesto.', { doc: { title: SENDEROS.title, ficha: SENDEROS.ficha }, fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['En casi todos los parques hay uno: un caminito de tierra pelada que cruza el pasto en diagonal, justo al lado del sendero de cemento que los arquitectos dibujaron con tanto cuidado.', 'Durante décadas, la respuesta de muchas administraciones fue la misma: poner una cerca, sembrar arbustos espinosos o clavar un letrero de «No pise el césped».', 'Algunos diseñadores decidieron hacer lo contrario.', 'La idea va mucho más allá de los parques.', 'Eso no significa que todo atajo deba volverse camino.'],
+      mira: ['', 'Cuenta una respuesta: ¿a qué?', '«Lo contrario» ¿de qué? Tiene que haberse contado.', '«La idea» ¿cuál? Falta contarla arriba.', '«Eso» le pone límite a algo que ya se dijo.'], bien: 'Fenómeno, error, acierto, idea y límite.' },
+      'El fenómeno; la respuesta de prohibir; «lo contrario» de prohibir; la idea general; y «Eso no significa», que la limita.',
+      { hint: 'Busca a qué se refieren «lo contrario», «la idea» y «eso».' }),
+  ]);
+
+  // ---------------- Lección 2 · Analogías ----------------
+  setLesson('pu-ap-2', [
+    play('cambia-tipo', 'Completa la analogía con las palabras del texto. Sobran fichas.', { de: 'misma relación: barrera que cierra el paso', antes: 'Piel es a cuerpo como…', frase: '[0] es a [1]', rot: ['¿qué?', '¿de qué?'], fichas: ['muralla', 'ciudad', 'guardia', 'herida', 'enemigo'], va: [0, 1, null, null, null],
+      mira: ['Piel cierra el paso: ¿qué lo cierra en el otro lado?', 'Una cuida y la otra es cuidada: ¿cuál es esta?', 'Ataca, no cierra el paso.', 'Es lo contrario: abre el paso.', 'No es lo protegido, sino de quien se protege.'], bien: 'La relación es la misma a los dos lados.' },
+      'La piel cierra el paso al cuerpo como la muralla a la ciudad. El guardia ataca, la herida abre y el enemigo no es lo protegido.',
+      { hint: 'Di la relación en voz alta («la piel protege al cuerpo cerrando el paso») y busca qué hace eso en el otro lado.' }),
+    play('pista-tipo', 'Ata cada relación a la pareja que la tiene.', { lineas: ['página y libro', 'martillo y carpintero', 'nube y lluvia', 'semilla y árbol'], tarjetas: ['parte y todo', 'herramienta y quien la usa', 'causa y efecto', 'etapa y lo que llega a ser'], va: [0, 1, 2, 3],
+      mira: ['¿En qué pareja está una cosa dentro de la otra?', '¿En cuál hay alguien que trabaja con algo?', '¿En cuál una trae a la otra?', '¿En cuál una se convierte en la otra?'], bien: 'Antes de comparar, di la relación.' },
+      'La página es parte del libro; el carpintero usa el martillo; la nube trae la lluvia; la semilla llega a ser árbol.',
+      { hint: 'Arma una oración corta con cada pareja («la página está en el libro») y mira qué relación dice.' }),
+    play('genero-o-cita', 'Según el artículo, ¿qué analogías conservan la relación?', { rot: ['la conserva', 'la cambia'], doc: DEFENSA, fichas: ['Anticuerpo es a invasor como llave es a cerradura.', 'Herida es a piel como guardia es a ciudad.', 'Célula de memoria es a microbio como retrato es a enemigo.', 'Glóbulo blanco es a microbio como muralla es a ladrón.'], va: [0, 1, 0, 1],
+      mira: ['Di qué hace una con otra en cada lado.', '¿Qué hace la herida en la piel? ¿Y el guardia en la ciudad?', 'Di para qué sirve cada una.', '¿Los dos atacan?'], luz: [[4, 'como una llave en su cerradura'], [5, 'una especie de archivo con los retratos de los enemigos'], [2, 'se abre una brecha en la muralla'], [3, 'atacan cualquier cosa']], bien: 'Parecerse no basta: la relación tiene que ser la misma.' },
+      'La llave encaja como el anticuerpo y el retrato sirve para reconocer, como la memoria. La herida abre y el guardia cuida; el glóbulo ataca y la muralla solo cierra.',
+      { hint: 'Di la relación del primer lado con un verbo y prueba ese mismo verbo en el otro.' }),
+    play('ordena-texto', 'Se desordenó el artículo. La primera tira está en su puesto.', { doc: { title: DEFENSA.title, ficha: DEFENSA.ficha }, fija: 1, ini: [0, 4, 2, 1, 3], tiras: ['Por eso muchos profesores recurren a una comparación: el cuerpo es como una ciudad antigua, con murallas, guardias, mensajeros y un archivo donde se guardan los retratos de los enemigos.', 'La primera defensa es la muralla.', 'Detrás de la muralla patrullan los guardias: ciertos glóbulos blancos que recorren la sangre y los tejidos y atacan cualquier cosa que no reconocen como propia.', 'Si la invasión continúa, entra en acción una defensa más lenta y más precisa.', 'Lo más asombroso viene después.'],
+      mira: ['', 'Es «la primera».', '«Detrás de la muralla»: ya se habló de ella.', '«Más lenta» que otra ya contada.', '«Después» de todo lo anterior.'], bien: 'De afuera hacia adentro y de rápido a lento.' },
+      'La muralla, los guardias detrás, la defensa más lenta y, después, la memoria.',
+      { hint: 'Sigue las pistas: «primera», «detrás de», «si continúa», «después».' }),
+    play('pasos-del-proceso', 'Ordena lo que pasa en una herida.', { que: 'lo que cuentan los párrafos 2 y 3', de: 'De la herida a la hinchazón', fija: 0, ini: [2, 0, 3, 1], tiras: ['Se abre la piel.', 'Entran microbios.', 'Los glóbulos blancos atacan.', 'La zona se enrojece y se hincha.'],
+      mira: ['Es lo que empieza todo.', 'Para entrar hace falta por dónde.', 'Atacan a algo que entró.', 'Es la huella de una pelea: ¿ya hubo pelea?'], bien: 'La hinchazón es la huella de la pelea.' },
+      'Se abre la muralla, se cuelan invasores, los guardias pelean y queda la huella.',
+      { hint: 'Piensa en la ciudad: brecha, invasores, guardias y huella de la pelea.' }),
+    play('comprueba-apuesta', 'Subraya en el párrafo 6 la oración que dice en qué **falla** la comparación.', { doc: DEFENSA, nums: [6], n: 1, apuesta: 'La comparación con la ciudad tiene un límite preciso.', va: ['6.1'],
+      mira: { '6.0': 'Anuncia que hay límites, pero no dice cuál.', '6.2': 'Dice para qué sirve, no en qué falla.' }, bien: 'Anunciar un límite no es decirlo.' },
+      'Una ciudad no fabrica sus guardias según el enemigo y el cuerpo sí: ese es el límite. La primera oración lo anuncia y la última dice para qué sirve.',
+      { hint: 'Busca la oración que nombra una diferencia entre la ciudad y el cuerpo.' }),
+    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: DEFENSA, pares: [['Hay que fabricar una llave para cada enemigo;', 'la defensa tarda días.'], ['La ciudad no fabrica sus guardias;', 'la imagen ayuda a recordar.'], ['Así como la muralla cierra el paso,', 'la piel lo cierra.']], fichas: ['por eso,', 'sin embargo,', 'también', 'porque', 'por ejemplo,'], va: [0, 1, 2, null, null],
+      mira: ['¿Dónde la demora resulta de algo?', '¿Dónde algo sirve aunque tenga un defecto?', '¿Dónde se dice que dos cosas hacen lo mismo?', 'Daría la causa de lo anterior.', 'Ninguna segunda parte es un caso.'], bien: '«Así como… también» arma la analogía.' },
+      'La demora resulta («por eso»); la imagen sirve pese al límite («sin embargo»); y las dos hacen lo mismo («así como… también»).',
+      { hint: 'Una pareja compara, otra trae una consecuencia y otra se opone a lo que se esperaba.' }),
+    play('tacha-resumen', 'Tacha las tres oraciones que no hacen falta para entender el artículo.', { doc: DEFENSA, n: 3, lineas: ['El cuerpo se defiende como una ciudad.', 'La muralla no distingue a un comerciante.', 'Unas defensas cierran, otras atacan rápido y otras son lentas y precisas.', 'La llave encaja en la cerradura.', 'El cuerpo recuerda a los enemigos, y de eso se valen las vacunas.', 'Las sustancias tienen nombres largos.'], va: [1, 3, 5],
+      mira: { 0: 'Es la comparación que organiza todo.', 2: 'Reúne los tres tipos de defensa.', 4: 'Es a donde llega el texto.' }, bien: 'La comparación, las defensas y la memoria.' },
+      'El comerciante, la llave y los nombres largos ilustran. Quedan la comparación, los tipos de defensa y la memoria.',
+      { hint: 'Las imágenes de un solo párrafo ayudan a entender, pero no resumen.' }),
+  ]);
+
+  // ---------------- Evaluación: formato real, texto nuevo ----------------
+  const MECANICO = {
+    id: 'lec-mecanico', title: 'El que adivina cobra dos veces',
+    paras: [
+      'Don Ramiro, el mecánico de la esquina, tiene una costumbre que desespera a algunos clientes: antes de abrir el capó, les pide que le cuenten, con detalle, cuándo empezó el ruido, si suena en frío o en caliente, si se oye al frenar o al acelerar. Mientras escucha, no toca el carro. «El que adivina cobra dos veces», dice.',
+      'Su método tiene una lógica sencilla. Un mismo síntoma puede tener muchas causas: un golpeteo puede venir del motor, de la suspensión o de algo suelto en el baúl. Si el mecánico cambia la primera pieza que se le ocurre, puede acertar, pero también puede gastar el dinero del cliente en una pieza que estaba buena. Preguntar primero reduce las posibilidades antes de gastar un peso.',
+      'Los clientes apurados prefieren el taller de enfrente, donde le cambian a uno las pastillas de freno en veinte minutos sin muchas preguntas. Algunos vuelven a la semana con el mismo ruido. Don Ramiro no se alegra: solo saca otra vez su libreta y empieza de nuevo por las preguntas.',
+      'Él dice que el oficio le enseñó algo que sirve para todo: el que escucha bien gasta menos. Lo repite cuando sus nietos se pelean, cuando un vecino le pide consejo y hasta cuando va al médico, al que le cuenta sus síntomas con el mismo orden con que le gustaría que le contaran los de un carro.',
+    ],
+  };
+  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: MECANICO, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
+  setExam('pu-aplicacion', 'Evaluación · Aplicación y analogía', [
+    ['pu-ap-1', 'Aplicar es reconocer la misma estructura en un tema distinto.',
+      Q('Una situación que aplica el método de don Ramiro es la de:', ['un técnico que cambia el computador completo apenas falla', 'un profesor que pone el examen sin explicar el tema', 'una médica que pregunta cuándo empezó el dolor antes de pedir exámenes', 'un vendedor que ofrece primero el producto más caro'], 2,
+        'La médica, como don Ramiro, pregunta primero para reducir las posibilidades antes de gastar. El técnico hace lo contrario.',
+        'Saca primero el principio del texto (preguntar antes de actuar) y busca el caso que lo cumple.')],
+    ['pu-ap-1', 'Un caso nuevo puede aplicar la idea del texto o su contrario: hay que distinguirlos.',
+      Q('Según la idea del texto, cambiar de inmediato la primera pieza que se le ocurre al mecánico se parece a:', ['tomar un remedio para el dolor de cabeza sin saber de dónde viene', 'leer el manual antes de usar una máquina', 'preguntarle al vecino qué pasó', 'revisar la cuenta antes de pagar'], 0,
+        'Tomar un remedio sin saber la causa es actuar antes de averiguar, como cambiar una pieza al azar. Las otras opciones averiguan primero.',
+        'Busca la opción que actúa antes de averiguar, igual que el taller de enfrente.')],
+    ['pu-ap-1', 'Para predecir qué haría alguien en otra situación, se usa el principio que guía sus actos.',
+      Q('Si don Ramiro fuera profesor, ante un estudiante que pierde matemáticas, probablemente:', ['le pondría más tareas de inmediato', 'lo cambiaría de curso', 'le diría que estudie más, sin preguntarle nada', 'le preguntaría en qué temas y desde cuándo se le dificulta'], 3,
+        'Su principio es escuchar antes de actuar: primero averiguaría dónde está la dificultad.',
+        'Recuerda lo que hace don Ramiro antes de abrir el capó.')],
+    ['pu-ap-2', 'En una analogía se compara la relación entre las parejas, no las cosas sueltas.',
+      Q('La relación entre «síntoma» y «causa» en el texto es la misma que hay entre:', ['llanta y carro', 'humo y fuego', 'mecánico y taller', 'freno y acelerador'], 1,
+        'El síntoma es la señal que deja una causa escondida, como el humo es la señal de un fuego. Llanta y carro es parte y todo; mecánico y taller, persona y lugar; freno y acelerador, opuestos.',
+        'Nombra la relación de la primera pareja (¿qué es el síntoma de la causa?) y pruébala en cada opción.')],
+    ['pu-ap-2', 'Un refrán puede ser análogo a otro si enseñan lo mismo en oficios distintos.',
+      Q('«El que adivina cobra dos veces» es a don Ramiro lo que, para un carpintero, sería el refrán:', ['«Mide dos veces y corta una»', '«Al que madruga, Dios le ayuda»', '«Más vale tarde que nunca»', '«En casa de herrero, cuchillo de palo»'], 0,
+        'Los dos refranes enseñan que comprobar antes de actuar evita pagar dos veces por un error.',
+        'Pregúntate qué enseña la frase de don Ramiro y busca el refrán que enseña lo mismo.')],
+    ['pu-ap-2', 'Una analogía puede llevar la idea del texto a la manera de presentar el examen.',
+      Q('Preguntarle al cliente antes de tocar el carro es a don Ramiro lo que, para un buen lector en el examen, es:', ['marcar la primera opción que suena bien', 'dejar en blanco las preguntas difíciles', 'volver al texto antes de marcar una opción', 'leer solo el título'], 2,
+        'Volver al texto es reunir la información antes de decidir, como don Ramiro antes de cambiar una pieza. Marcar lo primero que suena bien es adivinar.',
+        'Busca la opción en la que el lector averigua antes de decidir.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-l-fuentes.js
+// Preuniversitario · Comprensión lectora · mundo 7 «Fuentes y voces» con textos de verdad (spec 2026-11-19-preuda-lectura-textos):
+// un debate sobre las tareas con tres voces citadas y la del autor (citas y voces) y otro sobre el turismo en un páramo con
+// posturas a favor, en contra y matizada, más citas externas que apoyan o debilitan la tesis (posturas y citas externas). La
+// evaluación usa un texto sobre grafitis con cuatro voces. Textos escritos para Zuka.
+PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
+  const TAREAS = {
+    id: 'lec-tareas-casa', title: '¿Sirven las tareas para la casa?',
+    ficha: { autor: 'Columna de una periodista de educación', fuente: 'Periódico de Medellín, sección Educación', fecha: 'Abril de 2025' },
+    paras: [
+      'Cada tarde, en miles de casas, se repite la misma escena: un niño frente a un cuaderno, un adulto cansado a su lado y una pregunta que nadie se atreve a hacer en voz alta: ¿sirve de algo todo esto? Las tareas para la casa son tan viejas como la escuela, pero la discusión sobre ellas nunca había estado tan viva.',
+      'La psicopedagoga Adriana Velásquez, que ha estudiado el tema durante una década, sostiene que la respuesta depende de la edad. «En primaria, la tarea larga no mejora el aprendizaje; lo que mejora es el hábito de leer un rato cada día», explica. En bachillerato, en cambio, reconoce que las tareas bien diseñadas sí se relacionan con mejores resultados, siempre que no pasen de una hora diaria.',
+      'Jairo Benavides, profesor de matemáticas en un colegio público de Itagüí, no está tan convencido de que haya que reducirlas. Según él, sin práctica en la casa los estudiantes olvidan en una semana lo que aprendieron en clase. Admite, sin embargo, que muchas tareas se dejan «por cumplir» y que nadie las revisa con cuidado.',
+      'Para Liliana Ospina, madre de tres hijos, el problema es otro: las tareas suponen que en todas las casas hay un adulto con tiempo y estudios para ayudar. «Yo llego a las ocho de la noche. ¿A qué hora le explico fracciones a mi hija?», pregunta. Su vecina, cuenta, le paga a una muchacha para que le haga las tareas al niño, y eso, a su juicio, es peor que no dejarlas.',
+      'A mi modo de ver, los tres tienen parte de razón, y por eso la pregunta está mal planteada. No se trata de tareas sí o tareas no, sino de qué tareas. Una tarea que el estudiante puede hacer solo, que se revisa al día siguiente y que no depende de lo que haya en la casa difícilmente le hace daño a alguien. Una tarea que solo se puede hacer con ayuda, en cambio, mide más la casa que al estudiante.',
+    ],
+  };
+
+  const PARAMO = {
+    id: 'lec-paramo-turismo', title: 'Caminar el páramo sin romperlo',
+    ficha: { autor: 'Columna de opinión', fuente: 'Periódico regional de Boyacá', fecha: 'Enero de 2026' },
+    paras: [
+      'Hace diez años, al páramo de La Cumbrera subían unos cuantos campesinos y algún biólogo despistado. Hoy, los fines de semana, llegan hasta trescientos visitantes que quieren tomarse una foto junto a los frailejones, esas plantas peludas que crecen apenas un centímetro al año. La pregunta ya no es si el turismo llegará al páramo: ya llegó. La pregunta es qué hacer con él.',
+      'Para Mauricio Lenis, guía e hijo de la vereda, el turismo es la mejor oportunidad que ha tenido la zona. «Antes, para ganarse la vida aquí había que tumbar monte para sembrar papa. Ahora hay familias que viven de cocinarles a los caminantes», dice. Lenis defiende que se siga abriendo el páramo, pero con guías locales obligatorios: nadie cuida mejor un lugar, dice, que quien vive de mostrarlo y piensa quedarse en él toda la vida.',
+      'La bióloga Carolina Mesa no está de acuerdo. Según sus mediciones, en los senderos más visitados el suelo se ha compactado tanto que ya no absorbe el agua como antes, y el páramo es, ante todo, una esponja que surte de agua a los pueblos de abajo. «Cada pisada fuera del sendero es una pequeña herida que tarda años en cerrarse», advierte. Para ella, la mayor parte del páramo debería cerrarse a las visitas.',
+      'El secretario de ambiente del departamento propone un camino intermedio: abrir solo dos senderos, con un cupo de cien personas al día, reservas previas y un cobro que se invierta en restaurar las zonas dañadas. Reconoce que el cupo será impopular, pero sostiene que sin límites no habrá páramo que mostrar dentro de veinte años. El dinero del cobro, explica, alcanzaría para pagar a los guías de la vereda.',
+      'Creo que el secretario se acerca más a la respuesta, aunque se queda corto. Un cupo protege el suelo, pero no basta si los caminantes no entienden lo que pisan. Por eso, además del límite, cada visita debería empezar con una charla sobre el agua y los frailejones. Quien sabe que está caminando sobre la fuente de su propio acueducto pisa distinto.',
+    ],
+  };
+
+  // ---------------- Lección 1 · Citas y voces ----------------
+  setLesson('pu-fu-1', [
+    play('pinta-voces', 'Pinta cada idea con el color de quien la dice.', { doc: TAREAS, plumas: ['Adriana', 'Jairo', 'Liliana', 'la autora'], lineas: ['En primaria, lo que mejora es leer un rato cada día.', 'Sin práctica en la casa, lo aprendido se olvida en una semana.', 'Las tareas suponen un adulto con tiempo.', 'La pregunta está mal planteada.', 'Muchas tareas se dejan «por cumplir».'], va: [0, 1, 2, 3, 1],
+      mira: ['Busca «explica».', 'Busca «Según él».', 'Busca quién llega a las ocho.', 'Busca «A mi modo de ver».', 'Busca «Admite».'], bien: 'Cada voz lleva su marca.' },
+      'Adriana «explica», Jairo habla «según él» y «admite», Liliana cuenta su caso y la autora dice «a mi modo de ver».',
+      { hint: 'Vuelve al texto y busca al lado de cada idea el verbo o la marca de quien habla.' }),
+    play('genero-o-cita', '¿Es cita **directa** (palabras exactas) o **indirecta** (contada)?', { rot: ['directa', 'indirecta'], doc: TAREAS, fichas: ['«¿A qué hora le explico fracciones a mi hija?», pregunta.', 'Según él, sin práctica los estudiantes olvidan.', 'Sostiene que la respuesta depende de la edad.', '«En primaria, la tarea larga no mejora el aprendizaje», explica.'], va: [0, 1, 1, 0],
+      mira: ['¿Lleva comillas?', '¿Lleva comillas?', 'Mira el «que» después del verbo.', '¿Lleva comillas?'], bien: 'Comillas: exactas. «Que» o «según»: contadas.' },
+      'Las comillas copian las palabras exactas. «Según él» y «sostiene que» las cuentan con otras palabras.',
+      { hint: 'Busca comillas. Si no hay, mira si un «que» o un «según» cuenta lo dicho.' }),
+    play('signo-oficio', 'Los dos son comillas, pero no hacen lo mismo. Ata cada oficio a las suyas.', { doc: TAREAS, texto: 'Admite que muchas tareas se dejan |«por cumplir»|. La psicopedagoga explica: |«En primaria, la tarea larga no mejora el aprendizaje»|.', tarjetas: ['reproduce solo una expresión', 'copia una oración completa'], va: [0, 1],
+      mira: ['Busca las que encierran pocas palabras dentro de otra oración.', 'Busca las que encierran todo lo que alguien dijo.'], bien: 'Una expresión corta o una oración entera.' },
+      '«Por cumplir» es solo una expresión del profesor dentro de la oración de la autora; las otras comillas copian la oración completa.',
+      { hint: 'Quita las comillas: ¿lo que queda adentro es una oración completa o un pedazo?' }),
+    play('donde-mirar', 'De cada párrafo solo ves el comienzo. Lleva cada pregunta al párrafo donde la buscarías.', { doc: TAREAS, fichas: ['¿Qué opina la experta?', '¿Qué reconoce el profesor?', '¿Qué propone la autora?'], va: [1, 2, 4],
+      mira: ['Busca el comienzo que presenta a alguien que ha estudiado el tema.', 'Busca el comienzo que presenta a quien enseña.', 'Busca el comienzo con la marca de la autora.'], luz: [[2, 'reconoce que las tareas bien diseñadas'], [3, 'Admite, sin embargo'], [5, 'sino de qué tareas']], bien: 'Los comienzos presentan a cada voz.' },
+      'La psicopedagoga abre el 2, el profesor el 3 y «A mi modo de ver» anuncia a la autora en el 5.',
+      { hint: 'Cada párrafo presenta a alguien en su primera oración. Busca a quién corresponde la pregunta.' }),
+    play('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: TAREAS, texto: '|Su vecina|, cuenta, |le paga a una muchacha para que le haga las tareas al niño|, y eso, a su juicio, es peor que no dejarlas. Para |Liliana Ospina|, el problema es otro.', tarjetas: ['«eso»', '«su» de «a su juicio»'], va: [1, 2],
+      mira: ['No es una persona: ¿qué hecho es peor?', '¿De quién es el juicio: de quien paga o de quien lo cuenta?'], bien: '«Eso» puede apuntar a un hecho completo.' },
+      '«Eso» es pagar para que hagan las tareas. Y el juicio es de Liliana, que es quien lo cuenta.',
+      { hint: 'Abre el texto y mira quién habla en ese párrafo. Luego prueba cada opción.' }),
+    play('talla-idea', 'Tres versiones de lo que piensa la autora (párrafo 5): pon cada una en su talla.', { doc: TAREAS, p: 5, rot: ['se queda en un detalle', 'justa', 'dice de más'], fichas: ['Las tareas se revisan al día siguiente.', 'Importa qué tareas se dejan, no si se dejan.', 'Habría que acabar con todas las tareas.'], va: [0, 1, 2],
+      mira: ['Es una condición: ¿es toda su idea?', 'Mira «No se trata de… sino de…».', '¿La autora pide acabarlas?'], luz: [[5, 'No se trata de tareas sí o tareas no, sino de qué tareas']], bien: '«No… sino…» dice la idea entera.' },
+      'La revisión es un detalle; acabar con todas exagera. «No se trata de tareas sí o no, sino de qué tareas» es la idea.',
+      { hint: 'Busca en el párrafo la oración que niega una cosa para afirmar otra.' }),
+    play('balanza-tesis', 'Tesis de la autora: importa **qué** tareas se dejan. ¿Qué hace cada dato?', { doc: TAREAS, tesis: 'Importa qué tareas se dejan', fichas: ['Las bien diseñadas se relacionan con mejores resultados.', 'Las que exigen ayuda miden más la casa que al estudiante.', 'Un estudio: cualquier tarea da los mismos resultados.', 'Las tareas son tan viejas como la escuela.'], va: [0, 0, 1, 2],
+      mira: ['Si el diseño cambia el resultado, ¿importa cuáles?', 'Si unas miden la casa, ¿importa cuáles?', 'Si todas dan lo mismo, ¿importa cuáles?', 'La edad de las tareas, ¿dice cuáles importan?'], bien: 'Si todas dieran lo mismo, la tesis caería.' },
+      'El diseño y la ayuda muestran que no todas son iguales: apoyan. Que cualquiera dé lo mismo debilita. Que sean viejas no pesa.',
+      { hint: 'Supón que el dato es cierto y pregunta: ¿importa cuál tarea, o da igual?' }),
+    play('tacha-resumen', 'Tacha las tres oraciones que no hacen falta para entender la columna.', { doc: TAREAS, n: 3, lineas: ['La discusión sobre las tareas está muy viva.', 'Liliana llega a las ocho de la noche.', 'Una experta, un profesor y una madre la ven distinto.', 'El colegio queda en Itagüí.', 'La autora cree que importa qué tareas se dejan.', 'La vecina le paga a una muchacha.'], va: [1, 3, 5],
+      mira: { 0: 'Plantea el tema.', 2: 'Reúne las tres voces.', 4: 'Es la tesis de la autora.' }, bien: 'Tema, voces y tesis.' },
+      'La hora, el lugar y la vecina son detalles de cada voz. Quedan el tema, las voces y la tesis.',
+      { hint: 'De un texto con varias voces se guarda el tema, quiénes discuten y qué concluye quien escribe.' }),
+  ]);
+
+  // ---------------- Lección 2 · Posturas y citas externas ----------------
+  setLesson('pu-fu-2', [
+    play('pinta-voces', 'Pinta cada idea con el color de quien la dice.', { doc: PARAMO, plumas: ['Lenis', 'Mesa', 'el secretario', 'el autor'], lineas: ['El turismo es la mejor oportunidad de la zona.', 'La mayor parte debería cerrarse a las visitas.', 'Hay que abrir solo dos senderos con cupo.', 'Cada visita debería empezar con una charla.', 'El suelo ya no absorbe el agua como antes.'], va: [0, 1, 2, 3, 1],
+      mira: ['Busca a quien vive de mostrar el lugar.', 'Busca «Para ella».', 'Busca «propone un camino intermedio».', 'Busca «Creo que».', 'Busca «Según sus mediciones».'], bien: 'Cada postura tiene su dueño.' },
+      'Lenis, el guía, quiere abrir; Mesa, la bióloga, cerrar casi todo; el secretario, abrir poco; y el autor agrega la charla.',
+      { hint: 'Vuelve al texto y busca quién está hablando en el párrafo de cada idea.' }),
+    play('linea-vida', 'Pon a cada quien en su postura frente a abrir el páramo.', { doc: PARAMO, rot: ['a favor', 'matizada', 'en contra'], fichas: ['Lenis: es una oportunidad; que se siga abriendo.', 'Mesa: cerrar la mayor parte.', 'El secretario: dos senderos con cupo.', 'El autor: cupo y, además, una charla.'], va: [0, 2, 1, 1],
+      mira: ['Pide guías, pero ¿quiere abrir más o menos?', 'No dice «todo», pero ¿qué quiere para la mayor parte?', '¿Dice sí, no o sí con condiciones?', '¿Dice sí, no o sí con condiciones?'], bien: 'Sí, no, o sí pero…' },
+      'Lenis quiere que se siga abriendo: a favor. Mesa quiere cerrar casi todo: en contra. El secretario y el autor aceptan visitas con condiciones: matizan.',
+      { hint: 'Pregunta de cada uno: ¿quiere más visitas, menos, o visitas con condiciones?' }),
+    play('balanza-tesis', 'Estas citas **no** están en el texto. ¿Qué le hacen a la tesis del autor?', { doc: PARAMO, tesis: 'Las visitas deben tener cupo y empezar con una charla', fichas: ['«Con cupo, la vegetación se recuperó en cinco años.»', '«Quien recibe una charla se sale menos del sendero.»', '«Un cupo de cien personas no reduce el daño.»', '«El frailejón es una planta de alta montaña.»'], va: [0, 0, 1, 2],
+      mira: ['Si el cupo sirve, ¿la tesis gana o pierde?', 'Si la charla sirve, ¿la tesis gana o pierde?', 'Si el cupo no sirve, ¿la tesis gana o pierde?', '¿Habla del cupo o de la charla?'], bien: 'Se compara con la tesis, no con un detalle.' },
+      'El cupo y la charla que funcionan apoyan; el cupo que no reduce el daño debilita; definir el frailejón no toca la tesis.',
+      { hint: 'La tesis tiene dos partes: cupo y charla. ¿La cita le da o le quita razón a alguna?' }),
+    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: PARAMO, nums: [2, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['El secretario sabe que el cupo no gustará.', 'Lenis cree que el turismo puede evitar que tumben monte.', 'El cobro se invertiría en restaurar.', 'Los guías ganan más que los agricultores.', 'El cupo ya se aplicó.'], va: [0, 1, 0, 2, 2],
+      mira: ['Busca «impopular».', 'Compara su «Antes» con su «Ahora».', 'Busca el cobro.', '¿Alguien compara lo que ganan?', 'Mira el verbo: ¿propone o hizo?'], luz: [[4, 'Reconoce que el cupo será impopular'], [2, 'había que tumbar monte'], [4, 'un cobro que se invierta en restaurar']], bien: 'Proponer no es haber hecho.' },
+      'Impopular y el cobro están escritos. De «Antes… Ahora» se deduce lo de Lenis. Lo que ganan no se compara y el cupo es una propuesta.',
+      { hint: 'Busca primero la palabra clave; si no está, mira si sale de juntar dos frases.' }),
+    play('sella-parrafo', '«El secretario propone todo lo siguiente, **EXCEPTO**:» Ata cada opción al párrafo donde está **como idea suya**.', { doc: PARAMO, tarjetas: ['Dos senderos', 'Reservas previas', 'Un cobro', 'Sacar a los campesinos'], va: [3, 3, 3, 5],
+      mira: ['Busca «abrir solo».', 'Busca cómo se entraría.', 'Busca en qué se invierte.', 'Los campesinos se nombran: ¿alguien pide sacarlos?'], luz: [[4, 'abrir solo dos senderos, con un cupo de cien personas al día, reservas previas y un cobro']], bien: 'Nombrarlos no es querer sacarlos.' },
+      'Los senderos, las reservas y el cobro son del párrafo 4. Sacar a los campesinos no lo propone nadie.',
+      { hint: 'Tres opciones pueden venir en una sola oración. Revisa además de quién es la idea.' }),
+    play('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: PARAMO, fichas: ['plantea el problema', 'da una postura a favor', 'da una postura en contra', 'da una postura intermedia', 'da la opinión del autor', 'da la voz de los turistas'], va: [0, 1, 2, 3, 4, null],
+      mira: ['Busca la pregunta que abre el texto.', 'Busca la «mejor oportunidad».', 'Busca «no está de acuerdo».', 'Busca «camino intermedio».', 'Busca «Creo que».', 'Se habla de ellos, pero ¿hablan?'],
+      luz: [[1, 'La pregunta es qué hacer con él'], [2, 'la mejor oportunidad'], [3, 'no está de acuerdo'], [4, 'un camino intermedio'], [5, 'Creo que']], bien: 'Problema, tres posturas y la del autor.' },
+      'El problema, el guía a favor, la bióloga en contra, el secretario en el medio y el autor.',
+      { hint: 'Mira cómo empieza cada párrafo y quién habla en él.' }),
+    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: PARAMO, pares: [['El secretario se acerca a la respuesta,', 'se queda corto.'], ['Defiende el cupo', 'sin límites no habrá páramo.'], ['No basta el cupo;', 'propone una charla.']], fichas: ['aunque', 'porque', 'por eso', 'es decir,', 'por ejemplo'], va: [0, 1, 2, null, null],
+      mira: ['¿Dónde se acepta algo y se le pone un pero?', '¿Dónde lo segundo es la razón de lo primero?', '¿Dónde la segunda resulta de la primera?', 'En ninguna la segunda repite la primera con otras palabras.', 'En ninguna la segunda es un caso.'], bien: 'Matizar es decir sí, pero.' },
+      '«Aunque» acepta y frena; «porque» da la razón de defender el cupo; «por eso» trae la propuesta.',
+      { hint: 'En una lo segundo frena, en otra es la razón y en otra es lo que resulta.' }),
+    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: PARAMO, nums: [3, 4], pregunta: 'Queda en pie', queda: 'El secretario busca un punto medio.', tarjetas: ['La bióloga quiere cerrar todo el páramo.', 'Pisar fuera del sendero no le hace daño.', 'El secretario cree que el cupo le gustará a todos.'], va: [3, 2, 5],
+      mira: ['Busca cuánto quiere cerrar.', 'Busca la pequeña herida.', 'Busca lo que reconoce.'], bien: '«La mayor parte» no es «todo».' },
+      'Ella habla de «la mayor parte»; cada pisada «es una pequeña herida»; y él reconoce que será «impopular».',
+      { hint: 'Fíjate en la palabra que exagera o niega en cada opción y busca la oración que la corrige.' }),
+  ]);
+
+  // ---------------- Evaluación: formato real, texto nuevo ----------------
+  const GRAFITI = {
+    id: 'lec-grafitis', title: 'Muros que hablan',
+    paras: [
+      'En el barrio San Javier, los muros que hace quince años estaban llenos de amenazas hoy están cubiertos de murales. Los turistas recorren las escaleras eléctricas tomando fotos, y los jóvenes del barrio cobran por guiar los recorridos. Pero no todos los muros pintados de la ciudad cuentan una historia tan amable.',
+      'El grafitero Andrés «Trazo» Gómez defiende que la calle es el museo de quienes nunca han entrado a uno. «Un muro gris no le pertenece a nadie; un muro pintado le pertenece a todos», afirma. Reconoce, eso sí, que hay quienes rayan sin permiso las fachadas recién pintadas de las casas, y dice que eso «no es arte, es falta de respeto».',
+      'Gloria Arango, presidenta de una junta de acción comunal, está cansada de pintar la pared de su casa cada mes. Según ella, el problema no son los murales, sino las firmas rápidas que aparecen de noche y que nadie pidió. Propone que la alcaldía multe a quienes rayen propiedades privadas.',
+      'La Secretaría de Cultura, por su parte, asegura que ha entregado más de doscientos muros legales para pintar y que, en las zonas donde lo hizo, las rayas en fachadas privadas se redujeron casi a la mitad.',
+    ],
+  };
+  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: GRAFITI, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
+  setExam('pu-fuentes', 'Evaluación · Fuentes y voces', [
+    ['pu-fu-1', 'Antes de responder, se identifica de quién es cada cita: el verbo que la acompaña lo dice.',
+      Q('La frase «Un muro gris no le pertenece a nadie; un muro pintado le pertenece a todos» es de:', ['Gloria Arango', 'La Secretaría de Cultura', 'El autor del texto', 'Andrés Gómez'], 3,
+        'Va entre comillas, seguida de «afirma», en el párrafo de Andrés «Trazo» Gómez.',
+        'Busca la cita en el texto y mira qué verbo la acompaña y en qué párrafo está.')],
+    ['pu-fu-1', 'Las comillas con un verbo de decir marcan las palabras exactas de alguien.',
+      Q('Las comillas en «no es arte, es falta de respeto» indican que:', ['son las palabras exactas de Andrés Gómez', 'el autor usa la frase con ironía', 'es el título de un mural', 'es una idea de la Secretaría de Cultura'], 0,
+        'La frase va con «dice que», y quien la dice es Gómez, refiriéndose a quienes rayan las fachadas.',
+        'Fíjate en el verbo que va antes de las comillas y en quién es el sujeto.')],
+    ['pu-fu-1', 'Un dato también tiene una voz: «asegura», «según», «informa».',
+      Q('Según el texto, quien asegura que las rayas en fachadas privadas se redujeron casi a la mitad es:', ['Gloria Arango', 'La Secretaría de Cultura', 'Andrés Gómez', 'Los guías del barrio'], 1,
+        'El párrafo 4 dice que la Secretaría de Cultura «asegura» ese dato.',
+        'Busca el dato de «casi a la mitad» y quién lo asegura.')],
+    ['pu-fu-2', 'Una postura matizada acepta una parte y rechaza otra.',
+      Q('La postura de Gloria Arango frente al grafiti es:', ['A favor de cualquier grafiti', 'En contra de todos los murales', 'Matizada: acepta los murales pero rechaza las firmas sin permiso', 'Indiferente'], 2,
+        'Dice que «el problema no son los murales, sino las firmas rápidas»: acepta una cosa y rechaza la otra.',
+        'Lee la frase de Gloria que empieza con «el problema no son…».')],
+    ['pu-fu-2', 'Una cita externa apoya una propuesta si muestra que lo propuesto funciona.',
+      Q('Un dato que apoyaría la propuesta de Gloria Arango sería:', ['Un informe de que los turistas prefieren los murales', 'Un estudio que muestra que las multas redujeron las firmas en fachadas de otra ciudad', 'Una encuesta según la cual a los jóvenes les gusta pintar', 'Un dato sobre el precio de la pintura'], 1,
+        'Gloria propone multas; un estudio donde las multas funcionaron la apoya. Las demás opciones no tocan la propuesta.',
+        'Recuerda qué propone Gloria y busca el dato que muestre que eso funciona.')],
+    ['pu-fu-2', 'Un dato debilita una idea si muestra lo contrario de lo que ella afirma.',
+      Q('El dato de la Secretaría de Cultura (párrafo 4) debilita sobre todo la idea de que:', ['los murales atraen turistas', 'Gloria pinta su pared cada mes', 'Andrés Gómez es grafitero', 'entregar muros legales no sirve para reducir las rayas en las casas'], 3,
+        'Si en las zonas con muros legales las rayas bajaron casi a la mitad, se debilita la idea de que esos muros no sirven.',
+        'Pregúntate qué idea quedaría en duda si el dato de la Secretaría es cierto.')],
+  ]);
+});
+;
+//#archivo js/courses/preuda-l-conectores.js
+// Preuniversitario · Comprensión lectora · mundo 8 «Conectores y función de partes» con textos de verdad (spec
+// 2026-11-19-preuda-lectura-textos): una columna sobre el reciclaje llena de «sin embargo», «además», «de modo que», «por ejemplo»
+// y «en conclusión» (conectores), y otra sobre la «modernización» de una plaza de mercado con párrafos que ejemplifican,
+// contraargumentan y concluyen, y con comillas irónicas, rayas y paréntesis (función de párrafos y signos). La evaluación usa un
+// texto sobre la cosecha de lluvia en La Guajira. Textos escritos para Zuka.
+PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
+  const RECICLA = {
+    id: 'lec-reciclar-no-basta', title: 'Reciclar no es suficiente',
+    ficha: { autor: 'Columna de una ingeniera ambiental', fuente: 'Revista de ciencia y sociedad', fecha: 'Junio de 2025' },
+    paras: [
+      'Durante años nos han enseñado que reciclar es la mejor manera de cuidar el planeta. Separamos las botellas, lavamos los envases y los llevamos al punto ecológico con la conciencia tranquila. Sin embargo, los datos cuentan una historia menos cómoda: en muchos países, solo una pequeña parte del plástico que se separa termina convertida en un objeto nuevo.',
+      'Las razones son varias. En primer lugar, muchos plásticos no se pueden reciclar porque mezclan materiales que no se separan, como los empaques de papas fritas, que llevan una capa metálica por dentro. Además, cada vez que un plástico se recicla pierde calidad, de modo que una botella rara vez vuelve a ser botella: suele convertirse en fibra para ropa o en relleno, y ahí termina su vida.',
+      'Por otra parte, reciclar tiene costos que casi nunca vemos. Hay que transportar el material, lavarlo, triturarlo y fundirlo, y todo eso consume agua y energía. Por eso, cuando el petróleo está barato, a muchas empresas les sale más económico fabricar plástico nuevo que comprar el reciclado. Y si el material llega sucio o mezclado, buena parte termina de todos modos en el relleno sanitario.',
+      'Esto no quiere decir que reciclar sea inútil. Al contrario: cada kilo que se recupera es un kilo que no llega al río ni al relleno sanitario. El problema no está en reciclar; está, más bien, en creer que con eso basta. El reciclaje es la última de tres tareas, no la primera. Antes vienen reducir lo que compramos y reutilizar lo que ya tenemos.',
+      'Por ejemplo, una botella de vidrio retornable puede volver a llenarse decenas de veces antes de romperse, mientras que una de plástico desechable se usa una vez. Del mismo modo, una bolsa de tela que se lleva al mercado durante un año reemplaza cientos de bolsas plásticas, y un frasco que se lleva a la tienda para comprar a granel ahorra un empaque cada semana. Ninguna de estas soluciones necesita una planta de reciclaje.',
+      'En conclusión, separar la basura está bien, pero no nos exime de lo más difícil: comprar menos y desechar menos. Reciclar no es el comienzo del camino; antes bien, es lo que queda cuando ya no se pudo reducir ni reutilizar. El mejor residuo, como dicen los ambientalistas, es el que nunca se produce.',
+    ],
+  };
+
+  const PLAZA = {
+    id: 'lec-plaza-modernizada', title: 'La «modernización» de la plaza',
+    ficha: { autor: 'Columna de opinión', fuente: 'Periódico de un municipio del oriente antioqueño', fecha: 'Septiembre de 2025' },
+    paras: [
+      'En marzo, la alcaldía anunció con bombos y platillos la «modernización» de la plaza de mercado: pisos de baldosa blanca, locales con vitrina y un parqueadero de dos pisos. Hubo banda, discursos y una cinta tricolor que cortó el alcalde. Las fotos del proyecto mostraban gente sonriente, frutas brillantes y ningún perro. Seis meses después de la inauguración, la mitad de los vendedores ya no está.',
+      'Pongamos un ejemplo. Doña Rubiela vendía hierbas aromáticas —toronjil, limoncillo, ruda— en un puesto de un metro cuadrado que pagaba a diario. El nuevo local, con vitrina y contador de luz, cuesta un arriendo mensual que equivale a lo que ella ganaba en dos meses. Hoy vende en la acera de enfrente, sin techo, y la policía la saca cada tanto por «ocupar el espacio público». Sus clientes de siempre la siguen buscando; los nuevos, los del parqueadero, ni la ven.',
+      'Se dirá, con razón, que la plaza vieja tenía problemas serios: el techo goteaba, los baños eran una vergüenza y las ratas se paseaban a plena luz del día. Nadie pide volver a eso, ni defender la suciedad en nombre de la tradición. Pero arreglar un techo no obligaba a cambiar a quienes vivían debajo de él.',
+      'Los funcionarios repiten que los vendedores pueden presentarse a una convocatoria para los locales (siempre que tengan cámara de comercio, cuenta bancaria y un fiador). Es decir, pueden presentarse todos, menos los que más lo necesitan. Ninguno de los requisitos tiene que ver con saber vender, ni con los años que cada uno lleva en la plaza, ni con la calidad de lo que ofrece a sus clientes. La alcaldía presume de que hoy llegan más compradores a la plaza; puede ser, pero de poco sirve que lleguen más si ya no encuentran a quién comprarle.',
+      'En suma, una plaza no se moderniza cuando cambia de baldosa, sino cuando sirve mejor a quienes la usan. Y la plaza de mercado la usaban, sobre todo, los vendedores pequeños y sus clientes de siempre. Si ellos ya no caben, lo que se hizo no fue una modernización: fue un desalojo con buena iluminación. Una modernización de verdad habría empezado por preguntarles a ellos qué necesitaban.',
+    ],
+  };
+
+  // ---------------- Lección 1 · Conectores ----------------
+  setLesson('pu-cn-1', [
+    play('ordena-texto', 'Se desordenó la columna. La primera tira está en su puesto: guíate por los conectores.', { doc: { title: RECICLA.title, ficha: RECICLA.ficha }, fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Durante años nos han enseñado que reciclar es la mejor manera de cuidar el planeta. Sin embargo, los datos cuentan una historia menos cómoda: en muchos países, solo una pequeña parte del plástico que se separa termina convertida en un objeto nuevo.', 'Las razones son varias. En primer lugar, muchos plásticos no se pueden reciclar porque mezclan materiales que no se separan, como los empaques de papas fritas, que llevan una capa metálica por dentro.', 'Por otra parte, reciclar tiene costos que casi nunca vemos.', 'Esto no quiere decir que reciclar sea inútil. El reciclaje es la última de tres tareas, no la primera. Antes vienen reducir lo que compramos y reutilizar lo que ya tenemos.', 'Por ejemplo, una botella de vidrio retornable puede volver a llenarse decenas de veces antes de romperse, mientras que una de plástico desechable se usa una vez.'],
+      mira: ['', 'Da razones de algo que ya se dijo.', '«Por otra parte» suma a una razón anterior.', '«Esto no quiere decir» frena las críticas: ¿quedaron debajo?', '«Por ejemplo» ilustra lo de reutilizar: ¿ya se dijo?'], bien: 'Problema, razones, freno y ejemplo.' },
+      '«Las razones» explican el problema, «Por otra parte» suma, «Esto no quiere decir» frena y «Por ejemplo» ilustra la reutilización.',
+      { hint: 'Cada conector necesita algo antes: una razón a la cual sumarse, una crítica que frenar o una idea que ilustrar.' }),
+    play('bisagras', 'Pon en cada hueco el conector que une las dos ideas. Sobran dos.', { doc: RECICLA, pares: [['Nos enseñaron que reciclar basta.', 'los datos dicen otra cosa.'], ['El plástico pierde calidad al reciclarse;', 'una botella rara vez vuelve a ser botella.'], ['Esto no quiere decir que sea inútil.', 'cada kilo recuperado no llega al río.'], ['Antes hay que reutilizar.', 'una botella de vidrio se llena decenas de veces.']], fichas: ['Sin embargo,', 'por lo tanto,', 'Al contrario:', 'Por ejemplo,', 'En conclusión,', 'porque'], va: [0, 1, 2, 3, null, null],
+      mira: ['¿Dónde chocan dos ideas que siguen en pie?', '¿Dónde lo segundo resulta de lo primero?', '¿Dónde se niega algo y se pone lo contrario?', '¿Dónde lo segundo es un caso?', 'Ninguna segunda idea recoge todo lo dicho.', 'Ninguna segunda idea es la causa de la primera.'], bien: 'Choca, resulta, rectifica e ilustra.' },
+      'Los datos chocan («Sin embargo»), no volver a ser botella resulta («por lo tanto»), se niega que sea inútil («Al contrario») y la botella ilustra («Por ejemplo»).',
+      { hint: 'Busca primero la pareja que empieza negando algo, y luego la que cuenta un caso.' }),
+    play('pinta-tipos', 'Pinta cada oración según lo que anuncia su conector.', { doc: RECICLA, plumas: ['contraste', 'consecuencia', 'suma', 'ejemplo'], lineas: ['Además, cada reciclaje le quita calidad.', 'Por eso, sale más barato fabricar plástico nuevo.', 'Sin embargo, los datos cuentan otra historia.', 'Por ejemplo, un frasco que se lleva a la tienda ahorra un empaque.', 'Por otra parte, reciclar consume agua.'], va: [2, 1, 0, 3, 2],
+      mira: ['¿Agrega otra razón o la contradice?', '¿Es un resultado o un caso?', '¿Va en la misma dirección o en contra?', '¿Es un resultado o un caso?', '¿Agrega otra razón o la contradice?'], bien: 'El conector dice qué viene.' },
+      '«Además» y «Por otra parte» suman; «Por eso» trae una consecuencia; «Sin embargo», un contraste; «Por ejemplo», un caso.',
+      { hint: 'Tapa lo que sigue y pregunta qué esperarías después de leer solo el conector.' }),
+    play('genero-o-cita', '¿Opone dos ideas que siguen en pie, o **rectifica**: niega una y pone otra?', { rot: ['opone', 'rectifica'], doc: RECICLA, fichas: ['Nos enseñaron eso; sin embargo, los datos dicen otra cosa.', 'No es el comienzo; antes bien, es lo último.', 'Reciclar sirve, pero tiene costos.', 'El problema no está en reciclar; está, más bien, en creer que basta.'], va: [0, 1, 0, 1],
+      mira: ['¿Alguna de las dos ideas quedó negada?', '¿Cuál de las dos ideas queda en pie?', '¿Alguna de las dos ideas quedó negada?', '¿Cuál de las dos ideas queda en pie?'], bien: 'Rectificar: no esto, sino aquello.' },
+      'En «sin embargo» y «pero» quedan las dos ideas. «Antes bien» y «más bien» llegan tras un «no» y ponen otra en su lugar.',
+      { hint: 'Busca el «no» en la primera parte. Si lo segundo reemplaza lo negado, rectifica.' }),
+    play('pasos-del-proceso', 'Ordena la vida de la botella que cuenta el párrafo 2.', { que: 'lo que pasa con el plástico', de: 'De botella a relleno', fija: 0, ini: [2, 0, 3, 1], tiras: ['La botella se recicla.', 'El plástico pierde calidad.', 'Se vuelve fibra o relleno.', 'Ahí termina su vida.'],
+      mira: ['Es lo que empieza todo.', 'Pierde calidad por algo que le hacen.', 'Se vuelve otra cosa porque ya no sirve igual.', 'Es el final de la cadena.'], bien: '«De modo que» une la cadena.' },
+      'Se recicla, pierde calidad, se vuelve fibra o relleno y ahí termina. «De modo que» marca la consecuencia.',
+      { hint: 'Busca «de modo que» en el párrafo 2: lo que va antes es la causa.' }),
+    play('sella-parrafo', '«Reciclar plástico tiene todos estos problemas, **EXCEPTO**:» Ata cada opción a su párrafo.', { doc: RECICLA, tarjetas: ['Hay empaques con materiales mezclados', 'Pierde calidad', 'Gasta agua y energía', 'Suelta gases que enferman'], va: [1, 1, 2, 6],
+      mira: ['Busca las papas fritas.', 'Busca la botella que no vuelve a ser botella.', 'Busca los costos.', 'Suena posible, pero búscalo.'], luz: [[2, 'mezclan materiales que no se separan'], [2, 'pierde calidad'], [3, 'consume agua y energía']], bien: 'Los gases no los nombró nadie.' },
+      'La mezcla y la calidad están en el 2; el agua y la energía, en el 3. Los gases no aparecen.',
+      { hint: 'Dos opciones pueden estar en el mismo párrafo. La que no encuentres es la respuesta.' }),
+    play('talla-idea', 'Tres resúmenes del párrafo 4: pon cada uno en su talla.', { doc: RECICLA, p: 4, rot: ['se queda en un detalle', 'justa', 'dice de más'], fichas: ['Un kilo recuperado no llega al río.', 'Reciclar sirve, pero después de reducir y reutilizar.', 'Reciclar no sirve para nada.'], va: [0, 1, 2],
+      mira: ['Es la prueba de una idea: ¿es toda la idea?', 'Mira «la última de tres tareas».', 'Compárala con «no quiere decir que reciclar sea inútil».'], luz: [[4, 'El reciclaje es la última de tres tareas, no la primera']], bien: 'Frenar no es negar.' },
+      'El kilo es un detalle; «para nada» lo niega el propio párrafo. La justa dice que sirve y en qué puesto va.',
+      { hint: 'El párrafo frena una exageración y pone orden. La justa tiene que hacer las dos cosas.' }),
+    play('comprueba-apuesta', 'Subraya en el párrafo 1 la oración que mejor prueba esta conclusión.', { doc: RECICLA, nums: [1], n: 1, apuesta: 'Separar la basura no garantiza que el plástico se recicle.', va: ['1.2'],
+      mira: { '1.0': 'Dice lo que nos enseñaron, no lo que pasa.', '1.1': 'Dice lo que hacemos al separar.' }, bien: 'Después de «Sin embargo» viene lo que pesa.' },
+      '«Solo una pequeña parte del plástico que se separa termina convertida en un objeto nuevo»: está justo después de «Sin embargo».',
+      { hint: 'Lo importante suele venir después del conector que contrasta.' }),
+  ]);
+
+  // ---------------- Lección 2 · Función de párrafos y signos ----------------
+  setLesson('pu-cn-2', [
+    play('mapa-margen', 'Lleva al margen la función de cada párrafo. Sobra una nota.', { doc: PLAZA, fichas: ['presenta el hecho con ironía', 'ejemplifica con un caso', 'concede algo y lo refuta', 'desmonta lo que dicen los funcionarios', 'concluye con la tesis', 'propone volver a la plaza vieja'], va: [0, 1, 2, 3, 4, null],
+      mira: ['Busca las comillas burlonas.', 'Busca «Pongamos un ejemplo».', 'Busca «Se dirá, con razón».', 'Busca «Es decir».', 'Busca «En suma».', 'Compárala con «Nadie pide volver a eso».'],
+      luz: [[1, '«modernización»'], [2, 'Pongamos un ejemplo'], [3, 'Se dirá, con razón'], [4, 'Es decir'], [5, 'En suma']], bien: 'Las primeras palabras anuncian la función.' },
+      'Presenta con ironía, ejemplifica, concede y refuta, desmonta y concluye. Volver a la plaza vieja se descarta.',
+      { hint: 'Mira la primera o segunda oración de cada párrafo: ahí está la palabra que anuncia lo que hace.' }),
+    play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: PLAZA, texto: 'anunció la |«modernización»| de la plaza. Vendía hierbas aromáticas |—toronjil, limoncillo, ruda—|. Pueden presentarse a una convocatoria |(siempre que tengan cámara de comercio)|.', tarjetas: ['muestra que el autor no cree la palabra', 'mete ejemplos en la oración', 'guarda una condición'], va: [0, 1, 2],
+      mira: ['¿Dónde el autor se burla de una palabra?', '¿Dónde hay una lista de casos?', '¿Dónde hay un requisito?'], bien: 'Comillas irónicas, rayas con ejemplos, paréntesis con la condición.' },
+      'Las comillas de «modernización» son irónicas; las rayas meten ejemplos de hierbas; el paréntesis guarda la condición.',
+      { hint: 'Lee lo que está adentro de cada signo: ¿es una burla, una lista o una condición?' }),
+    play('pista-tipo', 'Ata cada verbo de función a la oración que lo hace.', { doc: PLAZA, lineas: ['Se dirá, con razón, que la plaza vieja tenía problemas.', 'Pongamos un ejemplo: doña Rubiela vendía hierbas.', 'En suma, una plaza no se moderniza cuando cambia de baldosa.', 'Pero arreglar un techo no obligaba a cambiar a quienes vivían debajo.'], tarjetas: ['concede', 'ejemplifica', 'concluye', 'refuta'], va: [0, 1, 2, 3],
+      mira: ['¿Dónde se acepta algo del otro lado?', '¿Dónde hay un caso?', '¿Dónde se recoge lo dicho?', '¿Dónde se muestra que una objeción no se sostiene?'], bien: 'Los verbos del examen, en acción.' },
+      '«Con razón» concede; el caso de Rubiela ejemplifica; «En suma» concluye; y el «Pero» refuta la objeción.',
+      { hint: 'Busca la marca de cada oración: «con razón», «ejemplo», «en suma», «pero».' }),
+    play('genero-o-cita', '¿**Matiza** lo propio o **relativiza** lo del otro?', { rot: ['matiza lo propio', 'relativiza lo ajeno'], doc: PLAZA, fichas: ['«Nadie pide volver a eso.»', '«Puede ser que lleguen más compradores, pero de poco sirve.»', '«No digo que toda obra sea mala.»', '«Quizá haya más luz, pero a nadie le devuelve el puesto.»'], va: [0, 1, 0, 1],
+      mira: ['¿De quién es la idea que se limita?', '¿De quién es el dato?', '¿De quién es la idea que se limita?', '¿De quién es el dato?'], bien: '¿De quién es la idea a la que se le pone límite?' },
+      '«Nadie pide» y «No digo» le ponen límite a la crítica del propio autor. «Puede ser… pero» acepta un dato ajeno y le quita peso.',
+      { hint: 'Pregunta de quién es lo que se limita: de quien escribe o de quien piensa distinto.' }),
+    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: PLAZA, pares: [['La plaza vieja tenía problemas;', 'arreglarla no obligaba a sacar a nadie.'], ['Pueden presentarse los que tengan cuenta y fiador;', 'todos, menos los que más lo necesitan.'], ['El arriendo equivale a dos meses de ganancia;', 'ella vende en la acera.']], fichas: ['sin embargo,', 'es decir,', 'por eso', 'porque', 'por ejemplo,'], va: [0, 1, 2, null, null],
+      mira: ['¿Dónde se acepta algo y se frena?', '¿Dónde lo segundo dice lo mismo de frente?', '¿Dónde lo segundo es efecto de lo primero?', 'Ninguna segunda idea es la causa de su primera.', 'Ninguna segunda idea es un caso.'], bien: 'Frena, aclara y trae el efecto.' },
+      'Los problemas no justifican sacar gente («sin embargo»); los requisitos dichos de frente («es decir»); y la acera es el efecto («por eso»).',
+      { hint: 'Una pareja choca, otra traduce y otra trae la consecuencia.' }),
+    play('voz-de-la-fuente', 'Ata cada frase a lo que hace con su tono.', { portadas: [['Burla', 'muestra lo ridículo'], ['Ironía', 'dice bonito lo grave'], ['Justicia', 'reconoce lo cierto'], ['Denuncia', 'señala un daño']], tarjetas: ['«Frutas brillantes y ningún perro.»', '«Un desalojo con buena iluminación.»', '«Los baños eran una vergüenza.»', '«La mitad de los vendedores ya no está.»'], va: [0, 1, 2, 3],
+      mira: ['¿Qué fotos son tan perfectas que dan risa?', '¿Dónde algo malo se adorna?', '¿Dónde acepta algo en contra de la plaza vieja?', '¿Dónde dice a quién perjudicó?'], bien: 'El tono cambia de frase en frase.' },
+      '«Ningún perro» se burla; «buena iluminación» es ironía; los baños, reconocer lo cierto; y la mitad que ya no está, denuncia.',
+      { hint: 'Pregunta de cada frase: ¿se ríe, dice lo contrario, acepta algo o acusa?' }),
+    play('balanza-tesis', 'Tesis: la obra sacó a quienes más necesitaban la plaza. ¿Qué hace cada dato?', { doc: PLAZA, tesis: 'La obra sacó a quienes más la necesitaban', fichas: ['El arriendo cuesta dos meses de ganancia.', 'La mitad de los vendedores ya no está.', 'Los que se fueron lo hicieron a locales mejores.', 'El techo viejo goteaba.'], va: [0, 0, 1, 2],
+      mira: ['Si no pueden pagarlo, ¿la tesis gana o pierde?', 'Si se fueron tantos, ¿la tesis gana o pierde?', 'Si les fue mejor, ¿la tesis gana o pierde?', '¿Dice algo de quién se fue?'], bien: 'El techo explica la obra, no a quién sacó.' },
+      'El arriendo y la mitad que falta apoyan; irse a algo mejor debilitaría; el techo no dice quién salió.',
+      { hint: 'Supón que cada dato es cierto y pregunta si hace más creíble que los sacaron.' }),
+    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: PLAZA, nums: [3, 4], pregunta: 'Queda en pie', queda: 'Los requisitos dejan por fuera a los pequeños.', tarjetas: ['El autor quiere la plaza vieja tal como estaba.', 'La plaza vieja no tenía ningún problema.', 'Para el local importa cuánto se sabe vender.'], va: [1, 0, 5],
+      mira: ['Busca «Nadie pide».', 'Busca lo que goteaba.', 'Busca con qué no tienen que ver los requisitos.'], bien: 'Cada falsa cae con una oración.' },
+      '«Nadie pide volver a eso»; la plaza «tenía problemas serios»; y ningún requisito «tiene que ver con saber vender».',
+      { hint: 'Busca la oración que habla de lo mismo y mira qué niega o qué acepta.' }),
+  ]);
+
+  // ---------------- Evaluación: formato real, texto nuevo ----------------
+  const LLUVIA = {
+    id: 'lec-cosechar-lluvia', title: 'Cosechar la lluvia',
+    paras: [
+      'En La Guajira llueve poco, pero cuando llueve, llueve fuerte. Por eso, desde hace mucho tiempo, las comunidades wayuu construyen jagüeyes: depresiones en la tierra que recogen el agua de los aguaceros y la guardan para los meses secos. Sin embargo, el agua de un jagüey se evapora rápido y se ensucia con facilidad.',
+      'Algunas escuelas rurales han probado otra solución: canaletas en los techos que llevan el agua a tanques cerrados. Un techo de cien metros cuadrados, por ejemplo, puede recoger miles de litros en una sola temporada de lluvias. Además, como el tanque está tapado, el agua llega más limpia y no se pierde por evaporación. Esto no significa que haya que tapar los jagüeyes. Al contrario: donde hay tanque, el jagüey queda libre para los animales y los cultivos.',
+      'Es cierto que un tanque cuesta más que un jagüey y que no todas las casas tienen un techo grande. No obstante, varias familias pueden compartir el tanque de la escuela, y el costo se reparte.',
+      'En suma, cosechar la lluvia no reemplaza un acueducto, pero puede ser la diferencia entre tener agua o no tenerla durante la sequía.',
+    ],
+  };
+  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: LLUVIA, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
+  setExam('pu-conectores', 'Evaluación · Conectores y función de partes', [
+    ['pu-cn-1', 'Después de una idea que el autor rechaza («Esto no significa que…»), «al contrario» rectifica: pone en su lugar lo que el autor sí sostiene.',
+      Q('En el párrafo 2, «Al contrario» introduce:', ['un problema de los tanques que el autor no había mencionado', 'lo que el autor sí sostiene sobre los jagüeyes, en lugar de lo que acaba de rechazar', 'una consecuencia de que el agua del jagüey se evapore tan rápido', 'un ejemplo de las escuelas rurales que construyen canaletas'], 1,
+        'Antes, el autor rechaza una idea: que haya que tapar los jagüeyes. «Al contrario» trae la idea que la reemplaza: los jagüeyes siguen sirviendo, ahora para los animales y los cultivos. No opone dos datos: corrige una lectura equivocada.',
+        'Lee la oración anterior al conector: ¿qué idea niega el autor? Lo que sigue a «Al contrario» es lo que pone en su lugar.')],
+    ['pu-cn-1', 'Un conector de contraste anuncia una idea que se opone o le pone un límite a la anterior.',
+      Q('En el párrafo 1, «Sin embargo» introduce:', ['un ejemplo de cómo se construye un jagüey', 'una limitación de los jagüeyes', 'una consecuencia de que llueva tan fuerte', 'la conclusión de todo el texto sobre el agua'], 1,
+        'Después de explicar para qué sirven los jagüeyes, «Sin embargo» presenta sus problemas: el agua se evapora y se ensucia.',
+        'Mira qué dice el texto de los jagüeyes antes y después del conector.')],
+    ['pu-cn-1', 'Dos conectores son intercambiables si establecen la misma relación.',
+      Q('«Además» (párrafo 2) puede reemplazarse, sin cambiar el sentido, por:', ['En cambio', 'Por lo tanto', 'Aunque', 'Asimismo'], 3,
+        '«Además» suma una ventaja más; «asimismo» también suma. Los otros marcan contraste, consecuencia o concesión.',
+        'Pregúntate qué relación marca «Además»: ¿suma, opone o concluye?')],
+    ['pu-cn-1', '«No obstante» es un conector de contraste, como «sin embargo».',
+      Q('«No obstante» (párrafo 3) tiene el mismo valor que:', ['por eso', 'sin embargo', 'por ejemplo', 'es decir'], 1,
+        'Introduce una respuesta que se opone a la desventaja dicha antes: es contraste, igual que «sin embargo».',
+        'Lee lo que hay antes (una desventaja) y lo que viene después (una salida).')],
+    ['pu-cn-2', 'Un párrafo que empieza con «Es cierto que…» suele reconocer una objeción para luego responderla.',
+      Q('La función del párrafo 3 es:', ['presentar una objeción y responderla', 'dar un ejemplo de una escuela que usa tanques', 'introducir el tema de la sequía en La Guajira', 'concluir que el jagüey es la mejor solución'], 0,
+        'Reconoce dos desventajas del tanque («Es cierto que…») y las responde con «No obstante»: compartir el tanque reparte el costo.',
+        'Fíjate en cómo empieza el párrafo y en el conector que viene después.')],
+    ['pu-cn-2', 'Los conectores «en suma», «en conclusión» y «en fin» anuncian un cierre.',
+      Q('El párrafo 4 cumple la función de:', ['contraargumentar', 'ejemplificar', 'concluir', 'introducir'], 2,
+        '«En suma» anuncia la conclusión: la cosecha de lluvia no reemplaza un acueducto, pero ayuda en la sequía.',
+        'Mira la primera expresión del párrafo.')],
+    ['pu-cn-2', 'Conceder es aceptar una parte de la postura contraria; relativizar, mostrar que pesa menos de lo que parece.',
+      Q('En el párrafo 3, el autor:', ['refuta con datos la idea de que un tanque cueste más que un jagüey', 'concede dos desventajas del tanque y luego les quita peso', 'ejemplifica cómo se construye un jagüey', 'concluye que el jagüey es mejor que el tanque'], 1,
+        '«Es cierto que…» acepta que el tanque es más caro y que no todas las casas tienen techo grande; «No obstante» les quita peso: el tanque se comparte y el costo se reparte. No niega que cueste más.',
+        'Fíjate en si el autor niega la desventaja o la acepta y luego dice por qué no es tan grave.')],
+    ['pu-cn-2', 'Matizar es precisar hasta dónde llega lo que se afirma, sin cambiar de postura.',
+      Q('Con «cosechar la lluvia no reemplaza un acueducto», el autor:', ['refuta a quienes piden construir acueductos en La Guajira', 'concede que cosechar la lluvia no sirve', 'matiza el alcance de la solución que defiende', 'ilustra cómo funciona un acueducto'], 2,
+        'Sigue defendiendo la cosecha de lluvia («puede ser la diferencia»), pero precisa hasta dónde llega: no es un acueducto. Eso es matizar.',
+        'Lee la frase completa del párrafo 4: después del «pero», ¿el autor abandona su propuesta o la mantiene?')],
+    ['pu-cn-2', 'Los dos puntos pueden anunciar una definición, una lista o una explicación.',
+      Q('Los dos puntos en «jagüeyes: depresiones en la tierra que recogen el agua…» sirven para:', ['introducir una definición de jagüey', 'citar las palabras de las comunidades wayuu', 'enumerar las escuelas que recogen la lluvia', 'marcar ironía frente a la palabra jagüey'], 0,
+        'Lo que sigue a los dos puntos explica qué es un jagüey.',
+        'Lee lo que viene después de los dos puntos: ¿qué te dice de la palabra anterior?')],
+  ]);
+});

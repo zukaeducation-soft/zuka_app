@@ -123,7 +123,7 @@ test('zona de examen: completa, con una sola respuesta, y las claves A–D repar
     }
   }
   const n = letters.reduce((a, b) => a + b, 0);
-  assert.ok(n >= 2 * lessons().length, `${n} preguntas A–D`);
+  assert.ok(n >= lessons().length + hechos().flatMap(u => u.lessons).length, `${n} preguntas A–D`);   // una por lección y otra en la evaluación del mundo completo
   for (const k of letters) assert.ok(k > 0 && k / n <= 0.4, `respuestas mal repartidas entre A–D: ${letters}`);
 });
 
@@ -254,7 +254,7 @@ test('los juegos propios del curso no usan lienzo ni colores propios y están re
 });
 
 // Estado: los mundos que ya deben estar hechos. Al terminar uno, se añade aquí.
-const HECHOS = ['sistemas'];
+const HECHOS = ['sistemas', 'determinantes', 'vectores', 'productos', 'mecanica', 'conicas'];
 test('mundos terminados', () => {
   for (const w of HECHOS) assert.ok(DONE.includes(w), `${w} sin terminar`);
 });
@@ -274,4 +274,112 @@ test('fila-por-columna: la ficha de otra casilla se avisa como casilla cruzada',
     }));
     assert.ok(!/precio/.test(G.bien(p)), 'el cierre habla de precios');
   }
+});
+
+// ---------------------------------------------------------------------------------------------- parciales y quices
+const PRUEBAS = get(ctx, 'GVA_PRUEBAS'), CORTES = get(ctx, 'GVA_CORTES');
+const todos = () => new Set(C.units.flatMap(u => [...u.lessons.flatMap(l => l.ex), ...(u.exam?.items.map(it => it.ex) || [])]).map(e => e.game + JSON.stringify({ ...e.params, autoDemo: undefined })));
+test('simulacros: un parcial y un quiz por corte del cronograma, que cubren sus lecciones', () => {
+  assert.equal(CORTES.length, 4);
+  assert.equal(PRUEBAS.map(P => P.id).sort().join(), ['geo-parcial-1', 'geo-parcial-2', 'geo-parcial-3', 'geo-parcial-4', 'geo-quiz-1', 'geo-quiz-2', 'geo-quiz-3', 'geo-quiz-4'].join());
+  for (const P of PRUEBAS) {
+    const n = P.items.length;
+    if (P.tipo === 'parcial') assert.ok(n >= 10 && n <= 14 && P.minutes === 100, `${P.id}: ${n} preguntas`);
+    else assert.ok(n >= 4 && n <= 6, `${P.id}: ${n} preguntas`);
+    for (const id of P.lessons) assert.ok(P.items.some(it => it.lesson === id), `${P.id} no pregunta por ${id}`);
+    assert.ok(P.items.filter(it => it.ex.game === 'opcion-examen').length >= 2, `${P.id}: pocas A–D`);
+    assert.ok(P.items.filter(it => GAMES[it.ex.game]?.xp).length >= n / 3, `${P.id}: pocas escenas`);
+  }
+});
+test('simulacros: preguntas nuevas, que se resuelven, con nota de repaso y sin nombrar la fuente', () => {
+  const vistos = todos(), J = e => e.game + JSON.stringify({ ...e.params, autoDemo: undefined }), letras = [0, 0, 0, 0];
+  // Tampoco repiten un paso del gimnasio ni una pregunta de otro simulacro.
+  for (const r of get(ctx, 'GYM_RETOS').filter(r => /^gym-gva-/.test(r.id))) for (const s of r.steps) vistos.add(J(s.ex));
+  const otros = PRUEBAS.flatMap(P => P.items.map(it => J(it.ex)));
+  assert.equal(new Set(otros).size, otros.length, 'dos simulacros con la misma pregunta');
+  for (const P of PRUEBAS) for (const it of P.items) {
+    const e = it.ex, g = GAMES[e.game], p = e.params, id = `${P.id} ${it.lesson} ${e.game}`;
+    assert.ok(P.lessons.includes(it.lesson), id);
+    assert.ok(g && (GUIDES[e.game] || g.demo || e.game === 'opcion-examen'), `${id}: no existe o sin guía`);
+    assert.ok(!['completa-solucion', 'caza-error'].includes(e.game), id);
+    assert.ok(it.review?.length > 15 && e.hint?.length > 20 && e.explain?.length > 20, id);
+    assert.ok(e.exam && e.kind === 'Geometría Vectorial', id);
+    assert.ok(!SOURCE.test(JSON.stringify(e)), `${id}: nombra la fuente`);
+    assert.ok(!vistos.has(J(e)), `${id}: repite un ejercicio de las lecciones o de la evaluación`);
+    if (g.xp) { assert.equal(g.grade(g.solve(p), p).ok, true, id); assert.equal(g.grade(g.ini(p), p).ok, false, id); }
+    else { assert.equal(p.options.length, 4, id); assert.equal(new Set(p.options.map(String)).size, 4, id); assert.equal(g.grade({ pick: p.answer }, p).ok, true, id); letras[p.answer]++; }
+  }
+  const n = letras.reduce((a, b) => a + b, 0);
+  for (const k of letras) assert.ok(k > 0 && k / n <= 0.4, `claves A–D de los simulacros: ${letras}`);
+});
+test('simulacros: la pantalla del curso los muestra por corte', () => {
+  // La pantalla usa S, esc e ICON de la app, que esta prueba no carga.
+  get(ctx, `globalThis.S = { exams: { 'geo-quiz-1': { best: 80 } } }; globalThis.esc = x => String(x); globalThis.ICON = { lock: '' }; 1`);
+  const h = get(ctx, 'gvaPruebasHTML')(C);
+  assert.ok(h.includes('Mejor: 80 %'));
+  assert.equal((h.match(/data-gva-prueba=/g) || []).length, 8);
+  assert.equal((h.match(/class="simi-card"/g) || []).length, 4);
+  assert.equal(get(ctx, 'gvaPruebasHTML')(COURSES.find(c => c.id === 'algebra')), '');
+});
+
+// ---------------------------------------------------------------------------------------------- gimnasio
+test('gimnasio: cada mundo tiene dos retos de Fuerza y dos de Élite con escenas, que se resuelven y no repiten un ejercicio', () => {
+  const R = get(ctx, 'gymRetos')(C).flatMap(g => g.retos).filter(r => /^gym-gva-/.test(r.id)), vistos = todos();
+  const J = e => e.game + JSON.stringify({ ...e.params, autoDemo: undefined });
+  for (const u of C.units) {
+    const ids = u.lessons.map(l => l.id), n = R.filter(r => r.after.some(a => ids.includes(a))).map(r => r.level);
+    assert.ok(n.filter(x => x === 2).length >= 2 && n.filter(x => x === 3).length >= 2, `${u.world}: retos ${n}`);
+  }
+  for (const r of R) {
+    assert.ok(r.title && r.strategy && r.problem.length > 30 && r.answer && r.wrap, r.id);
+    assert.ok(r.steps.length >= 2 && r.steps.length <= 4, `${r.id}: ${r.steps.length} pasos`);
+    assert.ok(!SOURCE.test(JSON.stringify(r)), `${r.id}: nombra la fuente`);
+    for (const { ex, hints, coach, title } of r.steps) {
+      const g = GAMES[ex.game], p = ex.params, id = `${r.id} ${ex.game}`;
+      assert.equal(g?.xp, true, id); assert.ok(GUIDES[ex.game], `${id} sin guía`);
+      assert.ok(title && coach && hints?.length >= 2, id);
+      assert.equal(g.grade(g.solve(p), p).ok, true, id); assert.equal(g.grade(g.ini(p), p).ok, false, id);
+      assert.ok(!/undefined|NaN/.test(g.grade(g.solve(p), p).solution), id);
+      assert.ok(!vistos.has(J(ex)), `${id} repite un ejercicio de las lecciones`);
+    }
+  }
+});
+
+// Revisión del 2026-11-27: en cuarto-vertice-marco, los otros dos paralelogramos (los errores típicos) caben en la rejilla, para que
+// su aviso pueda salir.
+test('cuarto-vertice-marco: los dos paralelogramos equivocados se pueden marcar', () => {
+  const G = GAMES['cuarto-vertice-marco'];
+  const exs = [...lessons().flatMap(([, l]) => l.ex), ...hechos().flatMap(u => u.exam.items.map(it => it.ex)), ...PRUEBAS.flatMap(P => P.items.map(it => it.ex))]
+    .filter(e => e.game === 'cuarto-vertice-marco');
+  assert.ok(exs.length >= 2);
+  for (const { params: p } of exs) for (const [nombre, d] of [['abdc', [p.B[0] + p.C[0] - p.A[0], p.B[1] + p.C[1] - p.A[1]]], ['acbd', [p.A[0] + p.B[0] - p.C[0], p.A[1] + p.B[1] - p.C[1]]]]) {
+    assert.ok(d[0] >= 0 && d[0] <= 14 && d[1] >= 0 && d[1] <= 9, `${nombre} en ${d}: fuera de la rejilla`);
+    assert.equal(G.aviso({ x: d[0], y: d[1] }, p), p.mira[nombre], nombre);
+  }
+});
+
+// Revisión del 2026-11-27 (lecciones geo-14 a geo-23, gimnasios y simulacros).
+const todosLosEx = () => [...lessons().flatMap(([, l]) => l.ex), ...hechos().flatMap(u => u.exam.items.map(it => it.ex)), ...PRUEBAS.flatMap(P => P.items.map(it => it.ex)),
+  ...get(ctx, 'GYM_RETOS').filter(r => /^gym-gva-/.test(r.id)).flatMap(r => r.steps.map(s => s.ex))];
+test('ficha-de-la-elipse: los dos focos valen en cualquier orden y el aviso no acusa el cambio', () => {
+  const G = GAMES['ficha-de-la-elipse'], exs = todosLosEx().filter(e => e.game === 'ficha-de-la-elipse');
+  assert.ok(exs.length >= 3);
+  for (const { params: p } of exs) {
+    const m = G.metas(p), sw = [m[0], m[2], m[1], m[3], m[4]];
+    assert.equal(G.grade({ q: sw.map(x => [x]) }, p).ok, true, `focos cambiados: ${sw}`);
+    for (const y of new Set(G.fichas(p))) if (y !== m[3]) {
+      const a = G.aviso({ q: sw.map((x, i) => [i === 3 ? y : x]) }, p), b = G.aviso({ q: m.map((x, i) => [i === 3 ? y : x]) }, p);
+      assert.equal(a, b, `con los focos cambiados el aviso cambia: ${a}`);
+    }
+  }
+});
+test('cuerda-del-dron-al-cable: la distancia hasta P no redondea a la respuesta', () => {
+  const exs = todosLosEx().filter(e => e.game === 'cuerda-del-dron-al-cable');
+  assert.ok(exs.length >= 1);
+  for (const { params: p } of exs) for (const t of p.tiros) assert.notEqual(Math.round(Math.hypot(...t.Q.map((q, i) => q - t.P[i]))), t.r, t.q);
+});
+test('simulacros: ninguna elipse sale igual en un paso del gimnasio del mismo juego', () => {
+  const key = e => { const p = e.params; return `${e.game} ${[p.h, p.k, p.a ?? p.A, p.b ?? p.B].join()}`; };
+  const gym = new Set(get(ctx, 'GYM_RETOS').filter(r => /^gym-gva-/.test(r.id)).flatMap(r => r.steps.map(s => s.ex)).filter(e => /elipse/.test(e.game)).map(key));
+  for (const P of PRUEBAS) for (const it of P.items) if (/elipse/.test(it.ex.game)) assert.ok(!gym.has(key(it.ex)), `${P.id}: ${key(it.ex)} está en el gimnasio`);
 });

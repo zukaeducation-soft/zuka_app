@@ -107,7 +107,8 @@ Object.assign(XG, (() => {
   }
   function rotula(name, d) {
     const fichas = p => revuelve(d.fichas(p), d.metas(p));
-    const bien = (s, p) => d.metas(p).map((m, i) => s.q[i]?.[0] === m);
+    // d.juzga(q, p), si existe, dice lugar por lugar qué vale (p. ej. dos lugares que aceptan sus fichas en cualquier orden).
+    const bien = (s, p) => (d.juzga ? d.juzga(s.q, p) : d.metas(p).map((m, i) => s.q[i]?.[0] === m));
     XG.juego(name, {
       ini: p => ({ q: d.slots(p).map(() => []) }),
       listo: s => s.q.every(l => l.length),

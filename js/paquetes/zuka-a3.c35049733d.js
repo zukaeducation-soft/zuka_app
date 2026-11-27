@@ -1,955 +1,5 @@
 // Generado por tools/empaquetar.js: no editar a mano.
 ;
-//#archivo js/courses/preuda-l-inferencia.js
-// Preuniversitario · Comprensión lectora · mundo 4 «Inferencia» con textos de verdad (spec 2026-11-19-preuda-lectura-textos): una
-// panadería donde casi nada se dice y todo se ve (ideas implícitas), una columna llena de «por fin», «todavía» y «otra vez»
-// (presupuestos), un pueblo que se vacía y una causa equivocada (causa y efecto) y un testimonio sobre una máquina de coser
-// (actitudes y motivos). La evaluación usa la crónica de un cartero rural. Textos escritos para Zuka.
-PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
-  const PAN = {
-    id: 'lec-panaderia', title: 'Las tres de la mañana',
-    ficha: { autor: 'Relato de un escritor de Medellín', fuente: 'Antología de relatos de barrio', fecha: '2023' },
-    paras: [
-      'A las tres de la mañana, cuando el barrio todavía duerme, en la panadería de don Aurelio ya huele a levadura. Él llega primero, prende el horno y pone a hervir el agua del tinto. Su hijo Camilo llega media hora después, con los ojos a medio abrir, y se lava las manos sin decir palabra. Hace cuatro años que trabajan juntos, y en ese tiempo han aprendido a hablar poco antes de que salga la primera bandeja.',
-      'Don Aurelio amasa como si estuviera escuchando la masa. Hunde los dedos, la dobla, la vuelve a hundir y de pronto se detiene. «Todavía no», dice, y la deja reposar bajo un trapo. Camilo, en cambio, mira el reloj del celular cada tanto. Ha visto en internet unas máquinas que amasan solas en diez minutos y ya ha dejado sobre el mostrador, más de una vez, el folleto de una de ellas.',
-      'A las cinco y media empiezan a llegar los primeros clientes: los celadores que terminan su turno, las enfermeras que lo empiezan, un señor que compra siempre seis panes de queso y nunca saluda. Don Aurelio los conoce a todos por lo que piden. A la señora Inés le guarda el pan más tostado sin que ella tenga que pedirlo, desde que una mañana la vio devolver uno porque estaba pálido.',
-      'Hace dos meses abrió un supermercado a tres cuadras, con una panadería que vende el pan más barato. Desde entonces, don Aurelio hornea dos bandejas menos cada mañana. No ha dicho nada en la casa, pero la libreta donde anota las ventas ya no queda abierta sobre el mostrador: ahora la guarda en el bolsillo del delantal.',
-      'Esta mañana, cuando salió la última bandeja, Camilo se quedó mirando a su papá mientras contaba los billetes. Después recogió el folleto de la máquina, lo dobló en cuatro y lo metió en la basura. «Mañana llego a las tres», dijo. Don Aurelio no contestó. Siguió contando, pero se le perdió la cuenta y tuvo que empezar otra vez.',
-    ],
-  };
-
-  const CICLO = {
-    id: 'lec-ciclorruta', title: 'La ciclorruta, por fin (y a medias)',
-    ficha: { autor: 'Columna de opinión', fuente: 'Periódico de una ciudad intermedia', fecha: 'Agosto de 2025' },
-    paras: [
-      'Por fin, después de tres alcaldías y otras tantas promesas, la ciclorruta que une el barrio La Floresta con el centro dejó de ser un dibujo en un plano. Desde el lunes, quienes van en bicicleta al trabajo ya no tienen que disputarles el carril a los buses en la avenida. Es una buena noticia, y vale la pena decirlo antes de cualquier queja.',
-      'Pero las quejas también hay que decirlas. La ciclorruta vuelve a terminar donde terminan casi todas las obras de esta ciudad: en el borde de lo difícil. Recorre once kilómetros planos y bien iluminados y se interrumpe justo antes de la loma de San Antonio, donde viven los trabajadores que más la necesitan, los que todavía suben a pie porque el bus les cuesta medio día de jornal.',
-      'La secretaría de movilidad explica que el tramo de la loma quedó para una segunda etapa. Lo malo es que esta ciudad ya sabe lo que significa una segunda etapa: el parque de la quebrada sigue esperando la suya desde 2015, y el puente peatonal del colegio dejó de aparecer en los presupuestos hace dos años, aunque nadie lo haya cancelado oficialmente. Los niños de ese colegio siguen cruzando la avenida entre los carros, como lo hacían sus hermanos mayores cuando se anunció el puente.',
-      'Tampoco es cierto, como repiten algunos funcionarios, que la gente de las lomas no usa bicicleta. La usa menos porque nadie le ha construido por dónde subir con ella. Pedir que primero aparezcan los ciclistas para después hacer la vía es como exigir que alguien aprenda a nadar antes de dejarlo meterse al agua. En los barrios planos tampoco había ciclistas antes de la ciclorruta; aparecieron cuando tuvieron por dónde andar.',
-      'La ciclorruta que se inauguró el lunes demuestra que la ciudad sí puede hacer bien una obra cuando decide hacerla. Ahora falta que decida hacerla completa, empezando por donde la cuesta es más dura y el bolsillo más corto. Ojalá esta vez la segunda etapa no tenga que esperar a otra alcaldía.',
-    ],
-  };
-
-  const PUEBLO = {
-    id: 'lec-casas-candado', title: 'Las casas con candado',
-    ficha: { autor: 'Reportaje de una periodista regional', fuente: 'Revista de un periódico del Eje Cafetero', fecha: 'Mayo de 2025' },
-    paras: [
-      'En San José de las Nieblas, de cada diez casas de la calle principal, tres tienen candado en la puerta y una mata de helecho que nadie riega. Sus dueños no murieron ni se perdieron: viven en Medellín, en Bogotá o en Madrid, y vuelven, si acaso, para las fiestas de diciembre.',
-      'La historia empezó a cambiar hace unos veinte años, cuando el precio de la leche cayó y varias familias vendieron sus vacas. Con menos ordeño hubo menos trabajo para los jóvenes, que antes se empleaban en las fincas desde los catorce. Muchos se fueron a estudiar o a buscar empleo a la ciudad. Al principio volvían cada mes; después, cada año. En diciembre todavía se nota: durante dos semanas las calles se llenan de carros con placas de otras ciudades, y en enero el pueblo se vacía de nuevo.',
-      'La escuela de la vereda La Esperanza cerró en 2019 porque quedaban seis niños. Los que quedaron empezaron a viajar una hora en chiva hasta el colegio del pueblo, y algunas familias prefirieron mudarse más cerca o irse del todo. Así, la falta de niños cerró la escuela, y el cierre de la escuela se llevó a más niños.',
-      'Hay quien culpa a la carretera pavimentada, que se terminó en 2010, justo cuando más gente se estaba yendo. Pero la carretera no expulsó a nadie: los que se iban ya tenían razones para irse, y lo único que cambió fue que el viaje se hizo más corto. De hecho, la misma carretera trajo el año pasado a los primeros turistas, y con ellos dos hostales y una tienda de quesos.',
-      'La alcaldía ofrece ahora un subsidio para jóvenes que quieran volver y montar un negocio. Todavía es pronto para saber si funcionará: hasta ahora, dos jóvenes han preguntado por él, una para abrir una panadería y otro para montar un taller de motos. Lo que sí parece claro es que no bastará con el dinero: quien vuelve necesita también una escuela para sus hijos, señal en el celular y alguien con quien hablar en la tarde.',
-    ],
-  };
-
-  const MAQUINA = {
-    id: 'lec-maquina-coser', title: 'La máquina del comedor',
-    ficha: { autor: 'Testimonio de una lectora de Bello', fuente: 'Concurso de relatos «Historias de mi casa»', fecha: '2024' },
-    paras: [
-      'La máquina de coser de mi mamá sigue en el rincón del comedor, con su forro de tela de flores. Nadie la usa desde hace seis años, pero todos los domingos alguien le quita el polvo. Mis hermanas dicen que soy yo; yo digo que son ellas. Ninguna lo ha visto, y ninguna lo pregunta.',
-      'Mi mamá cosió en esa máquina durante treinta años. Hacía uniformes para dos colegios del barrio, y en diciembre se acostaba a la una de la mañana con los dedos llenos de curitas. Cuando alguien le decía que descansara, contestaba: «Descansar es para los ricos», y se reía, pero no paraba. Cosía con la radio prendida, tarareando boleros, y solo se callaba cuando tenía que contar los botones. Con esos uniformes pagó el estudio de las tres.',
-      'Yo nunca quise aprender. Me daba rabia el ruido del pedal cuando quería ver televisión, y me daba más rabia que ella me pidiera ayuda para hacer los ojales. Le decía que yo iba a ser abogada y que las abogadas no hacían ojales. Ella me miraba por encima de las gafas y seguía cosiendo. Cuando entré a la universidad, me hizo una carpeta de tela para los apuntes, con mis iniciales bordadas. La usé un mes y la cambié por una de plástico.',
-      'El año pasado se me descosió la toga el día de mi grado. Faltaba una hora para la ceremonia. Mis hermanas estaban peinándose, nadie tenía aguja, y yo me encontré abriendo el forro de flores, enhebrando la máquina como la había visto hacerlo diez mil veces y pisando el pedal. Me temblaban las manos, como si ella estuviera mirándome por encima de las gafas. La costura quedó torcida. No me importó.',
-      'En la foto del grado salgo sonriendo, con la toga torcida a la altura del hombro. La tengo en la mesa de noche. Cuando alguien me pregunta por qué no la mandé arreglar con un fotógrafo, le digo que me gusta así. No le explico más.',
-    ],
-  };
-
-  // ---------------- Lección 1 · Ideas implícitas ----------------
-  setLesson('pu-in-1', [
-    play('pista-tipo', 'Ata cada inferencia a la oración que la deja ver.', { doc: PAN, lineas: ['Desde entonces, don Aurelio hornea dos bandejas menos cada mañana.', 'La libreta ahora la guarda en el bolsillo del delantal.', 'A la señora Inés le guarda el pan más tostado sin que ella tenga que pedirlo.', 'Camilo ha dejado sobre el mostrador, más de una vez, el folleto de una máquina.'], tarjetas: ['Vende menos que antes', 'No quiere que vean las cuentas', 'Está pendiente de sus clientes', 'Quiere convencer a alguien'], va: [0, 1, 2, 3],
-      mira: ['¿Qué haría con el pan alguien que vende menos?', '¿Qué haría con los números alguien que los quiere tapar?', '¿Qué oración muestra un detalle con una persona?', '¿Qué hace quien insiste sin decirlo?'], bien: 'Nadie lo dijo: se ve en lo que hacen.' },
-      'Hornear menos muestra que vende menos; guardar la libreta, que esconde las cuentas; apartar el pan tostado, su atención; y dejar el folleto varias veces, que insiste.',
-      { hint: 'Por cada inferencia pregúntate qué gesto la delataría y búscalo en las oraciones.' }),
-    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: PAN, nums: [1, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['Trabajan juntos hace cuatro años.', 'Las ventas bajaron desde que abrió el supermercado.', 'El supermercado vende el pan más barato.', 'El pan del supermercado es de peor calidad.', 'Don Aurelio piensa cerrar la panadería.'], va: [0, 1, 0, 2, 2],
-      mira: ['Búscala tal cual en el párrafo 1.', 'Nadie lo dice así. ¿Qué cambió en las bandejas?', 'Búscala tal cual en el párrafo 4.', 'El texto habla del precio: ¿juzga el sabor?', '¿Hay alguna pista de que vaya a cerrar, o la pones tú?'], luz: [[1, 'Hace cuatro años que trabajan juntos'], [4, 'vende el pan más barato'], [4, 'hornea dos bandejas menos cada mañana']], bien: 'Inferir se apoya en una pista; suponer, en uno mismo.' },
-      'Los cuatro años y el precio están escritos. Las bandejas menos dejan ver que vende menos. Que el otro pan sea peor o que vaya a cerrar no tiene ninguna pista.',
-      { hint: 'Primero búscala tal cual. Si no está, señala la pista; si no hay pista, es una suposición.' }),
-    play('genero-o-cita', '¿Inferencia con pista o pura suposición?', { doc: PAN, rot: ['inferencia: hay pista', 'suposición: la pone uno'], fichas: ['Camilo quería comprar la máquina.', 'Camilo va a trabajar en el supermercado.', 'A Camilo le cuesta madrugar.', 'La señora Inés es familiar de don Aurelio.'], va: [0, 1, 0, 1],
-      mira: ['Busca qué dejaba sobre el mostrador.', '¿Algún gesto suyo apunta al supermercado?', 'Busca cómo tiene los ojos al llegar.', 'Que la atienda bien, ¿prueba que sean familia?'], luz: [[1, 'con los ojos a medio abrir'], [2, 'ha dejado sobre el mostrador']], bien: 'Sin pista, no hay inferencia.' },
-      'El folleto delata que quería la máquina y los ojos a medio abrir, que le cuesta madrugar. Lo del supermercado y la familia no tiene de dónde salir.',
-      { hint: 'Intenta señalar con el dedo la frase que la sostiene. Si no hay frase, la idea la pusiste tú.' }),
-    play('voz-de-la-fuente', 'El relato muestra lo que sienten sin nombrarlo. Ata cada gesto a lo que deja ver.', { portadas: [['Paciencia', 'sabe esperar'], ['Emoción', 'algo lo conmueve'], ['Prisa', 'quiere que pase rápido'], ['Preocupación', 'algo anda mal']], tarjetas: ['«Todavía no», dice, y deja reposar la masa.', 'Se le perdió la cuenta y tuvo que empezar otra vez.', 'Mira el reloj del celular cada tanto.', 'Guarda la libreta de las ventas.'], va: [0, 1, 2, 3],
-      mira: ['¿Qué tiene quien deja que la masa se tome su tiempo?', 'Acaba de oír algo de su hijo: ¿qué le pasa?', '¿Qué siente quien mira la hora una y otra vez?', '¿Por qué se guarda algo que antes estaba a la vista?'], bien: 'El gesto habla por la persona.' },
-      'Esperar a la masa es paciencia; perder la cuenta después de oír a su hijo, emoción; mirar el reloj, prisa; esconder la libreta, preocupación.',
-      { hint: 'Imagina a alguien haciendo ese gesto y pregúntate qué le pasa por dentro.' }),
-    play('comprueba-apuesta', 'Subraya en el párrafo 4 la oración que mejor prueba esta inferencia.', { doc: PAN, nums: [4], n: 1, apuesta: 'Don Aurelio está preocupado, aunque no lo diga.', va: ['4.2'],
-      mira: { '4.0': 'Cuenta lo que abrió: ¿muestra lo que él siente?', '4.1': 'Dice qué hace con el pan; puede ser solo un ajuste.' }, bien: 'Lo que antes estaba a la vista ahora se esconde.' },
-      'No decir nada en la casa y pasar la libreta del mostrador al bolsillo muestran que se guarda algo. Las otras cuentan el hecho y el ajuste de las bandejas.',
-      { hint: 'Preocuparse sin decirlo se nota en algo que se calla o se esconde. Búscalo.' }),
-    play('subraya-rasgo', 'Camilo cambió de idea sobre la máquina. Subraya las **dos** oraciones que lo muestran.', { doc: PAN, nums: [5], n: 2, va: ['5.1', '5.2'],
-      mira: { '5.0': 'Ahí apenas mira: todavía no hace nada con su idea.', '5.3': 'Habla de don Aurelio.', '5.4': 'Muestra lo que le pasa a don Aurelio.' }, bien: 'Bota el folleto y promete llegar más temprano.', falta: 'Faltó otra cosa que hace o dice Camilo.' },
-      'Doblar el folleto y botarlo muestra que renuncia a la máquina; «Mañana llego a las tres», que va a ayudar de otra manera.',
-      { hint: 'Busca lo que hace y lo que dice Camilo después de mirar a su papá.' }),
-    play('pasos-del-proceso', 'Ordena la cadena de hechos que cuenta el párrafo 4.', { que: 'lo que pasó', de: 'Del supermercado a la libreta escondida', fija: 0, ini: [1, 3, 0, 2], tiras: ['Abre un supermercado a tres cuadras.', 'Allí venden el pan más barato.', 'Don Aurelio hornea dos bandejas menos.', 'La libreta pasa al bolsillo.'],
-      mira: ['Es lo primero que cambia.', 'Para que vendan allí, algo tuvo que abrir.', 'Hornea menos por algo que pasó afuera.', 'La libreta se esconde cuando ya hay algo que esconder.'], bien: '«Desde entonces» une los hechos.' },
-      'Abre el supermercado, vende más barato, don Aurelio hornea menos y al final guarda la libreta.',
-      { hint: 'Empieza por «Hace dos meses» y sigue lo que cambió «desde entonces».' }),
-    play('cambia-palabra', 'Pon en cada hueco la palabra que dice lo mismo. Sobran dos.', { doc: PAN, frases: [[2, 'Don Aurelio amasa como si estuviera ', 'escuchando', ' la masa.'], [3, 'la vio devolver uno porque estaba ', 'pálido', '.']], fichas: ['atendiendo a', 'poco tostado', 'enfermo', 'vendiendo'], va: [0, 1, null, null],
-      mira: ['¿Qué hace con la masa quien sabe cuándo parar?', 'Le guarda el más tostado: ¿cómo estaba el que devolvió?', 'Es otro sentido de la palabra: ¿sirve para un pan?', 'Nada en la oración habla de venta.'], bien: 'También el sentido de una palabra se infiere.' },
-      'Amasar «escuchando» es estar atento a la masa; un pan «pálido» está poco tostado, por eso le guarda el más tostado.',
-      { hint: 'Lee lo que viene antes y después: ahí está la pista de lo que quiso decir.' }),
-  ]);
-
-  // ---------------- Lección 2 · Presupuestos ----------------
-  setLesson('pu-in-2', [
-    play('pista-tipo', 'Ata cada idea que se da por hecha a la oración que la supone.', { doc: CICLO, lineas: ['Ya no tienen que disputarles el carril a los buses.', 'El puente dejó de aparecer en los presupuestos.', 'Los trabajadores todavía suben a pie.', 'La ciudad sí puede hacer bien una obra.'], tarjetas: ['Antes tenían que disputarlo', 'Antes aparecía', 'Se esperaba que eso ya hubiera cambiado', 'Alguien lo dudaba'], va: [0, 1, 2, 3],
-      mira: ['Busca la palabra que dice que algo se acabó para alguien.', 'Busca lo que se interrumpió.', 'Busca la palabra que dice que algo sigue igual.', 'Busca la palabra que insiste, como quien responde.'], bien: '«Ya no», «dejó de», «todavía», «sí»: cada una supone algo.' },
-      '«Ya no» supone que antes sí; «dejó de», que aparecía; «todavía», que debería haber cambiado; y el «sí» que insiste, que alguien lo duda.',
-      { hint: 'En cada oración, pregunta qué tiene que haber sido cierto antes para que se diga así.' }),
-    play('todo-o-parte', 'El autor da por hechas estas ideas. ¿Qué las delata?', { doc: CICLO, rot: ['una palabra como «ya no» o «dejó de»', 'otra cosa: una comparación o un verbo'], fichas: ['Antes compartían el carril con los buses.', 'Los hermanos mayores también cruzaban entre los carros.', 'El puente estuvo en los presupuestos.', 'Las segundas etapas no suelen llegar.'], va: [0, 1, 0, 1],
-      mira: ['Busca «ya no tienen que».', 'Busca «como lo hacían»: ¿qué está haciendo esa frase?', 'Busca «dejó de aparecer».', 'Busca «esta ciudad ya sabe lo que significa».'], luz: [[1, 'ya no tienen que'], [3, 'como lo hacían sus hermanos mayores'], [3, 'esta ciudad ya sabe lo que significa una segunda etapa'], [3, 'dejó de aparecer']], bien: 'No siempre hay palabra de la lista.' },
-      '«Ya no» y «dejó de» son palabras delatoras. Las otras salen de comparar con los hermanos mayores y del verbo «sabe».',
-      { hint: 'Busca en el texto la frase que supone cada idea y mira si lleva una palabra de la lista.' }),
-    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CICLO, nums: [2, 3], rot: ['lo dice', 'lo da por hecho', 'ni lo dice ni lo supone'], fichas: ['La ciclorruta recorre once kilómetros planos.', 'Los niños llevan años cruzando entre los carros.', 'El bus de la loma pasa pocas veces al día.', 'El puente fue cancelado oficialmente.', 'El parque espera su segunda etapa desde 2015.'], va: [0, 1, 2, 2, 0],
-      mira: ['Búscala en el párrafo 2.', 'Busca a los hermanos mayores: ¿qué suponen?', 'El texto dice cuánto les cuesta el bus: ¿dice cada cuánto pasa?', 'Compárala con «aunque nadie…».', 'Búscala en el párrafo 3.'], luz: [[2, 'once kilómetros planos'], [3, 'desde 2015'], [3, 'como lo hacían sus hermanos mayores'], [3, 'aunque nadie lo haya cancelado oficialmente']], bien: '«Como lo hacían sus hermanos» supone años.' },
-      'Los kilómetros y el parque están escritos. «Como lo hacían sus hermanos mayores» da por hecho que llevan años. De cada cuánto pasa el bus no se habla y el puente no fue cancelado oficialmente.',
-      { hint: 'Dar por hecho es que la frase no tendría sentido si eso fuera falso.' }),
-    play('sella-parrafo', '«Quedaron a medias o sin hacer todas estas obras, **EXCEPTO**:» Ata cada una a su párrafo.', { doc: CICLO, tarjetas: ['El tramo de la loma', 'El parque de la quebrada', 'El puente del colegio', 'La ampliación de la avenida'], va: [[1, 2, 4], 2, 2, 5],
-      mira: ['Busca la loma de San Antonio.', 'Busca la quebrada.', 'Busca el puente peatonal.', 'La avenida se nombra, pero ¿alguien habla de ampliarla?'], luz: [[2, 'se interrumpe justo antes de la loma de San Antonio'], [3, 'el parque de la quebrada'], [3, 'el puente peatonal del colegio']], bien: 'Nombrar la avenida no es hablar de ampliarla.' },
-      'La loma está en los párrafos 2, 3 y 5; el parque y el puente, en el 3. De ampliar la avenida no se habla.',
-      { hint: 'Una opción usa una palabra del texto para contar algo que no está. Busca cada obra.' }),
-    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: CICLO, nums: [2, 4], pregunta: 'Queda en pie', queda: 'Donde hay por dónde andar, aparecen ciclistas.', tarjetas: ['La ciclorruta llega hasta la cima de la loma.', 'En las lomas no usan bicicleta porque no les gusta.', 'En los barrios planos siempre hubo ciclistas.'], va: [[2, 1], [3, 4], 6],
-      mira: ['Busca dónde termina o se interrumpe.', 'Busca qué dice el autor de lo que repiten los funcionarios.', 'Busca qué pasaba antes de la ciclorruta.'], bien: 'Cada falsa tiene su oración en contra.' },
-      'Se interrumpe antes de la loma; no es cierto que no usen bicicleta: no tienen por dónde; y en los barrios planos tampoco había ciclistas antes.',
-      { hint: 'Busca por cada opción la oración que habla de lo mismo y lee con cuidado lo que niega.' }),
-    play('comprueba-apuesta', 'Subraya en el párrafo 3 la oración que mejor prueba lo que el autor da por sentado.', { doc: CICLO, nums: [3], n: 1, apuesta: 'El autor da por sentado que las segundas etapas no se cumplen.', va: ['3.1'],
-      mira: { '3.0': 'Es la explicación de la secretaría, no del autor.', '3.2': 'Cuenta una consecuencia de que no haya puente.' }, bien: '«Ya sabe lo que significa» lo da por sabido.' },
-      '«Esta ciudad ya sabe lo que significa una segunda etapa», con el parque y el puente como ejemplos, da por sentado que no llegan.',
-      { hint: 'Busca la oración en la que el autor habla de las segundas etapas y trae ejemplos que todos conocen.' }),
-    play('talla-idea', 'Tres resúmenes del párrafo 2: pon cada uno en su talla.', { doc: CICLO, p: 2, rot: ['se queda en un detalle', 'justa', 'dice de más'], fichas: ['El tramo está bien iluminado.', 'La vía se detiene justo donde más la necesitan.', 'La ciclorruta no le sirve a nadie.'], va: [0, 1, 2],
-      mira: ['Es un dato del recorrido: ¿es la queja del párrafo?', 'Mira dónde se interrumpe y quién vive allí.', 'Compárala con lo que dice el párrafo 1.'], luz: [[2, 'se interrumpe justo antes de la loma de San Antonio'], [2, 'los trabajadores que más la necesitan']], bien: 'Criticar una parte no es rechazarlo todo.' },
-      'La luz es un detalle; «a nadie» exagera, porque el autor celebra la obra. La justa dice dónde se detiene y a quién deja por fuera.',
-      { hint: 'La justa tiene que recoger la queja del párrafo sin convertirla en algo más grande.' }),
-    play('pilares', 'El techo es lo que pide el autor. Lleva abajo lo que lo sostiene y al patio lo que no.', { doc: CICLO, idea: 'Hay que construir ya el tramo de la loma', fichas: ['Allí viven quienes más la necesitan.', 'Las segundas etapas suelen no llegar.', 'Usan poco la bicicleta por falta de vía.', 'El tramo plano está bien iluminado.', 'La obra se inauguró el lunes.'], va: [0, 0, 0, 1, 1],
-      mira: ['Si la necesitan más, ¿es razón para no esperar?', 'Si las segundas etapas no llegan, ¿conviene esperar?', 'Si les falta vía, ¿es razón para hacerla?', '¿La luz del tramo plano dice algo de la loma?', '¿El día de la inauguración es una razón?'], bien: 'Quedan las razones; caen los datos sueltos.' },
-      'La necesidad, las segundas etapas que no llegan y la falta de vía sostienen la petición. La iluminación y el lunes son datos que no la apoyan.',
-      { hint: 'Pregunta de cada una: ¿le daría a alguien una razón para no esperar?' }),
-  ]);
-
-  // ---------------- Lección 3 · Causa y efecto ----------------
-  setLesson('pu-in-3', [
-    play('pasos-del-proceso', 'Ordena la cadena de causas del párrafo 2.', { que: 'el efecto final', de: 'Los jóvenes se van', fija: 0, ini: [2, 3, 0, 1], tiras: ['Cae el precio de la leche.', 'Varias familias venden sus vacas.', 'Hay menos trabajo en las fincas.', 'Los jóvenes buscan empleo en la ciudad.'],
-      mira: ['Es lo que empieza todo.', 'Vender las vacas responde a algo.', 'Sin ordeño no hay trabajo: ¿qué tuvo que pasar antes?', 'Se van por algo que les faltó.'], bien: 'Cada hecho empuja al siguiente.' },
-      'Cae la leche, venden las vacas, hay menos trabajo y los jóvenes se van. El párrafo lo encadena con «cuando», «con menos ordeño» y lo que pasó después.',
-      { hint: 'De cada hecho pregunta: ¿qué tuvo que pasar antes para que esto pasara?' }),
-    play('pinta-voces', '¿La primera parte **causa** la segunda, o solo pasó antes o al tiempo?', { doc: PUEBLO, plumas: ['la causa', 'solo coincide'], lineas: ['Quedaban seis niños; la escuela cerró.', 'Se terminó la carretera; el pueblo se estaba vaciando.', 'Con menos ordeño, hubo menos trabajo para los jóvenes.', 'El parque abrió un martes; ese martes llovió.', 'La escuela cerró; algunas familias se mudaron más cerca de otra.'], va: [0, 1, 0, 1, 0],
-      mira: ['¿Puede funcionar una escuela casi sin niños?', 'Busca qué dice el texto de la carretera.', 'Si hay menos ordeño, ¿qué pasa con quienes ordeñaban?', '¿Un parque puede hacer llover?', '¿Por qué se mudaría alguien con hijos?'], bien: 'Después no es por.' },
-      'Pocos niños cierran la escuela, menos ordeño quita trabajo y el cierre hace mudarse. La carretera y el parque solo coincidieron.',
-      { hint: 'Quita lo primero con la imaginación: ¿lo segundo habría pasado igual? Entonces no es la causa.' }),
-    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: PUEBLO, pares: [['La escuela cerró', 'quedaban seis niños.'], ['Hubo menos ordeño;', 'hubo menos trabajo.'], ['Algunos culpan a la carretera,', 'ella no expulsó a nadie.']], fichas: ['porque', 'por eso', 'pero', 'además', 'por ejemplo'], va: [0, 1, 2, null, null],
-      mira: ['¿Dónde la causa va en la segunda parte?', '¿Dónde el efecto va en la segunda parte?', '¿Dónde la segunda parte le lleva la contraria a la primera?', 'En ninguna la segunda solo se suma.', 'En ninguna la segunda es un caso de la primera.'], bien: 'La causa puede ir antes o después.' },
-      '«Porque» presenta la causa; «por eso», el efecto; «pero» desmiente lo que algunos creen.',
-      { hint: 'En cada par, señala cuál es la causa y cuál el efecto, o si una le lleva la contraria a la otra.' }),
-    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: PUEBLO, nums: [3, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['La escuela cerró en 2019.', 'La carretera les facilitó la salida a quienes ya se iban.', 'La carretera trajo turistas.', 'Sin carretera, nadie se habría ido.', 'Los hostales son de los que se fueron.'], va: [0, 1, 0, 2, 2],
-      mira: ['Búscala en el párrafo 3.', 'Si «el viaje se hizo más corto», ¿qué se saca?', 'Búscala al final del párrafo 4.', 'Compárala con «ya tenían razones para irse».', '¿El texto dice de quién son?'], luz: [[3, 'cerró en 2019'], [4, 'el viaje se hizo más corto'], [4, 'trajo el año pasado a los primeros turistas'], [4, 'ya tenían razones para irse']], bien: 'Mencionar una causa no es afirmarla.' },
-      'El cierre y los turistas están escritos. Un viaje más corto permite deducir que salir fue más fácil. Que sin carretera nadie se iría lo niega el texto, y de quién son los hostales no se habla.',
-      { hint: 'Ojo con la idea que el texto nombra para descartarla.' }),
-    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: PUEBLO, nums: [4, 5], pregunta: 'Queda en pie', queda: 'La gente se iba por razones que ya tenía.', tarjetas: ['La carretera vació el pueblo.', 'Desde la carretera no ha llegado nadie.', 'Con dinero basta para que vuelvan.'], va: [1, 2, 5],
-      mira: ['Busca «no expulsó».', 'Busca a los primeros turistas.', 'Busca «no bastará».'], bien: 'Cada falsa tiene su oración en contra.' },
-      'La carretera «no expulsó a nadie»; trajo turistas; y «no bastará con el dinero».',
-      { hint: 'Busca la oración del párrafo 4 o 5 que habla de lo mismo y dice lo contrario.' }),
-    play('pilares', 'El techo es lo que sostiene la periodista. Lleva abajo lo que lo apoya y al patio lo que no.', { doc: PUEBLO, idea: 'La carretera no fue la causa de que se fueran', fichas: ['Ya tenían razones para irse.', 'La salida empezó antes de 2010.', 'La carretera solo acortó el viaje.', 'La escuela cerró en 2019.', 'Hay helechos que nadie riega.'], va: [0, 0, 0, 1, 1],
-      mira: ['Si ya querían irse, ¿hace falta la carretera para explicarlo?', 'Si empezó antes, ¿pudo causarla la carretera?', 'Acortar un viaje, ¿es hacer que alguien se vaya?', '¿Eso dice algo de la carretera?', '¿Eso dice algo de la carretera?'], bien: 'Lo que pasó antes no pudo ser causado después.' },
-      'Las razones que ya tenían, el comienzo anterior y el viaje más corto apoyan la idea. La escuela y los helechos no hablan de la carretera.',
-      { hint: 'Pregunta de cada una si le quita o le da culpa a la carretera. Si no hace ninguna, es adorno.' }),
-    play('sella-parrafo', '«Según el texto, se necesita para volver todo lo siguiente, **EXCEPTO**:» Ata cada opción a su párrafo.', { doc: PUEBLO, tarjetas: ['Una escuela para los hijos', 'Señal en el celular', 'Alguien con quien hablar', 'Una carretera más ancha'], va: [4, 4, 4, 5],
-      mira: ['Busca «quien vuelve necesita».', 'Busca el celular.', 'Busca la tarde.', 'La carretera se nombra: ¿alguien pide ensancharla?'], luz: [[5, 'una escuela para sus hijos, señal en el celular y alguien con quien hablar en la tarde']], bien: 'Las tres están en una sola oración.' },
-      'La escuela, la señal y la compañía están en la última oración del párrafo 5. Ensanchar la carretera no lo pide nadie.',
-      { hint: 'Tres opciones pueden estar en el mismo lugar. La que no, es la respuesta.' }),
-    play('tacha-resumen', 'Tacha las tres oraciones que no hacen falta para entender por qué se vació el pueblo y qué haría falta.', { doc: PUEBLO, n: 3, lineas: ['El pueblo se ha ido quedando sin gente.', 'Los helechos nadie los riega.', 'Cayó la leche y los jóvenes perdieron el trabajo.', 'Sin niños cerró la escuela, y sin escuela se fueron más.', 'Hay una tienda de quesos.', 'Con dinero no basta para que vuelvan.', 'Una joven quiere abrir una panadería.'], va: [1, 4, 6],
-      mira: { 0: 'Es lo que el texto quiere explicar.', 2: 'Es la causa de fondo.', 3: 'Es el círculo del párrafo 3.', 5: 'Es lo que concluye el texto.' }, bien: 'Qué pasó, por qué y qué haría falta.' },
-      'Los helechos, la tienda y la panadería ilustran, pero se pueden quitar. Quedan el problema, sus causas y lo que haría falta.',
-      { hint: 'Si la oración cuenta un caso o un objeto suelto, probablemente es un detalle.' }),
-  ]);
-
-  // ---------------- Lección 4 · Actitudes y motivos ----------------
-  setLesson('pu-in-4', [
-    play('ordena-texto', 'Se desordenó el relato. Las dos primeras tiras están en su puesto.', { doc: { title: MAQUINA.title, ficha: MAQUINA.ficha }, fija: 2, ini: [0, 1, 4, 2, 3], tiras: ['La máquina de coser de mi mamá sigue en el rincón del comedor, con su forro de tela de flores.', 'Mi mamá cosió en esa máquina durante treinta años.', 'Yo nunca quise aprender.', 'El año pasado se me descosió la toga el día de mi grado. Mis hermanas estaban peinándose, nadie tenía aguja, y yo me encontré abriendo el forro de flores, enhebrando la máquina como la había visto hacerlo diez mil veces y pisando el pedal.', 'En la foto del grado salgo sonriendo, con la toga torcida a la altura del hombro.'],
-      mira: ['', '«Esa máquina» ya se había nombrado.', 'Aprender ¿qué? Tiene que haberse contado antes.', 'Aquí termina cosiendo: ¿quedó debajo lo de no querer aprender?', 'La toga torcida y la foto son de un día que ya se contó.'], bien: 'La máquina, la mamá, el rechazo, el grado y la foto.' },
-      'La mamá cose en «esa máquina»; ella no quiso aprender «eso»; un día la necesita; y la foto muestra la toga de ese día.',
-      { hint: 'Busca en cada tira lo que da por conocido: «esa máquina», «aprender», «la toga torcida».' }),
-    play('voz-de-la-fuente', 'Nadie nombra lo que siente. Ata cada gesto a lo que deja ver.', { portadas: [['Nostalgia', 'extraña algo que ya no está'], ['Desdén', 'cree que algo es poca cosa'], ['Reserva', 'se guarda lo que siente'], ['Orgullo', 'le gusta lo que hizo']], tarjetas: ['«Las abogadas no hacían ojales.»', '«Le digo que me gusta así. No le explico más.»', '«La costura quedó torcida. No me importó.»', '«Todos los domingos alguien le quita el polvo.»'], va: [1, 2, 3, 0],
-      mira: ['¿Cómo mira el oficio de su mamá?', '¿Cuenta lo que significa para ella o se lo calla?', 'Quedó mal y no le importa: ¿qué le importa entonces?', '¿Por qué se limpia algo que nadie usa?'], bien: 'Cada emoción deja su huella.' },
-      'Despreciar los ojales es desdén; no explicar, reserva; no importarle que quedara torcida, orgullo de haberla cosido; y limpiar lo que nadie usa, nostalgia.',
-      { hint: 'Pregunta de cada gesto: ¿qué siente alguien que hace o dice eso?' }),
-    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: MAQUINA, nums: [1, 2], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['La mamá cosió treinta años.', 'Alguna de las tres limpia la máquina sin admitirlo.', 'La mamá cosía hasta muy tarde en diciembre.', 'Las hermanas saben coser.', 'La mamá ganaba mucho dinero.'], va: [0, 1, 0, 2, 2],
-      mira: ['Búscala en el párrafo 2.', 'Alguien la limpia y ninguna dice que sí: ¿qué se saca?', 'Búscala en el párrafo 2.', '¿Alguna frase las muestra cosiendo?', 'Compárala con «Descansar es para los ricos».'], luz: [[1, 'Mis hermanas dicen que soy yo; yo digo que son ellas'], [2, 'durante treinta años'], [2, 'se acostaba a la una de la mañana']], bien: 'Lo que se calla también dice.' },
-      'Los treinta años y la una de la mañana están escritos. Que alguna la limpia se deduce de que nadie lo admite. Lo demás no tiene pista.',
-      { hint: 'Para deducir hace falta una pista en la página. Si no la encuentras, es suposición.' }),
-    play('pista-tipo', 'Ata cada motivo a la oración que lo deja ver.', { doc: MAQUINA, lineas: ['Con esos uniformes pagó el estudio de las tres.', 'La usé un mes y la cambié por una de plástico.', 'Me temblaban las manos, como si ella estuviera mirándome.', 'La tengo en la mesa de noche.'], tarjetas: ['Cosía por sus hijas', 'Le daba pena lo hecho en casa', 'Sentía cerca a su mamá', 'Esa foto le importa mucho'], va: [0, 1, 2, 3],
-      mira: ['Busca para qué sirvió lo que ganaba.', 'Busca qué hizo con un regalo cosido.', 'Busca un temblor.', 'Busca dónde se guarda lo que uno quiere ver.'], bien: 'El motivo se ve en lo que se hace.' },
-      'Pagar el estudio dice por qué cosía; cambiar la carpeta, que le daba pena; temblar, que la sentía cerca; tener la foto en la mesa de noche, cuánto le importa.',
-      { hint: 'De cada motivo pregunta: ¿qué haría alguien que siente o quiere eso?' }),
-    play('comprueba-apuesta', 'Subraya en el párrafo 3 la oración que mejor prueba esta inferencia.', { doc: MAQUINA, nums: [3], n: 1, apuesta: 'De joven, no valoró un regalo que su mamá le hizo.', va: ['3.5'],
-      mira: { '3.0': 'Habla de no querer aprender, no de un regalo.', '3.1': 'Habla del ruido y de ayudar, no de un regalo.', '3.2': 'Desprecia los ojales, pero ahí no hay regalo.', '3.3': 'Muestra lo que hace la mamá.', '3.4': 'Cuenta el regalo; falta lo que ella hizo con él.' }, bien: 'Un mes y una de plástico: eso lo dice todo.' },
-      'La carpeta bordada se usó un mes y se cambió por una de plástico: ahí se ve que no la valoró. La oración anterior solo cuenta el regalo.',
-      { hint: 'La prueba no es que hubo un regalo, sino qué hizo ella con él.' }),
-    play('genero-o-cita', '¿El sentimiento se **muestra** o se **nombra**?', { rot: ['se muestra', 'se nombra'], doc: MAQUINA, fichas: ['Guarda el último boleto que compró con su padre.', 'Escribe: «Siento mucho miedo».', 'Sigue poniendo un plato de más en la mesa.', 'Dice que siente un orgullo enorme.'], va: [0, 1, 0, 1],
-      mira: ['¿Alguna palabra de la ficha es el nombre de un sentimiento?', 'Busca si está el nombre del sentimiento.', '¿Alguna palabra de la ficha es el nombre de un sentimiento?', 'Busca si está el nombre del sentimiento.'], bien: 'Mostrar es dejar que se vea.' },
-      'El boleto y el plato dejan ver el cariño sin nombrarlo, como la foto torcida. «Miedo» y «orgullo» lo nombran.',
-      { hint: 'Busca en cada ficha la palabra que nombra un sentimiento. Si no está, se muestra.' }),
-    play('tira-referente', 'Ata la palabra a aquello a lo que apunta.', { doc: MAQUINA, texto: 'En |la foto del grado| salgo sonriendo, con |la toga| torcida a la altura |del hombro|. La tengo en |la mesa de noche|.', tarjetas: ['«La» de «La tengo»'], va: [0],
-      mira: ['La oración siguiente habla de un fotógrafo: ¿qué se le llevaría?'], bien: 'Lo que sigue ayuda a decidir.' },
-      '«La» es la foto: enseguida alguien pregunta por qué no la mandó arreglar con un fotógrafo. «La toga» también es femenina, pero no es eso lo que se lleva allá.',
-      { hint: 'Abre el texto y lee la oración que sigue: dice qué se podría mandar arreglar y con quién.' }),
-    play('cambia-palabra', 'Pon en cada hueco la palabra que dice lo mismo. Sobran dos.', { doc: MAQUINA, frases: [[1, 'con su ', 'forro', ' de tela de flores.'], [2, 'y se reía, pero no ', 'paraba', '.'], [4, 'La costura quedó ', 'torcida', '.']], fichas: ['funda', 'dejaba de coser', 'chueca', 'cajón', 'escondida'], va: [0, 1, 2, null, null],
-      mira: ['Es de tela y se abre: ¿qué cubre?', 'Le pedían que descansara: ¿qué no hacía?', 'En la foto se nota a la altura del hombro: ¿cómo quedó?', 'No es de tela.', 'La costura se ve en la foto.'], bien: 'El contexto da el sentido.' },
-      'El forro es la funda que cubre la máquina; no paraba es no dejaba de coser; torcida es chueca.',
-      { hint: 'Busca en el texto otra frase que hable de lo mismo y prueba con ella cada ficha.' }),
-  ]);
-
-  // ---------------- Evaluación: formato real, texto nuevo ----------------
-  const CARTERO = {
-    id: 'lec-cartero', title: 'El cartero de los jueves',
-    paras: [
-      'Todos los jueves, a las ocho de la mañana, Rubén Darío Gallego cuelga en la bicicleta un bolso de lona y sale del pueblo por la carretera destapada que sube a la vereda El Carmen. Lleva veintiocho años haciendo ese recorrido. Antes cargaba cartas; ahora carga, sobre todo, recibos de servicios, citas médicas impresas y, de vez en cuando, un paquete que alguien pidió por internet.',
-      'Las cartas dejaron de llegar poco a poco. Primero dejaron de escribir los hijos que se habían ido a la ciudad, cuando en las casas de la vereda empezaron a aparecer celulares. Después dejaron de llegar las postales de diciembre. La última carta escrita a mano que entregó, dice, fue hace tres años, para doña Gilma, de una hermana que vive en Chile y que no tiene celular.',
-      'Aun así, Rubén no ha dejado de detenerse en cada casa. En la de don Jesús, que vive solo, se toma un tinto aunque no lleve nada para él. En la de los Ospina, les cuenta a los niños cómo va el partido del domingo. A doña Gilma le pregunta siempre por la hermana de Chile, y ella saca la carta, que guarda dentro de una Biblia, y se la vuelve a leer en voz alta.',
-      'La empresa de correos anunció que el próximo año los envíos a la vereda se harán con una empresa de mensajería que pasará cuando haya paquetes, no todos los jueves. Rubén no ha opinado en público. Solo le pidió a su jefe que le dejara hacer el recorrido de los jueves hasta diciembre, «para despedirme bien».',
-    ],
-  };
-  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: CARTERO, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
-  setExam('pu-inferencia', 'Evaluación · Inferencia', [
-    ['pu-in-1', 'Una inferencia válida se apoya en una pista del texto, no en lo que uno supone.',
-      Q('Del párrafo 1 se puede inferir que:', ['Hoy Rubén lleva menos cartas personales que antes', 'Rubén quiere jubilarse pronto y dejar la bicicleta', 'En la vereda nadie usa internet ni pide paquetes', 'La carretera a El Carmen ya está pavimentada del todo'], 0,
-        '«Antes cargaba cartas; ahora carga, sobre todo, recibos…» deja ver que las cartas personales disminuyeron. El paquete pedido por internet desmiente la opción C, y la carretera es destapada.',
-        'Compara lo que Rubén cargaba antes con lo que carga ahora.')],
-    ['pu-in-1', 'Un gesto que no tiene una razón práctica suele revelar un motivo afectivo.',
-      Q('Que Rubén se tome un tinto en casa de don Jesús «aunque no lleve nada para él» permite inferir que:', ['Don Jesús le paga por la visita', 'Don Jesús espera una carta importante', 'Rubén considera que su visita acompaña a don Jesús', 'Rubén tiene que entrar a todas las casas por reglamento'], 2,
-        'Don Jesús vive solo y Rubén entra sin tener nada que entregarle: su visita es compañía. Nada habla de pagos ni de reglamentos.',
-        'Fíjate en el detalle que el texto da sobre don Jesús.')],
-    ['pu-in-2', 'Las expresiones «no ha dejado de», «ya no», «otra vez» dan por hecho algo anterior.',
-      Q('La frase «Rubén no ha dejado de detenerse en cada casa» presupone que:', ['Nunca se había detenido en las casas', 'Antes también se detenía en cada casa', 'Pronto dejará de hacerlo', 'Las casas están muy lejos unas de otras'], 1,
-        '«No ha dejado de» supone que lo hacía antes y lo sigue haciendo.',
-        'Para dejar de hacer algo, primero hay que haberlo hecho.')],
-    ['pu-in-2', '«El último» presupone que hubo otros antes; no dice que no habrá más.',
-      Q('La expresión «La última carta escrita a mano que entregó» presupone que:', ['Doña Gilma no sabe leer la letra de su hermana', 'La hermana de Chile escribe cada mes', 'No volverá a entregar ninguna carta', 'Antes entregó otras cartas escritas a mano'], 3,
-        'Si hubo una última, hubo otras antes. Que no vuelva a entregar ninguna es una suposición, y doña Gilma lee la carta en voz alta.',
-        'Pregúntate qué tiene que haber pasado para que algo sea «el último».')],
-    ['pu-in-2', '«Da por sentado» pregunta lo mismo que «presupone»: qué tiene que ser cierto para que la frase tenga sentido, aunque no haya palabra pista.',
-      Q('Al pedir hacer el recorrido de los jueves «hasta diciembre», Rubén da por sentado que:', ['después de diciembre ya no hará ese recorrido', 'su jefe le va a negar el permiso que le pidió', 'en diciembre llegarán otra vez muchas cartas', 'la mensajería pasará por la vereda todos los jueves'], 0,
-        'Si pide seguir «hasta diciembre» y quiere «despedirse», supone que después el recorrido se acaba: lo hará la mensajería. No hay «ya no» ni «dejó de»: el presupuesto sale de «hasta» y de la despedida. La mensajería pasará «cuando haya paquetes», no cada jueves.',
-        'No busques una palabra de la lista. Pregúntate qué tiene que ser cierto para que alguien pida algo «hasta» una fecha y hable de despedirse.')],
-    ['pu-in-1', 'Una inferencia también puede ser una crítica que el texto no dice: sale del contraste entre dos datos.',
-      Q('Al contraponer «cuando haya paquetes» con «todos los jueves» (párrafo 4), el texto sugiere que la empresa:', ['solo ve en el recorrido una entrega, no la visita que es para la vereda', 'quiere despedir a Rubén porque ya casi no entrega cartas escritas a mano', 'va a cobrarles más a las familias de la vereda por cada envío', 'ya no tendrá paquetes que llevar a la vereda El Carmen'], 0,
-        'El texto no critica a la empresa con palabras, pero el párrafo 3 mostró lo que hace Rubén en cada casa aunque no lleve nada. Pasar solo «cuando haya paquetes» deja por fuera justo eso. Nada habla de despidos, de cobros ni de que se acaben los paquetes.',
-        'Relaciona el párrafo 4 con lo que Rubén hace en el párrafo 3 cuando no lleva nada para entregar.')],
-    ['pu-in-3', 'Una causa puede ir marcada solo por «cuando» y por el orden de los hechos.',
-      Q('Según el párrafo 2, los hijos que se fueron a la ciudad dejaron de escribir cartas porque:', ['Olvidaron a sus padres cuando se fueron a vivir a la ciudad', 'En las casas de la vereda empezaron a aparecer celulares', 'El correo subió de precio y ya no podían pagar el envío', 'Rubén dejó de subir a la vereda'], 1,
-        'El texto une las dos cosas: dejaron de escribir «cuando» aparecieron los celulares; es decir, empezaron a comunicarse por teléfono.',
-        'Busca qué cambió en las casas de la vereda justo cuando dejaron de llegar las cartas.')],
-    ['pu-in-3', 'Para explicar una excepción, se busca qué la hace distinta de los demás casos.',
-      Q('La carta para doña Gilma siguió llegando cuando las demás ya no llegaban porque:', ['La hermana de Chile no tiene celular', 'Doña Gilma prefiere las cartas a las llamadas', 'Chile queda muy lejos', 'Rubén se la pidió a la hermana'], 0,
-        'Las cartas se acabaron por los celulares; la hermana de Chile «no tiene celular», por eso siguió escribiendo.',
-        'Relaciona el dato sobre la hermana con la causa de que las demás cartas desaparecieran.')],
-    ['pu-in-4', 'El lugar donde alguien guarda algo dice cuánto lo valora.',
-      Q('Que doña Gilma guarde la carta dentro de una Biblia muestra que:', ['Quiere esconderla de Rubén', 'La carta habla de religión', 'La considera algo valioso', 'No le importa la carta'], 2,
-        'La guarda en un lugar especial y la vuelve a leer en voz alta cada vez que Rubén pregunta: la valora.',
-        'Piensa en qué objetos se guardan en un lugar así y en lo que hace doña Gilma con la carta.')],
-    ['pu-in-4', 'Los motivos se infieren de las acciones y de las palabras elegidas.',
-      Q('La petición de Rubén de hacer el recorrido hasta diciembre, «para despedirme bien», revela sobre todo:', ['Enojo con la empresa de correos', 'Cariño por la gente de su recorrido', 'Interés en ganar más dinero antes de irse', 'Deseo de cambiar de trabajo'], 1,
-        'No protesta en público: solo quiere despedirse de las personas que visita cada jueves. Eso muestra cariño.',
-        'Fíjate en lo que Rubén no hace (opinar en público) y en lo que pide.')],
-  ]);
-});
-;
-//#archivo js/courses/preuda-l-vocabulario.js
-// Preuniversitario · Comprensión lectora · mundo 5 «Vocabulario en contexto» con textos de verdad (spec
-// 2026-11-19-preuda-lectura-textos): una huerta escolar con palabras que cambian de sentido según la frase (sinónimos), una planta
-// de secado de café donde «planta», «banco», «nota», «salvar» y «tiempo» significan otra cosa (polisemia), el testimonio de un
-// primer semestre lleno de colombianismos (frases hechas) y una cueva de guácharos con palabras que se entienden por sus piezas
-// (prefijos y raíces). La evaluación usa la crónica de un remendón. Textos escritos para Zuka.
-PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
-  const HUERTA = {
-    id: 'lec-huerta-colegio', title: 'Una huerta en el patio de atrás',
-    ficha: { autor: 'Nota del periódico escolar', fuente: 'Gaceta de un colegio público de Envigado', fecha: 'Noviembre de 2025' },
-    paras: [
-      'Hace tres años, el patio de atrás del colegio Simón Bolívar era un terreno árido donde solo crecían piedras y bolsas de papas fritas. Los estudiantes de décimo lo miraban desde la ventana del laboratorio y, un día, la profesora de biología les propuso convertirlo en una huerta. La idea parecía un chiste: la tierra estaba tan dura que había que romperla con barra.',
-      'El primer semestre fue de pura preparación. Los muchachos recogieron cascarones de huevo, borra de café y hojas secas en sus casas, y armaron una compostera al lado de la cancha. Tardó cuatro meses en dar abono, y durante ese tiempo más de uno se cansó de revolver una montaña que olía a cebolla podrida. Pero cuando por fin la mezclaron con la tierra del patio, el suelo cambió de color: se volvió oscuro, suelto y húmedo.',
-      'Hoy la huerta tiene doce eras de lechuga, cilantro, tomate y frijol, y una cosecha sólida que alcanza para el restaurante escolar dos veces por semana. Los estudiantes llevan un registro de cada siembra: la fecha, la semilla, cuánta agua recibió y qué plagas aparecieron. Con esos datos han aprendido más estadística, dice el profesor de matemáticas, que con todos los ejercicios del libro.',
-      'No todo ha salido bien. El año pasado una plaga de babosas arrasó con las lechugas en una sola semana, y una sequía larga obligó a racionar el agua del tanque. Los estudiantes probaron trampas de cerveza para las babosas y aprendieron a regar al amanecer, cuando el sol todavía no evapora el agua. De cada fracaso quedó una anotación en el registro, y la anotación sirvió al año siguiente.',
-      'Lo que más sorprende a los profesores no es la cosecha, sino lo que cambió en los estudiantes. Algunos que apenas hablaban en clase ahora les explican a los visitantes cómo se hace el abono. Otros, que se escapaban por la malla, llegan temprano para regar. «La huerta no les enseñó a sembrar», dice la profesora de biología; «les enseñó a esperar».',
-      'Para el próximo año, el colegio quiere vender en la tienda escolar lo que sobre y usar el dinero en semillas y herramientas. Los de décimo ya hicieron las cuentas: si la huerta sigue produciendo como hasta ahora, en dos años se pagará sola.',
-    ],
-  };
-
-  const CAFE = {
-    id: 'lec-planta-cafe', title: 'El primer año de la planta',
-    ficha: { autor: 'Crónica de un periodista del suroeste', fuente: 'Revista de una federación de productores', fecha: 'Septiembre de 2025' },
-    paras: [
-      'Cuando la asociación de caficultores de Tablazo inauguró su planta de secado, en enero, nadie en la vereda había visto una máquina tan grande. Hasta entonces, cada familia secaba el café en el patio, sobre lonas, y lo recogía a la carrera cada vez que amenazaba el aguacero. Bastaba un descuido para que la humedad dañara el grano de toda una semana, y con él buena parte de lo que una familia ganaba en el mes.',
-      'La planta costó más de lo que la asociación tenía. El banco agrario prestó una parte, y el resto salió de una vaca que hicieron las cuarenta familias socias: cada una puso según lo que había cosechado el año anterior. Don Hernán, el presidente, todavía guarda en el bolsillo la libreta donde anotó cada aporte, con nombres, fechas y cifras que repasa en voz alta cuando alguien duda.',
-      'Al cabo de seis meses, los resultados se ven en la taza. Un catador que vino de Medellín probó el café de la asociación y le dio una nota de 86 sobre 100, la más alta que ha recibido la vereda. Describió notas de panela y de mandarina, palabras que hicieron reír a más de uno, porque en Tablazo el café siempre había sabido simplemente a café.',
-      'Con ese puntaje, la asociación entró a una red de productores que vende directamente, sin intermediarios, a tostadores de Europa y Asia. El precio por kilo casi se duplicó. Algunos socios, sin embargo, desconfían: dicen que el gusto de los compradores extranjeros cambia como el tiempo y que no conviene sembrar pensando solo en ellos.',
-      'Mientras tanto, la planta ya salvó una cosecha. En mayo llovió tres semanas seguidas, y las familias que antes habrían perdido el grano lo llevaron a secar a la máquina. Doña Fabiola, que lleva cuarenta años en el café, se sentó en el banco de la entrada a ver girar el tambor, y dijo que por primera vez no había rezado para que dejara de llover.',
-    ],
-  };
-
-  const SEMESTRE = {
-    id: 'lec-primer-semestre', title: 'Aguanten el primer golpe',
-    ficha: { autor: 'Testimonio de un estudiante de ingeniería', fuente: 'Blog de bienvenida de una universidad pública', fecha: 'Febrero de 2026' },
-    paras: [
-      'El primer día de clases en la universidad llegué con una hora de anticipación, porque mi mamá me había dicho que en la ciudad uno no puede dar papaya. Me senté en la última fila, con el bolso abrazado, y no me lo quité ni para escribir. Venía de un colegio de pueblo donde todos nos conocíamos desde el kínder, y aquí no conocía ni al celador.',
-      'Las primeras semanas no di pie con bola. Confundía los bloques, llegaba a clases que no eran las mías y en el primer parcial de cálculo saqué 1.8. Esa noche llamé a mi papá para decirle que me devolvía. Él me escuchó sin interrumpir y al final me dijo: «Mijo, póngase las pilas, que usted no se fue hasta allá para tirar la toalla en el primer asalto».',
-      'Lo que me salvó fue un grupo de estudio. Lo armaron tres compañeros que también venían de pueblos y que también estaban en la olla. Nos reuníamos en la biblioteca hasta que nos echaban, y cuando alguien entendía algo se lo explicaba a los demás con dibujos en una servilleta. Para las fotocopias hacíamos vaca, y para el almuerzo también.',
-      'También metí la pata varias veces. Una vez le respondí mal a un profesor delante de todos, creyendo que se estaba burlando de mi acento, y resultó que solo me estaba pidiendo que hablara más duro. Me tocó ir a su oficina a pedirle disculpas con la cara roja. Él se rio y me dijo que no me preocupara, que él también había llegado del campo con las botas embarradas.',
-      'Terminé el semestre con un promedio de 3.6. No es para echar voladores, pero tampoco es para llorar. Lo que aprendí, más que cálculo, es que en la universidad nadie se salva solo, y que pedir ayuda no es de débiles. A los que entran este año les digo lo mismo que me dijo mi papá, aunque con otras palabras: aguanten el primer golpe, que el segundo ya no duele tanto.',
-    ],
-  };
-
-  const CUEVA = {
-    id: 'lec-cueva-guacharos', title: 'Los habitantes de la oscuridad',
-    ficha: { autor: 'Artículo de divulgación', fuente: 'Revista de ciencia para jóvenes', fecha: 'Abril de 2025' },
-    paras: [
-      'A la entrada de la cueva, el guía apaga la linterna y pide silencio. Lleva quince años recorriendo esta cueva con grupos reducidos de visitantes. Al principio no se oye nada. Luego, desde el fondo, llega un chillido largo, después otro, y en pocos segundos la oscuridad se llena de un ruido que parece de mil puertas oxidadas. Son guácharos, unas aves nocturnas que pasan el día dentro de las cuevas y salen de noche a buscar frutos.',
-      'Los guácharos son frugívoros: se alimentan casi solo de frutos, sobre todo de palmas y de laureles silvestres, que tragan enteros. Las semillas que no digieren caen al suelo de la cueva, y algunas alcanzan a germinar en la penumbra. Por eso el piso de muchas cuevas donde viven está cubierto de plántulas pálidas y delgadas, que crecen unos días buscando una luz que nunca llega y luego mueren.',
-      'Para moverse en la oscuridad total, los guácharos usan un sistema parecido al de los murciélagos: emiten chasquidos y se orientan por el eco que rebota en las paredes. A diferencia de los murciélagos, que usan sonidos agudísimos, inaudibles para nosotros, los chasquidos del guácharo se oyen perfectamente. Fuera de la cueva, en cambio, se guían sobre todo por la vista y el olfato, que les permite encontrar de noche los frutos maduros desde lejos.',
-      'La cueva no solo alberga aves. En sus aguas subterráneas viven peces ciegos, sin pigmento, y en sus paredes, comunidades de microorganismos que los científicos estudian con atención: algunos producen sustancias capaces de frenar a otras bacterias, y podrían servir algún día para fabricar antibióticos nuevos. Cada cueva es, en ese sentido, un laboratorio que todavía nadie ha terminado de explorar.',
-      'Por eso los biólogos insisten en que las visitas se hagan con reglas: grupos pequeños, sin linternas potentes y sin tocar las paredes. Un exceso de luz o de ruido puede hacer que las aves abandonen la cueva, y una mano con bloqueador solar puede alterar en minutos comunidades de microorganismos que tardaron siglos en formarse. Quien entra a una cueva, dicen, entra a la casa de otros.',
-    ],
-  };
-
-  // ---------------- Lección 1 · Sinónimos según el contexto ----------------
-  setLesson('pu-vo-1', [
-    play('cambia-palabra', 'Pon en cada hueco la palabra que deja la oración diciendo lo mismo. Sobran tres.', { doc: HUERTA, frases: [[1, 'era un terreno ', 'árido', ' donde solo crecían piedras'], [3, 'y una cosecha ', 'sólida', ' que alcanza para el restaurante'], [4, 'una plaga de babosas ', 'arrasó', ' con las lechugas']], fichas: ['seco', 'abundante y segura', 'acabó', 'aburrido', 'dura', 'se paseó'], va: [0, 1, 2, null, null, null],
-      mira: ['¿Cómo es un suelo donde solo hay piedras?', 'Alcanza para el restaurante: ¿cómo es esa cosecha?', 'Pasó «en una sola semana»: ¿qué quedó?', 'Es un sentido de «árido», pero para un libro.', 'Es un sentido de «sólida», pero para una piedra.', 'Las lechugas no se salvaron.'], bien: 'El primer sentido del diccionario no siempre encaja.' },
-      'Un terreno árido es seco; una cosecha sólida es abundante y segura; arrasar es acabar. «Aburrido» y «dura» son otros sentidos de esas palabras.',
-      { hint: 'Reemplaza y lee la oración entera: si se vuelve rara, ese sentido no es.' }),
-    play('pista-tipo', 'Estos verbos concretos se usan con un sentido de ideas. Ata cada significado a la oración donde está.', { doc: HUERTA, lineas: ['La profesora sembró en ellos la curiosidad.', 'Con datos, desarmó el argumento de los que se burlaban.', 'Tejieron un acuerdo con la tienda escolar.', 'La noticia encendió los ánimos del grupo.'], tarjetas: ['refutar, mostrar que no se sostiene', 'construir poco a poco', 'provocar, hacer nacer', 'despertar con fuerza'], va: [1, 2, 0, 3],
-      mira: ['¿Qué se hace con una idea equivocada?', '¿Qué se hace con hilos, uno por uno?', '¿Qué pasa con algo que se siembra?', '¿Qué pasa con algo que se enciende?'], bien: 'Del uso concreto se saltó a la idea.' },
-      'Desarmar un argumento es refutarlo; tejer un acuerdo, construirlo poco a poco; sembrar curiosidad, provocarla; encender los ánimos, despertarlos con fuerza.',
-      { hint: 'Piensa qué hace ese verbo con una cosa y busca lo parecido que haría con una idea.' }),
-    play('pinta-voces', '¿La palabra en mayúscula puede cambiarse por la que va entre paréntesis sin cambiar lo dicho?', { plumas: ['sí encaja', 'cambia el sentido'], lineas: ['Dio una RAZÓN clara para aplazar el viaje. (motivo)', 'Tiene RAZÓN: el bus sale a las seis. (motivo)', 'La decisión fue FIRME. (definitiva)', 'La escalera está FIRME. (definitiva)', 'Hizo un comentario AGUDO. (perspicaz)'], va: [0, 1, 0, 1, 0],
-      mira: ['Léela con «motivo»: ¿dice lo mismo?', 'Léela con «motivo»: ¿se puede «tener motivo» que el bus salga a las seis?', 'Léela con «definitiva»: ¿dice lo mismo?', 'Léela con «definitiva»: ¿una escalera puede serlo?', 'Léela con «perspicaz»: ¿dice lo mismo?'], bien: 'La misma palabra encaja en una oración y en otra no.' },
-      '«Motivo», «definitiva» y «perspicaz» encajan en la primera, la tercera y la quinta. Tener razón es acertar y una escalera firme no se mueve: ahí cambian el sentido.',
-      { hint: 'Haz la prueba del reemplazo: pon la palabra del paréntesis y lee en voz alta.' }),
-    play('sella-parrafo', '«Los estudiantes hicieron todo lo siguiente, **EXCEPTO**:» Ata cada opción a su párrafo.', { doc: HUERTA, tarjetas: ['Armar una compostera', 'Anotar las plagas de cada siembra', 'Poner trampas con cerveza', 'Construir un invernadero'], va: [1, 2, 3, 6],
-      mira: ['Busca los cascarones y la borra.', 'Busca el registro y lo que se anota.', 'Busca las babosas.', 'Búscalo: ¿algún párrafo lo nombra?'], luz: [[2, 'armaron una compostera'], [3, 'qué plagas aparecieron'], [4, 'probaron trampas de cerveza']], bien: 'Otras palabras, el mismo hecho.' },
-      'La compostera está en el 2, el registro de plagas en el 3 y las trampas en el 4. El invernadero no aparece.',
-      { hint: 'Las opciones pueden decirlo con otras palabras. Busca el hecho, no la palabra exacta.' }),
-    play('comprueba-apuesta', 'Subraya en el párrafo 5 la oración que mejor prueba esta conclusión.', { doc: HUERTA, nums: [5], n: 1, apuesta: 'La huerta hizo que algunos quisieran estar en el colegio.', va: ['5.2'],
-      mira: { '5.0': 'Anuncia un cambio, pero no dice cuál.', '5.1': 'Habla de los que ahora explican, no de querer estar.', '5.3': 'Habla de aprender a esperar.' }, bien: 'De escaparse a llegar temprano.' },
-      'Los que «se escapaban por la malla» ahora «llegan temprano para regar»: eso muestra que quieren estar. Los que explican muestran otro cambio.',
-      { hint: 'Hay dos grupos de estudiantes que cambiaron de manera distinta. ¿Cuál cambió sus ganas de estar?' }),
-    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: HUERTA, pares: [['La compostera olía a podrido;', 'su abono mejoró el suelo.'], ['Riegan al amanecer', 'el sol todavía no evapora el agua.'], ['Anotaron cada fracaso;', 'al año siguiente supieron qué hacer.']], fichas: ['sin embargo,', 'porque', 'por eso,', 'además,', 'por ejemplo,'], va: [0, 1, 2, null, null],
-      mira: ['¿Dónde lo segundo es mejor de lo que se esperaba?', '¿Dónde lo segundo dice por qué?', '¿Dónde lo segundo resulta de lo primero?', 'En ninguna la segunda solo se suma.', 'En ninguna la segunda es un caso.'], bien: 'Se opone, da la causa y trae el efecto.' },
-      'El mal olor contrasta con el buen suelo; el sol es la causa de regar temprano; saber qué hacer es efecto de anotar.',
-      { hint: 'Pregunta si lo segundo contradice lo esperado, explica lo primero o resulta de él.' }),
-    play('talla-idea', '¿Qué quiso decir la profesora con «les enseñó a esperar»? Pon cada versión en su talla.', { doc: HUERTA, p: 5, rot: ['se queda corta', 'justa', 'dice de más'], fichas: ['Esperan su turno para regar.', 'Aprendieron que las cosas buenas toman tiempo.', 'Ahora son pacientes en todo lo que hacen.'], va: [0, 1, 2],
-      mira: ['¿Eso es todo lo que enseña una huerta de meses?', 'Compárala con lo que tardó el abono.', '«En todo»: ¿alguien dijo tanto?'], luz: [[5, 'les enseñó a esperar']], bien: 'Ni al pie de la letra ni de más.' },
-      'Esperar el turno es quedarse corto y «en todo» exagera. La justa recoge lo que cuenta el texto: meses de abono, siembra y cosecha.',
-      { hint: 'Piensa qué tuvo que esperar el grupo, según los párrafos 2 y 3, y hasta dónde se puede decir que cambió.' }),
-    play('pasos-del-proceso', 'Ordena cómo el patio se volvió huerta.', { que: 'lo que cuentan los párrafos 2 y 3', de: 'De los cascarones a la cosecha', fija: 0, ini: [2, 0, 3, 1], tiras: ['Recogen cascarones, borra y hojas.', 'La compostera da abono.', 'El suelo se vuelve oscuro y suelto.', 'La cosecha alcanza para el restaurante.'],
-      mira: ['Es lo que empieza todo.', 'El abono sale de algo que se recogió.', 'El suelo cambia por el abono: ¿quedó debajo?', 'La cosecha necesita buen suelo.'], bien: 'Cada paso prepara el siguiente.' },
-      'Recogen, la compostera da abono, el abono cambia el suelo y el suelo da la cosecha.',
-      { hint: 'Empieza por lo que trajeron de sus casas y pregunta en qué se volvió.' }),
-  ]);
-
-  // ---------------- Lección 2 · Palabras con varios sentidos ----------------
-  setLesson('pu-vo-2', [
-    play('cambia-palabra', 'La misma palabra cambia con la oración. Pon en cada hueco el sentido que tiene ahí. Sobran dos.', { doc: CAFE, frases: [[1, 'inauguró su ', 'planta', ' de secado'], [3, 'y le dio una ', 'nota', ' de 86 sobre 100'], [3, 'Describió ', 'notas', ' de panela y de mandarina'], [5, 'la planta ya ', 'salvó', ' una cosecha']], fichas: ['instalación', 'calificación', 'sabores', 'rescató', 'mata', 'aprobó'], va: [0, 1, 2, 3, null, null],
-      mira: ['Tiene una máquina muy grande: ¿qué es?', 'Es un número sobre cien: ¿qué es?', 'Son de panela y mandarina: ¿qué son?', '¿Qué hizo con lo que se iba a perder?', 'Es otro sentido de «planta»: ¿una mata seca café?', 'Es otro sentido de «salvar»: ¿se aprueba una cosecha?'], bien: 'Las palabras vecinas eligen el sentido.' },
-      '«De secado», «sobre 100», «de panela» y «una cosecha» eligen: instalación, calificación, sabores y rescató.',
-      { hint: 'Mira las palabras que van pegadas a la tachada: ellas deciden.' }),
-    play('pista-tipo', 'La palabra «banco» tiene varios sentidos. Ata cada uno a la oración donde está.', { doc: CAFE, lineas: ['El banco agrario prestó una parte.', 'Se sentó en el banco de la entrada.', 'El barco encalló en un banco de arena.', 'Vieron pasar un banco de sardinas.'], tarjetas: ['entidad que maneja dinero', 'asiento', 'montón bajo el agua', 'grupo de peces'], va: [0, 1, 2, 3],
-      mira: ['¿Cuál presta?', '¿En cuál se puede uno sentar?', '¿En cuál se atasca algo que navega?', '¿Cuál se mueve nadando?'], bien: 'Lo que acompaña a la palabra dice cuál es.' },
-      'Presta una entidad, se sienta uno en un asiento, un barco encalla en un montón de arena y las sardinas forman un grupo.',
-      { hint: 'En cada oración busca el verbo o la palabra que solo sirve para uno de los sentidos.' }),
-    play('pinta-voces', '¿Qué «tiempo» es? Pinta cada oración.', { plumas: ['el clima', 'lo que dura'], lineas: ['El gusto de los compradores cambia como el tiempo: hoy sol, mañana lluvia.', 'Tardó mucho tiempo en secarse.', 'Con este tiempo no se puede tender la ropa.', 'No hubo tiempo de recoger el grano.', 'El tiempo está de aguacero.'], va: [0, 1, 0, 1, 0],
-      mira: ['¿Qué es lo que hoy es sol y mañana lluvia?', 'Se mide en horas o en días: ¿cuál es?', '¿Qué impide tender la ropa?', '¿Qué faltó para alcanzar a hacerlo?', '¿Qué puede estar «de aguacero»?'], bien: 'El contexto elige: cielo o reloj.' },
-      'El sol, la ropa y el aguacero hablan del clima. Tardar y no alcanzar hablan de lo que dura.',
-      { hint: 'Prueba a cambiarla por «clima» y por «rato». Solo una de las dos tiene sentido.' }),
-    play('ordena-texto', 'Se desordenó el reportaje. Las dos primeras tiras están en su puesto.', { doc: { title: CAFE.title, ficha: CAFE.ficha }, fija: 2, ini: [0, 1, 4, 2, 3], tiras: ['Cuando la asociación de caficultores de Tablazo inauguró su planta de secado, en enero, nadie en la vereda había visto una máquina tan grande.', 'La planta costó más de lo que la asociación tenía.', 'Al cabo de seis meses, los resultados se ven en la taza. Un catador que vino de Medellín probó el café de la asociación y le dio una nota de 86 sobre 100, la más alta que ha recibido la vereda.', 'Con ese puntaje, la asociación entró a una red de productores que vende directamente, sin intermediarios, a tostadores de Europa y Asia.', 'Algunos socios, sin embargo, desconfían: dicen que el gusto de los compradores extranjeros cambia como el tiempo y que no conviene sembrar pensando solo en ellos.'],
-      mira: ['', '«La planta» ya se había presentado.', 'Habla de resultados: ¿quedó debajo cómo se pagó?', '«Ese puntaje» necesita una nota ya contada.', 'Habla de compradores extranjeros: ¿ya se contó que les venden?'], bien: 'Se inaugura, se paga, resulta, abre mercado y aparecen dudas.' },
-      'Se inaugura; se cuenta cómo se pagó; a los seis meses llega la nota; «Con ese puntaje» entra a la red; y «sin embargo» trae la duda sobre esos compradores.',
-      { hint: 'Busca qué retoman «ese puntaje» y «los compradores extranjeros».' }),
-    play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: CAFE, texto: 'el resto salió de una vaca que hicieron las cuarenta familias socias|:| cada una puso según lo que había cosechado. Una red que vende directamente|,| sin intermediarios, a tostadores de Europa y Asia|.|', tarjetas: ['anuncia cómo se hizo algo', 'abre una aclaración'], va: [0, 1],
-      mira: ['Busca el signo después del cual se explica la vaca.', 'Busca el signo que abre algo que se puede quitar.'], bien: 'Hacer vaca: cada uno pone una parte.' },
-      'Los dos puntos anuncian cómo funcionó la vaca. La coma abre la aclaración «sin intermediarios», que se puede quitar.',
-      { hint: 'Lee la oración sin lo que sigue al signo: si se sostiene, era una aclaración.' }),
-    play('tira-referente', 'Ata la palabra a aquello a lo que apunta.', { doc: CAFE, texto: 'Algunos |socios| dicen que el gusto de |los compradores extranjeros| cambia como |el tiempo| y que no conviene sembrar pensando solo en ellos.', tarjetas: ['«ellos»'], va: [1],
-      mira: ['Quien habla no suele ser aquel de quien habla: ¿en quiénes piensa al sembrar?'], bien: 'Se siembra pensando en quien compra.' },
-      '«Ellos» son los compradores extranjeros: los socios dicen que no conviene sembrar pensando solo en esos compradores.',
-      { hint: 'Pon cada opción en vez de «ellos». ¿En quién se podría pensar al sembrar?' }),
-    play('pasos-del-proceso', 'Ordena la cadena del párrafo 4 y lo que la trajo.', { que: 'lo que pasó', de: 'Del catador al precio', fija: 0, ini: [3, 1, 0, 2], tiras: ['Un catador prueba el café.', 'Le da una nota de 86.', 'La asociación entra a una red sin intermediarios.', 'El precio por kilo casi se duplica.'],
-      mira: ['Es lo que empieza todo.', 'Para calificarlo hay que haberlo probado.', '«Con ese puntaje»: ¿de dónde salió?', 'El precio sube por cómo se vende.'], bien: '«Con ese puntaje» une la cadena.' },
-      'Prueba, nota, red y precio: «con ese puntaje» entra a la red, y vender sin intermediarios sube el precio.',
-      { hint: 'Pregunta de cada hecho qué tuvo que pasar antes.' }),
-    play('tacha-resumen', 'Tacha las tres oraciones que no hacen falta para entender qué cambió en la vereda.', { doc: CAFE, n: 3, lineas: ['Cuarenta familias hicieron una planta para secar café.', 'Don Hernán guarda una libreta en el bolsillo.', 'Su café ganó calidad y se vende casi al doble.', 'El catador habló de mandarina.', 'La planta ya protegió una cosecha de la lluvia.', 'Doña Fabiola lleva cuarenta años en el café.'], va: [1, 3, 5],
-      mira: { 0: 'Dice qué hicieron.', 2: 'Dice qué ganaron.', 4: 'Dice qué evitó la planta.' }, bien: 'Qué hicieron, qué ganaron y qué evitaron.' },
-      'La libreta, la mandarina y los años de doña Fabiola dan color. Quedan la planta, lo que ganó el café y la cosecha protegida.',
-      { hint: 'Si una oración solo describe a una persona o un sabor, se puede quitar.' }),
-  ]);
-
-  // ---------------- Lección 3 · Expresiones y frases hechas ----------------
-  setLesson('pu-vo-3', [
-    play('antes-de-leer', 'El texto está tapado. Con sus bordes, completa la apuesta. Sobran fichas.', { doc: SEMESTRE, frase: 'Es [0] sobre [1], para [2].', rot: ['¿qué clase de texto?', '¿qué tema?', '¿para qué?'], fichas: ['un testimonio', 'el primer semestre', 'animar a los que entran', 'una noticia', 'un partido de boxeo', 'explicar un reglamento'], va: [0, 1, 2, null, null, null],
-      mira: ['Mira qué dice el autor.', 'Es un estudiante en un blog de bienvenida: ¿de qué hablará?', 'El título le habla a alguien: «Aguanten».', 'Los bordes nombran otra clase de texto.', '«Golpe» no se lee al pie de la letra.', 'El título da ánimo, no reglas.'], luz: [[1, 'El primer día de clases en la universidad'], [5, 'aguanten el primer golpe']], bien: 'El «golpe» del título no era de boxeo.' },
-      'Es el testimonio de un estudiante, en un blog de bienvenida, y el título les habla a otros: «Aguanten». El golpe es una manera de decir.',
-      { hint: 'La clase de texto está en los bordes; el tema sale de quién firma y dónde se publica.' }),
-    play('pista-tipo', 'Ata cada expresión a la situación en que la dirías.', { doc: SEMESTRE, lineas: ['Dejó el celular a la vista en una calle oscura.', 'Se equivocó de salón, de hora y de cuaderno.', 'Entre todos juntaron para el regalo.', 'No tiene plata ni para el bus.'], tarjetas: ['dio papaya', 'no dio pie con bola', 'hicieron vaca', 'está en la olla'], va: [0, 1, 2, 3],
-      mira: ['¿Quién le facilitó algo a un ladrón?', '¿Quién no acertó en nada?', '¿Quiénes pusieron de a poco?', '¿Quién pasa por un mal momento?'], bien: 'El sentido no sale de sumar las palabras.' },
-      'Dar papaya es descuidarse; no dar pie con bola, no acertar; hacer vaca, juntar dinero; estar en la olla, pasarla mal.',
-      { hint: 'Busca en el texto qué le pasaba al narrador cuando usó cada expresión.' }),
-    play('cambia-palabra', 'Pon en cada hueco lo que quiere decir la expresión. Sobran dos.', { doc: SEMESTRE, frases: [[2, 'Las primeras semanas no ', 'di pie con bola', '.'], [2, 'para ', 'tirar la toalla', ' en el primer asalto'], [4, 'También ', 'metí la pata', ' varias veces.']], fichas: ['acerté en nada', 'rendirse', 'me equivoqué', 'jugué fútbol', 'limpiar'], va: [0, 1, 2, null, null],
-      mira: ['Confundía los bloques y sacó 1.8: ¿cómo le iba?', 'Quería devolverse: ¿qué iba a hacer?', 'Luego tuvo que pedir disculpas: ¿qué había hecho?', 'Nadie jugaba a nada.', 'No hay ninguna toalla de verdad.'], bien: 'La situación explica la expresión.' },
-      'No dar pie con bola es no acertar; tirar la toalla, rendirse; meter la pata, equivocarse.',
-      { hint: 'Lee la oración que sigue a cada expresión: cuenta lo que pasó y ahí está el sentido.' }),
-    play('genero-o-cita', '¿Se lee al pie de la letra o es una manera de decir?', { rot: ['al pie de la letra', 'una manera de decir'], doc: SEMESTRE, fichas: ['Hacíamos dibujos en una servilleta.', 'Se tomó un río de jugo.', 'Llegó con las botas embarradas.', 'Tiene más vidas que un gato.', 'No es para echar voladores.'], va: [0, 1, 0, 1, 1],
-      mira: ['¿Se puede dibujar de verdad en una servilleta?', '¿Alguien puede tomarse un río?', '¿Unas botas pueden tener barro?', '¿Alguien tiene siete vidas?', '¿Alguien iba a echar pólvora por esa nota?'], bien: 'Exagerar también es una manera de decir.' },
-      'La servilleta y el barro pasaron. El río y el gato exageran, y los voladores son una frase hecha: nadie iba a echar pólvora.',
-      { hint: 'Imagínatelo tal cual: si resulta imposible o absurdo, no se lee al pie de la letra.' }),
-    play('voz-de-la-fuente', 'Ata cada frase a lo que siente quien la dice.', { portadas: [['Vergüenza', 'algo hizo mal'], ['Conformidad', 'ni bien ni mal'], ['Desánimo', 'quiere rendirse'], ['Ánimo', 'empuja a otro']], tarjetas: ['«Fui a pedirle disculpas con la cara roja.»', '«No es para echar voladores, pero tampoco es para llorar.»', '«Le dije que me devolvía.»', '«Póngase las pilas.»'], va: [0, 1, 2, 3],
-      mira: ['¿Cuándo se le pone roja la cara a alguien?', 'Ni fiesta ni llanto: ¿cómo está?', '¿Quién quiere devolverse a su casa?', '¿A quién se le dice eso?'], bien: 'La expresión también muestra el ánimo.' },
-      'La cara roja es vergüenza; ni voladores ni llanto, conformidad; devolverse, desánimo; «póngase las pilas», ánimo para otro.',
-      { hint: 'Busca en qué momento del texto se dice cada una y cómo estaba la persona.' }),
-    play('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: SEMESTRE, texto: 'Lo que me salvó fue |un grupo de estudio|. Lo armaron |tres compañeros| que también venían de |pueblos|. Esa noche llamé a |mi papá|. Él me escuchó sin interrumpir.', tarjetas: ['«Lo» de «Lo armaron»', '«Él»'], va: [0, 3],
-      mira: ['¿Qué se arma entre varios?', '¿Quién puede escuchar una llamada?'], bien: 'El verbo ayuda: se arma un grupo, escucha una persona.' },
-      'Se armó el grupo de estudio y quien escuchó fue el papá.',
-      { hint: 'Mira el verbo que acompaña a cada palabra y pregunta quién o qué puede hacer o recibir eso.' }),
-    play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: SEMESTRE, texto: 'y al final me dijo: |«|Mijo, póngase las pilas». Les digo lo mismo, aunque con otras palabras|:| aguanten el primer golpe|.|', tarjetas: ['abre palabras exactas', 'anuncia un consejo dicho a su manera'], va: [0, 1],
-      mira: ['Busca el signo que abre lo que dijo el papá.', 'Busca el signo que va después de «con otras palabras».'], bien: '«Con otras palabras» no lleva comillas.' },
-      'Las comillas abren las palabras exactas del papá. Los dos puntos anuncian el consejo del autor, que lo dice con otras palabras.',
-      { hint: '¿Dónde se repite lo dicho tal cual y dónde se dice de otra manera?' }),
-    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: SEMESTRE, nums: [4, 5], pregunta: 'Queda en pie', queda: 'Pedir ayuda no es de débiles.', tarjetas: ['El profesor se burló de su acento.', 'Perdió el semestre.', 'Aprendió que hay que arreglárselas solo.'], va: [1, [4, 5], 6],
-      mira: ['Busca qué le estaba pidiendo el profesor en realidad.', 'Busca con qué promedio terminó.', 'Busca lo que dice que aprendió.'], bien: 'Lo que creyó no era lo que pasó.' },
-      'El profesor «solo me estaba pidiendo que hablara más duro»; terminó con 3.6; y aprendió que «nadie se salva solo».',
-      { hint: 'Busca por cada opción la oración que habla de lo mismo y mira cómo termina.' }),
-  ]);
-
-  // ---------------- Lección 4 · Prefijos y raíces ----------------
-  setLesson('pu-vo-4', [
-    play('cambia-tipo', 'Arma con piezas la palabra que significa eso. Sobran fichas.', { de: 'significa', antes: 'que no se puede oír', frase: '[0] [1] [2]', rot: ['¿comienzo?', '¿raíz?', '¿final?'], fichas: ['in-', 'aud-', '-ible', 're-', 'vis-', '-logía'], va: [0, 1, 2, null, null, null],
-      mira: ['Hace falta una pieza que niegue.', 'Hace falta una pieza que tenga que ver con oír.', 'Hace falta una pieza que diga «que se puede».', 'Esa pieza suele decir «de nuevo».', 'Esa tiene que ver con mirar.', 'Esa habla de estudiar algo.'], bien: 'in + aud + ible: inaudible.' },
-      'In- niega, aud- tiene que ver con oír (audífono, audiencia) e -ible es «que se puede»: inaudible, que no se puede oír.',
-      { hint: 'Busca palabras que conozcas con cada pieza: ¿qué tienen en común audífono y audiencia?' }),
-    play('pista-tipo', 'Ata cada significado a la palabra que lo lleva en sus piezas.', { doc: CUEVA, lineas: ['frugívoro', 'subterráneo', 'microorganismo', 'espeleología', 'fotofobia'], tarjetas: ['que come frutos', 'bajo tierra', 'ser vivo muy pequeño', 'estudio de las cuevas', 'rechazo a la luz'], va: [0, 1, 2, 3, 4],
-      mira: ['Busca la pieza de «herbívoro» y «carnívoro».', 'Busca la pieza de «submarino».', 'Busca la pieza de «microscopio».', 'Busca la pieza de «biología».', 'Busca la pieza de «claustrofobia».'], bien: 'Cada pieza trae su parte del sentido.' },
-      'Frugi- (fruto) y -voro (que come); sub- (bajo) y terra; micro- (pequeño); espeleo- (cueva) y -logía (estudio); foto- (luz) y -fobia (rechazo).',
-      { hint: 'De cada palabra piensa en otra que conozcas con el mismo comienzo o el mismo final.' }),
-    play('genero-o-cita', '¿Las piezas ayudan o engañan? En todas se ve «re-».', { rot: ['re- es «otra vez»', 're- engaña'], doc: CUEVA, fichas: ['releer una carta', 'recorrer la cueva', 'reabrir la tienda', 'un grupo reducido', 'reconstruir el muro'], va: [0, 1, 0, 1, 0],
-      mira: ['¿Se lee otra vez?', '¿Se corre otra vez?', '¿Se abre otra vez?', '¿Se conduce otra vez?', '¿Se construye otra vez?'], bien: 'Manda el contexto.' },
-      'Releer, reabrir y reconstruir son hacer otra vez. Recorrer es andar de un lado a otro y reducido es pequeño: ahí la pieza engaña.',
-      { hint: 'Pon «otra vez» después del verbo sin re-. Si no dice lo mismo, la pieza engaña.' }),
-    play('cambia-palabra', 'Pon en cada hueco lo que significa la palabra en esa oración. Sobran dos.', { doc: CUEVA, frases: [[1, 'Lleva quince años ', 'recorriendo', ' esta cueva'], [1, 'con grupos ', 'reducidos', ' de visitantes'], [3, 'sonidos agudísimos, ', 'inaudibles', ' para nosotros']], fichas: ['andando por', 'pequeños', 'que no se oyen', 'corriendo otra vez por', 'que se ven bien'], va: [0, 1, 2, null, null],
-      mira: ['¿Qué hace un guía con una cueva durante años?', '¿Cómo son los grupos que entran con cuidado?', 'Son tan agudos que… ¿qué pasa con ellos?', 'Las piezas te engañaron: ¿un guía corre?', 'Se habla de sonidos.'], bien: 'Unas piezas ayudan; otras, no.' },
-      'Recorrer es andar por todas partes; reducidos, pequeños; inaudibles, que no se oyen. En las dos primeras, re- no es «otra vez».',
-      { hint: 'Arma el sentido por piezas y ponlo en la oración. Si suena absurdo, decide el contexto.' }),
-    play('sella-parrafo', '«En la cueva viven todos estos, **EXCEPTO**:» Ata cada uno a su párrafo.', { doc: CUEVA, tarjetas: ['Aves que salen de noche', 'Peces sin pigmento', 'Microorganismos en las paredes', 'Murciélagos que comen frutos'], va: [[0, 2], 3, [3, 4], 5],
-      mira: ['Busca quiénes chillan al fondo.', 'Busca las aguas subterráneas.', 'Busca las paredes.', 'Los murciélagos se nombran: ¿para decir que viven allí?'], luz: [[1, 'unas aves nocturnas'], [4, 'peces ciegos, sin pigmento'], [4, 'comunidades de microorganismos']], bien: 'Nombrar para comparar no es decir que viven ahí.' },
-      'Los guácharos están en el 1; los peces y microorganismos, en el 4. Los murciélagos solo aparecen como comparación.',
-      { hint: 'Que algo se nombre no quiere decir que viva ahí. Mira para qué se nombra.' }),
-    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CUEVA, nums: [2, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['Los guácharos tragan los frutos enteros.', 'Los guácharos llevan semillas a la cueva.', 'Las plántulas mueren por falta de luz.', 'Ya se hizo un antibiótico con lo de la cueva.', 'Los guácharos son ciegos.'], va: [0, 1, 1, 2, 2],
-      mira: ['Búscala en el párrafo 2.', 'Las semillas caen dentro: ¿quién las trajo?', 'Buscan algo que «nunca llega»: ¿qué les falta?', 'Compárala con «podrían servir algún día».', '¿De quién se dice que es ciego?'], luz: [[2, 'que tragan enteros'], [2, 'caen al suelo de la cueva'], [2, 'una luz que nunca llega'], [4, 'podrían servir algún día']], bien: '«Podrían» no es «ya».' },
-      'Tragar enteros está escrito. Si las semillas caen dentro, ellos las llevan; si buscan una luz que nunca llega y luego mueren, es por falta de luz. El antibiótico «podría» hacerse y los ciegos son los peces.',
-      { hint: 'Mira el verbo de cada afirmación y de quién se habla.' }),
-    play('pasos-del-proceso', 'Ordena lo que le pasa a una semilla en la cueva.', { que: 'lo que cuenta el párrafo 2', de: 'Del fruto a la plántula', fija: 0, ini: [2, 3, 1, 0], tiras: ['El guácharo traga el fruto entero.', 'La semilla cae sin digerir.', 'Germina en la penumbra.', 'La plántula muere buscando luz.'],
-      mira: ['Es lo que empieza todo.', 'Para caer tuvo que haber sido tragada.', 'Para germinar tuvo que haber caído.', 'Para morir tuvo que haber crecido.'], bien: 'De un fruto a una planta que no alcanza la luz.' },
-      'Traga el fruto, la semilla cae sin digerir, germina en la penumbra y la plántula muere sin luz.',
-      { hint: 'Sigue a una sola semilla desde que está en el fruto.' }),
-    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: CUEVA, pares: [['Los sonidos del murciélago no se oyen;', 'los del guácharo se oyen perfectamente.'], ['Mucha luz espanta a las aves;', 'se entra sin linternas potentes.'], ['Son frugívoros,', 'comen casi solo frutos.']], fichas: ['en cambio,', 'por eso,', 'es decir,', 'por ejemplo,', 'además,'], va: [0, 1, 2, null, null],
-      mira: ['¿Dónde se comparan dos cosas distintas?', '¿Dónde la regla resulta del riesgo?', '¿Dónde la segunda parte aclara la primera?', 'En ninguna la segunda es un caso de la primera.', 'En ninguna la segunda solo se suma.'], bien: '«Es decir» traduce la palabra difícil.' },
-      'Los animales se comparan («en cambio»), la regla resulta del riesgo («por eso») y «comen frutos» aclara «frugívoros» («es decir»).',
-      { hint: 'Pregunta si la segunda parte se opone, resulta o aclara.' }),
-  ]);
-
-  // ---------------- Evaluación: formato real, texto nuevo ----------------
-  const REMENDON = {
-    id: 'lec-remendon', title: 'El último remendón de la plaza',
-    paras: [
-      'En la esquina de la plaza de mercado, debajo de un parasol desteñido, don Isaías Mejía remienda zapatos desde 1979. Tiene una lezna, un martillo, tres hormas y una paciencia que no se compra. Por su banco han pasado botas de policía, zapatillas de bailarina y unos tacones que, según él, «tenían más kilómetros que un bus intermunicipal».',
-      'Hace veinte años, en la misma cuadra trabajaban seis remendones. Hoy queda él solo. Los zapatos baratos, que se botan cuando se dañan, acabaron con el oficio más rápido que cualquier impuesto. «Ahora la gente prefiere comprar otro par que arreglar el que tiene», dice sin rabia, como quien describe el clima.',
-      'Sin embargo, en los últimos años algo ha empezado a cambiar. Estudiantes de diseño vienen a preguntarle cómo se cose una suela, y una tienda de ropa reutilizada le manda cada semana una caja de botas para restaurar. Sin proponérselo, van desarmando la idea de que lo remendado es cosa de pobres. Él cobra lo mismo que antes y trabaja más que nunca. «Me tocó vivir para ver que lo viejo se volviera moda», dice, y se ríe.',
-      'Don Isaías no cree que el oficio vaya a desaparecer, pero tampoco que vuelva a ser lo que fue. Lo que sí le preocupa es que nadie aprenda. Ha ofrecido enseñar gratis los sábados, y hasta ahora solo han ido dos muchachos. Uno se cansó al tercer día; el otro ya cose suelas mejor que él, asegura, aunque nadie le crea.',
-    ],
-  };
-  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: REMENDON, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
-  setExam('pu-vocabulario', 'Evaluación · Vocabulario en contexto', [
-    ['pu-vo-1', 'El sinónimo correcto es el que, puesto en la frase, conserva su sentido.',
-      Q('En el párrafo 1, la palabra «remienda» puede reemplazarse por:', ['arregla', 'vende', 'fabrica', 'limpia'], 0,
-        'Remendar es arreglar algo roto o gastado; don Isaías trabaja con hormas y lezna para reparar zapatos.',
-        'Reemplaza la palabra por cada opción y relee la frase con las herramientas que tiene don Isaías.')],
-    ['pu-vo-1', 'Una expresión se entiende con el sentido de toda la frase, no palabra por palabra.',
-      Q('En «una paciencia que no se compra», se quiere decir que la paciencia de don Isaías:', ['es tan cara que pocos la pueden pagar', 'no se consigue con dinero', 'está prohibida', 'se vende en la plaza'], 1,
-        'Algo que «no se compra» no se obtiene pagando: se forma con los años, como la paciencia del oficio.',
-        'Piensa en qué cosas no se pueden comprar aunque uno tenga dinero.')],
-    ['pu-vo-1', 'Un verbo concreto puede tener un sentido abstracto: desarmar una idea es refutarla.',
-      Q('En el párrafo 3, «van desarmando la idea de que lo remendado es cosa de pobres» quiere decir que los estudiantes y la tienda:', ['van mostrando que esa idea no se sostiene', 'van reforzando la idea con sus compras', 'van desbaratando los zapatos viejos', 'van repitiendo esa idea entre sus clientes'], 0,
-        'Una idea no se desarma con las manos: se desarma mostrando que no se sostiene, es decir, refutándola. Que los jóvenes de diseño y una tienda de moda busquen lo remendado contradice que sea «cosa de pobres».',
-        'Reemplaza «desarmando» por cada opción y lee la frase entera. Recuerda que lo que se desarma aquí es una idea, no un objeto.')],
-    ['pu-vo-2', 'Una palabra con varios sentidos se interpreta por las demás palabras de la frase.',
-      Q('En el párrafo 1, la palabra «banco» se refiere a:', ['una entidad que presta dinero a los vecinos', 'el asiento y la mesa donde trabaja', 'un grupo de peces', 'un lugar donde se guarda sangre'], 1,
-        'Por el banco «han pasado» botas y zapatillas: es el lugar de trabajo del remendón, no una entidad financiera.',
-        'Lee qué ha pasado «por su banco».')],
-    ['pu-vo-2', 'El sentido más común de una palabra suele ser la trampa.',
-      Q('En «Los zapatos baratos, que se botan cuando se dañan», la palabra «botan» significa:', ['rebotan contra el piso', 'fabrican', 'calzan', 'tiran a la basura'], 3,
-        'Botar, en Colombia, es tirar a la basura: los zapatos baratos se desechan en vez de arreglarse.',
-        'Lee la oración siguiente: la gente prefiere comprar otro par.')],
-    ['pu-vo-3', 'La exageración es una manera de decir algo con fuerza.',
-      Q('«Tenían más kilómetros que un bus intermunicipal» quiere decir que los tacones:', ['estaban muy usados', 'habían viajado en bus', 'eran muy rápidos', 'eran nuevos'], 0,
-        'Comparar los tacones con un bus que viaja todo el día exagera para decir que habían caminado muchísimo: estaban muy gastados.',
-        'Piensa en cuánto anda un bus que va de un municipio a otro y en cómo quedan unos zapatos que caminan tanto.')],
-    ['pu-vo-3', 'Una frase hecha expresa una actitud; el contexto dice cuál.',
-      Q('Con la expresión «me tocó vivir para ver que lo viejo se volviera moda», don Isaías expresa:', ['tristeza por el pasado', 'obligación de trabajar más que antes por la moda', 'sorpresa ante algo que no esperaba', 'miedo al futuro'], 2,
-        '«Me tocó vivir para ver» se dice ante algo inesperado; y él se ríe: le sorprende que su oficio vuelva a interesar.',
-        'Fíjate en lo que hace don Isaías justo después de decirlo.')],
-    ['pu-vo-4', 'Los prefijos dan pistas del sentido: re- (de nuevo), sub- (debajo), inter- (entre).',
-      Q('En «ropa reutilizada», el prefijo re- significa:', ['antes', 'contra', 'por debajo', 'de nuevo'], 3,
-        'Reutilizar es utilizar de nuevo: la tienda vende ropa que ya tuvo otro dueño.',
-        'Piensa en otras palabras con re-: releer, rehacer, reconstruir.')],
-    ['pu-vo-4', 'Las piezas orientan, pero el contexto manda: re- no siempre es «de nuevo» (restaurar, recorrer, reducir).',
-      Q('En «una caja de botas para restaurar» (párrafo 3), «restaurar» significa:', ['volver a guardar en la tienda', 'reparar hasta dejar en buen estado', 'servir como en un restaurante', 'volver a vender sin arreglarlas'], 1,
-        'Por las piezas, re- invita a leer «otra vez», pero no hay ningún «staurar» que se repita: lo que decide es el contexto. Don Isaías es remendón y la tienda le manda botas gastadas: restaurarlas es repararlas. Con la prueba del reemplazo, solo «reparar» deja la frase con sentido.',
-        'No te quedes con lo que sugiere el re-. Pon cada opción en la frase y piensa en el oficio de don Isaías.')],
-    ['pu-vo-4', 'Inter- significa «entre»: internacional, intercambio.',
-      Q('Un bus «intermunicipal» es uno que:', ['circula dentro de un solo municipio', 'viaja de un municipio a otro', 'pertenece a la alcaldía', 'pasa por debajo de la ciudad'], 1,
-        'Inter- es «entre»: el bus intermunicipal va entre municipios.',
-        'Piensa en «internacional»: ¿dentro de un país o entre países?')],
-  ]);
-});
-;
-//#archivo js/courses/preuda-l-aplicacion.js
-// Preuniversitario · Comprensión lectora · mundo 6 «Aplicación y analogía» con textos de verdad (spec
-// 2026-11-19-preuda-lectura-textos): los senderos de deseo de los parques, una idea que sirve para mil casos (aplicar a un caso
-// nuevo), y el sistema de defensa del cuerpo explicado como una ciudad con murallas y archivos (analogías). La evaluación usa un
-// mecánico que pregunta antes de tocar el carro. Textos escritos para Zuka.
-PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
-  const SENDEROS = {
-    id: 'lec-senderos-deseo', title: 'Los caminos que nadie diseñó',
-    ficha: { autor: 'Columna de un urbanista', fuente: 'Revista de arquitectura y ciudad', fecha: 'Marzo de 2025' },
-    paras: [
-      'En casi todos los parques hay uno: un caminito de tierra pelada que cruza el pasto en diagonal, justo al lado del sendero de cemento que los arquitectos dibujaron con tanto cuidado. Nadie lo trazó en un plano. Lo hicieron los pies de cientos de personas que, día tras día, eligieron el camino más corto. Los urbanistas los llaman «senderos de deseo».',
-      'Durante décadas, la respuesta de muchas administraciones fue la misma: poner una cerca, sembrar arbustos espinosos o clavar un letrero de «No pise el césped». Casi nunca funcionó. La gente saltaba la cerca, rodeaba los arbustos o simplemente ignoraba el letrero, y al cabo de unos meses el caminito volvía a aparecer, a veces un poco más allá.',
-      'Algunos diseñadores decidieron hacer lo contrario. Cuando una universidad estrenaba un campus, por ejemplo, dejaban todo el terreno sembrado de pasto durante el primer año y esperaban. Al final del año, los estudiantes ya habían marcado con sus pasos por dónde querían caminar, y solo entonces se pavimentaban esos trazos. El resultado eran senderos que la gente sí usaba, porque eran los que ya usaba.',
-      'La idea va mucho más allá de los parques. Detrás de cada sendero de deseo hay una lección incómoda para quien diseña: la gente no hace lo que uno espera, sino lo que le resulta más fácil o más útil. Se puede pelear contra eso con prohibiciones, o se puede observar primero y diseñar después. Lo segundo suele salir más barato y dura más.',
-      'Eso no significa que todo atajo deba volverse camino. Hay senderos que cruzan zonas frágiles, como un humedal o el lugar donde anidan unas aves, y ahí sí hace falta proteger el terreno. Pero incluso en esos casos, quien observa por qué la gente toma el atajo puede ofrecerle otra ruta igual de corta, en vez de limitarse a prohibirle la que ya escogió.',
-      'La próxima vez que vea un caminito de tierra en un parque, no lo mire como un daño. Mírelo como un mensaje: alguien, muchas veces, le está diciendo a la ciudad por dónde necesita pasar.',
-    ],
-  };
-
-  const DEFENSA = {
-    id: 'lec-ciudad-defensas', title: 'Una ciudad con murallas y archivos',
-    ficha: { autor: 'Artículo de divulgación', fuente: 'Revista de ciencia para colegios', fecha: 'Agosto de 2024' },
-    paras: [
-      'Explicar cómo se defiende el cuerpo de una infección es difícil, porque intervienen miles de células y sustancias con nombres largos. Por eso muchos profesores recurren a una comparación: el cuerpo es como una ciudad antigua, con murallas, guardias, mensajeros y un archivo donde se guardan los retratos de los enemigos.',
-      'La primera defensa es la muralla. La piel y las mucosas de la nariz y la garganta impiden que la mayoría de los microbios entre. Así como una muralla no distingue entre un ladrón y un comerciante, la piel tampoco elige: simplemente cierra el paso. Cuando hay una herida, se abre una brecha en la muralla, y por ahí pueden colarse los invasores.',
-      'Detrás de la muralla patrullan los guardias: ciertos glóbulos blancos que recorren la sangre y los tejidos y atacan cualquier cosa que no reconocen como propia. Son rápidos pero poco precisos, como una patrulla que detiene a todo el que parezca sospechoso. Muchas veces el enrojecimiento y la hinchazón alrededor de una herida son la huella de esa pelea.',
-      'Si la invasión continúa, entra en acción una defensa más lenta y más precisa. Algunas células fabrican anticuerpos, unas proteínas que encajan en una parte específica del invasor como una llave en su cerradura. Cada anticuerpo sirve para un solo tipo de enemigo, y por eso esta defensa tarda días en organizarse: primero hay que fabricar la llave adecuada.',
-      'Lo más asombroso viene después. Cuando la infección termina, el cuerpo conserva células de memoria, una especie de archivo con los retratos de los enemigos ya vencidos. Si el mismo microbio vuelve, la respuesta es mucho más rápida, porque la llave ya existe. En esa memoria se apoyan las vacunas: le muestran al cuerpo el retrato de un enemigo, sin la enfermedad, para que lo archive antes de conocerlo.',
-      'Toda comparación tiene límites, y esta también. Una ciudad no fabrica sus guardias según el enemigo que llega, y el cuerpo sí. Pero la imagen ayuda a recordar lo esencial: hay defensas que cierran el paso, otras que atacan sin preguntar y otras que aprenden.',
-    ],
-  };
-
-  // ---------------- Lección 1 · Aplicar a un caso nuevo ----------------
-  setLesson('pu-ap-1', [
-    play('talla-idea', 'Del párrafo 4 se saca un **principio**. Pon cada versión en su talla.', { doc: SENDEROS, p: 4, rot: ['se queda en el caso', 'principio general', 'dice de más'], fichas: ['En los parques hay caminos de tierra.', 'Antes de diseñar, conviene observar lo que la gente ya hace.', 'Nunca hay que prohibirle nada a nadie.'], va: [0, 1, 2],
-      mira: ['¿Serviría para algo que no sea un parque?', 'Mira «observar primero y diseñar después».', 'Compárala con el párrafo 5: ¿el autor diría «nunca»?'], luz: [[4, 'se puede observar primero y diseñar después']], bien: 'El principio sirve aunque cambie el tema.' },
-      'El camino de tierra es el caso; «nunca» exagera, porque el párrafo 5 pone límites. El principio sirve para parques, tiendas o aplicaciones.',
-      { hint: 'Un principio no nombra el caso: se puede llevar a otro tema. Prueba cada uno con una tienda.' }),
-    play('genero-o-cita', '¿En qué casos se cumple el principio: observar lo que la gente hace y facilitarlo?', { rot: ['se cumple', 'no se cumple'], doc: SENDEROS, fichas: ['Ponen bancas en la escalera donde todos se reúnen.', 'Multan a quien cruza la zona verde.', 'Mueven el botón a donde la gente ya tocaba.', 'Cambian los precios sin avisar.', 'Ponen enchufes donde ya se sentaban a cargar el celular.'], va: [0, 1, 0, 1, 0],
-      mira: ['¿Miraron primero qué hacía la gente?', '¿Alguien preguntó por qué la cruzan?', '¿Miraron primero dónde tocaba la gente?', '¿Se facilitó algo que la gente ya hacía?', '¿Miraron primero dónde se sentaban?'], bien: 'Cambia el tema, la estructura es la misma.' },
-      'Las bancas, el botón y los enchufes llegaron donde la gente ya estaba. La multa prohíbe sin observar y los precios no tienen que ver.',
-      { hint: 'Busca dos pasos: primero se observa, después se facilita. Si falta uno, no se cumple.' }),
-    play('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: SENDEROS, fichas: ['presenta el fenómeno', 'cuenta lo que no funcionó', 'cuenta lo que sí funcionó', 'saca el principio general', 'le pone un límite', 'invita al lector', 'da cifras'], va: [0, 1, 2, 3, 4, 5, null],
-      mira: ['Busca dónde se dice qué es.', 'Busca la cerca y el letrero.', 'Busca «hacer lo contrario».', 'Busca «va mucho más allá».', 'Busca «Eso no significa».', 'Busca a quién le habla el final.', 'No hay ningún número que comparar.'],
-      luz: [[1, '«senderos de deseo»'], [2, 'Casi nunca funcionó'], [3, 'hacer lo contrario'], [4, 'La idea va mucho más allá'], [5, 'Eso no significa'], [6, 'no lo mire como un daño']], bien: 'Del caso al principio, y del principio a su límite.' },
-      'Presenta los senderos, cuenta lo que falló y lo que funcionó, saca el principio, le pone un límite y le habla al lector.',
-      { hint: 'Mira las primeras palabras: «Durante décadas», «lo contrario», «más allá», «Eso no significa».' }),
-    play('balanza-tesis', 'Tesis: es mejor convertir los senderos en caminos que prohibirlos. ¿Qué hace cada dato?', { doc: SENDEROS, tesis: 'Es mejor convertirlos en caminos que prohibirlos', fichas: ['Las cercas casi nunca funcionaron.', 'Los senderos pavimentados sí se usaban.', 'Algunos cruzan un humedal.', 'Los urbanistas les pusieron un nombre.'], va: [0, 0, 1, 2],
-      mira: ['Si prohibir no sirve, ¿la tesis gana o pierde?', 'Si se usan, ¿la tesis gana o pierde?', 'Si ahí no conviene un camino, ¿la tesis gana o pierde?', 'Un nombre, ¿le da o le quita razón?'], bien: 'Un dato curioso no pesa.' },
-      'Que prohibir no funcione y que los pavimentados se usen apoyan la tesis; el humedal la limita; el nombre no pesa.',
-      { hint: 'Supón que cada dato es cierto: ¿la tesis queda más fuerte, más débil o igual?' }),
-    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: SENDEROS, nums: [2, 3], pregunta: 'Queda en pie', queda: 'Los senderos hechos después de observar sí se usaban.', tarjetas: ['Los letreros acabaron con los atajos.', 'Pavimentaron antes de que llegaran los estudiantes.', 'Nadie usó los senderos nuevos del campus.'], va: [[1, 2], [4, 5], 6],
-      mira: ['Busca si funcionó.', 'Busca cuándo se pavimentaban.', 'Busca el resultado.'], bien: 'Cada falsa cae con una oración.' },
-      'Los letreros «casi nunca» funcionaron; se esperaba un año y «solo entonces» se pavimentaba; y eran senderos «que la gente sí usaba».',
-      { hint: 'Busca la oración que habla de lo mismo y fíjate en el orden de los hechos.' }),
-    play('sella-parrafo', '«Para frenar los senderos intentaron todo, **EXCEPTO**:» Ata cada opción a su párrafo.', { doc: SENDEROS, tarjetas: ['Una cerca', 'Arbustos con espinas', 'Un letrero', 'Multas'], va: [1, 1, 1, 6],
-      mira: ['Busca la cerca.', 'Busca los arbustos.', 'Busca el césped.', 'Suena posible, pero búscala.'], luz: [[2, 'poner una cerca, sembrar arbustos espinosos o clavar un letrero']], bien: 'Las multas las puso la imaginación.' },
-      'La cerca, los arbustos y el letrero están en el párrafo 2. Las multas no aparecen.',
-      { hint: 'Tres opciones pueden estar en la misma oración. La que no, es la respuesta.' }),
-    play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: SENDEROS, texto: 'Los urbanistas los llaman |«|senderos de deseo». Mírelo como un mensaje|:| alguien, muchas veces, le está diciendo a la ciudad por dónde necesita pasar|.|', tarjetas: ['presenta un nombre técnico', 'anuncia qué dice el mensaje'], va: [0, 1],
-      mira: ['Busca el signo que va junto a un nombre especial.', 'Busca el signo después de «mensaje».'], bien: 'Las comillas no siempre citan a alguien.' },
-      'Las comillas presentan el nombre que usan los urbanistas; los dos puntos anuncian qué dice el mensaje.',
-      { hint: 'Mira qué viene después de cada signo: ¿un nombre o una explicación?' }),
-    play('ordena-texto', 'Se desordenó la columna. La primera tira está en su puesto.', { doc: { title: SENDEROS.title, ficha: SENDEROS.ficha }, fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['En casi todos los parques hay uno: un caminito de tierra pelada que cruza el pasto en diagonal, justo al lado del sendero de cemento que los arquitectos dibujaron con tanto cuidado.', 'Durante décadas, la respuesta de muchas administraciones fue la misma: poner una cerca, sembrar arbustos espinosos o clavar un letrero de «No pise el césped».', 'Algunos diseñadores decidieron hacer lo contrario.', 'La idea va mucho más allá de los parques.', 'Eso no significa que todo atajo deba volverse camino.'],
-      mira: ['', 'Cuenta una respuesta: ¿a qué?', '«Lo contrario» ¿de qué? Tiene que haberse contado.', '«La idea» ¿cuál? Falta contarla arriba.', '«Eso» le pone límite a algo que ya se dijo.'], bien: 'Fenómeno, error, acierto, idea y límite.' },
-      'El fenómeno; la respuesta de prohibir; «lo contrario» de prohibir; la idea general; y «Eso no significa», que la limita.',
-      { hint: 'Busca a qué se refieren «lo contrario», «la idea» y «eso».' }),
-  ]);
-
-  // ---------------- Lección 2 · Analogías ----------------
-  setLesson('pu-ap-2', [
-    play('cambia-tipo', 'Completa la analogía con las palabras del texto. Sobran fichas.', { de: 'misma relación: barrera que cierra el paso', antes: 'Piel es a cuerpo como…', frase: '[0] es a [1]', rot: ['¿qué?', '¿de qué?'], fichas: ['muralla', 'ciudad', 'guardia', 'herida', 'enemigo'], va: [0, 1, null, null, null],
-      mira: ['Piel cierra el paso: ¿qué lo cierra en el otro lado?', 'Una cuida y la otra es cuidada: ¿cuál es esta?', 'Ataca, no cierra el paso.', 'Es lo contrario: abre el paso.', 'No es lo protegido, sino de quien se protege.'], bien: 'La relación es la misma a los dos lados.' },
-      'La piel cierra el paso al cuerpo como la muralla a la ciudad. El guardia ataca, la herida abre y el enemigo no es lo protegido.',
-      { hint: 'Di la relación en voz alta («la piel protege al cuerpo cerrando el paso») y busca qué hace eso en el otro lado.' }),
-    play('pista-tipo', 'Ata cada relación a la pareja que la tiene.', { lineas: ['página y libro', 'martillo y carpintero', 'nube y lluvia', 'semilla y árbol'], tarjetas: ['parte y todo', 'herramienta y quien la usa', 'causa y efecto', 'etapa y lo que llega a ser'], va: [0, 1, 2, 3],
-      mira: ['¿En qué pareja está una cosa dentro de la otra?', '¿En cuál hay alguien que trabaja con algo?', '¿En cuál una trae a la otra?', '¿En cuál una se convierte en la otra?'], bien: 'Antes de comparar, di la relación.' },
-      'La página es parte del libro; el carpintero usa el martillo; la nube trae la lluvia; la semilla llega a ser árbol.',
-      { hint: 'Arma una oración corta con cada pareja («la página está en el libro») y mira qué relación dice.' }),
-    play('genero-o-cita', 'Según el artículo, ¿qué analogías conservan la relación?', { rot: ['la conserva', 'la cambia'], doc: DEFENSA, fichas: ['Anticuerpo es a invasor como llave es a cerradura.', 'Herida es a piel como guardia es a ciudad.', 'Célula de memoria es a microbio como retrato es a enemigo.', 'Glóbulo blanco es a microbio como muralla es a ladrón.'], va: [0, 1, 0, 1],
-      mira: ['Di qué hace una con otra en cada lado.', '¿Qué hace la herida en la piel? ¿Y el guardia en la ciudad?', 'Di para qué sirve cada una.', '¿Los dos atacan?'], luz: [[4, 'como una llave en su cerradura'], [5, 'una especie de archivo con los retratos de los enemigos'], [2, 'se abre una brecha en la muralla'], [3, 'atacan cualquier cosa']], bien: 'Parecerse no basta: la relación tiene que ser la misma.' },
-      'La llave encaja como el anticuerpo y el retrato sirve para reconocer, como la memoria. La herida abre y el guardia cuida; el glóbulo ataca y la muralla solo cierra.',
-      { hint: 'Di la relación del primer lado con un verbo y prueba ese mismo verbo en el otro.' }),
-    play('ordena-texto', 'Se desordenó el artículo. La primera tira está en su puesto.', { doc: { title: DEFENSA.title, ficha: DEFENSA.ficha }, fija: 1, ini: [0, 4, 2, 1, 3], tiras: ['Por eso muchos profesores recurren a una comparación: el cuerpo es como una ciudad antigua, con murallas, guardias, mensajeros y un archivo donde se guardan los retratos de los enemigos.', 'La primera defensa es la muralla.', 'Detrás de la muralla patrullan los guardias: ciertos glóbulos blancos que recorren la sangre y los tejidos y atacan cualquier cosa que no reconocen como propia.', 'Si la invasión continúa, entra en acción una defensa más lenta y más precisa.', 'Lo más asombroso viene después.'],
-      mira: ['', 'Es «la primera».', '«Detrás de la muralla»: ya se habló de ella.', '«Más lenta» que otra ya contada.', '«Después» de todo lo anterior.'], bien: 'De afuera hacia adentro y de rápido a lento.' },
-      'La muralla, los guardias detrás, la defensa más lenta y, después, la memoria.',
-      { hint: 'Sigue las pistas: «primera», «detrás de», «si continúa», «después».' }),
-    play('pasos-del-proceso', 'Ordena lo que pasa en una herida.', { que: 'lo que cuentan los párrafos 2 y 3', de: 'De la herida a la hinchazón', fija: 0, ini: [2, 0, 3, 1], tiras: ['Se abre la piel.', 'Entran microbios.', 'Los glóbulos blancos atacan.', 'La zona se enrojece y se hincha.'],
-      mira: ['Es lo que empieza todo.', 'Para entrar hace falta por dónde.', 'Atacan a algo que entró.', 'Es la huella de una pelea: ¿ya hubo pelea?'], bien: 'La hinchazón es la huella de la pelea.' },
-      'Se abre la muralla, se cuelan invasores, los guardias pelean y queda la huella.',
-      { hint: 'Piensa en la ciudad: brecha, invasores, guardias y huella de la pelea.' }),
-    play('comprueba-apuesta', 'Subraya en el párrafo 6 la oración que dice en qué **falla** la comparación.', { doc: DEFENSA, nums: [6], n: 1, apuesta: 'La comparación con la ciudad tiene un límite preciso.', va: ['6.1'],
-      mira: { '6.0': 'Anuncia que hay límites, pero no dice cuál.', '6.2': 'Dice para qué sirve, no en qué falla.' }, bien: 'Anunciar un límite no es decirlo.' },
-      'Una ciudad no fabrica sus guardias según el enemigo y el cuerpo sí: ese es el límite. La primera oración lo anuncia y la última dice para qué sirve.',
-      { hint: 'Busca la oración que nombra una diferencia entre la ciudad y el cuerpo.' }),
-    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: DEFENSA, pares: [['Hay que fabricar una llave para cada enemigo;', 'la defensa tarda días.'], ['La ciudad no fabrica sus guardias;', 'la imagen ayuda a recordar.'], ['Así como la muralla cierra el paso,', 'la piel lo cierra.']], fichas: ['por eso,', 'sin embargo,', 'también', 'porque', 'por ejemplo,'], va: [0, 1, 2, null, null],
-      mira: ['¿Dónde la demora resulta de algo?', '¿Dónde algo sirve aunque tenga un defecto?', '¿Dónde se dice que dos cosas hacen lo mismo?', 'Daría la causa de lo anterior.', 'Ninguna segunda parte es un caso.'], bien: '«Así como… también» arma la analogía.' },
-      'La demora resulta («por eso»); la imagen sirve pese al límite («sin embargo»); y las dos hacen lo mismo («así como… también»).',
-      { hint: 'Una pareja compara, otra trae una consecuencia y otra se opone a lo que se esperaba.' }),
-    play('tacha-resumen', 'Tacha las tres oraciones que no hacen falta para entender el artículo.', { doc: DEFENSA, n: 3, lineas: ['El cuerpo se defiende como una ciudad.', 'La muralla no distingue a un comerciante.', 'Unas defensas cierran, otras atacan rápido y otras son lentas y precisas.', 'La llave encaja en la cerradura.', 'El cuerpo recuerda a los enemigos, y de eso se valen las vacunas.', 'Las sustancias tienen nombres largos.'], va: [1, 3, 5],
-      mira: { 0: 'Es la comparación que organiza todo.', 2: 'Reúne los tres tipos de defensa.', 4: 'Es a donde llega el texto.' }, bien: 'La comparación, las defensas y la memoria.' },
-      'El comerciante, la llave y los nombres largos ilustran. Quedan la comparación, los tipos de defensa y la memoria.',
-      { hint: 'Las imágenes de un solo párrafo ayudan a entender, pero no resumen.' }),
-  ]);
-
-  // ---------------- Evaluación: formato real, texto nuevo ----------------
-  const MECANICO = {
-    id: 'lec-mecanico', title: 'El que adivina cobra dos veces',
-    paras: [
-      'Don Ramiro, el mecánico de la esquina, tiene una costumbre que desespera a algunos clientes: antes de abrir el capó, les pide que le cuenten, con detalle, cuándo empezó el ruido, si suena en frío o en caliente, si se oye al frenar o al acelerar. Mientras escucha, no toca el carro. «El que adivina cobra dos veces», dice.',
-      'Su método tiene una lógica sencilla. Un mismo síntoma puede tener muchas causas: un golpeteo puede venir del motor, de la suspensión o de algo suelto en el baúl. Si el mecánico cambia la primera pieza que se le ocurre, puede acertar, pero también puede gastar el dinero del cliente en una pieza que estaba buena. Preguntar primero reduce las posibilidades antes de gastar un peso.',
-      'Los clientes apurados prefieren el taller de enfrente, donde le cambian a uno las pastillas de freno en veinte minutos sin muchas preguntas. Algunos vuelven a la semana con el mismo ruido. Don Ramiro no se alegra: solo saca otra vez su libreta y empieza de nuevo por las preguntas.',
-      'Él dice que el oficio le enseñó algo que sirve para todo: el que escucha bien gasta menos. Lo repite cuando sus nietos se pelean, cuando un vecino le pide consejo y hasta cuando va al médico, al que le cuenta sus síntomas con el mismo orden con que le gustaría que le contaran los de un carro.',
-    ],
-  };
-  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: MECANICO, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
-  setExam('pu-aplicacion', 'Evaluación · Aplicación y analogía', [
-    ['pu-ap-1', 'Aplicar es reconocer la misma estructura en un tema distinto.',
-      Q('Una situación que aplica el método de don Ramiro es la de:', ['un técnico que cambia el computador completo apenas falla', 'un profesor que pone el examen sin explicar el tema', 'una médica que pregunta cuándo empezó el dolor antes de pedir exámenes', 'un vendedor que ofrece primero el producto más caro'], 2,
-        'La médica, como don Ramiro, pregunta primero para reducir las posibilidades antes de gastar. El técnico hace lo contrario.',
-        'Saca primero el principio del texto (preguntar antes de actuar) y busca el caso que lo cumple.')],
-    ['pu-ap-1', 'Un caso nuevo puede aplicar la idea del texto o su contrario: hay que distinguirlos.',
-      Q('Según la idea del texto, cambiar de inmediato la primera pieza que se le ocurre al mecánico se parece a:', ['tomar un remedio para el dolor de cabeza sin saber de dónde viene', 'leer el manual antes de usar una máquina', 'preguntarle al vecino qué pasó', 'revisar la cuenta antes de pagar'], 0,
-        'Tomar un remedio sin saber la causa es actuar antes de averiguar, como cambiar una pieza al azar. Las otras opciones averiguan primero.',
-        'Busca la opción que actúa antes de averiguar, igual que el taller de enfrente.')],
-    ['pu-ap-1', 'Para predecir qué haría alguien en otra situación, se usa el principio que guía sus actos.',
-      Q('Si don Ramiro fuera profesor, ante un estudiante que pierde matemáticas, probablemente:', ['le pondría más tareas de inmediato', 'lo cambiaría de curso', 'le diría que estudie más, sin preguntarle nada', 'le preguntaría en qué temas y desde cuándo se le dificulta'], 3,
-        'Su principio es escuchar antes de actuar: primero averiguaría dónde está la dificultad.',
-        'Recuerda lo que hace don Ramiro antes de abrir el capó.')],
-    ['pu-ap-2', 'En una analogía se compara la relación entre las parejas, no las cosas sueltas.',
-      Q('La relación entre «síntoma» y «causa» en el texto es la misma que hay entre:', ['llanta y carro', 'humo y fuego', 'mecánico y taller', 'freno y acelerador'], 1,
-        'El síntoma es la señal que deja una causa escondida, como el humo es la señal de un fuego. Llanta y carro es parte y todo; mecánico y taller, persona y lugar; freno y acelerador, opuestos.',
-        'Nombra la relación de la primera pareja (¿qué es el síntoma de la causa?) y pruébala en cada opción.')],
-    ['pu-ap-2', 'Un refrán puede ser análogo a otro si enseñan lo mismo en oficios distintos.',
-      Q('«El que adivina cobra dos veces» es a don Ramiro lo que, para un carpintero, sería el refrán:', ['«Mide dos veces y corta una»', '«Al que madruga, Dios le ayuda»', '«Más vale tarde que nunca»', '«En casa de herrero, cuchillo de palo»'], 0,
-        'Los dos refranes enseñan que comprobar antes de actuar evita pagar dos veces por un error.',
-        'Pregúntate qué enseña la frase de don Ramiro y busca el refrán que enseña lo mismo.')],
-    ['pu-ap-2', 'Una analogía puede llevar la idea del texto a la manera de presentar el examen.',
-      Q('Preguntarle al cliente antes de tocar el carro es a don Ramiro lo que, para un buen lector en el examen, es:', ['marcar la primera opción que suena bien', 'dejar en blanco las preguntas difíciles', 'volver al texto antes de marcar una opción', 'leer solo el título'], 2,
-        'Volver al texto es reunir la información antes de decidir, como don Ramiro antes de cambiar una pieza. Marcar lo primero que suena bien es adivinar.',
-        'Busca la opción en la que el lector averigua antes de decidir.')],
-  ]);
-});
-;
-//#archivo js/courses/preuda-l-fuentes.js
-// Preuniversitario · Comprensión lectora · mundo 7 «Fuentes y voces» con textos de verdad (spec 2026-11-19-preuda-lectura-textos):
-// un debate sobre las tareas con tres voces citadas y la del autor (citas y voces) y otro sobre el turismo en un páramo con
-// posturas a favor, en contra y matizada, más citas externas que apoyan o debilitan la tesis (posturas y citas externas). La
-// evaluación usa un texto sobre grafitis con cuatro voces. Textos escritos para Zuka.
-PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
-  const TAREAS = {
-    id: 'lec-tareas-casa', title: '¿Sirven las tareas para la casa?',
-    ficha: { autor: 'Columna de una periodista de educación', fuente: 'Periódico de Medellín, sección Educación', fecha: 'Abril de 2025' },
-    paras: [
-      'Cada tarde, en miles de casas, se repite la misma escena: un niño frente a un cuaderno, un adulto cansado a su lado y una pregunta que nadie se atreve a hacer en voz alta: ¿sirve de algo todo esto? Las tareas para la casa son tan viejas como la escuela, pero la discusión sobre ellas nunca había estado tan viva.',
-      'La psicopedagoga Adriana Velásquez, que ha estudiado el tema durante una década, sostiene que la respuesta depende de la edad. «En primaria, la tarea larga no mejora el aprendizaje; lo que mejora es el hábito de leer un rato cada día», explica. En bachillerato, en cambio, reconoce que las tareas bien diseñadas sí se relacionan con mejores resultados, siempre que no pasen de una hora diaria.',
-      'Jairo Benavides, profesor de matemáticas en un colegio público de Itagüí, no está tan convencido de que haya que reducirlas. Según él, sin práctica en la casa los estudiantes olvidan en una semana lo que aprendieron en clase. Admite, sin embargo, que muchas tareas se dejan «por cumplir» y que nadie las revisa con cuidado.',
-      'Para Liliana Ospina, madre de tres hijos, el problema es otro: las tareas suponen que en todas las casas hay un adulto con tiempo y estudios para ayudar. «Yo llego a las ocho de la noche. ¿A qué hora le explico fracciones a mi hija?», pregunta. Su vecina, cuenta, le paga a una muchacha para que le haga las tareas al niño, y eso, a su juicio, es peor que no dejarlas.',
-      'A mi modo de ver, los tres tienen parte de razón, y por eso la pregunta está mal planteada. No se trata de tareas sí o tareas no, sino de qué tareas. Una tarea que el estudiante puede hacer solo, que se revisa al día siguiente y que no depende de lo que haya en la casa difícilmente le hace daño a alguien. Una tarea que solo se puede hacer con ayuda, en cambio, mide más la casa que al estudiante.',
-    ],
-  };
-
-  const PARAMO = {
-    id: 'lec-paramo-turismo', title: 'Caminar el páramo sin romperlo',
-    ficha: { autor: 'Columna de opinión', fuente: 'Periódico regional de Boyacá', fecha: 'Enero de 2026' },
-    paras: [
-      'Hace diez años, al páramo de La Cumbrera subían unos cuantos campesinos y algún biólogo despistado. Hoy, los fines de semana, llegan hasta trescientos visitantes que quieren tomarse una foto junto a los frailejones, esas plantas peludas que crecen apenas un centímetro al año. La pregunta ya no es si el turismo llegará al páramo: ya llegó. La pregunta es qué hacer con él.',
-      'Para Mauricio Lenis, guía e hijo de la vereda, el turismo es la mejor oportunidad que ha tenido la zona. «Antes, para ganarse la vida aquí había que tumbar monte para sembrar papa. Ahora hay familias que viven de cocinarles a los caminantes», dice. Lenis defiende que se siga abriendo el páramo, pero con guías locales obligatorios: nadie cuida mejor un lugar, dice, que quien vive de mostrarlo y piensa quedarse en él toda la vida.',
-      'La bióloga Carolina Mesa no está de acuerdo. Según sus mediciones, en los senderos más visitados el suelo se ha compactado tanto que ya no absorbe el agua como antes, y el páramo es, ante todo, una esponja que surte de agua a los pueblos de abajo. «Cada pisada fuera del sendero es una pequeña herida que tarda años en cerrarse», advierte. Para ella, la mayor parte del páramo debería cerrarse a las visitas.',
-      'El secretario de ambiente del departamento propone un camino intermedio: abrir solo dos senderos, con un cupo de cien personas al día, reservas previas y un cobro que se invierta en restaurar las zonas dañadas. Reconoce que el cupo será impopular, pero sostiene que sin límites no habrá páramo que mostrar dentro de veinte años. El dinero del cobro, explica, alcanzaría para pagar a los guías de la vereda.',
-      'Creo que el secretario se acerca más a la respuesta, aunque se queda corto. Un cupo protege el suelo, pero no basta si los caminantes no entienden lo que pisan. Por eso, además del límite, cada visita debería empezar con una charla sobre el agua y los frailejones. Quien sabe que está caminando sobre la fuente de su propio acueducto pisa distinto.',
-    ],
-  };
-
-  // ---------------- Lección 1 · Citas y voces ----------------
-  setLesson('pu-fu-1', [
-    play('pinta-voces', 'Pinta cada idea con el color de quien la dice.', { doc: TAREAS, plumas: ['Adriana', 'Jairo', 'Liliana', 'la autora'], lineas: ['En primaria, lo que mejora es leer un rato cada día.', 'Sin práctica en la casa, lo aprendido se olvida en una semana.', 'Las tareas suponen un adulto con tiempo.', 'La pregunta está mal planteada.', 'Muchas tareas se dejan «por cumplir».'], va: [0, 1, 2, 3, 1],
-      mira: ['Busca «explica».', 'Busca «Según él».', 'Busca quién llega a las ocho.', 'Busca «A mi modo de ver».', 'Busca «Admite».'], bien: 'Cada voz lleva su marca.' },
-      'Adriana «explica», Jairo habla «según él» y «admite», Liliana cuenta su caso y la autora dice «a mi modo de ver».',
-      { hint: 'Vuelve al texto y busca al lado de cada idea el verbo o la marca de quien habla.' }),
-    play('genero-o-cita', '¿Es cita **directa** (palabras exactas) o **indirecta** (contada)?', { rot: ['directa', 'indirecta'], doc: TAREAS, fichas: ['«¿A qué hora le explico fracciones a mi hija?», pregunta.', 'Según él, sin práctica los estudiantes olvidan.', 'Sostiene que la respuesta depende de la edad.', '«En primaria, la tarea larga no mejora el aprendizaje», explica.'], va: [0, 1, 1, 0],
-      mira: ['¿Lleva comillas?', '¿Lleva comillas?', 'Mira el «que» después del verbo.', '¿Lleva comillas?'], bien: 'Comillas: exactas. «Que» o «según»: contadas.' },
-      'Las comillas copian las palabras exactas. «Según él» y «sostiene que» las cuentan con otras palabras.',
-      { hint: 'Busca comillas. Si no hay, mira si un «que» o un «según» cuenta lo dicho.' }),
-    play('signo-oficio', 'Los dos son comillas, pero no hacen lo mismo. Ata cada oficio a las suyas.', { doc: TAREAS, texto: 'Admite que muchas tareas se dejan |«por cumplir»|. La psicopedagoga explica: |«En primaria, la tarea larga no mejora el aprendizaje»|.', tarjetas: ['reproduce solo una expresión', 'copia una oración completa'], va: [0, 1],
-      mira: ['Busca las que encierran pocas palabras dentro de otra oración.', 'Busca las que encierran todo lo que alguien dijo.'], bien: 'Una expresión corta o una oración entera.' },
-      '«Por cumplir» es solo una expresión del profesor dentro de la oración de la autora; las otras comillas copian la oración completa.',
-      { hint: 'Quita las comillas: ¿lo que queda adentro es una oración completa o un pedazo?' }),
-    play('donde-mirar', 'De cada párrafo solo ves el comienzo. Lleva cada pregunta al párrafo donde la buscarías.', { doc: TAREAS, fichas: ['¿Qué opina la experta?', '¿Qué reconoce el profesor?', '¿Qué propone la autora?'], va: [1, 2, 4],
-      mira: ['Busca el comienzo que presenta a alguien que ha estudiado el tema.', 'Busca el comienzo que presenta a quien enseña.', 'Busca el comienzo con la marca de la autora.'], luz: [[2, 'reconoce que las tareas bien diseñadas'], [3, 'Admite, sin embargo'], [5, 'sino de qué tareas']], bien: 'Los comienzos presentan a cada voz.' },
-      'La psicopedagoga abre el 2, el profesor el 3 y «A mi modo de ver» anuncia a la autora en el 5.',
-      { hint: 'Cada párrafo presenta a alguien en su primera oración. Busca a quién corresponde la pregunta.' }),
-    play('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: TAREAS, texto: '|Su vecina|, cuenta, |le paga a una muchacha para que le haga las tareas al niño|, y eso, a su juicio, es peor que no dejarlas. Para |Liliana Ospina|, el problema es otro.', tarjetas: ['«eso»', '«su» de «a su juicio»'], va: [1, 2],
-      mira: ['No es una persona: ¿qué hecho es peor?', '¿De quién es el juicio: de quien paga o de quien lo cuenta?'], bien: '«Eso» puede apuntar a un hecho completo.' },
-      '«Eso» es pagar para que hagan las tareas. Y el juicio es de Liliana, que es quien lo cuenta.',
-      { hint: 'Abre el texto y mira quién habla en ese párrafo. Luego prueba cada opción.' }),
-    play('talla-idea', 'Tres versiones de lo que piensa la autora (párrafo 5): pon cada una en su talla.', { doc: TAREAS, p: 5, rot: ['se queda en un detalle', 'justa', 'dice de más'], fichas: ['Las tareas se revisan al día siguiente.', 'Importa qué tareas se dejan, no si se dejan.', 'Habría que acabar con todas las tareas.'], va: [0, 1, 2],
-      mira: ['Es una condición: ¿es toda su idea?', 'Mira «No se trata de… sino de…».', '¿La autora pide acabarlas?'], luz: [[5, 'No se trata de tareas sí o tareas no, sino de qué tareas']], bien: '«No… sino…» dice la idea entera.' },
-      'La revisión es un detalle; acabar con todas exagera. «No se trata de tareas sí o no, sino de qué tareas» es la idea.',
-      { hint: 'Busca en el párrafo la oración que niega una cosa para afirmar otra.' }),
-    play('balanza-tesis', 'Tesis de la autora: importa **qué** tareas se dejan. ¿Qué hace cada dato?', { doc: TAREAS, tesis: 'Importa qué tareas se dejan', fichas: ['Las bien diseñadas se relacionan con mejores resultados.', 'Las que exigen ayuda miden más la casa que al estudiante.', 'Un estudio: cualquier tarea da los mismos resultados.', 'Las tareas son tan viejas como la escuela.'], va: [0, 0, 1, 2],
-      mira: ['Si el diseño cambia el resultado, ¿importa cuáles?', 'Si unas miden la casa, ¿importa cuáles?', 'Si todas dan lo mismo, ¿importa cuáles?', 'La edad de las tareas, ¿dice cuáles importan?'], bien: 'Si todas dieran lo mismo, la tesis caería.' },
-      'El diseño y la ayuda muestran que no todas son iguales: apoyan. Que cualquiera dé lo mismo debilita. Que sean viejas no pesa.',
-      { hint: 'Supón que el dato es cierto y pregunta: ¿importa cuál tarea, o da igual?' }),
-    play('tacha-resumen', 'Tacha las tres oraciones que no hacen falta para entender la columna.', { doc: TAREAS, n: 3, lineas: ['La discusión sobre las tareas está muy viva.', 'Liliana llega a las ocho de la noche.', 'Una experta, un profesor y una madre la ven distinto.', 'El colegio queda en Itagüí.', 'La autora cree que importa qué tareas se dejan.', 'La vecina le paga a una muchacha.'], va: [1, 3, 5],
-      mira: { 0: 'Plantea el tema.', 2: 'Reúne las tres voces.', 4: 'Es la tesis de la autora.' }, bien: 'Tema, voces y tesis.' },
-      'La hora, el lugar y la vecina son detalles de cada voz. Quedan el tema, las voces y la tesis.',
-      { hint: 'De un texto con varias voces se guarda el tema, quiénes discuten y qué concluye quien escribe.' }),
-  ]);
-
-  // ---------------- Lección 2 · Posturas y citas externas ----------------
-  setLesson('pu-fu-2', [
-    play('pinta-voces', 'Pinta cada idea con el color de quien la dice.', { doc: PARAMO, plumas: ['Lenis', 'Mesa', 'el secretario', 'el autor'], lineas: ['El turismo es la mejor oportunidad de la zona.', 'La mayor parte debería cerrarse a las visitas.', 'Hay que abrir solo dos senderos con cupo.', 'Cada visita debería empezar con una charla.', 'El suelo ya no absorbe el agua como antes.'], va: [0, 1, 2, 3, 1],
-      mira: ['Busca a quien vive de mostrar el lugar.', 'Busca «Para ella».', 'Busca «propone un camino intermedio».', 'Busca «Creo que».', 'Busca «Según sus mediciones».'], bien: 'Cada postura tiene su dueño.' },
-      'Lenis, el guía, quiere abrir; Mesa, la bióloga, cerrar casi todo; el secretario, abrir poco; y el autor agrega la charla.',
-      { hint: 'Vuelve al texto y busca quién está hablando en el párrafo de cada idea.' }),
-    play('linea-vida', 'Pon a cada quien en su postura frente a abrir el páramo.', { doc: PARAMO, rot: ['a favor', 'matizada', 'en contra'], fichas: ['Lenis: es una oportunidad; que se siga abriendo.', 'Mesa: cerrar la mayor parte.', 'El secretario: dos senderos con cupo.', 'El autor: cupo y, además, una charla.'], va: [0, 2, 1, 1],
-      mira: ['Pide guías, pero ¿quiere abrir más o menos?', 'No dice «todo», pero ¿qué quiere para la mayor parte?', '¿Dice sí, no o sí con condiciones?', '¿Dice sí, no o sí con condiciones?'], bien: 'Sí, no, o sí pero…' },
-      'Lenis quiere que se siga abriendo: a favor. Mesa quiere cerrar casi todo: en contra. El secretario y el autor aceptan visitas con condiciones: matizan.',
-      { hint: 'Pregunta de cada uno: ¿quiere más visitas, menos, o visitas con condiciones?' }),
-    play('balanza-tesis', 'Estas citas **no** están en el texto. ¿Qué le hacen a la tesis del autor?', { doc: PARAMO, tesis: 'Las visitas deben tener cupo y empezar con una charla', fichas: ['«Con cupo, la vegetación se recuperó en cinco años.»', '«Quien recibe una charla se sale menos del sendero.»', '«Un cupo de cien personas no reduce el daño.»', '«El frailejón es una planta de alta montaña.»'], va: [0, 0, 1, 2],
-      mira: ['Si el cupo sirve, ¿la tesis gana o pierde?', 'Si la charla sirve, ¿la tesis gana o pierde?', 'Si el cupo no sirve, ¿la tesis gana o pierde?', '¿Habla del cupo o de la charla?'], bien: 'Se compara con la tesis, no con un detalle.' },
-      'El cupo y la charla que funcionan apoyan; el cupo que no reduce el daño debilita; definir el frailejón no toca la tesis.',
-      { hint: 'La tesis tiene dos partes: cupo y charla. ¿La cita le da o le quita razón a alguna?' }),
-    play('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: PARAMO, nums: [2, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'], fichas: ['El secretario sabe que el cupo no gustará.', 'Lenis cree que el turismo puede evitar que tumben monte.', 'El cobro se invertiría en restaurar.', 'Los guías ganan más que los agricultores.', 'El cupo ya se aplicó.'], va: [0, 1, 0, 2, 2],
-      mira: ['Busca «impopular».', 'Compara su «Antes» con su «Ahora».', 'Busca el cobro.', '¿Alguien compara lo que ganan?', 'Mira el verbo: ¿propone o hizo?'], luz: [[4, 'Reconoce que el cupo será impopular'], [2, 'había que tumbar monte'], [4, 'un cobro que se invierta en restaurar']], bien: 'Proponer no es haber hecho.' },
-      'Impopular y el cobro están escritos. De «Antes… Ahora» se deduce lo de Lenis. Lo que ganan no se compara y el cupo es una propuesta.',
-      { hint: 'Busca primero la palabra clave; si no está, mira si sale de juntar dos frases.' }),
-    play('sella-parrafo', '«El secretario propone todo lo siguiente, **EXCEPTO**:» Ata cada opción al párrafo donde está **como idea suya**.', { doc: PARAMO, tarjetas: ['Dos senderos', 'Reservas previas', 'Un cobro', 'Sacar a los campesinos'], va: [3, 3, 3, 5],
-      mira: ['Busca «abrir solo».', 'Busca cómo se entraría.', 'Busca en qué se invierte.', 'Los campesinos se nombran: ¿alguien pide sacarlos?'], luz: [[4, 'abrir solo dos senderos, con un cupo de cien personas al día, reservas previas y un cobro']], bien: 'Nombrarlos no es querer sacarlos.' },
-      'Los senderos, las reservas y el cobro son del párrafo 4. Sacar a los campesinos no lo propone nadie.',
-      { hint: 'Tres opciones pueden venir en una sola oración. Revisa además de quién es la idea.' }),
-    play('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: PARAMO, fichas: ['plantea el problema', 'da una postura a favor', 'da una postura en contra', 'da una postura intermedia', 'da la opinión del autor', 'da la voz de los turistas'], va: [0, 1, 2, 3, 4, null],
-      mira: ['Busca la pregunta que abre el texto.', 'Busca la «mejor oportunidad».', 'Busca «no está de acuerdo».', 'Busca «camino intermedio».', 'Busca «Creo que».', 'Se habla de ellos, pero ¿hablan?'],
-      luz: [[1, 'La pregunta es qué hacer con él'], [2, 'la mejor oportunidad'], [3, 'no está de acuerdo'], [4, 'un camino intermedio'], [5, 'Creo que']], bien: 'Problema, tres posturas y la del autor.' },
-      'El problema, el guía a favor, la bióloga en contra, el secretario en el medio y el autor.',
-      { hint: 'Mira cómo empieza cada párrafo y quién habla en él.' }),
-    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: PARAMO, pares: [['El secretario se acerca a la respuesta,', 'se queda corto.'], ['Defiende el cupo', 'sin límites no habrá páramo.'], ['No basta el cupo;', 'propone una charla.']], fichas: ['aunque', 'porque', 'por eso', 'es decir,', 'por ejemplo'], va: [0, 1, 2, null, null],
-      mira: ['¿Dónde se acepta algo y se le pone un pero?', '¿Dónde lo segundo es la razón de lo primero?', '¿Dónde la segunda resulta de la primera?', 'En ninguna la segunda repite la primera con otras palabras.', 'En ninguna la segunda es un caso.'], bien: 'Matizar es decir sí, pero.' },
-      '«Aunque» acepta y frena; «porque» da la razón de defender el cupo; «por eso» trae la propuesta.',
-      { hint: 'En una lo segundo frena, en otra es la razón y en otra es lo que resulta.' }),
-    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: PARAMO, nums: [3, 4], pregunta: 'Queda en pie', queda: 'El secretario busca un punto medio.', tarjetas: ['La bióloga quiere cerrar todo el páramo.', 'Pisar fuera del sendero no le hace daño.', 'El secretario cree que el cupo le gustará a todos.'], va: [3, 2, 5],
-      mira: ['Busca cuánto quiere cerrar.', 'Busca la pequeña herida.', 'Busca lo que reconoce.'], bien: '«La mayor parte» no es «todo».' },
-      'Ella habla de «la mayor parte»; cada pisada «es una pequeña herida»; y él reconoce que será «impopular».',
-      { hint: 'Fíjate en la palabra que exagera o niega en cada opción y busca la oración que la corrige.' }),
-  ]);
-
-  // ---------------- Evaluación: formato real, texto nuevo ----------------
-  const GRAFITI = {
-    id: 'lec-grafitis', title: 'Muros que hablan',
-    paras: [
-      'En el barrio San Javier, los muros que hace quince años estaban llenos de amenazas hoy están cubiertos de murales. Los turistas recorren las escaleras eléctricas tomando fotos, y los jóvenes del barrio cobran por guiar los recorridos. Pero no todos los muros pintados de la ciudad cuentan una historia tan amable.',
-      'El grafitero Andrés «Trazo» Gómez defiende que la calle es el museo de quienes nunca han entrado a uno. «Un muro gris no le pertenece a nadie; un muro pintado le pertenece a todos», afirma. Reconoce, eso sí, que hay quienes rayan sin permiso las fachadas recién pintadas de las casas, y dice que eso «no es arte, es falta de respeto».',
-      'Gloria Arango, presidenta de una junta de acción comunal, está cansada de pintar la pared de su casa cada mes. Según ella, el problema no son los murales, sino las firmas rápidas que aparecen de noche y que nadie pidió. Propone que la alcaldía multe a quienes rayen propiedades privadas.',
-      'La Secretaría de Cultura, por su parte, asegura que ha entregado más de doscientos muros legales para pintar y que, en las zonas donde lo hizo, las rayas en fachadas privadas se redujeron casi a la mitad.',
-    ],
-  };
-  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: GRAFITI, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
-  setExam('pu-fuentes', 'Evaluación · Fuentes y voces', [
-    ['pu-fu-1', 'Antes de responder, se identifica de quién es cada cita: el verbo que la acompaña lo dice.',
-      Q('La frase «Un muro gris no le pertenece a nadie; un muro pintado le pertenece a todos» es de:', ['Gloria Arango', 'La Secretaría de Cultura', 'El autor del texto', 'Andrés Gómez'], 3,
-        'Va entre comillas, seguida de «afirma», en el párrafo de Andrés «Trazo» Gómez.',
-        'Busca la cita en el texto y mira qué verbo la acompaña y en qué párrafo está.')],
-    ['pu-fu-1', 'Las comillas con un verbo de decir marcan las palabras exactas de alguien.',
-      Q('Las comillas en «no es arte, es falta de respeto» indican que:', ['son las palabras exactas de Andrés Gómez', 'el autor usa la frase con ironía', 'es el título de un mural', 'es una idea de la Secretaría de Cultura'], 0,
-        'La frase va con «dice que», y quien la dice es Gómez, refiriéndose a quienes rayan las fachadas.',
-        'Fíjate en el verbo que va antes de las comillas y en quién es el sujeto.')],
-    ['pu-fu-1', 'Un dato también tiene una voz: «asegura», «según», «informa».',
-      Q('Según el texto, quien asegura que las rayas en fachadas privadas se redujeron casi a la mitad es:', ['Gloria Arango', 'La Secretaría de Cultura', 'Andrés Gómez', 'Los guías del barrio'], 1,
-        'El párrafo 4 dice que la Secretaría de Cultura «asegura» ese dato.',
-        'Busca el dato de «casi a la mitad» y quién lo asegura.')],
-    ['pu-fu-2', 'Una postura matizada acepta una parte y rechaza otra.',
-      Q('La postura de Gloria Arango frente al grafiti es:', ['A favor de cualquier grafiti', 'En contra de todos los murales', 'Matizada: acepta los murales pero rechaza las firmas sin permiso', 'Indiferente'], 2,
-        'Dice que «el problema no son los murales, sino las firmas rápidas»: acepta una cosa y rechaza la otra.',
-        'Lee la frase de Gloria que empieza con «el problema no son…».')],
-    ['pu-fu-2', 'Una cita externa apoya una propuesta si muestra que lo propuesto funciona.',
-      Q('Un dato que apoyaría la propuesta de Gloria Arango sería:', ['Un informe de que los turistas prefieren los murales', 'Un estudio que muestra que las multas redujeron las firmas en fachadas de otra ciudad', 'Una encuesta según la cual a los jóvenes les gusta pintar', 'Un dato sobre el precio de la pintura'], 1,
-        'Gloria propone multas; un estudio donde las multas funcionaron la apoya. Las demás opciones no tocan la propuesta.',
-        'Recuerda qué propone Gloria y busca el dato que muestre que eso funciona.')],
-    ['pu-fu-2', 'Un dato debilita una idea si muestra lo contrario de lo que ella afirma.',
-      Q('El dato de la Secretaría de Cultura (párrafo 4) debilita sobre todo la idea de que:', ['los murales atraen turistas', 'Gloria pinta su pared cada mes', 'Andrés Gómez es grafitero', 'entregar muros legales no sirve para reducir las rayas en las casas'], 3,
-        'Si en las zonas con muros legales las rayas bajaron casi a la mitad, se debilita la idea de que esos muros no sirven.',
-        'Pregúntate qué idea quedaría en duda si el dato de la Secretaría es cierto.')],
-  ]);
-});
-;
-//#archivo js/courses/preuda-l-conectores.js
-// Preuniversitario · Comprensión lectora · mundo 8 «Conectores y función de partes» con textos de verdad (spec
-// 2026-11-19-preuda-lectura-textos): una columna sobre el reciclaje llena de «sin embargo», «además», «de modo que», «por ejemplo»
-// y «en conclusión» (conectores), y otra sobre la «modernización» de una plaza de mercado con párrafos que ejemplifican,
-// contraargumentan y concluyen, y con comillas irónicas, rayas y paréntesis (función de párrafos y signos). La evaluación usa un
-// texto sobre la cosecha de lluvia en La Guajira. Textos escritos para Zuka.
-PU_LEC_JUEGOS.push(({ setLesson, setExam }) => {
-  const RECICLA = {
-    id: 'lec-reciclar-no-basta', title: 'Reciclar no es suficiente',
-    ficha: { autor: 'Columna de una ingeniera ambiental', fuente: 'Revista de ciencia y sociedad', fecha: 'Junio de 2025' },
-    paras: [
-      'Durante años nos han enseñado que reciclar es la mejor manera de cuidar el planeta. Separamos las botellas, lavamos los envases y los llevamos al punto ecológico con la conciencia tranquila. Sin embargo, los datos cuentan una historia menos cómoda: en muchos países, solo una pequeña parte del plástico que se separa termina convertida en un objeto nuevo.',
-      'Las razones son varias. En primer lugar, muchos plásticos no se pueden reciclar porque mezclan materiales que no se separan, como los empaques de papas fritas, que llevan una capa metálica por dentro. Además, cada vez que un plástico se recicla pierde calidad, de modo que una botella rara vez vuelve a ser botella: suele convertirse en fibra para ropa o en relleno, y ahí termina su vida.',
-      'Por otra parte, reciclar tiene costos que casi nunca vemos. Hay que transportar el material, lavarlo, triturarlo y fundirlo, y todo eso consume agua y energía. Por eso, cuando el petróleo está barato, a muchas empresas les sale más económico fabricar plástico nuevo que comprar el reciclado. Y si el material llega sucio o mezclado, buena parte termina de todos modos en el relleno sanitario.',
-      'Esto no quiere decir que reciclar sea inútil. Al contrario: cada kilo que se recupera es un kilo que no llega al río ni al relleno sanitario. El problema no está en reciclar; está, más bien, en creer que con eso basta. El reciclaje es la última de tres tareas, no la primera. Antes vienen reducir lo que compramos y reutilizar lo que ya tenemos.',
-      'Por ejemplo, una botella de vidrio retornable puede volver a llenarse decenas de veces antes de romperse, mientras que una de plástico desechable se usa una vez. Del mismo modo, una bolsa de tela que se lleva al mercado durante un año reemplaza cientos de bolsas plásticas, y un frasco que se lleva a la tienda para comprar a granel ahorra un empaque cada semana. Ninguna de estas soluciones necesita una planta de reciclaje.',
-      'En conclusión, separar la basura está bien, pero no nos exime de lo más difícil: comprar menos y desechar menos. Reciclar no es el comienzo del camino; antes bien, es lo que queda cuando ya no se pudo reducir ni reutilizar. El mejor residuo, como dicen los ambientalistas, es el que nunca se produce.',
-    ],
-  };
-
-  const PLAZA = {
-    id: 'lec-plaza-modernizada', title: 'La «modernización» de la plaza',
-    ficha: { autor: 'Columna de opinión', fuente: 'Periódico de un municipio del oriente antioqueño', fecha: 'Septiembre de 2025' },
-    paras: [
-      'En marzo, la alcaldía anunció con bombos y platillos la «modernización» de la plaza de mercado: pisos de baldosa blanca, locales con vitrina y un parqueadero de dos pisos. Hubo banda, discursos y una cinta tricolor que cortó el alcalde. Las fotos del proyecto mostraban gente sonriente, frutas brillantes y ningún perro. Seis meses después de la inauguración, la mitad de los vendedores ya no está.',
-      'Pongamos un ejemplo. Doña Rubiela vendía hierbas aromáticas —toronjil, limoncillo, ruda— en un puesto de un metro cuadrado que pagaba a diario. El nuevo local, con vitrina y contador de luz, cuesta un arriendo mensual que equivale a lo que ella ganaba en dos meses. Hoy vende en la acera de enfrente, sin techo, y la policía la saca cada tanto por «ocupar el espacio público». Sus clientes de siempre la siguen buscando; los nuevos, los del parqueadero, ni la ven.',
-      'Se dirá, con razón, que la plaza vieja tenía problemas serios: el techo goteaba, los baños eran una vergüenza y las ratas se paseaban a plena luz del día. Nadie pide volver a eso, ni defender la suciedad en nombre de la tradición. Pero arreglar un techo no obligaba a cambiar a quienes vivían debajo de él.',
-      'Los funcionarios repiten que los vendedores pueden presentarse a una convocatoria para los locales (siempre que tengan cámara de comercio, cuenta bancaria y un fiador). Es decir, pueden presentarse todos, menos los que más lo necesitan. Ninguno de los requisitos tiene que ver con saber vender, ni con los años que cada uno lleva en la plaza, ni con la calidad de lo que ofrece a sus clientes. La alcaldía presume de que hoy llegan más compradores a la plaza; puede ser, pero de poco sirve que lleguen más si ya no encuentran a quién comprarle.',
-      'En suma, una plaza no se moderniza cuando cambia de baldosa, sino cuando sirve mejor a quienes la usan. Y la plaza de mercado la usaban, sobre todo, los vendedores pequeños y sus clientes de siempre. Si ellos ya no caben, lo que se hizo no fue una modernización: fue un desalojo con buena iluminación. Una modernización de verdad habría empezado por preguntarles a ellos qué necesitaban.',
-    ],
-  };
-
-  // ---------------- Lección 1 · Conectores ----------------
-  setLesson('pu-cn-1', [
-    play('ordena-texto', 'Se desordenó la columna. La primera tira está en su puesto: guíate por los conectores.', { doc: { title: RECICLA.title, ficha: RECICLA.ficha }, fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Durante años nos han enseñado que reciclar es la mejor manera de cuidar el planeta. Sin embargo, los datos cuentan una historia menos cómoda: en muchos países, solo una pequeña parte del plástico que se separa termina convertida en un objeto nuevo.', 'Las razones son varias. En primer lugar, muchos plásticos no se pueden reciclar porque mezclan materiales que no se separan, como los empaques de papas fritas, que llevan una capa metálica por dentro.', 'Por otra parte, reciclar tiene costos que casi nunca vemos.', 'Esto no quiere decir que reciclar sea inútil. El reciclaje es la última de tres tareas, no la primera. Antes vienen reducir lo que compramos y reutilizar lo que ya tenemos.', 'Por ejemplo, una botella de vidrio retornable puede volver a llenarse decenas de veces antes de romperse, mientras que una de plástico desechable se usa una vez.'],
-      mira: ['', 'Da razones de algo que ya se dijo.', '«Por otra parte» suma a una razón anterior.', '«Esto no quiere decir» frena las críticas: ¿quedaron debajo?', '«Por ejemplo» ilustra lo de reutilizar: ¿ya se dijo?'], bien: 'Problema, razones, freno y ejemplo.' },
-      '«Las razones» explican el problema, «Por otra parte» suma, «Esto no quiere decir» frena y «Por ejemplo» ilustra la reutilización.',
-      { hint: 'Cada conector necesita algo antes: una razón a la cual sumarse, una crítica que frenar o una idea que ilustrar.' }),
-    play('bisagras', 'Pon en cada hueco el conector que une las dos ideas. Sobran dos.', { doc: RECICLA, pares: [['Nos enseñaron que reciclar basta.', 'los datos dicen otra cosa.'], ['El plástico pierde calidad al reciclarse;', 'una botella rara vez vuelve a ser botella.'], ['Esto no quiere decir que sea inútil.', 'cada kilo recuperado no llega al río.'], ['Antes hay que reutilizar.', 'una botella de vidrio se llena decenas de veces.']], fichas: ['Sin embargo,', 'por lo tanto,', 'Al contrario:', 'Por ejemplo,', 'En conclusión,', 'porque'], va: [0, 1, 2, 3, null, null],
-      mira: ['¿Dónde chocan dos ideas que siguen en pie?', '¿Dónde lo segundo resulta de lo primero?', '¿Dónde se niega algo y se pone lo contrario?', '¿Dónde lo segundo es un caso?', 'Ninguna segunda idea recoge todo lo dicho.', 'Ninguna segunda idea es la causa de la primera.'], bien: 'Choca, resulta, rectifica e ilustra.' },
-      'Los datos chocan («Sin embargo»), no volver a ser botella resulta («por lo tanto»), se niega que sea inútil («Al contrario») y la botella ilustra («Por ejemplo»).',
-      { hint: 'Busca primero la pareja que empieza negando algo, y luego la que cuenta un caso.' }),
-    play('pinta-tipos', 'Pinta cada oración según lo que anuncia su conector.', { doc: RECICLA, plumas: ['contraste', 'consecuencia', 'suma', 'ejemplo'], lineas: ['Además, cada reciclaje le quita calidad.', 'Por eso, sale más barato fabricar plástico nuevo.', 'Sin embargo, los datos cuentan otra historia.', 'Por ejemplo, un frasco que se lleva a la tienda ahorra un empaque.', 'Por otra parte, reciclar consume agua.'], va: [2, 1, 0, 3, 2],
-      mira: ['¿Agrega otra razón o la contradice?', '¿Es un resultado o un caso?', '¿Va en la misma dirección o en contra?', '¿Es un resultado o un caso?', '¿Agrega otra razón o la contradice?'], bien: 'El conector dice qué viene.' },
-      '«Además» y «Por otra parte» suman; «Por eso» trae una consecuencia; «Sin embargo», un contraste; «Por ejemplo», un caso.',
-      { hint: 'Tapa lo que sigue y pregunta qué esperarías después de leer solo el conector.' }),
-    play('genero-o-cita', '¿Opone dos ideas que siguen en pie, o **rectifica**: niega una y pone otra?', { rot: ['opone', 'rectifica'], doc: RECICLA, fichas: ['Nos enseñaron eso; sin embargo, los datos dicen otra cosa.', 'No es el comienzo; antes bien, es lo último.', 'Reciclar sirve, pero tiene costos.', 'El problema no está en reciclar; está, más bien, en creer que basta.'], va: [0, 1, 0, 1],
-      mira: ['¿Alguna de las dos ideas quedó negada?', '¿Cuál de las dos ideas queda en pie?', '¿Alguna de las dos ideas quedó negada?', '¿Cuál de las dos ideas queda en pie?'], bien: 'Rectificar: no esto, sino aquello.' },
-      'En «sin embargo» y «pero» quedan las dos ideas. «Antes bien» y «más bien» llegan tras un «no» y ponen otra en su lugar.',
-      { hint: 'Busca el «no» en la primera parte. Si lo segundo reemplaza lo negado, rectifica.' }),
-    play('pasos-del-proceso', 'Ordena la vida de la botella que cuenta el párrafo 2.', { que: 'lo que pasa con el plástico', de: 'De botella a relleno', fija: 0, ini: [2, 0, 3, 1], tiras: ['La botella se recicla.', 'El plástico pierde calidad.', 'Se vuelve fibra o relleno.', 'Ahí termina su vida.'],
-      mira: ['Es lo que empieza todo.', 'Pierde calidad por algo que le hacen.', 'Se vuelve otra cosa porque ya no sirve igual.', 'Es el final de la cadena.'], bien: '«De modo que» une la cadena.' },
-      'Se recicla, pierde calidad, se vuelve fibra o relleno y ahí termina. «De modo que» marca la consecuencia.',
-      { hint: 'Busca «de modo que» en el párrafo 2: lo que va antes es la causa.' }),
-    play('sella-parrafo', '«Reciclar plástico tiene todos estos problemas, **EXCEPTO**:» Ata cada opción a su párrafo.', { doc: RECICLA, tarjetas: ['Hay empaques con materiales mezclados', 'Pierde calidad', 'Gasta agua y energía', 'Suelta gases que enferman'], va: [1, 1, 2, 6],
-      mira: ['Busca las papas fritas.', 'Busca la botella que no vuelve a ser botella.', 'Busca los costos.', 'Suena posible, pero búscalo.'], luz: [[2, 'mezclan materiales que no se separan'], [2, 'pierde calidad'], [3, 'consume agua y energía']], bien: 'Los gases no los nombró nadie.' },
-      'La mezcla y la calidad están en el 2; el agua y la energía, en el 3. Los gases no aparecen.',
-      { hint: 'Dos opciones pueden estar en el mismo párrafo. La que no encuentres es la respuesta.' }),
-    play('talla-idea', 'Tres resúmenes del párrafo 4: pon cada uno en su talla.', { doc: RECICLA, p: 4, rot: ['se queda en un detalle', 'justa', 'dice de más'], fichas: ['Un kilo recuperado no llega al río.', 'Reciclar sirve, pero después de reducir y reutilizar.', 'Reciclar no sirve para nada.'], va: [0, 1, 2],
-      mira: ['Es la prueba de una idea: ¿es toda la idea?', 'Mira «la última de tres tareas».', 'Compárala con «no quiere decir que reciclar sea inútil».'], luz: [[4, 'El reciclaje es la última de tres tareas, no la primera']], bien: 'Frenar no es negar.' },
-      'El kilo es un detalle; «para nada» lo niega el propio párrafo. La justa dice que sirve y en qué puesto va.',
-      { hint: 'El párrafo frena una exageración y pone orden. La justa tiene que hacer las dos cosas.' }),
-    play('comprueba-apuesta', 'Subraya en el párrafo 1 la oración que mejor prueba esta conclusión.', { doc: RECICLA, nums: [1], n: 1, apuesta: 'Separar la basura no garantiza que el plástico se recicle.', va: ['1.2'],
-      mira: { '1.0': 'Dice lo que nos enseñaron, no lo que pasa.', '1.1': 'Dice lo que hacemos al separar.' }, bien: 'Después de «Sin embargo» viene lo que pesa.' },
-      '«Solo una pequeña parte del plástico que se separa termina convertida en un objeto nuevo»: está justo después de «Sin embargo».',
-      { hint: 'Lo importante suele venir después del conector que contrasta.' }),
-  ]);
-
-  // ---------------- Lección 2 · Función de párrafos y signos ----------------
-  setLesson('pu-cn-2', [
-    play('mapa-margen', 'Lleva al margen la función de cada párrafo. Sobra una nota.', { doc: PLAZA, fichas: ['presenta el hecho con ironía', 'ejemplifica con un caso', 'concede algo y lo refuta', 'desmonta lo que dicen los funcionarios', 'concluye con la tesis', 'propone volver a la plaza vieja'], va: [0, 1, 2, 3, 4, null],
-      mira: ['Busca las comillas burlonas.', 'Busca «Pongamos un ejemplo».', 'Busca «Se dirá, con razón».', 'Busca «Es decir».', 'Busca «En suma».', 'Compárala con «Nadie pide volver a eso».'],
-      luz: [[1, '«modernización»'], [2, 'Pongamos un ejemplo'], [3, 'Se dirá, con razón'], [4, 'Es decir'], [5, 'En suma']], bien: 'Las primeras palabras anuncian la función.' },
-      'Presenta con ironía, ejemplifica, concede y refuta, desmonta y concluye. Volver a la plaza vieja se descarta.',
-      { hint: 'Mira la primera o segunda oración de cada párrafo: ahí está la palabra que anuncia lo que hace.' }),
-    play('signo-oficio', 'Ata cada oficio al signo que lo hace.', { doc: PLAZA, texto: 'anunció la |«modernización»| de la plaza. Vendía hierbas aromáticas |—toronjil, limoncillo, ruda—|. Pueden presentarse a una convocatoria |(siempre que tengan cámara de comercio)|.', tarjetas: ['muestra que el autor no cree la palabra', 'mete ejemplos en la oración', 'guarda una condición'], va: [0, 1, 2],
-      mira: ['¿Dónde el autor se burla de una palabra?', '¿Dónde hay una lista de casos?', '¿Dónde hay un requisito?'], bien: 'Comillas irónicas, rayas con ejemplos, paréntesis con la condición.' },
-      'Las comillas de «modernización» son irónicas; las rayas meten ejemplos de hierbas; el paréntesis guarda la condición.',
-      { hint: 'Lee lo que está adentro de cada signo: ¿es una burla, una lista o una condición?' }),
-    play('pista-tipo', 'Ata cada verbo de función a la oración que lo hace.', { doc: PLAZA, lineas: ['Se dirá, con razón, que la plaza vieja tenía problemas.', 'Pongamos un ejemplo: doña Rubiela vendía hierbas.', 'En suma, una plaza no se moderniza cuando cambia de baldosa.', 'Pero arreglar un techo no obligaba a cambiar a quienes vivían debajo.'], tarjetas: ['concede', 'ejemplifica', 'concluye', 'refuta'], va: [0, 1, 2, 3],
-      mira: ['¿Dónde se acepta algo del otro lado?', '¿Dónde hay un caso?', '¿Dónde se recoge lo dicho?', '¿Dónde se muestra que una objeción no se sostiene?'], bien: 'Los verbos del examen, en acción.' },
-      '«Con razón» concede; el caso de Rubiela ejemplifica; «En suma» concluye; y el «Pero» refuta la objeción.',
-      { hint: 'Busca la marca de cada oración: «con razón», «ejemplo», «en suma», «pero».' }),
-    play('genero-o-cita', '¿**Matiza** lo propio o **relativiza** lo del otro?', { rot: ['matiza lo propio', 'relativiza lo ajeno'], doc: PLAZA, fichas: ['«Nadie pide volver a eso.»', '«Puede ser que lleguen más compradores, pero de poco sirve.»', '«No digo que toda obra sea mala.»', '«Quizá haya más luz, pero a nadie le devuelve el puesto.»'], va: [0, 1, 0, 1],
-      mira: ['¿De quién es la idea que se limita?', '¿De quién es el dato?', '¿De quién es la idea que se limita?', '¿De quién es el dato?'], bien: '¿De quién es la idea a la que se le pone límite?' },
-      '«Nadie pide» y «No digo» le ponen límite a la crítica del propio autor. «Puede ser… pero» acepta un dato ajeno y le quita peso.',
-      { hint: 'Pregunta de quién es lo que se limita: de quien escribe o de quien piensa distinto.' }),
-    play('bisagras', 'Pon en cada hueco la palabra que une las dos ideas. Sobran dos.', { doc: PLAZA, pares: [['La plaza vieja tenía problemas;', 'arreglarla no obligaba a sacar a nadie.'], ['Pueden presentarse los que tengan cuenta y fiador;', 'todos, menos los que más lo necesitan.'], ['El arriendo equivale a dos meses de ganancia;', 'ella vende en la acera.']], fichas: ['sin embargo,', 'es decir,', 'por eso', 'porque', 'por ejemplo,'], va: [0, 1, 2, null, null],
-      mira: ['¿Dónde se acepta algo y se frena?', '¿Dónde lo segundo dice lo mismo de frente?', '¿Dónde lo segundo es efecto de lo primero?', 'Ninguna segunda idea es la causa de su primera.', 'Ninguna segunda idea es un caso.'], bien: 'Frena, aclara y trae el efecto.' },
-      'Los problemas no justifican sacar gente («sin embargo»); los requisitos dichos de frente («es decir»); y la acera es el efecto («por eso»).',
-      { hint: 'Una pareja choca, otra traduce y otra trae la consecuencia.' }),
-    play('voz-de-la-fuente', 'Ata cada frase a lo que hace con su tono.', { portadas: [['Burla', 'muestra lo ridículo'], ['Ironía', 'dice bonito lo grave'], ['Justicia', 'reconoce lo cierto'], ['Denuncia', 'señala un daño']], tarjetas: ['«Frutas brillantes y ningún perro.»', '«Un desalojo con buena iluminación.»', '«Los baños eran una vergüenza.»', '«La mitad de los vendedores ya no está.»'], va: [0, 1, 2, 3],
-      mira: ['¿Qué fotos son tan perfectas que dan risa?', '¿Dónde algo malo se adorna?', '¿Dónde acepta algo en contra de la plaza vieja?', '¿Dónde dice a quién perjudicó?'], bien: 'El tono cambia de frase en frase.' },
-      '«Ningún perro» se burla; «buena iluminación» es ironía; los baños, reconocer lo cierto; y la mitad que ya no está, denuncia.',
-      { hint: 'Pregunta de cada frase: ¿se ríe, dice lo contrario, acepta algo o acusa?' }),
-    play('balanza-tesis', 'Tesis: la obra sacó a quienes más necesitaban la plaza. ¿Qué hace cada dato?', { doc: PLAZA, tesis: 'La obra sacó a quienes más la necesitaban', fichas: ['El arriendo cuesta dos meses de ganancia.', 'La mitad de los vendedores ya no está.', 'Los que se fueron lo hicieron a locales mejores.', 'El techo viejo goteaba.'], va: [0, 0, 1, 2],
-      mira: ['Si no pueden pagarlo, ¿la tesis gana o pierde?', 'Si se fueron tantos, ¿la tesis gana o pierde?', 'Si les fue mejor, ¿la tesis gana o pierde?', '¿Dice algo de quién se fue?'], bien: 'El techo explica la obra, no a quién sacó.' },
-      'El arriendo y la mitad que falta apoyan; irse a algo mejor debilitaría; el techo no dice quién salió.',
-      { hint: 'Supón que cada dato es cierto y pregunta si hace más creíble que los sacaron.' }),
-    play('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a una oración que la desmiente.', { doc: PLAZA, nums: [3, 4], pregunta: 'Queda en pie', queda: 'Los requisitos dejan por fuera a los pequeños.', tarjetas: ['El autor quiere la plaza vieja tal como estaba.', 'La plaza vieja no tenía ningún problema.', 'Para el local importa cuánto se sabe vender.'], va: [1, 0, 5],
-      mira: ['Busca «Nadie pide».', 'Busca lo que goteaba.', 'Busca con qué no tienen que ver los requisitos.'], bien: 'Cada falsa cae con una oración.' },
-      '«Nadie pide volver a eso»; la plaza «tenía problemas serios»; y ningún requisito «tiene que ver con saber vender».',
-      { hint: 'Busca la oración que habla de lo mismo y mira qué niega o qué acepta.' }),
-  ]);
-
-  // ---------------- Evaluación: formato real, texto nuevo ----------------
-  const LLUVIA = {
-    id: 'lec-cosechar-lluvia', title: 'Cosechar la lluvia',
-    paras: [
-      'En La Guajira llueve poco, pero cuando llueve, llueve fuerte. Por eso, desde hace mucho tiempo, las comunidades wayuu construyen jagüeyes: depresiones en la tierra que recogen el agua de los aguaceros y la guardan para los meses secos. Sin embargo, el agua de un jagüey se evapora rápido y se ensucia con facilidad.',
-      'Algunas escuelas rurales han probado otra solución: canaletas en los techos que llevan el agua a tanques cerrados. Un techo de cien metros cuadrados, por ejemplo, puede recoger miles de litros en una sola temporada de lluvias. Además, como el tanque está tapado, el agua llega más limpia y no se pierde por evaporación. Esto no significa que haya que tapar los jagüeyes. Al contrario: donde hay tanque, el jagüey queda libre para los animales y los cultivos.',
-      'Es cierto que un tanque cuesta más que un jagüey y que no todas las casas tienen un techo grande. No obstante, varias familias pueden compartir el tanque de la escuela, y el costo se reparte.',
-      'En suma, cosechar la lluvia no reemplaza un acueducto, pero puede ser la diferencia entre tener agua o no tenerla durante la sequía.',
-    ],
-  };
-  const Q = (q, options, answer, explain, hint) => play('pregunta-examen', 'Pregunta del examen', { doc: LLUVIA, q, options, answer }, explain, { hint, kind: 'Comprensión lectora' });
-  setExam('pu-conectores', 'Evaluación · Conectores y función de partes', [
-    ['pu-cn-1', 'Después de una idea que el autor rechaza («Esto no significa que…»), «al contrario» rectifica: pone en su lugar lo que el autor sí sostiene.',
-      Q('En el párrafo 2, «Al contrario» introduce:', ['un problema de los tanques que el autor no había mencionado', 'lo que el autor sí sostiene sobre los jagüeyes, en lugar de lo que acaba de rechazar', 'una consecuencia de que el agua del jagüey se evapore tan rápido', 'un ejemplo de las escuelas rurales que construyen canaletas'], 1,
-        'Antes, el autor rechaza una idea: que haya que tapar los jagüeyes. «Al contrario» trae la idea que la reemplaza: los jagüeyes siguen sirviendo, ahora para los animales y los cultivos. No opone dos datos: corrige una lectura equivocada.',
-        'Lee la oración anterior al conector: ¿qué idea niega el autor? Lo que sigue a «Al contrario» es lo que pone en su lugar.')],
-    ['pu-cn-1', 'Un conector de contraste anuncia una idea que se opone o le pone un límite a la anterior.',
-      Q('En el párrafo 1, «Sin embargo» introduce:', ['un ejemplo de cómo se construye un jagüey', 'una limitación de los jagüeyes', 'una consecuencia de que llueva tan fuerte', 'la conclusión de todo el texto sobre el agua'], 1,
-        'Después de explicar para qué sirven los jagüeyes, «Sin embargo» presenta sus problemas: el agua se evapora y se ensucia.',
-        'Mira qué dice el texto de los jagüeyes antes y después del conector.')],
-    ['pu-cn-1', 'Dos conectores son intercambiables si establecen la misma relación.',
-      Q('«Además» (párrafo 2) puede reemplazarse, sin cambiar el sentido, por:', ['En cambio', 'Por lo tanto', 'Aunque', 'Asimismo'], 3,
-        '«Además» suma una ventaja más; «asimismo» también suma. Los otros marcan contraste, consecuencia o concesión.',
-        'Pregúntate qué relación marca «Además»: ¿suma, opone o concluye?')],
-    ['pu-cn-1', '«No obstante» es un conector de contraste, como «sin embargo».',
-      Q('«No obstante» (párrafo 3) tiene el mismo valor que:', ['por eso', 'sin embargo', 'por ejemplo', 'es decir'], 1,
-        'Introduce una respuesta que se opone a la desventaja dicha antes: es contraste, igual que «sin embargo».',
-        'Lee lo que hay antes (una desventaja) y lo que viene después (una salida).')],
-    ['pu-cn-2', 'Un párrafo que empieza con «Es cierto que…» suele reconocer una objeción para luego responderla.',
-      Q('La función del párrafo 3 es:', ['presentar una objeción y responderla', 'dar un ejemplo de una escuela que usa tanques', 'introducir el tema de la sequía en La Guajira', 'concluir que el jagüey es la mejor solución'], 0,
-        'Reconoce dos desventajas del tanque («Es cierto que…») y las responde con «No obstante»: compartir el tanque reparte el costo.',
-        'Fíjate en cómo empieza el párrafo y en el conector que viene después.')],
-    ['pu-cn-2', 'Los conectores «en suma», «en conclusión» y «en fin» anuncian un cierre.',
-      Q('El párrafo 4 cumple la función de:', ['contraargumentar', 'ejemplificar', 'concluir', 'introducir'], 2,
-        '«En suma» anuncia la conclusión: la cosecha de lluvia no reemplaza un acueducto, pero ayuda en la sequía.',
-        'Mira la primera expresión del párrafo.')],
-    ['pu-cn-2', 'Conceder es aceptar una parte de la postura contraria; relativizar, mostrar que pesa menos de lo que parece.',
-      Q('En el párrafo 3, el autor:', ['refuta con datos la idea de que un tanque cueste más que un jagüey', 'concede dos desventajas del tanque y luego les quita peso', 'ejemplifica cómo se construye un jagüey', 'concluye que el jagüey es mejor que el tanque'], 1,
-        '«Es cierto que…» acepta que el tanque es más caro y que no todas las casas tienen techo grande; «No obstante» les quita peso: el tanque se comparte y el costo se reparte. No niega que cueste más.',
-        'Fíjate en si el autor niega la desventaja o la acepta y luego dice por qué no es tan grave.')],
-    ['pu-cn-2', 'Matizar es precisar hasta dónde llega lo que se afirma, sin cambiar de postura.',
-      Q('Con «cosechar la lluvia no reemplaza un acueducto», el autor:', ['refuta a quienes piden construir acueductos en La Guajira', 'concede que cosechar la lluvia no sirve', 'matiza el alcance de la solución que defiende', 'ilustra cómo funciona un acueducto'], 2,
-        'Sigue defendiendo la cosecha de lluvia («puede ser la diferencia»), pero precisa hasta dónde llega: no es un acueducto. Eso es matizar.',
-        'Lee la frase completa del párrafo 4: después del «pero», ¿el autor abandona su propuesta o la mantiene?')],
-    ['pu-cn-2', 'Los dos puntos pueden anunciar una definición, una lista o una explicación.',
-      Q('Los dos puntos en «jagüeyes: depresiones en la tierra que recogen el agua…» sirven para:', ['introducir una definición de jagüey', 'citar las palabras de las comunidades wayuu', 'enumerar las escuelas que recogen la lluvia', 'marcar ironía frente a la palabra jagüey'], 0,
-        'Lo que sigue a los dos puntos explica qué es un jagüey.',
-        'Lee lo que viene después de los dos puntos: ¿qué te dice de la palabra anterior?')],
-  ]);
-});
-;
 //#archivo js/courses/preuda-l-argumentacion.js
 // Preuniversitario · Comprensión lectora · mundo 9 «Argumentación, intención y tono» con textos de verdad (spec
 // 2026-11-19-preuda-lectura-textos): una columna que defiende la educación financiera con argumentos de datos, ejemplo y analogía y
@@ -5019,5 +4069,1275 @@ PI_MUNDOS.push((() => {
     ['icf-sc-fuentes-2', 'Un solo testimonio no permite generalizar.', Q('A partir de la entrevista, sería un error concluir que:', ['El marido de Hermelinda murió joven', 'Todas las familias del pueblo lo vivieron igual', 'Hermelinda recuerda alegría y pérdida', 'El hospital prometido fue pequeño, según ella'], 1, 'Es la voz de una persona: no prueba lo que vivieron todas.', 'Cuidado con la palabra «todas».')],
     ['icf-sc-fuentes-3', 'La caricatura opina con contraste y exageración.', Q('En la caricatura, que los invitados tosan en lugar de cantar critica:', ['La falta de música en las fiestas', 'El daño a la salud de los obreros mientras la empresa celebra', 'El precio de los pasteles', 'La edad de los invitados'], 1, 'Las caras tiznadas y la tos señalan el daño de la mina; la empresa celebra su aniversario.', 'Une la tos, las caras tiznadas y el pastel.')],
     ['icf-sc-fuentes-3', 'Un texto que reúne voces no las borra: las muestra.', Q('La última línea del texto de los estudiantes expresa que:', ['La mina fue mala para todos', 'La mina fue buena para todos', 'La valoración depende de la perspectiva de cada fuente', 'No se puede saber nada del pasado'], 2, '«Según a quién se le pregunte»: las fuentes miran desde lugares distintos.', 'Fíjate en la expresión «según a quién».')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-sc-sistemico.js
+// Preicfes · Sociales y Ciudadanas · mundo 5 «Problemas Complejos» (spec 2026-11-25-preicfes-estructura). Casos inventados para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const BASURA = {
+    id: 'icf-quebrada', title: 'La quebrada que se desborda',
+    ficha: { autor: 'Equipo de una emisora comunitaria', fuente: 'Serie «Preguntas del barrio»', fecha: 'Marzo de 2026' },
+    paras: [
+      'En abril la quebrada La Honda se desbordó por tercera vez en cinco años y dejó barro en ciento veinte casas. «Fue el aguacero», dijeron muchos. Tenían razón a medias. Ese día llovió fuerte, pero en 1998 llovió más y no pasó nada. El aguacero fue lo que disparó el desborde; no explica por qué ahora sí.',
+      'Las causas de fondo se fueron juntando. Cuando la fábrica de tejidos cerró, llegaron familias sin empleo que construyeron en la ladera, donde el suelo era barato. Para hacer las casas se cortaron árboles; sin raíces, la tierra se suelta y baja hasta el cauce. Además, el camión de la basura no sube hasta allá, así que una parte termina en el agua y tapa el paso.',
+      'Las consecuencias también vienen en cadena. Con el barro se cerró la escuela dos semanas. Sin clases, varias madres dejaron de ir a trabajar para cuidar a los hijos. Con menos ingresos, algunas familias se atrasaron en el arriendo y se mudaron más arriba, a la ladera, donde es más barato. Así, una consecuencia del desborde se volvió una nueva causa.',
+      'En la reunión del barrio, un líder propuso un culpable: «Esto es por los que llegaron». Una vecina le respondió que ellos no cerraron la fábrica ni decidieron por dónde sube el camión. Que dos cosas ocurran juntas no significa que una sea la única causa de la otra. Además, señalar a un grupo suele tapar las decisiones que nadie quiere revisar.',
+      'La ingeniera de la alcaldía llevó un mapa con flechas. En él, casi ninguna flecha salía de un solo lugar. Empleo, vivienda, bosque, basura y lluvia se empujaban unos a otros. «Si solo hacemos un muro», advirtió, «el agua pasará, pero volverá a taparse».',
+      'Acordaron tres cosas: una ruta de recolección que suba, sembrar con las familias en las zonas de mayor riesgo y reubicar a las veinte casas que están dentro del cauce. El muro quedó para el final. Nadie cree que esto evite todos los aguaceros. La idea es que un aguacero vuelva a ser solo un aguacero.',
+    ],
+  };
+  const l1 = leccion('icf-sc-sistemico-1', 'Causas y consecuencias', guion(
+    ['Detonante y causa de fondo', 'El detonante dispara; las causas de fondo explican por qué esta vez sí.'],
+    ['Varias causas', 'Los problemas sociales casi nunca tienen una sola.'],
+    ['En cadena y en círculo', 'Una consecuencia puede volverse una nueva causa.'],
+    ['Juntas no es por', 'Que dos cosas pasen a la vez no prueba que una cause la otra.']), [
+    x('genero-o-cita', '¿Es el **detonante** o una **causa de fondo**?', { doc: BASURA, rot: ['detonante', 'causa de fondo'],
+      ...F(['El aguacero de ese día', 0, '¿Disparó el hecho o lo venía preparando?'], ['Casas en la ladera sin árboles', 1, '¿Disparó el hecho o lo venía preparando?'], ['El camión no sube por la basura', 1, '¿Disparó el hecho o lo venía preparando?'], ['El cierre de la fábrica', 1, '¿Disparó el hecho o lo venía preparando?']), bien: 'Lo que dispara y lo que prepara.' },
+      'El aguacero disparó el desborde; la ladera, la basura y el cierre lo fueron preparando.', 'Pregunta si ocurrió ese día o si venía de tiempo atrás.'),
+    x('pasos-del-proceso', 'Ordena la cadena. El primer paso está en su puesto.', { doc: BASURA, que: 'la cadena', de: 'Del cierre al desborde', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Cierra la fábrica.', 'Llegan familias a la ladera.', 'Se cortan árboles.', 'La tierra baja al cauce.', 'Un aguacero lo desborda.'], mira: ['', 'Llegan cuando ya no hay empleo.', 'Se cortan para construir las casas.', 'La tierra se suelta cuando faltan raíces.', 'Es lo que dispara al final.'], bien: 'Cierre, ladera, tala, tierra y desborde.' },
+      'El cierre lleva familias a la ladera, se tala, la tierra baja y el aguacero desborda.', 'Busca en el párrafo 2 qué pasó antes y qué después.'),
+    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: BASURA,
+      ...F(['cuenta el hecho y separa el detonante', 0, 'Busca el desborde.'], ['explica las causas de fondo', 1, 'Busca lo que se fue juntando.'], ['sigue las consecuencias', 2, 'Busca la escuela.'], ['discute una explicación simple', 3, 'Busca el culpable.'], ['muestra cómo se conectan', 4, 'Busca el mapa.'], ['cuenta lo que acordaron', 5, 'Busca las tres cosas.'], ['narra la historia de la fábrica', null, 'La fábrica solo se nombra.']),
+      luz: [[1, 'lo que disparó el desborde'], [2, 'Las causas de fondo'], [3, 'Las consecuencias'], [4, 'un culpable'], [5, 'un mapa con flechas'], [6, 'Acordaron tres cosas']], bien: 'Hecho, causas, consecuencias, crítica, mapa y acuerdo.' },
+      'Va del hecho a las causas, las consecuencias, una explicación simple, el mapa y el acuerdo.', 'Busca en el comienzo de cada párrafo de qué se ocupa.'),
+    x('tira-referente', 'Ata cada palabra a aquello a lo que apunta.', { doc: BASURA, texto: '|El líder| señaló a |los recién llegados|. Una vecina le respondió que ellos no cerraron la fábrica.',
+      ...T(['«le»', 0, 'Pon en su lugar lo que ataste: ¿a quién respondió?'], ['«ellos»', 1, 'Pon en su lugar lo que ataste: ¿quiénes no la cerraron?']), bien: 'El líder y los recién llegados.' },
+      'La vecina le responde al líder y «ellos» son los que llegaron al barrio.', 'Mira si la palabra nombra a uno o a varios.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: BASURA, nums: [1, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['En 1998 llovió más y no se desbordó.', 0, 'Léela junto al párrafo 1.'], ['Algo cambió en la quebrada después de 1998.', 1, '¿Por qué con más lluvia no pasó nada?'], ['El problema puede repetirse con más fuerza.', 1, '¿Adónde se mudan las familias después?'], ['La alcaldía ocultó el mapa.', 2, '¿Alguna oración lo dice?']),
+      luz: [[1, 'en 1998 llovió más'], [3, 'a la ladera'], [3, 'una nueva causa']], bien: 'Comparar dos fechas descubre causas.' },
+      '1998 está escrito; que algo cambió y que puede repetirse se deducen; ocultar el mapa se inventa.', 'Compara los dos aguaceros y sigue el círculo del párrafo 3.'),
+    x('balanza-tesis', 'Afirmación: «la única causa es la lluvia». ¿Qué hace cada dato?', { doc: BASURA, tesis: 'La única causa es la lluvia',
+      ...F(['Con una lluvia mayor, años atrás, no pasó nada.', 1, '¿Bastó la lluvia esa vez?'], ['Otra quebrada limpia y con bosque no se desbordó ese día.', 1, '¿Le llovió también?'], ['Todas las quebradas de la región se desbordaron, sin importar su estado.', 0, 'Si fuera así, ¿qué explicaría todo?'], ['La reunión fue un martes.', 2, '¿Dice algo de las causas?']), bien: 'Comparar casos prueba causas.' },
+      'Que no pasara con más lluvia o con bosque la debilita; que todas se desbordaran la apoyaría; el martes no pesa.', 'Pregunta qué cambia entre los casos que se desbordan y los que no.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: BASURA, nums: [4, 5, 6], pregunta: 'Queda en pie', queda: 'El desborde tiene varias causas conectadas.',
+      ...T(['Los recién llegados cerraron la fábrica.', 1, 'Busca qué no hicieron ellos.'], ['Un muro bastaría para siempre.', 7, 'Busca qué advirtió la ingeniera.'], ['El acuerdo evitará todos los aguaceros.', 10, 'Busca qué cree la gente del acuerdo.']), bien: 'Una oración desmiente cada una.' },
+      'Ellos no la cerraron, el muro volvería a taparse y nadie cree que evite todos los aguaceros.', 'Saca la palabra clave: fábrica, muro, aguaceros.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: BASURA, lineas: ['La lluvia disparó el desborde, pero no lo explica sola.', 'El barro era oscuro.', 'Desempleo, tala y basura lo fueron preparando.', 'Las consecuencias se vuelven nuevas causas.', 'El camión es de basura.', 'Las soluciones atienden varias causas.'], ...S([1, 4], { 0: 'Separa detonante y fondo.', 2: 'Son las causas de fondo.', 3: 'Es el círculo.', 5: 'Es el acuerdo.' }), bien: 'Detonante, fondo, círculo y acuerdo.' },
+      'El color del barro y el tipo de camión no explican nada; lo demás sí.', 'Deja lo que ayuda a entender por qué pasó.'),
+  ]);
+
+  const MINA = {
+    id: 'icf-turismo', title: 'Un hotel frente a la ciénaga',
+    ficha: { autor: 'Periódico escolar «El Manglar»', fuente: 'Edición especial', fecha: 'Abril de 2026' },
+    paras: [
+      'Una empresa quiere construir un hotel de doscientas habitaciones frente a la ciénaga de Las Garzas. El proyecto parece un asunto de dinero y, en efecto, lo es: promete cien empleos y más impuestos para un municipio que apenas paga sus profesores. Pero los que fuimos a preguntar volvimos con un cuaderno lleno de otras cosas.',
+      'La bióloga del parque nos habló de la dimensión ambiental. El manglar cría los peces que se pescan en toda la costa y frena las olas en las tormentas. Cortar cuatro hectáreas para el muelle no acaba con la ciénaga, dijo, pero la parte en dos, y hay animales que no cruzan.',
+      'Doña Petrona, que preside el consejo comunitario, nos habló de lo cultural. En esa orilla se hace cada año el velorio de los santos del agua, y allí están enterrados los ombligos de medio pueblo. «Ustedes ven una playa», nos dijo; «nosotros vemos un altar». Para ella no hay precio que alcance, porque no está en venta.',
+      'El alcalde insistió en lo político y en lo legal. Como se trata de territorio de una comunidad negra, la ley ordena una consulta previa antes de decidir. Él la apoya, aunque teme que se alargue. También hay división: los jóvenes del puerto están a favor, porque llevan dos años buscando trabajo.',
+      'Al comparar notas descubrimos que casi todos tenían razón en lo suyo. El choque no es entre buenos y malos, sino entre dimensiones: lo que mejora la economía puede dañar el ambiente; lo que cuida la cultura puede dejar sin empleo a los jóvenes. Incluso dentro de una misma dimensión hay tensiones: el hotel daría trabajo, pero podría quitárselo a los pescadores.',
+      'Un profesor propuso una regla que nos gustó: antes de votar, cada grupo debe explicar con sus palabras lo que más le importa al otro, hasta que el otro diga «sí, es eso». Todavía no hay decisión. Hay, eso sí, un nuevo plano del hotel: más pequeño, sin muelle y lejos de la orilla. Nadie está feliz del todo. Quizá esa sea una buena señal.',
+    ],
+  };
+  const l2 = leccion('icf-sc-sistemico-2', 'Dimensiones en choque', guion(
+    ['Mirar por dimensiones', 'Económica, ambiental, cultural, política, legal, social.'],
+    ['Cada actor enfatiza una', 'La bióloga, el ambiente; la líder, la cultura; la empresa, el dinero.'],
+    ['El choque', 'Lo que mejora una dimensión puede empeorar otra.'],
+    ['Acordar', 'Ceder un poco en cada una suele ser mejor que ganar solo en una.']), [
+    x('pinta-tipos', 'Pinta cada dato con su dimensión.', { doc: MINA, plumas: ['económica', 'ambiental', 'cultural'],
+      ...P(['El manglar cría los peces de la costa.', 1, '¿Habla de dinero, de naturaleza o de creencias y costumbres?'], ['Habrá más impuestos para el municipio.', 0, '¿Habla de dinero, de naturaleza o de creencias y costumbres?'], ['Se hace el velorio de los santos del agua.', 2, '¿Habla de dinero, de naturaleza o de creencias y costumbres?'], ['Hay animales que no cruzan.', 1, '¿Habla de dinero, de naturaleza o de creencias y costumbres?'], ['Promete cien empleos.', 0, '¿Habla de dinero, de naturaleza o de creencias y costumbres?']), bien: 'Dinero, naturaleza y costumbres.' },
+      'Impuestos y empleos son económicos; peces y animales, ambientales; el velorio, cultural.', 'Pregunta qué se gana o se pierde en cada dato.'),
+    x('voz-de-la-fuente', 'Ata cada preocupación a quien la tiene.', { ayuda: 'Tira un hilo desde cada preocupación hasta quien la tiene.', doc: MINA, portadas: [['La bióloga', 'actor'], ['Doña Petrona', 'actor'], ['El alcalde', 'actor'], ['Los jóvenes del puerto', 'actor']],
+      ...T(['que la ciénaga quede partida', 0, '¿Quién habla de animales que no cruzan?'], ['que se pierda un lugar sagrado', 1, '¿Quién ve un altar?'], ['que el trámite se alargue', 2, '¿Quién habla de la ley?'], ['seguir sin trabajo', 3, '¿Quién lleva dos años buscando?']), bien: 'Cada actor, su dimensión.' },
+      'La bióloga cuida la ciénaga, doña Petrona lo sagrado, el alcalde el trámite y los jóvenes el empleo.', 'Busca quién dijo cada cosa y qué le preocupa.'),
+    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: MINA,
+      ...F(['¿Qué exige la ley antes de decidir?', 3, 'Busca el comienzo que habla de lo legal.'], ['¿Para qué sirve el manglar?', 1, 'Busca el comienzo que habla del ambiente.'], ['¿Qué regla propuso un profesor?', 5, 'Busca el comienzo que lo nombra.']),
+      luz: [[4, 'una consulta previa'], [2, 'frena las olas'], [6, 'cada grupo debe explicar']], bien: 'Ley, ambiente y regla.' },
+      'La ley está en el 4, el manglar en el 2 y la regla en el 6.', 'Lee solo el comienzo de cada párrafo y decide.'),
+    x('genero-o-cita', '¿El choque es **entre dimensiones** o **dentro de una misma**?', { doc: MINA, rot: ['entre dimensiones', 'dentro de una'],
+      ...F(['Más empleo en el hotel, menos para los pescadores', 1, '¿Las dos partes hablan de lo mismo?'], ['Más impuestos, menos manglar', 0, '¿Las dos partes hablan de lo mismo?'], ['Se cuida un altar y se frena el empleo', 0, '¿Las dos partes hablan de lo mismo?'], ['Los jóvenes ganan sueldo, los pescadores pierden ventas', 1, '¿Las dos partes hablan de lo mismo?']), bien: 'Dos temas o uno solo.' },
+      'Empleo contra empleo y sueldo contra ventas son de una misma; impuestos y altar chocan con otra.', 'Nombra la dimensión de cada parte y compáralas.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: MINA, nums: [3, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Doña Petrona preside el consejo comunitario.', 0, 'Léela junto al párrafo 3.'], ['Ofrecerle más dinero no cambiaría su posición.', 1, '¿Qué dice ella del precio?'], ['El nuevo plano atiende a quienes se oponían.', 1, '¿Qué le quitaron al hotel y adónde lo movieron?'], ['El hotel ya abrió.', 2, '¿Hay decisión?']),
+      luz: [[3, 'no hay precio que alcance'], [6, 'sin muelle y lejos de la orilla']], bien: 'Los cambios muestran a quién se oyó.' },
+      'El cargo está escrito; lo del dinero y lo del plano se deducen; aún no hay decisión.', 'Compara el plano nuevo con las quejas de cada uno.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: MINA, filas: [{ antes: 'Cortar cuatro hectáreas', topes: ['acaba la ciénaga', 'no la afecta', 'la parte en dos'], va: 2 }, { antes: 'La consulta previa es', topes: ['un favor', 'una orden de la ley', 'ilegal'], va: 1 }, { antes: 'Con el plano nuevo,', topes: ['nadie está feliz del todo', 'todos están felices', 'nadie cede'], va: 0 }], mira: ['Relee lo que dijo la bióloga.', 'Relee por qué se hace.', 'Relee el final del párrafo 6.'], luz: [[2, 'la parte en dos'], [4, 'la ley ordena'], [6, 'Nadie está feliz del todo']], bien: 'Parte, ordena y reparte.' },
+      'La parte en dos, la ley la ordena y nadie quedó feliz del todo.', 'Busca la oración exacta que corresponde a cada perilla.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 5 la oración que dice **cómo es** el conflicto.', { doc: MINA, nums: [5], apuesta: 'Chocan dimensiones, no buenos y malos.', ...S(['5.1'], { '5.0': 'Dice lo que descubrieron, no cómo es el choque.', '5.2': 'Da un caso dentro de una dimensión.' }), bien: '«No… sino» define el conflicto.' },
+      'La segunda oración lo define: el choque es entre dimensiones, no entre buenos y malos.', 'Busca la oración que descarta una idea y pone otra.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: MINA, lineas: ['Un hotel promete empleo e impuestos.', 'El cuaderno se llenó.', 'También afecta el ambiente, la cultura y la ley.', 'El choque es entre dimensiones.', 'El hotel tiene habitaciones.', 'Se busca un plan en que cada uno ceda.'], ...S([1, 4], { 0: 'Es la dimensión económica.', 2: 'Son las otras dimensiones.', 3: 'Es la idea central.', 5: 'Es la salida.' }), bien: 'Propuesta, dimensiones, choque y salida.' },
+      'El cuaderno y las habitaciones son detalles; lo demás explica el conflicto.', 'Deja lo que necesitas para entender el desacuerdo.'),
+  ]);
+
+  const PICO = {
+    id: 'icf-pico', title: 'La buena idea que hizo trancón',
+    ficha: { autor: 'Semillero de políticas públicas', fuente: 'Cuaderno de casos', fecha: 'Mayo de 2026' },
+    paras: [
+      'En la ciudad de Altamira el tráfico era insoportable. El concejo aprobó una medida sencilla: cada carro debía quedarse en casa un día a la semana, según el último número de la placa. El primer mes las calles se vaciaron. El alcalde salió en televisión con una bicicleta.',
+      'Al año, el trancón era peor que antes. ¿Qué pasó? Quienes podían pagarlo compraron un segundo carro, casi siempre viejo y barato, con una placa que terminara en otro número. Una medida contra los carros había aumentado los carros. Y como eran viejos, contaminaban más.',
+      'Nadie en el concejo quería ese resultado. A eso se le llama efecto no deseado: lo que produce una intervención sin que nadie lo busque. Aparece porque las personas no se quedan quietas cuando cambia una regla: se acomodan. Quien diseña una política debe preguntarse qué hará la gente al día siguiente.',
+      'También hubo efectos desiguales. Quien tenía dinero compró otro carro; quien no, empezó a salir a las cuatro y media de la mañana para alcanzar un bus repleto. Los repartidores que usaban su moto perdían un día de ingreso por semana. La misma regla pesaba distinto según quién la cargara. Sin embargo, en las cifras que publicaba el concejo aparecía un solo promedio para toda la ciudad, y ese promedio escondía la diferencia.',
+      'Y hubo un efecto bueno que nadie anunció: como el bus iba lleno, los pasajeros se organizaron y lograron un carril exclusivo. El carril, y no la placa, redujo los tiempos de viaje en veinte minutos para quienes usan el transporte público.',
+      'El concejo corrigió. Mantuvo el carril, cambió la medida por un cobro a quien entra solo en carro al centro y usó ese dinero para más buses. Esta vez publicó de antemano qué iba a medir: tiempos de viaje, calidad del aire y gasto de las familias más pobres. Si en un año no mejora, la regla se cae sola. Una buena intervención no es la que suena bien, sino la que se deja corregir.',
+    ],
+  };
+  const l3 = leccion('icf-sc-sistemico-3', 'Efectos de una intervención', guion(
+    ['Lo que se busca', 'Toda medida tiene un propósito.'],
+    ['Lo que no se busca', 'La gente se acomoda y aparecen efectos no deseados.'],
+    ['Para quién', 'La misma regla pesa distinto según quién la cargue.'],
+    ['Medir y corregir', 'Conviene decir de antemano qué se va a medir.']), [
+    x('genero-o-cita', '¿Es un efecto **buscado** o **no buscado** por el concejo?', { doc: PICO, rot: ['buscado', 'no buscado'],
+      ...F(['Menos carros en la calle el primer mes', 0, '¿Para eso se aprobó?'], ['Se compran segundos carros', 1, '¿Para eso se aprobó?'], ['Más contaminación por carros viejos', 1, '¿Para eso se aprobó?'], ['Los pasajeros logran un carril', 1, '¿Para eso se aprobó?']), bien: 'También hay efectos buenos no buscados.' },
+      'Solo vaciar las calles era el propósito; los carros, la contaminación y el carril no estaban previstos.', 'Compara cada efecto con lo que quería la medida.'),
+    x('pasos-del-proceso', 'Ordena lo que pasó. El primer paso está en su puesto.', { doc: PICO, que: 'el caso', de: 'La medida de Altamira', fija: 1, ini: [0, 2, 4, 1, 3], tiras: ['Se aprueba la medida de la placa.', 'Las calles se vacían.', 'Se compran segundos carros.', 'El trancón empeora.', 'El concejo corrige.'], mira: ['', 'Ocurre el primer mes.', 'Es lo que hace la gente para acomodarse.', 'Es lo que se ve al año.', 'Es lo último que cuenta el texto.'], bien: 'Aprobar, vaciar, acomodarse, empeorar y corregir.' },
+      'Se aprueba, funciona un mes, la gente compra carros, empeora y se corrige.', 'Fíjate en las palabras que dicen cuándo ocurrió cada cosa.'),
+    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: PICO,
+      ...F(['presenta la medida y su éxito', 0, 'Busca el primer mes.'], ['cuenta el resultado contrario', 1, 'Busca el segundo carro.'], ['define el efecto no deseado', 2, 'Busca «se le llama».'], ['muestra a quién le pesó más', 3, 'Busca los repartidores.'], ['cuenta un efecto bueno', 4, 'Busca el carril.'], ['explica la corrección', 5, 'Busca lo que se va a medir.'], ['explica cómo se fabrica un bus', null, 'Nadie fabrica buses aquí.']),
+      luz: [[1, 'El primer mes'], [2, 'un segundo carro'], [3, 'efecto no deseado'], [4, 'efectos desiguales'], [5, 'un carril exclusivo'], [6, 'El concejo corrigió']], bien: 'Medida, resultado, concepto, desigualdad, carril y corrección.' },
+      'Presenta la medida, su mal resultado, el concepto, la desigualdad, un efecto bueno y la corrección.', 'Mira de qué efecto habla cada párrafo del caso.'),
+    x('pista-tipo', 'Ata cada grupo a cómo le pesó la medida.', { doc: PICO, lineas: ['Compró otro carro.', 'Salía a las cuatro y media.', 'Perdía un día de ingreso.', 'Ganó un viaje más corto, al final.'],
+      ...T(['quien tenía dinero', 0, '¿Quién podía evitarla pagando?'], ['quien dependía del bus lleno', 1, '¿Quién madrugaba más?'], ['el repartidor en moto', 2, '¿Quién trabaja con su vehículo?'], ['el pasajero, tras el carril', 3, '¿A quién ayudó lo no previsto?']), bien: 'La misma regla, pesos distintos.' },
+      'Con dinero se evitaba; el del bus madrugaba, el repartidor perdía ingreso y el carril ayudó al pasajero.', 'Busca qué hizo, ganó o perdió cada grupo de personas.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: PICO, frases: [[3, 'lo que produce una ', 'intervención', ' sin que nadie lo busque'], [3, 'cuando cambia una regla: se ', 'acomodan', ''], [6, 'publicó ', 'de antemano', ' qué iba a medir']],
+      ...F(['medida', 0, '¿Cómo llama el texto a lo que hizo el concejo?'], ['adaptan', 1, '¿Qué hizo la gente con la placa?'], ['desde antes', 2, '¿Cuándo avisó qué mediría?'], ['cirugía', null, 'Aquí nadie opera a nadie.'], ['sientan', null, 'No se trata de sillas.']), bien: 'El contexto decide el sentido.' },
+      'La intervención es la medida, acomodarse es adaptarse y de antemano es desde antes.', 'Reemplaza y mira si la oración dice lo mismo.'),
+    x('balanza-tesis', 'Afirmación: «la placa redujo los tiempos de viaje». ¿Qué hace cada dato?', { doc: PICO, tesis: 'La placa redujo los tiempos de viaje',
+      ...F(['Al año el trancón era peor.', 1, '¿Se viajaba más rápido?'], ['Los tiempos bajaron solo donde hay carril.', 1, '¿Qué otra cosa los explica?'], ['El primer mes las calles se vaciaron.', 0, '¿Apoya al menos por un tiempo?'], ['La bicicleta del alcalde es verde.', 2, '¿Mide tiempos?']), bien: 'Otra causa explica mejor.' },
+      'El trancón y el carril la debilitan; el primer mes la apoya; la bicicleta no pesa.', 'Pregunta si el dato señala a la placa o a otra causa.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: PICO, nums: [2, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Los segundos carros contaminaban más.', 0, 'Léela junto al párrafo 2.'], ['El concejo aprendió de su primera medida.', 1, '¿Qué hace distinto esta vez?'], ['Al concejo le importa no cargar a los más pobres.', 1, '¿Qué va a medir esta vez?'], ['El alcalde fue reelegido.', 2, '¿Se habla de elecciones?']),
+      luz: [[2, 'contaminaban más'], [6, 'Esta vez publicó'], [6, 'gasto de las familias más pobres']], bien: 'Lo que se mide muestra lo que importa.' },
+      'La contaminación está escrita; que aprendió y que cuida a los pobres se deducen; la reelección no aparece.', 'Mira qué anunció que mediría y qué pasa si no mejora.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: PICO, lineas: ['Una medida contra el tráfico lo empeoró.', 'El alcalde usó una bicicleta.', 'La gente se acomodó y surgieron efectos no deseados.', 'La regla pesó distinto según el dinero.', 'Algunos salían a las cuatro y media.', 'Se corrigió anunciando qué se mediría.'], ...S([1, 4], { 0: 'Es el problema.', 2: 'Es el concepto.', 3: 'Es la desigualdad.', 5: 'Es la lección.' }), bien: 'Problema, concepto, desigualdad y corrección.' },
+      'La bicicleta y la hora son detalles; lo demás sirve para evaluar otra medida.', 'Deja lo que usarías para analizar otra política.'),
+  ]);
+
+  const ESCUELA = {
+    id: 'icf-celulares', title: 'El colegio sin celulares',
+    paras: [
+      'El colegio San Isidro prohibió los celulares desde enero. La rectora explicó el motivo: en un año, las peleas grabadas y publicadas habían pasado de tres a diecinueve. «El celular tiene la culpa», afirmó una madre en la asamblea. Otra recordó que ese mismo año el colegio recibió, de un día para otro, a los estudiantes de una sede que cerró por grietas, y que los cursos pasaron de treinta a cuarenta y cinco alumnos.',
+      'A los tres meses los videos bajaron a uno. Las peleas, según el registro de enfermería, siguieron iguales: solo dejaron de grabarse. Los profesores notaron más conversación en el recreo y más atención en clase. Al mismo tiempo aparecieron problemas que nadie previó. Varios estudiantes que trabajan por la tarde perdieron turnos porque no veían los mensajes de sus jefes. Dos niñas con diabetes, que medían su glucosa con una aplicación, tuvieron que pedir permiso cada vez.',
+      'Los que tenían dinero compraron relojes que reciben mensajes. Los demás se quedaron sin nada. Además surgió, detrás de la cancha, un pequeño negocio: un alumno de once alquilaba su teléfono a quinientos pesos el minuto.',
+      'El consejo directivo se reunió en abril. Los profesores pedían mantener la prohibición por la atención; los padres que trabajan, poder comunicarse; los estudiantes, confianza; y la orientadora, que se hablara de las peleas y no solo de los videos. La secretaría de educación recordó que cualquier regla debe respetar el derecho a la salud.',
+      'La decisión fue intermedia. Los celulares se guardan en clase y se pueden usar en el primer recreo; quienes los necesiten por salud los llevan siempre. Se crearon tres grupos de mediación para los cursos que crecieron, y la secretaría se comprometió a abrir dos cursos más. En noviembre se revisará con cuatro datos: atención en clase, peleas en enfermería, quejas de acoso y opinión de los estudiantes. «Si solo miramos los videos», dijo la orientadora, «vamos a creer que todo se arregló».',
+    ],
+  };
+  const Q = preg(ESCUELA, 'sociales');
+  return mundo('icf-sc-sistemico', 'Problemas Complejos', 'sociales', [l1, l2, l3], [
+    ['icf-sc-sistemico-1', 'Busca qué más cambió al mismo tiempo.', Q('El dato de los cursos de cuarenta y cinco alumnos sirve para:', ['Probar que el celular causa las peleas', 'Señalar otra posible causa del aumento de peleas', 'Mostrar que la sede cerró por error', 'Negar que hubo peleas'], 1, 'Ese año también cambió el tamaño de los cursos: puede ser otra causa.', 'Pregunta qué más pasó ese mismo año.')],
+    ['icf-sc-sistemico-1', 'Que algo deje de verse no significa que deje de ocurrir.', Q('Según el registro de enfermería, la prohibición:', ['Acabó con las peleas', 'Aumentó las peleas', 'Redujo las grabaciones, pero no las peleas', 'No cambió nada en el colegio'], 2, 'Las peleas siguieron iguales: solo dejaron de grabarse.', 'Compara el número de videos con el registro de enfermería.')],
+    ['icf-sc-sistemico-2', 'Cada actor enfatiza una dimensión distinta.', Q('El caso de las niñas con diabetes muestra un choque entre:', ['La disciplina y el derecho a la salud', 'La moda y el estudio', 'El deporte y la economía', 'Los profesores y los bomberos'], 0, 'La regla de disciplina dificultaba cuidar su salud.', 'Nombra lo que buscaba la regla y lo que ellas necesitaban.')],
+    ['icf-sc-sistemico-2', 'Una salida puede atender varias dimensiones.', Q('La decisión de abril atiende sobre todo a:', ['Solo los profesores', 'Solo los padres', 'Nadie, porque mantiene la regla', 'Varios intereses, con concesiones de cada grupo'], 3, 'Guarda en clase, permite un recreo, exceptúa la salud y crea mediación.', 'Compara cada parte de la decisión con lo que pedía cada grupo.')],
+    ['icf-sc-sistemico-3', 'La gente se acomoda a las reglas.', Q('El alquiler del teléfono detrás de la cancha es un ejemplo de:', ['Efecto buscado por la rectora', 'Efecto no deseado de la medida', 'Causa de la prohibición', 'Dimensión ambiental'], 1, 'Nadie quería ese negocio: apareció cuando los estudiantes se acomodaron a la regla.', 'Pregunta si la prohibición se hizo para eso.')],
+    ['icf-sc-sistemico-3', 'Medir una sola cosa puede engañar.', Q('La frase final de la orientadora advierte que:', ['Los videos deben volver', 'Hay que prohibir las cámaras', 'Un solo indicador puede hacer creer que el problema se resolvió', 'Las peleas ya se acabaron'], 2, 'Si solo se cuentan videos, parece resuelto aunque las peleas sigan.', 'Une la frase con el dato de enfermería.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-sc-historia.js
+// Preicfes · Sociales y Ciudadanas · mundo 6 «Historia de Colombia» (spec 2026-11-25-preicfes-estructura). Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const COLONIA = {
+    id: 'icf-colonia', title: 'De súbditos a ciudadanos',
+    ficha: { autor: 'Cuaderno de historia', fuente: 'Colección «Pasado presente»', fecha: 'Febrero de 2026' },
+    paras: [
+      'Durante casi tres siglos, lo que hoy es Colombia fue parte del imperio español. La Corona nombraba a quienes gobernaban, cobraba impuestos y controlaba el comercio: solo se podía vender y comprar, legalmente, con la metrópoli. La sociedad estaba ordenada por origen. Arriba, los españoles nacidos en Europa; luego sus descendientes americanos, los criollos; después mestizos, indígenas y, en la base, los africanos esclavizados.',
+      'Ese orden nunca fue tranquilo. Hubo indígenas que pleitearon por sus resguardos y esclavizados que huyeron y fundaron palenques, como el de San Basilio, reconocido por la Corona a comienzos del siglo XVIII. Resistir no era siempre pelear: también era conservar una lengua, una fiesta o una forma de sembrar.',
+      'En el siglo XVIII, los reyes de la casa de Borbón quisieron sacar más provecho de sus colonias. Subieron los impuestos, crearon monopolios como el del tabaco y prefirieron a los peninsulares para los cargos. En 1781, en El Socorro, Manuela Beltrán rompió el edicto de un nuevo impuesto, y miles de personas marcharon hacia Santafé. Los comuneros pactaron unas capitulaciones que el gobierno incumplió. José Antonio Galán, que siguió en rebeldía, fue ejecutado en 1782.',
+      'Los criollos tenían dinero y estudios, pero no el poder. Leían a los ilustrados franceses y conocían la independencia de Estados Unidos. A fines de 1793, Antonio Nariño tradujo e imprimió los Derechos del Hombre; al año siguiente, eso le costó la cárcel. Cuando en 1808 Napoleón invadió España y puso preso al rey, surgió una pregunta incómoda: si no hay rey, ¿quién manda?',
+      'El 20 de julio de 1810, en Santafé, una disputa por un florero fue la chispa de un cabildo abierto que formó una junta de gobierno. No fue todavía la independencia total: la junta decía gobernar en nombre del rey. Vinieron años de división entre centralistas y federalistas, la reconquista española de 1816 y, por fin, la campaña libertadora, que triunfó en Boyacá el 7 de agosto de 1819.',
+      'La nueva república cambió muchas cosas y dejó otras. Ya no había súbditos, sino ciudadanos; pero solo votaban los hombres libres con propiedades o renta. La esclavitud duró hasta 1851. Los indígenas perdieron, poco a poco, sus tierras comunales. La independencia cambió quién gobernaba antes de cambiar cómo se vivía.',
+    ],
+  };
+  const l1 = leccion('icf-sc-historia-1', 'De la Colonia a la República', guion(
+    ['El orden colonial', 'Un imperio que controla cargos, comercio e impuestos, y una sociedad ordenada por origen.'],
+    ['Resistencias', 'Palenques, pleitos, comuneros: el orden nunca fue tranquilo.'],
+    ['Causas y detonantes', 'Reformas, ideas y crisis del rey; el florero fue la chispa.'],
+    ['Cambios y permanencias', 'Hubo república, pero siguieron la esclavitud y el voto de pocos.']), [
+    x('linea-vida', 'Lleva cada hecho a su época.', { doc: COLONIA, rot: ['antes de 1800', 'de 1800 a 1819', 'después de 1819'],
+      ...F(['La marcha de los comuneros', 0, 'Busca el año de El Socorro.'], ['La junta de Santafé', 1, 'Busca el año del florero.'], ['El fin legal de la esclavitud', 2, 'Busca hasta cuándo duró.'], ['La batalla de Boyacá', 1, 'Busca el triunfo de la campaña.']), luz: [[3, 'En 1781'], [5, '20 de julio de 1810'], [6, 'hasta 1851']], bien: '1781, 1810, 1819 y 1851.' },
+      'Los comuneros son de 1781; la junta, de 1810; Boyacá, de 1819; la esclavitud terminó en 1851.', 'Busca la fecha de cada hecho en el texto.'),
+    x('genero-o-cita', '¿Es una **causa de fondo** o el **detonante** del 20 de julio?', { doc: COLONIA, rot: ['de fondo', 'detonante'],
+      ...F(['La disputa por el florero', 1, '¿Venía de tiempo atrás?'], ['Los cargos para los peninsulares', 0, '¿Venía de tiempo atrás?'], ['Las ideas ilustradas', 0, '¿Venía de tiempo atrás?'], ['Los impuestos y monopolios', 0, '¿Venía de tiempo atrás?']), bien: 'La chispa y la leña.' },
+      'El florero fue la chispa; cargos, ideas e impuestos venían acumulándose.', 'Pregunta si ocurrió ese día o desde antes.'),
+    x('pista-tipo', 'Ata cada grupo a lo que lo caracteriza en el texto.', { doc: COLONIA, lineas: ['peninsulares', 'criollos', 'africanos esclavizados', 'indígenas'],
+      ...T(['preferidos para los cargos', 0, '¿A quiénes prefirieron los Borbones?'], ['con dinero y estudios, sin el poder', 1, '¿Quiénes leían a los ilustrados?'], ['algunos huyeron y fundaron palenques', 2, '¿Quiénes hicieron San Basilio?'], ['pleitearon por sus resguardos', 3, '¿Quiénes defendían tierras comunales?']), bien: 'Cada grupo, su lugar y su lucha.' },
+      'Peninsulares con cargos, criollos sin poder, palenques de esclavizados y resguardos indígenas.', 'Busca en el texto qué se dice de cada grupo.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: COLONIA, nums: [3, 5, 6], pregunta: 'Queda en pie', queda: 'La independencia fue un proceso con varias etapas.',
+      ...T(['El gobierno cumplió lo pactado con los comuneros.', 3, 'Busca qué pasó con las capitulaciones.'], ['El 20 de julio fue la independencia total.', 6, 'Busca en nombre de quién gobernaba la junta.'], ['Desde 1819 votaron todos.', 9, 'Busca quiénes votaban.']), bien: 'Incumplió, todavía no y solo algunos.' },
+      'Las capitulaciones se incumplieron, la junta gobernaba en nombre del rey y votaban pocos.', 'Busca la palabra clave: comuneros, independencia, votar.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: COLONIA, nums: [4, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Nariño fue preso por imprimir los Derechos del Hombre.', 0, 'Búscala junto al nombre de Nariño.'], ['Al gobierno le inquietaban esas ideas.', 1, '¿Por qué castigaría una traducción?'], ['Un hombre sin propiedades podía ser ciudadano y no votar.', 1, '¿Quiénes votaban?'], ['Nariño viajó con Napoleón.', 2, '¿El texto los une?']),
+      luz: [[4, 'eso le costó la cárcel'], [6, 'solo votaban']], bien: 'El castigo muestra el miedo.' },
+      'La cárcel está escrita; la inquietud y el ciudadano sin voto se deducen; el viaje se inventa.', 'Pregunta por qué un gobierno castigaría eso.'),
+    x('balanza-tesis', 'Tesis: «la independencia cambió quién gobernaba antes de cambiar cómo se vivía». ¿Qué hace cada dato?', { doc: COLONIA, tesis: 'Cambió quién gobernaba antes de cómo se vivía',
+      ...F(['La esclavitud siguió más de treinta años.', 0, '¿Siguió algo de la vida de antes?'], ['Solo votaban hombres con propiedades o renta.', 0, '¿Cambió para la mayoría?'], ['En 1820 se repartió la tierra entre todos.', 1, 'Si fuera cierto, ¿qué diría de la tesis?'], ['El florero era de porcelana.', 2, '¿Habla de la vida o del gobierno?']), bien: 'Cambios y permanencias.' },
+      'La esclavitud y el voto restringido la apoyan; un reparto general la debilitaría; el florero no pesa.', 'Supón cierto cada dato y pregunta si la vida cambió pronto.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: COLONIA, frases: [[1, 'legalmente, con la ', 'metrópoli', ''], [3, 'crearon ', 'monopolios', ' como el del tabaco'], [2, 'indígenas que ', 'pleitearon', ' por sus resguardos']],
+      ...F(['España', 0, '¿Quién dominaba la colonia?'], ['negocios de un solo vendedor', 1, '¿Quién podía vender el tabaco?'], ['reclamaron ante la ley', 2, '¿Cómo defendieron sus tierras?'], ['ciudad grande', null, 'Aquí se habla de un imperio.'], ['bailaron', null, 'Se trata de defender tierras.']), bien: 'Cada palabra en su época.' },
+      'La metrópoli es el país que domina, el monopolio es un solo vendedor y pleitear es reclamar ante la ley.', 'Lee la oración completa y piensa quién manda.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: COLONIA, lineas: ['La sociedad colonial estaba ordenada por origen.', 'La campaña triunfó en agosto.', 'Hubo resistencias y reformas que molestaron.', 'La crisis del rey abrió el camino a la independencia.', 'Galán siguió en rebeldía.', 'La república dejó muchas desigualdades.'], ...S([1, 4], { 0: 'Es el punto de partida.', 2: 'Son causas de fondo.', 3: 'Es el momento clave.', 5: 'Es lo que permaneció.' }), bien: 'Orden, resistencia, crisis y permanencias.' },
+      'El mes y la rebeldía de Galán son detalles; lo demás explica el proceso.', 'Deja lo que ayuda a entender por qué y qué cambió.'),
+  ]);
+
+  const SIGLO = {
+    id: 'icf-siglo19', title: 'Un país que se escribía y se borraba',
+    ficha: { autor: 'Cuaderno de historia', fuente: 'Colección «Pasado presente»', fecha: 'Marzo de 2026' },
+    paras: [
+      'Pocos países estrenaron tantas constituciones en un siglo. Entre 1821 y 1886 hubo, por lo menos, ocho textos nacionales. Varios cambiaban el nombre del país y casi todos, la respuesta a tres preguntas: ¿cuánto poder tiene el gobierno central?, ¿qué lugar ocupa la Iglesia?, ¿quién puede votar?',
+      'La primera república unió a la Nueva Granada, Venezuela y Ecuador. Los historiadores la llaman Gran Colombia. Era enorme y sus regiones estaban mal comunicadas; además, Bolívar y Santander tenían ideas distintas sobre cuánto debía mandar el centro. En 1830 se separaron Venezuela y Ecuador, y ese mismo año murió Bolívar en Santa Marta.',
+      'A mitad de siglo aparecieron los dos partidos que marcarían la historia. Los conservadores defendían, en general, un Estado central fuerte y a la Iglesia católica como base del orden. Los liberales pedían más libertades, más poder para las regiones y separar a la Iglesia del Estado. Dentro de cada partido había ricos y pobres; muchas veces se era liberal o conservador por la familia o por el pueblo.',
+      'Las reformas liberales de mitad de siglo abolieron la esclavitud, expropiaron tierras de la Iglesia y, en 1863, consolidaron con la Constitución de Rionegro un país federal, los Estados Unidos de Colombia, con nueve estados que tenían ejército propio. Hubo muchas libertades y también muchas guerras locales.',
+      'En 1886, con Rafael Núñez y Miguel Antonio Caro, la Regeneración hizo lo contrario: un país unitario, con un presidente fuerte, y un acuerdo con la Iglesia que le entregó la educación. Los liberales quedaron casi por fuera del gobierno. El siglo terminó con la guerra de los Mil Días, entre 1899 y 1902, que dejó unos cien mil muertos según los cálculos más citados. Al año siguiente, con apoyo de Estados Unidos, se separó Panamá.',
+      'Mientras los partidos peleaban, el café crecía en las laderas. A fines de siglo ya era el principal producto que se exportaba. Con él llegaron caminos, pequeños propietarios en unas regiones y grandes haciendas en otras. La política se escribía en constituciones; la vida, en recibos de café.',
+    ],
+  };
+  const l2 = leccion('icf-sc-historia-2', 'Siglo XIX', guion(
+    ['Tres preguntas', 'Centro o regiones, Iglesia y Estado, y quién vota.'],
+    ['Dos partidos', 'Conservadores y liberales, a mitad de siglo.'],
+    ['Péndulo', '1863, federal y liberal; 1886, central y conservadora.'],
+    ['Economía', 'El café cambió el país mientras los partidos peleaban.']), [
+    x('pinta-tipos', 'Pinta cada idea con el partido que, en general, la defendía.', { doc: SIGLO, plumas: ['conservador', 'liberal'],
+      ...P(['Un Estado central fuerte.', 0, '¿Quién quería un centro fuerte?'], ['Separar a la Iglesia del Estado.', 1, '¿Quién quería separarla?'], ['Más poder para las regiones.', 1, '¿Quién quería repartir el poder?'], ['La Iglesia como base del orden.', 0, '¿Quién veía así a la Iglesia?']), bien: 'Centro e Iglesia; regiones y libertades.' },
+      'Los conservadores, centro e Iglesia; los liberales, regiones y separación.', 'Relee el párrafo que presenta a los dos partidos.'),
+    x('linea-vida', 'Lleva cada rasgo a su constitución.', { doc: SIGLO, rot: ['Rionegro, 1863', 'Regeneración, 1886'],
+      ...F(['Nueve estados con ejército', 0, 'Busca el nombre «Estados Unidos de Colombia».'], ['Un presidente fuerte', 1, 'Busca a Núñez y Caro.'], ['La Iglesia recibe la educación', 1, 'Busca el acuerdo con la Iglesia.'], ['Un país federal', 0, 'Busca la palabra en el párrafo 4.']), luz: [[4, 'un país federal'], [5, 'un país unitario']], bien: 'De un extremo al otro.' },
+      'Rionegro fue federal, con ejércitos regionales; la de 1886, unitaria, presidencial y con la Iglesia.', 'Compara lo que hizo cada reforma: párrafos 4 y 5.'),
+    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: SIGLO,
+      ...F(['¿Por qué se separó la Gran Colombia?', 1, 'Busca el comienzo que nombra la primera república.'], ['¿Qué producto se exportaba más?', 5, 'Busca el comienzo que nombra un cultivo.'], ['¿Qué tres preguntas cambiaban?', 0, 'Busca el comienzo sobre constituciones.']),
+      luz: [[2, 'mal comunicadas'], [6, 'el principal producto'], [1, 'tres preguntas']], bien: 'Comienzo, segundo y último.' },
+      'La separación está en el 2, el café en el 6 y las preguntas en el 1.', 'Lee solo la primera oración de cada párrafo.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: SIGLO, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['En cada partido había ricos y pobres.', 0, 'Léela junto al párrafo 3.'], ['Dejar por fuera a un partido ayudó a que hubiera guerra.', 1, '¿Qué pasó después de que los liberales quedaran por fuera?'], ['Dos vecinos con ideas parecidas podían ser de partidos opuestos.', 1, '¿Por qué se era liberal o conservador muchas veces?'], ['Panamá se separó por una guerra de religión.', 2, '¿El texto da esa causa?']),
+      luz: [[3, 'había ricos y pobres'], [5, 'casi por fuera del gobierno'], [3, 'por la familia o por el pueblo']], bien: 'La familia y el pueblo pesaban.' },
+      'Ricos y pobres está escrito; la exclusión y la herencia del partido se deducen; la religión no.', 'Une lo que pasa antes con lo que pasa después.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: SIGLO, filas: [{ antes: 'Los conservadores defendían el centro', topes: ['nunca', 'siempre y todos', 'en general'], va: 2 }, { antes: 'Con Rionegro hubo', topes: ['solo paz', 'libertades y guerras locales', 'solo guerra'], va: 1 }, { antes: 'La cifra de muertos de los Mil Días es', topes: ['un cálculo', 'exacta', 'falsa'], va: 0 }], mira: ['Busca las dos palabras que limitan la idea.', 'Relee el final del párrafo 4.', 'Busca «unos» y «según».'], luz: [[3, 'en general'], [4, 'muchas guerras locales'], [5, 'según los cálculos']], bien: 'En general, las dos cosas y un cálculo.' },
+      'En general, libertades con guerras locales y una cifra calculada.', 'Busca en el texto la palabra que pone el límite.'),
+    x('pasos-del-proceso', 'Ordena el siglo. El primer paso está en su puesto.', { doc: SIGLO, que: 'el siglo', de: 'De la Gran Colombia a Panamá', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Se une la Gran Colombia.', 'Venezuela y Ecuador se separan.', 'Se escribe la de Rionegro.', 'Llega la Regeneración.', 'Guerra de los Mil Días.'], mira: ['', 'Ocurre en 1830.', 'Ocurre en 1863.', 'Ocurre en 1886.', 'Cierra el siglo.'], bien: 'Unión, separación, federal, central y guerra.' },
+      'Primero la unión, en 1830 la separación, luego 1863, 1886 y la guerra.', 'Busca los años en el texto y ponlos en fila.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 6 la oración que opone las **leyes** y los **recibos**.', { doc: SIGLO, nums: [6], apuesta: 'Una se escribía en leyes; la otra, en café.', ...S(['6.3'], { '6.0': 'Dice que las dos cosas pasaban a la vez.', '6.1': 'Da un dato de exportación.', '6.2': 'Dice qué llegó con el café.' }), bien: 'La imagen final resume la idea.' },
+      'La última oración opone las constituciones a los recibos de café.', 'Busca la oración que cierra el texto con una imagen.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: SIGLO, lineas: ['El siglo discutió centro, Iglesia y voto.', 'Bolívar murió en Santa Marta.', 'Dos partidos nacieron a mitad de siglo.', 'Se pasó de un país federal a uno central.', 'La guerra empezó en 1899.', 'El café transformó la economía.'], ...S([1, 4], { 0: 'Es la idea que organiza el texto.', 2: 'Son los actores.', 3: 'Es el péndulo.', 5: 'Es el cambio económico.' }), bien: 'Preguntas, partidos, péndulo y café.' },
+      'El lugar y el año son detalles; lo demás organiza el siglo.', 'Deja lo que explica los cambios del país.'),
+  ]);
+
+  const SIGLO20 = {
+    id: 'icf-siglo20', title: 'La paz y sus intentos',
+    ficha: { autor: 'Cuaderno de historia', fuente: 'Colección «Pasado presente»', fecha: 'Abril de 2026' },
+    paras: [
+      'Las primeras décadas del siglo XX trajeron ferrocarriles, café y la indemnización por Panamá. En las plantaciones y los pozos petroleros nacieron los sindicatos. En diciembre de 1928, en Ciénaga, el ejército disparó contra trabajadores en huelga de una bananera extranjera. Aún se discute cuántos murieron; nadie discute que marcó al país.',
+      'En 1930 los liberales volvieron al poder y, pocos años después, hicieron reformas: derecho a la huelga, función social de la propiedad, más educación pública. Parte del país sintió que por fin avanzaba; otra parte, que se perdía el orden. Jorge Eliécer Gaitán, que hablaba del «país político» y del «país nacional», reunió multitudes. El 9 de abril de 1948 lo asesinaron en Bogotá.',
+      'Su muerte no creó la violencia entre liberales y conservadores, que ya venía, pero la multiplicó. A los años que siguieron se les llama «La Violencia», con mayúscula: unos doscientos mil muertos y cientos de miles de personas que huyeron del campo. Entre 1953 y 1957 gobernó el general Rojas Pinilla. Para salir de la dictadura y de la guerra, los dos partidos crearon el Frente Nacional: se turnaron la presidencia durante dieciséis años.',
+      'El Frente Nacional redujo la guerra entre partidos, pero cerró la puerta a los demás. Quien no era liberal ni conservador tenía muy difícil participar. En los años sesenta, en un mundo partido por la Guerra Fría, nacieron guerrillas como las FARC y el ELN, que decían luchar por la tierra y la igualdad. Más tarde aparecieron grupos paramilitares, que decían defenderse de ellas, y el narcotráfico, que financió a unos y a otros.',
+      'La población civil puso la mayoría de las víctimas. Hubo desplazamiento, secuestros, masacres, reclutamiento de niños y ejecuciones de inocentes presentados como combatientes. Todos los grupos armados y también agentes del Estado cometieron crímenes. Decir esto no es repartir culpas por igual: es reconocer que ninguna víctima vale menos por quién la mató.',
+      'Los intentos de paz también hacen parte de la historia. En 1990 el M-19 dejó las armas; un año después, una asamblea plural escribió una nueva Constitución. En 2016 el Estado y las FARC firmaron un acuerdo, rechazado por poca diferencia en un plebiscito y luego modificado. Creó una comisión de la verdad y una justicia especial. El conflicto no terminó del todo, pero miles de personas siguen vivas porque algo cambió.',
+    ],
+  };
+  const l3 = leccion('icf-sc-historia-3', 'Siglo XX y conflicto armado', guion(
+    ['De la huelga al 9 de abril', 'Sindicatos, reformas y la muerte de Gaitán.'],
+    ['La Violencia y el Frente Nacional', 'Guerra entre partidos y un pacto que cerró la puerta a otros.'],
+    ['El conflicto armado', 'Guerrillas, paramilitares, narcotráfico y Estado; las víctimas, sobre todo civiles.'],
+    ['Intentos de paz', '1990, la Constitución de 1991, el acuerdo de 2016.']), [
+    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: SIGLO20,
+      ...F(['el comienzo del siglo y las huelgas', 0, 'Busca los sindicatos.'], ['reformas y Gaitán', 1, 'Busca el regreso de los liberales.'], ['La Violencia y el pacto', 2, 'Busca el turno en la presidencia.'], ['el origen del conflicto armado', 3, 'Busca los años sesenta.'], ['las víctimas', 4, 'Busca a la población civil.'], ['los intentos de paz', 5, 'Busca el año 1990.'], ['la llegada de los españoles', null, 'Eso fue siglos antes.']),
+      luz: [[1, 'nacieron los sindicatos'], [2, 'hicieron reformas'], [3, 'el Frente Nacional'], [4, 'nacieron guerrillas'], [5, 'La población civil'], [6, 'Los intentos de paz']], bien: 'Huelgas, reformas, violencia, conflicto, víctimas y paz.' },
+      'El texto recorre huelgas, reformas, La Violencia, el conflicto, las víctimas y la paz.', 'Lee el comienzo de cada párrafo y dale un nombre.'),
+    x('linea-vida', 'Lleva cada hecho a su momento.', { doc: SIGLO20, rot: ['antes de 1950', 'de 1950 a 1989', 'desde 1990'],
+      ...F(['La masacre de las bananeras', 0, 'Busca el año de Ciénaga.'], ['El Frente Nacional', 1, 'Busca qué vino después de Rojas.'], ['Nacen las FARC y el ELN', 1, 'Busca los años sesenta.'], ['La nueva Constitución', 2, 'Busca un año después de 1990.']), luz: [[1, '1928'], [4, 'años sesenta'], [6, 'En 1990']], bien: '1928, los cincuenta, los sesenta y 1991.' },
+      'Bananeras 1928, Frente Nacional tras 1957, guerrillas en los sesenta y Constitución en 1991.', 'Busca la fecha o la década de cada hecho.'),
+    x('genero-o-cita', 'Del Frente Nacional, ¿es un efecto **buscado** o **no buscado**?', { doc: SIGLO20, rot: ['buscado', 'no buscado'],
+      ...F(['Salir de la dictadura', 0, '¿Para eso se creó?'], ['Reducir la guerra entre partidos', 0, '¿Para eso se creó?'], ['Cerrar la puerta a otros grupos', 1, '¿El texto lo da como meta o como resultado?'], ['Alimentar que algunos buscaran las armas', 1, '¿Para eso se creó?']), bien: 'Un pacto con efectos inesperados.' },
+      'Salir de la dictadura y de la guerra era la meta; la exclusión y lo que siguió, no.', 'Mira para qué se creó y qué pasó después.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: SIGLO20, nums: [1, 3, 5], pregunta: 'Queda en pie', queda: 'La mayoría de las víctimas fueron civiles.',
+      ...T(['Se sabe exactamente cuántos murieron en Ciénaga.', 3, 'Busca lo que aún se discute.'], ['La violencia empezó con la muerte de Gaitán.', 4, 'Busca si ya venía.'], ['Solo un grupo cometió crímenes.', 10, 'Busca quiénes los cometieron.']), bien: 'Se discute, ya venía y todos.' },
+      'La cifra se discute, la violencia ya venía y los crímenes fueron de todos los grupos y de agentes del Estado.', 'Saca la palabra clave: cuántos, empezó, solo.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: SIGLO20, nums: [4, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['El narcotráfico financió a grupos enfrentados.', 0, 'Léela junto al final del párrafo 4.'], ['El país estaba dividido frente al acuerdo.', 1, '¿Cómo fue el resultado del plebiscito?'], ['Un contexto mundial influyó en el conflicto.', 1, '¿Qué pasaba en el mundo en los sesenta?'], ['El M-19 ganó la presidencia en 1990.', 2, '¿Se habla de esa elección?']),
+      luz: [[4, 'financió a unos y a otros'], [6, 'por poca diferencia'], [4, 'la Guerra Fría']], bien: 'Poca diferencia: un país dividido.' },
+      'El narcotráfico está escrito; la división y el contexto se deducen; la presidencia no aparece.', 'Piensa qué muestra un resultado tan cerrado.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 5 la oración que **aclara** cómo se debe entender lo anterior.', { doc: SIGLO20, nums: [5], apuesta: 'Ninguna víctima vale menos.', ...S(['5.3'], { '5.0': 'Dice quiénes fueron la mayoría.', '5.1': 'Da ejemplos de lo que ocurrió.', '5.2': 'Dice quiénes cometieron crímenes.' }), bien: '«No es… es…» aclara.' },
+      'La última oración aclara: no se trata de repartir culpas por igual, sino de reconocer a las víctimas.', 'Busca la oración que dice qué no es y qué sí es.'),
+    x('balanza-tesis', 'Tesis: «el Frente Nacional trajo una paz incompleta». ¿Qué hace cada dato?', { doc: SIGLO20, tesis: 'El Frente Nacional trajo una paz incompleta',
+      ...F(['Redujo la guerra entre liberales y conservadores.', 0, '¿Trajo algo de paz?'], ['Nacieron guerrillas en esos años.', 0, '¿Fue completa?'], ['Durante el pacto no hubo ningún grupo armado.', 1, 'Si fuera cierto, ¿sería incompleta?'], ['Duró un número par de años.', 2, '¿Habla de la paz?']), bien: 'Algo de paz y algo de guerra.' },
+      'Reducir una guerra y ver nacer otra apoyan «incompleta»; no haber armados la debilitaría; el número par no pesa.', 'La tesis tiene dos partes: hubo paz y no fue completa.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: SIGLO20, lineas: ['Las huelgas y las reformas abrieron el siglo.', 'Rojas era general.', 'La Violencia llevó a un pacto que excluyó a otros.', 'El conflicto armado golpeó sobre todo a civiles.', 'La huelga fue en diciembre.', 'Hubo varios intentos de paz.'], ...S([1, 4], { 0: 'Es el comienzo.', 2: 'Es el puente entre dos guerras.', 3: 'Es el centro del texto.', 5: 'Es el cierre.' }), bien: 'Comienzo, pacto, conflicto y paz.' },
+      'El grado y el mes son detalles; lo demás es el hilo del siglo.', 'Deja lo que explica cómo se llegó hasta hoy.'),
+  ]);
+
+  const CAJA = {
+    id: 'icf-caja', title: 'Tres papeles en una caja de galletas',
+    paras: [
+      'Al morir doña Carmen Arango, su nieta, que estudia historia, abrió la caja de galletas donde guardaba «lo importante». Había tres papeles, envueltos en el mismo pañuelo.',
+      'El primero era la copia de una carta de 1782. Un antepasado, tejedor de El Socorro, le contaba a un compadre: «Volvimos con las manos llenas de papeles firmados y ya no valen nada. Subieron otra vez el tabaco. A Galán lo mataron para que los demás aprendamos. Yo no aprendí a callarme; aprendí a leer lo que se firma».',
+      'El segundo era un billete de 1886, con un mensaje en el reverso. Lo escribió un bisabuelo que había sido soldado del Estado Soberano de Santander: «Me licenciaron. Ya no hay Estado, ni ejército, ni bandera: todo se manda desde Bogotá. Dicen que así habrá orden. El cura abrió la escuela y echó al maestro liberal. Mi hermano está contento; yo no. En la mesa ya no hablamos».',
+      'El tercero era la cédula de Carmen, con la fecha en que votó por primera vez: primero de diciembre de 1957. Ese día se decidía en un plebiscito si liberales y conservadores se turnarían el poder para salir de la dictadura y de la guerra entre ellos. Ninguna colombiana había votado antes en una elección nacional, aunque el derecho se había aprobado en 1954. Votaron más de un millón ochocientas mil mujeres. El mismo texto que confirmaba sus derechos reservaba los cargos a los dos partidos.',
+      'Junto a la cédula había un recorte con una caricatura: una señora entra a votar y, detrás, el marido carga al niño y la olla. El dibujante quiso burlarse. La abuela había escrito encima, con esfero azul: «Ojalá».',
+      'La nieta puso los tres papeles en fila. Uno hablaba de promesas incumplidas; otro, de un país que cambiaba de dueño; el último, de una puerta que se abría mientras otra quedaba cerrada. Comprendió por qué su abuela no los había guardado con las fotos, sino con las escrituras de la casa.',
+    ],
+  };
+  const Q = preg(CAJA, 'sociales');
+  return mundo('icf-sc-historia', 'Historia de Colombia', 'sociales', [l1, l2, l3], [
+    ['icf-sc-historia-1', 'Los comuneros pactaron y el gobierno incumplió.', Q('«Papeles firmados que ya no valen nada» se refiere a:', ['Las cédulas de 1957', 'Las capitulaciones pactadas con los comuneros', 'La Constitución de 1886', 'Los Derechos del Hombre'], 1, 'La carta es de 1782 y nombra El Socorro, el tabaco y a Galán: habla de lo pactado con los comuneros.', 'Mira la fecha, el lugar y a quién nombra la carta.')],
+    ['icf-sc-historia-1', 'El monopolio y los impuestos: causas de fondo.', Q('La frase «Subieron otra vez el tabaco» muestra una de las causas del descontento colonial:', ['La falta de escuelas', 'La guerra entre partidos', 'El voto femenino', 'Las cargas y monopolios de la Corona'], 3, 'El tabaco era un monopolio de la Corona, que subía sus cobros.', 'Recuerda qué reformas hicieron los Borbones.')],
+    ['icf-sc-historia-2', '1886: del federalismo al centralismo.', Q('El cambio que cuenta el soldado es el paso de:', ['Un país federal a uno central', 'Una colonia a una república', 'Una dictadura a un pacto', 'Un reino a un imperio'], 0, '«Ya no hay Estado, ni ejército: todo se manda desde Bogotá».', 'Compara dónde se mandaba antes y dónde después.')],
+    ['icf-sc-historia-2', 'La Iglesia recibió la educación en la Regeneración.', Q('«El cura abrió la escuela y echó al maestro liberal» ilustra:', ['La abolición de la esclavitud', 'La independencia', 'El papel de la Iglesia en la educación desde 1886', 'El origen de los sindicatos'], 2, 'La Regeneración acordó con la Iglesia que dirigiera la educación.', 'Piensa qué decidió la Constitución de ese año sobre la escuela.')],
+    ['icf-sc-historia-3', 'Mira qué abre y qué cierra una reforma.', Q('«Una puerta que se abría mientras otra quedaba cerrada» quiere decir que el plebiscito:', ['Abrió escuelas y cerró iglesias', 'Permitió votar solo a los hombres', 'Confirmó derechos a las mujeres, pero reservó los cargos a dos partidos', 'Separó a Panamá'], 2, 'El mismo texto hizo las dos cosas.', 'Busca las dos cosas que hizo el mismo texto.')],
+    ['icf-sc-historia-3', 'Una caricatura también es una fuente de su época.', Q('La palabra «Ojalá», escrita sobre la caricatura, muestra que la abuela:', ['Convirtió la burla en un deseo de mayor igualdad', 'Admiraba al dibujante', 'Quería que nadie votara', 'No entendió el dibujo'], 0, 'El dibujante se burlaba de que el hombre cuidara; ella lo desea.', 'Compara lo que quería el dibujante con lo que escribe ella.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-sc-mundo.js
+// Preicfes · Sociales y Ciudadanas · mundo 7 «Historia del Mundo» (spec 2026-11-25-preicfes-estructura). Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const REVO = {
+    id: 'icf-revoluciones', title: 'Cuando el mundo cambió de máquinas y de dueño',
+    ficha: { autor: 'Cuaderno de historia', fuente: 'Colección «Pasado presente»', fecha: 'Febrero de 2026' },
+    paras: [
+      'A finales del siglo XVIII ocurrieron, casi a la vez, dos clases de revolución. Unas cambiaron quién mandaba; otra cambió cómo se producía. Ninguna fue cosa de un día, y entre todas fabricaron buena parte del mundo en que vivimos.',
+      'En 1776, trece colonias inglesas de América del Norte declararon su independencia. Su argumento era nuevo: todos los hombres nacen iguales, los gobiernos existen para proteger derechos y obtienen su poder del consentimiento de los gobernados. En la práctica, ese «todos» no incluía a las mujeres, a los pueblos indígenas ni a las personas esclavizadas.',
+      'En Francia, el rey gobernaba con poder absoluto y la sociedad estaba dividida en estamentos. El clero y la nobleza casi no pagaban impuestos; el resto, la inmensa mayoría, sí. En 1789, con las cuentas en quiebra y el pan cada vez más caro, los representantes del pueblo se declararon Asamblea Nacional. En agosto proclamaron los Derechos del Hombre y del Ciudadano. Después vinieron la república, el Terror y, en 1799, Napoleón.',
+      'La revolución que más lejos llevó la palabra «libertad» ocurrió en Haití. Allí, en 1791, se rebelaron miles de personas esclavizadas en las plantaciones de azúcar. En 1804 fundaron un país sin esclavos. Francia les cobró después una enorme suma por reconocerlo. Muchas historias olvidan mencionarlo; los dueños de esclavos de toda América, en cambio, no lo olvidaron un solo día.',
+      'Mientras tanto, en Inglaterra, la máquina de vapor movía telares y, pronto, trenes y barcos. La Revolución Industrial multiplicó lo que se producía y llenó las ciudades de obreros, entre ellos niños, con jornadas de doce o más horas. Surgieron dos grupos con intereses opuestos: quienes tenían las fábricas y quienes solo tenían su trabajo.',
+      'Del choque nacieron los sindicatos, las leyes laborales y nuevas ideas. El liberalismo defendía la propiedad y las libertades individuales; el socialismo, que la riqueza se repartiera. El voto se fue ampliando, despacio: primero algunos propietarios, luego los hombres, mucho más tarde las mujeres. La democracia no fue un regalo de las revoluciones, sino una pelea que ellas dejaron abierta.',
+    ],
+  };
+  const l1 = leccion('icf-sc-mundo-1', 'Revoluciones y democracia', guion(
+    ['Dos clases', 'Políticas: quién manda. Industrial: cómo se produce.'],
+    ['Derechos para ¿todos?', 'La palabra era universal; la práctica, no.'],
+    ['Haití', 'La revolución hecha por personas esclavizadas.'],
+    ['Después', 'Sindicatos, leyes, liberalismo, socialismo y un voto que se amplía despacio.']), [
+    x('linea-vida', 'Lleva cada hecho a su revolución.', { doc: REVO, rot: ['Estados Unidos', 'Francia', 'Haití'],
+      ...F(['Trece colonias se independizan', 0, 'Busca el año 1776.'], ['Se proclaman los Derechos del Hombre', 1, 'Busca el año 1789.'], ['Se funda un país sin esclavos', 2, 'Busca el año 1804.'], ['Gobierna Napoleón', 1, 'Busca el año 1799.']), luz: [[2, 'trece colonias'], [3, 'En agosto proclamaron'], [4, 'un país sin esclavos']], bien: '1776, 1789 y 1804.' },
+      'Las colonias en 1776; Derechos y Napoleón en Francia; un país sin esclavos en Haití.', 'Busca en qué párrafo del texto aparece cada hecho.'),
+    x('genero-o-cita', '¿Es un cambio **político** o **de la producción**?', { doc: REVO, rot: ['político', 'de la producción'],
+      ...F(['El pueblo se declara Asamblea Nacional', 0, '¿Cambia quién manda o cómo se produce?'], ['La máquina de vapor mueve telares', 1, '¿Cambia quién manda o cómo se produce?'], ['Se reconocen derechos del ciudadano', 0, '¿Cambia quién manda o cómo se produce?'], ['Las ciudades se llenan de obreros', 1, '¿Cambia quién manda o cómo se produce?']), bien: 'Mandar y producir.' },
+      'La asamblea y los derechos cambian el poder; el vapor y los obreros, la producción.', 'Pregunta si habla de gobierno o de fábricas.'),
+    x('pista-tipo', 'Ata cada idea a quien la defendía o la vivía.', { doc: REVO, lineas: ['El gobierno nace del consentimiento.', 'Libertades individuales y propiedad.', 'Que la riqueza se reparta.', 'Un país fundado sin esclavos.'],
+      ...T(['colonias de América del Norte', 0, '¿Quién explicó para qué existen los gobiernos?'], ['liberalismo', 1, '¿Cuál defiende al individuo?'], ['socialismo', 2, '¿Cuál defiende repartir?'], ['revolución haitiana', 3, '¿Quiénes eran antes esclavizados?']), bien: 'Cada idea, su origen.' },
+      'Consentimiento en Norteamérica, libertades en el liberalismo, reparto en el socialismo y Haití sin esclavos.', 'Relee los párrafos 2, 4 y 6: ahí está cada idea.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: REVO, nums: [2, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Las colonias se independizaron en 1776.', 0, 'Léela junto al párrafo 2.'], ['Haití asustó a los dueños de esclavos.', 1, '¿Por qué no lo olvidaron un solo día?'], ['La declaración prometía más de lo que cumplió.', 1, '¿A quiénes dejaba por fuera?'], ['Haití le declaró la guerra a Inglaterra.', 2, '¿El texto las une?']),
+      luz: [[2, 'En 1776'], [4, 'no lo olvidaron'], [2, 'no incluía']], bien: 'No olvidar puede ser temer.' },
+      'El año está escrito; el temor y la promesa incumplida se deducen; la guerra no aparece.', 'Piensa por qué a alguien le importaría tanto Haití.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: REVO, nums: [3, 5, 6], pregunta: 'Queda en pie', queda: 'El voto se amplió poco a poco.',
+      ...T(['En Francia todos pagaban impuestos por igual.', 1, 'Busca quiénes casi no pagaban.'], ['En las fábricas no había niños.', 6, 'Busca quiénes llenaron las ciudades.'], ['La democracia llegó completa con las revoluciones.', [10, 11], 'Busca qué dejaron las revoluciones.']), bien: 'Casi no, entre ellos, pelea abierta.' },
+      'El clero y la nobleza casi no pagaban, había niños y la democracia quedó como pelea abierta.', 'Saca la palabra clave: impuestos, niños, completa.'),
+    x('balanza-tesis', 'Tesis: «la Revolución francesa tuvo causas económicas». ¿Qué hace cada dato?', { doc: REVO, tesis: 'Tuvo causas económicas',
+      ...F(['Las cuentas estaban en quiebra.', 0, '¿Habla de dinero?'], ['El pan estaba cada vez más caro.', 0, '¿Habla de dinero?'], ['Ese año la cosecha fue abundante y barata.', 1, 'Si fuera cierto, ¿quedaría la causa del pan?'], ['El rey usaba peluca.', 2, '¿Cambia la economía?']), bien: 'Quiebra y pan.' },
+      'La quiebra y el pan la apoyan; una cosecha barata la debilitaría; la peluca no pesa.', 'Pregunta si el dato tiene que ver con precios o cuentas.'),
+    x('bisagras', 'Pon en cada hueco la palabra que une. Sobran dos.', { doc: REVO, pares: [['La palabra era «todos»,', 'muchos quedaban por fuera.'], ['Las jornadas eran larguísimas;', 'nacieron los sindicatos.'], ['El pueblo protestó', 'el pan era muy caro.']],
+      ...F(['pero', 0, 'Contrasta: ¿dónde lo segundo no es lo prometido?'], ['por eso', 1, 'Trae el resultado: ¿dónde lo segundo sale de lo primero?'], ['porque', 2, 'Trae la causa: ¿dónde lo segundo explica lo primero?'], ['es decir,', null, 'Repetiría lo mismo: ninguna pareja repite.'], ['para que', null, 'Anunciaría un propósito: aquí nadie lo busca.']), bien: 'Contraste, resultado y causa.' },
+      'La promesa contrasta, las jornadas traen sindicatos y el pan explica la protesta.', 'Di qué hace la segunda idea con la primera.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: REVO, lineas: ['Hubo revoluciones políticas y una de la producción.', 'Las colonias eran trece.', 'Proclamaron derechos que no alcanzaban a todos.', 'Haití fundó un país sin esclavos.', 'Los Derechos se proclamaron en agosto.', 'El voto y las leyes laborales llegaron por luchas.'], ...S([1, 4], { 0: 'Es la idea del comienzo.', 2: 'Es la tensión central.', 3: 'Es el caso más radical.', 5: 'Es el cierre.' }), bien: 'Dos clases, límites, Haití y luchas.' },
+      'El número y el mes son detalles; lo demás es el hilo.', 'Deja lo que explica qué cambió y para quién.'),
+  ]);
+
+  const GUERRA = {
+    id: 'icf-guerras', title: 'Treinta años de guerra y cuarenta de miedo',
+    ficha: { autor: 'Cuaderno de historia', fuente: 'Colección «Pasado presente»', fecha: 'Marzo de 2026' },
+    paras: [
+      'A comienzos del siglo XX las potencias europeas competían por colonias, mercados y prestigio, y se habían repartido en dos alianzas. El 28 de junio de 1914 un nacionalista mató en Sarajevo al heredero de Austria-Hungría. En pocas semanas, por el juego de las alianzas, media Europa estaba en guerra. El disparo fue la chispa; la pólvora llevaba años guardada.',
+      'La Primera Guerra Mundial duró hasta 1918 y dejó alrededor de diez millones de soldados muertos. En plena guerra, en 1917, una revolución llevó al poder en Rusia a los bolcheviques, que se proponían construir el socialismo. El Tratado de Versalles, en 1919, culpó a Alemania y le impuso pagos enormes. Muchos alemanes lo vivieron como una humillación.',
+      'En 1929 quebró la bolsa de Nueva York y la crisis se regó por el mundo. Sin trabajo y con miedo, mucha gente escuchó a quienes ofrecían orden y culpables. En Italia ya gobernaba el fascismo; en 1933 Hitler llegó al poder en Alemania por vías legales y acabó con la democracia. El nazismo convirtió el racismo en política de Estado.',
+      'La Segunda Guerra Mundial comenzó en 1939 con la invasión de Polonia. Murieron entre sesenta y ochenta millones de personas, la mayoría civiles. En el Holocausto, el régimen nazi asesinó a unos seis millones de judíos, y también a gitanos, personas con discapacidad, opositores y otros grupos. La guerra terminó en 1945, después de que Estados Unidos lanzara bombas atómicas sobre Hiroshima y Nagasaki.',
+      'Ese mismo año se fundó la Organización de las Naciones Unidas y, en 1948, se proclamó la Declaración Universal de los Derechos Humanos. Pero los vencedores se separaron. Estados Unidos, capitalista, y la Unión Soviética, comunista, armaron bloques rivales. Como las dos tenían bombas capaces de destruirlo todo, no se atacaron de frente: fue una guerra «fría».',
+      'Fría para ellas. En Corea, Vietnam, Angola o Centroamérica, los bloques apoyaron a bandos distintos y la guerra fue muy caliente. En América Latina, el miedo al comunismo sirvió para justificar golpes militares. El Muro de Berlín, levantado en 1961 para que nadie se fuera del lado oriental, cayó en 1989; dos años después dejó de existir la Unión Soviética.',
+    ],
+  };
+  const l2 = leccion('icf-sc-mundo-2', 'Guerras y Guerra Fría', guion(
+    ['1914', 'Alianzas, colonias y nacionalismo: un disparo fue la chispa.'],
+    ['Entre guerras', 'Versalles, la crisis del 29, fascismo y nazismo.'],
+    ['1939–1945', 'La mayoría de las víctimas, civiles; el Holocausto; las bombas atómicas.'],
+    ['Guerra Fría', 'Dos bloques que no se atacan de frente y pelean en otros países.']), [
+    x('pasos-del-proceso', 'Ordena los hechos. El primero está en su puesto.', { doc: GUERRA, que: 'los hechos', de: 'De Sarajevo al Muro', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Atentado de Sarajevo.', 'Tratado de Versalles.', 'Crisis de la bolsa.', 'Invasión de Polonia.', 'Cae el Muro de Berlín.'], mira: ['', 'Se firma un año después de la guerra.', 'Ocurre en 1929.', 'Empieza la segunda guerra.', 'Ocurre en 1989.'], bien: '1914, 1919, 1929, 1939 y 1989.' },
+      'Sarajevo 1914, Versalles 1919, crisis 1929, Polonia 1939 y el Muro 1989.', 'Busca el año de cada uno y ponlos en fila.'),
+    x('genero-o-cita', 'De la Primera Guerra, ¿es **causa de fondo** o **detonante**?', { doc: GUERRA, rot: ['de fondo', 'detonante'],
+      ...F(['La competencia por colonias', 0, '¿Venía de años?'], ['El atentado de Sarajevo', 1, '¿Fue lo que disparó todo?'], ['Las dos alianzas', 0, '¿Venía de años?'], ['El afán de prestigio de las potencias', 0, '¿Venía de años?']), bien: 'La pólvora y la chispa.' },
+      'Colonias, alianzas y prestigio venían de años; el atentado la disparó.', 'Pregunta si ocurrió ese día o se venía guardando.'),
+    x('pista-tipo', 'Ata cada hecho a su consecuencia en el texto.', { doc: GUERRA, lineas: ['El Tratado de Versalles', 'La crisis de 1929', 'La Segunda Guerra', 'El miedo al comunismo'],
+      ...T(['humillación en Alemania', 0, '¿Cuál le impuso pagos?'], ['gente que busca orden y culpables', 1, '¿Cuál dejó sin trabajo?'], ['fundación de la ONU', 2, '¿Cuál terminó en 1945?'], ['golpes militares justificados', 3, '¿Cuál se usó en América Latina?']), bien: 'Cada hecho, su efecto.' },
+      'Versalles humilló, la crisis dio miedo, la guerra llevó a la ONU y el miedo justificó golpes.', 'Busca qué cuenta el texto justo después de cada hecho.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: GUERRA, nums: [3, 4, 6], pregunta: 'Queda en pie', queda: 'La Guerra Fría fue violenta en varios países.',
+      ...T(['Hitler llegó al poder con un golpe militar.', 2, 'Busca por qué vías llegó.'], ['La mayoría de los muertos fueron soldados.', 5, 'Busca quiénes fueron la mayoría.'], ['El Muro se hizo para que no entraran extranjeros.', 11, 'Busca para qué se levantó.']), bien: 'Legales, civiles y salir.' },
+      'Llegó por vías legales, la mayoría fueron civiles y el Muro evitaba que se fueran.', 'Saca la palabra clave: Hitler, muertos, Muro.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: GUERRA, nums: [5, 6], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['La Declaración Universal es de 1948.', 0, 'Léela junto al párrafo 5.'], ['Las armas atómicas no impidieron otras guerras.', 1, '¿Dónde fue caliente la guerra?'], ['Los derechos humanos fueron en parte una respuesta a la guerra.', 1, '¿Qué había pasado justo antes?'], ['La ONU fue idea de Rusia.', 2, '¿Se dice de quién fue la idea?']),
+      luz: [[5, 'en 1948'], [6, 'muy caliente'], [5, 'Ese mismo año']], bien: 'El orden de los hechos ayuda a deducir.' },
+      'El año está escrito; las otras guerras y la respuesta al horror se deducen; el autor de la idea no.', 'Une lo que pasó antes con lo que pasó después.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: GUERRA, filas: [{ antes: 'La Guerra Fría fue «fría»', topes: ['en todo el mundo', 'en ninguna parte', 'entre las dos potencias'], va: 2 }, { antes: 'El Holocausto asesinó a', topes: ['solo judíos', 'judíos y también otros grupos', 'solo opositores'], va: 1 }, { antes: 'La Unión Soviética dejó de existir', topes: ['en 1991', 'en 1989', 'en 1961'], va: 0 }], mira: ['Relee dónde fue caliente.', 'Relee a quiénes asesinó.', 'Suma dos años a la caída del Muro.'], luz: [[6, 'Fría para ellas'], [4, 'y también a gitanos'], [6, 'dos años después']], bien: 'Ellas, varios y 1991.' },
+      'Fría entre potencias, víctimas de varios grupos y fin en 1991.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('balanza-tesis', 'Tesis: «la crisis económica ayudó al ascenso del nazismo». ¿Qué hace cada dato?', { doc: GUERRA, tesis: 'La crisis ayudó al nazismo',
+      ...F(['El voto nazi creció cuando creció el desempleo.', 0, '¿Crecieron a la vez?'], ['El voto nazi ya era mayoría antes de la crisis.', 1, 'Si fuera cierto, ¿habría ayudado la crisis?'], ['Hitler había nacido en Austria.', 2, '¿Habla de la crisis?']), bien: 'El orden en el tiempo importa.' },
+      'Crecer con el desempleo la apoya; ser mayoría antes la debilitaría; el lugar de nacimiento no pesa.', 'Pregunta qué ocurrió primero y qué vino después.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: GUERRA, lineas: ['Las alianzas convirtieron un atentado en guerra mundial.', 'El atentado fue en junio.', 'Versalles y la crisis abonaron el nazismo.', 'La segunda guerra mató sobre todo a civiles.', 'La bolsa estaba en Nueva York.', 'Dos bloques se enfrentaron sin atacarse de frente.'], ...S([4, 1], { 0: 'Es el comienzo.', 2: 'Es el puente entre guerras.', 3: 'Es el centro del texto.', 5: 'Es la Guerra Fría.' }), bien: 'Alianzas, nazismo, civiles y bloques.' },
+      'El mes y la ciudad son detalles; lo demás une los hechos.', 'Deja lo que explica por qué pasó lo siguiente.'),
+  ]);
+
+  const LIBRES = {
+    id: 'icf-descolonizacion', title: 'Los que no esperaron permiso',
+    ficha: { autor: 'Cuaderno de historia', fuente: 'Colección «Pasado presente»', fecha: 'Abril de 2026' },
+    paras: [
+      'En 1945, cerca de un tercio de la población del mundo vivía en territorios gobernados por otro país. Treinta años después, casi todas esas colonias eran Estados independientes. A ese proceso se le llama descolonización. Las potencias europeas habían quedado debilitadas por la guerra, pero eso no basta para explicarlo: había, sobre todo, millones de personas que no pensaban seguir esperando.',
+      'La India mostró un camino. Mohandas Gandhi propuso la desobediencia civil no violenta: no pagar impuestos injustos, no comprar telas inglesas, caminar cientos de kilómetros para fabricar sal, cosa que estaba prohibida. En 1947 se logró la independencia. El país nació partido en dos, la India, de mayoría hindú, y Pakistán, de mayoría musulmana; en la partición murieron cientos de miles de personas.',
+      'Otros caminos fueron armados. Argelia peleó casi ocho años contra Francia, hasta 1962. En muchos lugares de África, las fronteras que heredaron los nuevos países habían sido trazadas en Europa, con regla, sin preguntar quién vivía a cada lado. Parte de las guerras que vinieron después nació en esas rayas.',
+      'En Sudáfrica el problema era otro: una minoría blanca gobernaba el país y, desde 1948, había convertido la segregación en ley. El apartheid decía dónde podía vivir, estudiar o sentarse cada persona según su color. Nelson Mandela pasó veintisiete años preso. En 1994, en las primeras elecciones en que todos pudieron votar, fue elegido presidente.',
+      'También dentro de países independientes hubo quienes exigieron que la palabra «todos» se cumpliera. En 1955, en Estados Unidos, Rosa Parks se negó a ceder su puesto en un bus; el boicot que siguió dio a conocer a Martin Luther King. En 1964 y 1965 se aprobaron leyes contra la segregación y a favor del voto. Las mujeres, los estudiantes, los pueblos indígenas y, más tarde, las personas LGBT organizaron sus propios movimientos.',
+      'Un movimiento social no es un partido ni un ejército: es gente que se organiza, fuera de las instituciones, para cambiar algo que considera injusto. Sus herramientas son la marcha, el boicot, la huelga, el arte, la ley. Casi nunca gana todo lo que pide. Pero, cuando gana algo, lo que antes parecía imposible empieza a parecer de sentido común.',
+    ],
+  };
+  const l3 = leccion('icf-sc-mundo-3', 'Descolonización y movimientos sociales', guion(
+    ['Descolonización', 'En treinta años casi todas las colonias fueron Estados.'],
+    ['Dos caminos', 'La no violencia de la India y la guerra de Argelia.'],
+    ['Fronteras y apartheid', 'Rayas trazadas en Europa y segregación hecha ley.'],
+    ['Movimientos sociales', 'Gente organizada, fuera de las instituciones, para cambiar algo injusto.']), [
+    x('pinta-tipos', 'Pinta cada hecho con su lugar.', { doc: LIBRES, plumas: ['India', 'Sudáfrica', 'Estados Unidos'],
+      ...P(['Caminar para fabricar sal.', 0, 'Busca quién propuso la no violencia.'], ['Apartheid desde 1948.', 1, 'Busca dónde la segregación fue ley así.'], ['Rosa Parks no cede su puesto.', 2, 'Busca el boicot del bus.'], ['No comprar telas inglesas.', 0, 'Busca quién propuso la no violencia.'], ['Mandela, presidente en 1994.', 1, 'Busca las primeras elecciones de todos.']), bien: 'Sal, apartheid y bus.' },
+      'La sal y las telas son de la India; apartheid y Mandela, de Sudáfrica; Parks, de Estados Unidos.', 'Busca el nombre propio que aparece en cada párrafo.'),
+    x('genero-o-cita', '¿Es una acción **no violenta** o **armada**?', { doc: LIBRES, rot: ['no violenta', 'armada'],
+      ...F(['Boicot a los buses', 0, '¿Se usan armas ahí?'], ['La guerra de Argelia', 1, '¿Se usan armas ahí?'], ['No pagar impuestos injustos', 0, '¿Se usan armas ahí?'], ['Negarse a ceder un puesto', 0, '¿Se usan armas ahí?']), bien: 'Desobedecer también es luchar.' },
+      'Boicot, impuestos y el puesto son desobediencia; Argelia fue una guerra.', 'Pregunta si alguien usa la fuerza contra otros.'),
+    x('mapa-margen', 'Lleva al margen qué hace cada párrafo. Sobra una nota.', { doc: LIBRES,
+      ...F(['define la descolonización', 0, 'Busca «se le llama».'], ['un camino sin violencia y su costo', 1, 'Busca a Gandhi.'], ['caminos armados y fronteras', 2, 'Busca la regla.'], ['segregación hecha ley', 3, 'Busca el apartheid.'], ['luchas dentro de países independientes', 4, 'Busca el bus.'], ['define movimiento social', 5, 'Busca «no es un partido».'], ['la vida de un rey', null, 'No aparece ningún rey.']),
+      luz: [[1, 'se le llama descolonización'], [2, 'no violenta'], [3, 'con regla'], [4, 'El apartheid'], [5, 'Rosa Parks'], [6, 'Un movimiento social']], bien: 'Definir, dos caminos, apartheid, luchas y definir.' },
+      'Abre con una definición, recorre casos y cierra con otra definición.', 'Mira de qué caso o idea habla cada párrafo.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: LIBRES, nums: [2, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['La India se independizó en 1947.', 0, 'Léela junto al párrafo 2.'], ['Una independencia sin guerra puede traer violencia.', 1, '¿Qué pasó en la partición?'], ['Algunas fronteras separaron a un mismo pueblo.', 1, '¿A quién no se le preguntó?'], ['Francia ganó la guerra de Argelia.', 2, '¿Hasta cuándo peleó Argelia y qué logró?']),
+      luz: [[2, 'En 1947'], [2, 'en la partición'], [3, 'sin preguntar']], bien: 'Una raya puede partir un pueblo.' },
+      'El año está escrito; la violencia de la partición y los pueblos divididos se deducen; que ganara Francia no.', 'Une lo que hicieron con lo que pasó después.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: LIBRES, frases: [[2, 'propuso la ', 'desobediencia civil', ' no violenta'], [4, 'había convertido la ', 'segregación', ' en ley'], [5, 'el ', 'boicot', ' que siguió']],
+      ...F(['negativa a cumplir normas injustas', 0, '¿Qué hacían con los impuestos y la sal?'], ['separación por el color', 1, '¿Qué decidía dónde vivir o sentarse?'], ['acuerdo de no usar el servicio', 2, '¿Qué hizo la gente con los buses?'], ['unión de todos', null, 'Es lo contrario de una de ellas.'], ['desfile militar', null, 'Aquí no hay ejércitos.']), bien: 'Palabras de la ciudadanía.' },
+      'Desobedecer es no cumplir lo injusto, segregar es separar y boicotear es dejar de usar.', 'Mira los ejemplos que da el texto alrededor.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 1 la oración que dice que **una causa no basta**.', { doc: LIBRES, nums: [1], apuesta: 'Europa débil no explica todo.', ...S(['1.3'], { '1.0': 'Da la situación del comienzo.', '1.1': 'Da la situación treinta años después.', '1.2': 'Le pone nombre al proceso.' }), bien: '«Pero eso no basta» suma otra causa.' },
+      'La última oración reconoce la debilidad de Europa y dice que no basta para explicarlo.', 'Busca la oración que reconoce una causa y agrega otra.'),
+    x('balanza-tesis', 'Tesis: «un movimiento social puede cambiar las leyes». ¿Qué hace cada dato?', { doc: LIBRES, tesis: 'Un movimiento social puede cambiar las leyes',
+      ...F(['Después del boicot y las marchas se aprobaron leyes.', 0, '¿Hubo un cambio legal?'], ['Las leyes ya estaban aprobadas antes de las marchas.', 1, 'Si fuera cierto, ¿habrían cambiado por ellas?'], ['El bus era amarillo.', 2, '¿Habla de leyes?']), bien: 'El orden de los hechos decide.' },
+      'Leyes después de las marchas la apoyan; si fueran de antes, la debilitarían; el color no pesa.', 'Mira en cada dato qué pasó primero: ¿las marchas o las leyes?'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: LIBRES, lineas: ['En treinta años casi todas las colonias se independizaron.', 'Fabricar sal estaba prohibido.', 'Hubo caminos pacíficos y armados, con costos.', 'Se luchó también contra la segregación.', 'Mandela estuvo veintisiete años preso.', 'Los movimientos cambian lo que parece posible.'], ...S([1, 4], { 0: 'Es el proceso.', 2: 'Son los caminos.', 3: 'Es la otra lucha.', 5: 'Es la conclusión.' }), bien: 'Proceso, caminos, segregación y conclusión.' },
+      'La sal y los años de cárcel son detalles; lo demás es el hilo.', 'Deja lo que explica el proceso, no un solo caso.'),
+  ]);
+
+  const SOPA = {
+    id: 'icf-carta-berlin', title: 'La mesa de los abuelos',
+    paras: [
+      'En una residencia para mayores de una ciudad europea, cuatro personas comparten la mesa del almuerzo. La directora les pidió que contaran, para un libro, qué día cambió su vida. Estas son sus respuestas.',
+      'Greta, de noventa y un años, habló de su padre. «En 1932 era obrero y se quedó sin trabajo. Tenía hambre y vergüenza. Un partido le ofreció un plato de sopa, un uniforme y alguien a quien culpar. Nunca le perdoné el uniforme. La sopa, sí. Cuando oigo hoy que todo se arreglaría si se fueran los de afuera, vuelvo a oler esa sopa».',
+      'Samuel, de ochenta y ocho, nació en una colonia africana. «El mapa de mi país lo dibujaron en una oficina, a cinco mil kilómetros. La raya pasaba por el patio de mi abuela: la cocina quedó de un lado y la letrina del otro. En 1960 nos dieron bandera. La raya la dejaron. He vivido dos guerras y en las dos se peleaba por el patio de mi abuela».',
+      'Irina, de ochenta y cuatro, vivía en Berlín oriental. «Una mañana de agosto de 1961 amaneció el alambre. Mi novio trabajaba al otro lado. Nos hacíamos señas desde una ventana con un espejo. Cuando cayó el muro, veintiocho años después, fui a buscarlo. Tenía nietos. Me mostró un cajón: adentro estaba el espejo».',
+      'Marie, de ochenta y seis, nació en Haití. «En la escuela, el primer día, nos hacían decir una fecha: 1804. Mi abuela contaba que una mujer de la familia cortó caña encadenada y murió siendo dueña de un pedazo de tierra y de su nombre. También contaba que la libertad nos la cobraron: Francia exigió una fortuna por perder a sus esclavos y el país pagó durante más de un siglo».',
+      'La directora publicó las cuatro historias sin cambiar una palabra. En el prólogo escribió: «Los libros de historia cuentan que hubo una revolución, una crisis, un reparto y un muro. Aquí se ve qué se siente cuando la historia entra a la casa sin tocar la puerta».',
+      'Un lector le escribió para quejarse: cuatro recuerdos, dijo, no son pruebas de nada. Ella le contestó que tenía razón: no prueban lo que pasó en el mundo. Prueban que pasó en alguien, y que todavía duele cuando se sirve la sopa.',
+    ],
+  };
+  const Q = preg(SOPA, 'sociales');
+  return mundo('icf-sc-mundo', 'Historia del Mundo', 'sociales', [l1, l2, l3], [
+    ['icf-sc-mundo-1', 'Haití: la revolución de los esclavizados, en 1804.', Q('La fecha que Marie repetía en la escuela recuerda:', ['La caída de Napoleón', 'La fundación de un país por quienes habían sido esclavizados', 'La llegada de los españoles', 'El fin de la Guerra Fría'], 1, 'En 1804 nació Haití, fundado por personas que habían sido esclavizadas.', 'Recuerda qué pasó en Haití ese año.')],
+    ['icf-sc-mundo-1', 'La palabra «libertad» y su costo.', Q('«La libertad nos la cobraron» muestra una contradicción con los ideales de 1789 porque:', ['Francia proclamó la libertad y exigió dinero por la de otros', 'Haití no quería ser libre', 'Los ideales eran solo económicos', 'Haití era más rico que Francia'], 0, 'El país que proclamó los Derechos del Hombre cobró por perder a sus esclavos.', 'Une lo que Francia proclamó con lo que exigió.')],
+    ['icf-sc-mundo-2', 'Las condiciones económicas influyen en la política.', Q('La historia del padre de Greta ayuda a entender por qué algunas personas apoyaron un régimen autoritario:', ['Por amor a la democracia', 'Por el desempleo, el hambre y un culpable que les ofrecieron', 'Porque odiaban la sopa', 'Por orden de un juez'], 1, 'Sin trabajo y con vergüenza, le ofrecieron comida, uniforme y alguien a quien culpar.', 'Mira qué le faltaba y qué le ofrecieron.')],
+    ['icf-sc-mundo-2', 'Culpar a un grupo simplifica un problema.', Q('Cuando Greta dice «vuelvo a oler esa sopa», advierte que:', ['La comida de hoy es mala', 'Extraña a su padre', 'El discurso que culpa a los de afuera se parece al de entonces', 'Le gusta cocinar'], 2, 'Compara el discurso actual con el que sedujo a su padre.', 'Lee la frase que va justo antes de la sopa.')],
+    ['icf-sc-mundo-2', 'El Muro dividió Berlín desde 1961 hasta 1989.', Q('El relato de Irina ilustra una consecuencia de la Guerra Fría:', ['La división de familias y personas por la separación en bloques', 'El reparto de África', 'La crisis de la bolsa', 'La Revolución Industrial'], 0, 'El muro separó a quienes vivían a cada lado.', 'Piensa qué separó a Irina de su novio.')],
+    ['icf-sc-mundo-2', 'Un testimonio prueba lo vivido, no lo general.', Q('La respuesta de la directora al lector reconoce que los testimonios:', ['Son falsos', 'Sirven para conocer cómo se vivió, no para probar lo general', 'Reemplazan los libros de historia', 'No sirven para nada'], 1, 'No prueban lo que pasó en el mundo; prueban que pasó en alguien.', 'Compara lo que dice que no prueban y lo que sí.')],
+    ['icf-sc-mundo-3', 'Muchas fronteras africanas se trazaron en Europa.', Q('La imagen de la raya en el patio de la abuela muestra que:', ['La casa era muy grande', 'La abuela construyó mal', 'Las fronteras coloniales ignoraron a quienes vivían allí', 'El mapa era pequeño'], 2, 'El mapa se dibujó lejos, sin tener en cuenta a la gente.', 'Mira dónde dibujaron el mapa.')],
+    ['icf-sc-mundo-3', 'La independencia no siempre cambió las fronteras.', Q('La frase «nos dieron bandera. La raya la dejaron» sugiere que la independencia:', ['No ocurrió', 'Resolvió todos los problemas', 'Fue pagada con dinero', 'Dejó sin resolver problemas heredados de la Colonia'], 3, 'Hubo país nuevo, pero con la frontera que causó guerras.', 'Compara lo que cambió con lo que quedó igual.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-sc-geografia.js
+// Preicfes · Sociales y Ciudadanas · mundo 8 «Territorio y Ambiente» (spec 2026-11-25-preicfes-estructura). Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const REGIONES = {
+    id: 'icf-regiones', title: 'Un país en seis pedazos que se tocan',
+    ficha: { autor: 'Cuaderno de geografía', fuente: 'Colección «Territorios»', fecha: 'Febrero de 2026' },
+    paras: [
+      'Colombia suele dividirse en seis regiones naturales: Caribe, Pacífica, Andina, Orinoquía, Amazonía e Insular. La división mira el relieve, el clima y la vegetación. No es una reja: hay municipios con un pie en cada lado, y la gente, los ríos y las mercancías las cruzan todos los días.',
+      'La cordillera de los Andes entra por el sur y se abre en tres ramales. Por eso, cerca de la línea del ecuador, el clima depende sobre todo de la altura: cada mil metros que se suben, la temperatura baja unos seis grados. En un viaje de dos horas se pasa del plátano al frailejón. En la Andina vive la mayor parte de la población, aunque ocupa cerca de la cuarta parte del territorio.',
+      'La Amazonía y la Orinoquía, juntas, son más de la mitad del país y tienen menos de una décima parte de sus habitantes. El Pacífico es uno de los lugares más lluviosos del mundo; La Guajira, en el Caribe, es casi un desierto. La densidad de población, que es el número de habitantes por kilómetro cuadrado, cambia muchísimo de un lugar a otro.',
+      'Un mapa no muestra todo: escoge. El mapa político muestra límites; el físico, montañas y ríos; el temático, un solo asunto, como las lluvias o el desempleo. La escala dice cuánto se redujo la realidad. En un mapa 1 : 1 000 000, un centímetro son diez kilómetros. Con una escala más grande, por ejemplo 1 : 10 000, cabe menos territorio y se ven más detalles.',
+      'La población también se mueve. A mediados del siglo XX, la mayoría de los colombianos vivía en el campo; hoy, unas tres de cada cuatro personas viven en ciudades. Unos migraron buscando trabajo o estudio; muchos otros huyeron de la violencia. Las ciudades crecieron rápido y sin plan, y en sus bordes surgieron barrios levantados por sus propios habitantes.',
+      'Además, la población envejece. Las familias tienen menos hijos y la gente vive más años. En las pirámides de población, la base se encoge y la parte alta se ensancha. Eso obliga a pensar en más cuidados y pensiones, y en menos salones de primaria. Un dibujo de barras puede anunciar, con veinte años de ventaja, lo que una sociedad va a necesitar.',
+    ],
+  };
+  const l1 = leccion('icf-sc-geografia-1', 'Regiones, mapas y población', guion(
+    ['Seis regiones', 'Caribe, Pacífica, Andina, Orinoquía, Amazonía e Insular.'],
+    ['Altura y clima', 'Cerca del ecuador, la temperatura depende de la altura.'],
+    ['Mapas', 'Político, físico, temático; y la escala.'],
+    ['Población', 'Densidad, migración del campo a la ciudad y envejecimiento.']), [
+    x('pinta-tipos', 'Pinta cada dato con su región.', { doc: REGIONES, plumas: ['Andina', 'Caribe', 'Pacífica'],
+      ...P(['Vive la mayor parte de la población.', 0, 'Busca qué región concentra la gente.'], ['Tiene un lugar casi desértico.', 1, 'Busca dónde está La Guajira.'], ['Es de los lugares más lluviosos.', 2, 'Busca el que casi siempre se moja.'], ['La cruzan tres ramales de cordillera.', 0, 'Busca dónde se abren los Andes.']), bien: 'Gente, desierto y lluvia.' },
+      'La Andina concentra gente y cordilleras, el Caribe tiene La Guajira y el Pacífico, la lluvia.', 'Busca el nombre de la región junto a cada dato.'),
+    x('pista-tipo', 'Ata cada necesidad al mapa que la resuelve.', { doc: REGIONES, lineas: ['mapa político', 'mapa físico', 'mapa temático', 'mapa a escala 1 : 10 000'],
+      ...T(['ver los límites de un departamento', 0, '¿Cuál muestra límites?'], ['ver montañas y ríos', 1, '¿Cuál muestra el relieve?'], ['ver dónde llueve más', 2, '¿Cuál muestra un solo asunto?'], ['ver las calles de un barrio', 3, '¿Cuál deja ver más detalles?']), bien: 'Cada mapa escoge.' },
+      'Límites en el político, relieve en el físico, lluvias en el temático y detalle en la escala grande.', 'Piensa qué elige mostrar cada uno de esos mapas.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: REGIONES, filas: [{ antes: 'Al subir mil metros, la temperatura', topes: ['sube seis grados', 'no cambia', 'baja unos seis grados'], va: 2 }, { antes: 'En 1 : 1 000 000, un centímetro son', topes: ['un kilómetro', 'diez kilómetros', 'mil kilómetros'], va: 1 }, { antes: 'Hoy viven en ciudades', topes: ['tres de cada cuatro', 'uno de cada cuatro', 'todos'], va: 0 }], mira: ['Relee lo que pasa con la altura.', 'Relee el ejemplo de la escala.', 'Relee cómo se movió la población.'], luz: [[2, 'baja unos seis grados'], [4, 'diez kilómetros'], [5, 'tres de cada cuatro']], bien: 'Baja, diez y tres de cuatro.' },
+      'Baja unos seis grados, un centímetro son diez kilómetros y tres de cada cuatro viven en ciudades.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: REGIONES, nums: [2, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['La Andina ocupa cerca de la cuarta parte del territorio.', 0, 'Léela junto al párrafo 2.'], ['La densidad de la Amazonía es baja.', 1, 'Compara su tamaño con sus habitantes.'], ['A 2 000 metros hace unos doce grados menos que al nivel del mar.', 1, 'Multiplica lo que baja por cada mil metros.'], ['En la Amazonía no hay ciudades.', 2, '¿Tener poca gente es no tener ciudades?']),
+      luz: [[2, 'la cuarta parte'], [3, 'menos de una décima parte'], [2, 'unos seis grados']], bien: 'Comparar y multiplicar.' },
+      'La cuarta parte está escrita; la densidad y los doce grados se deducen; lo de las ciudades no.', 'Haz la comparación o la cuenta con los datos.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: REGIONES, nums: [1, 4, 6], pregunta: 'Queda en pie', queda: 'La población del país envejece.',
+      ...T(['Las regiones son fronteras que nadie cruza.', 2, 'Busca qué dice que no es.'], ['Un buen mapa muestra todo.', 3, 'Busca qué hace un mapa.'], ['Las familias tienen cada vez más hijos.', [9, 10], 'Busca qué pasa con los hijos.']), bien: 'No es reja, escoge y menos hijos.' },
+      'La división no es una reja, un mapa escoge y las familias tienen menos hijos.', 'Saca la palabra clave: fronteras, todo, hijos.'),
+    x('genero-o-cita', '¿Es una migración **por decisión** o **forzada**?', { doc: REGIONES, rot: ['por decisión', 'forzada'],
+      ...F(['Se fue a estudiar a Cali', 0, '¿Podía quedarse?'], ['Huyó de un grupo armado', 1, '¿Podía quedarse?'], ['Buscó un mejor empleo', 0, '¿Podía quedarse?'], ['Una amenaza la sacó de su finca', 1, '¿Podía quedarse?']), bien: 'Elegir o huir.' },
+      'Estudio y empleo son decisiones; el grupo armado y la amenaza obligan.', 'Pregunta si la persona podía quedarse sin peligro.'),
+    x('balanza-tesis', 'Idea: «esta ciudad necesitará más cuidado para mayores». ¿Qué hace cada dato?', { doc: REGIONES, tesis: 'Necesitará más cuidado para mayores',
+      ...F(['La parte alta de su pirámide se ensancha.', 0, '¿Qué edades están arriba?'], ['Llegan miles de familias jóvenes con bebés.', 1, '¿Hacia qué edades crece?'], ['Su escudo tiene un cóndor.', 2, '¿Habla de edades?']), bien: 'La pirámide anuncia.' },
+      'Ensancharse arriba la apoya; familias jóvenes la debilitan; el escudo no pesa.', 'Piensa qué edades de la población crecen con cada dato.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: REGIONES, lineas: ['El país se divide en seis regiones que se cruzan.', 'El frailejón crece arriba.', 'La altura y la lluvia cambian mucho entre lugares.', 'Los mapas escogen qué mostrar.', 'Hay barrios en los bordes.', 'La población se concentra, se mueve y envejece.'], ...S([1, 4], { 0: 'Es la idea del comienzo.', 2: 'Es el contraste natural.', 3: 'Es la idea sobre los mapas.', 5: 'Es la idea sobre la población.' }), bien: 'Regiones, contrastes, mapas y población.' },
+      'El frailejón y los bordes son detalles; lo demás resume.', 'Deja lo que sirve para explicar el país en general.'),
+  ]);
+
+  const PARAMO = {
+    id: 'icf-paramo-agua', title: 'El agua que nace en la neblina',
+    ficha: { autor: 'Cuaderno de geografía', fuente: 'Colección «Territorios»', fecha: 'Marzo de 2026' },
+    paras: [
+      'Los recursos naturales se dividen en renovables, como el agua, el bosque o el viento, que pueden recuperarse si se usan con medida, y no renovables, como el petróleo o el carbón, que tardan millones de años en formarse. Que algo sea renovable no quiere decir que sea infinito: un bosque talado más rápido de lo que crece se acaba igual.',
+      'Los páramos son un buen ejemplo. Están por encima de los tres mil metros, más o menos, y casi la mitad de los que hay en el mundo está en Colombia. Sus plantas atrapan la neblina y sus suelos la guardan como una esponja. De allí viene buena parte del agua que toman las ciudades. Un frailejón crece alrededor de un centímetro al año: si se arranca uno de dos metros, se arrancan dos siglos.',
+      'En los páramos también vive gente, muchas veces desde antes de que existieran las leyes que los protegen. Siembran papa, tienen vacas, abren caminos. Prohibirles todo de un día para otro los deja sin sustento; permitirles todo seca el agua de millones. Por eso la ley habla de reconversión: ayudarlos a cambiar, poco a poco, a actividades que no dañen el suelo.',
+      'El desarrollo sostenible busca satisfacer las necesidades de hoy sin quitarles a las generaciones futuras la posibilidad de satisfacer las suyas. Tiene tres patas: la económica, la social y la ambiental. Si una falla, la mesa se cae. Una mina que da empleo y envenena un río cojea; una reserva que protege un río y expulsa a sus habitantes, también.',
+      'El cambio climático lo complica todo. La quema de combustibles y la tala aumentan los gases que retienen calor en la atmósfera. Colombia emite una parte pequeña del total mundial, pero es muy vulnerable: hay glaciares que se derriten, costas que se inundan, sequías y lluvias más fuertes. En el país, la mayor fuente de esas emisiones no son las fábricas: es la deforestación y el uso de la tierra.',
+      'Las decisiones sobre el territorio nunca son solo técnicas. Alguien gana y alguien pierde, y no siempre quien pierde está sentado a la mesa. La consulta previa, las audiencias públicas y los planes de ordenamiento existen para que se oiga a los que viven allí. Un mapa con todos los recursos marcados y ninguna casa dibujada es un mapa peligroso.',
+    ],
+  };
+  const l2 = leccion('icf-sc-geografia-2', 'Recursos, ambiente y desarrollo', guion(
+    ['Renovables y no', 'Renovable no es infinito: depende de la velocidad a la que se use.'],
+    ['Páramos', 'Fábricas de agua donde también vive gente.'],
+    ['Sostenible', 'Tres patas: económica, social y ambiental.'],
+    ['Clima y decisiones', 'Emitimos poco, somos vulnerables y la deforestación pesa mucho.']), [
+    x('genero-o-cita', '¿Es un recurso **renovable** o **no renovable**?', { doc: PARAMO, rot: ['renovable', 'no renovable'],
+      ...F(['El viento', 0, '¿Se recupera pronto?'], ['El carbón', 1, '¿Se recupera pronto?'], ['Un bosque', 0, '¿Se recupera pronto?'], ['El petróleo', 1, '¿Se recupera pronto?'], ['El agua', 0, '¿Se recupera pronto?']), bien: 'Años o millones de años.' },
+      'Viento, bosque y agua se recuperan; carbón y petróleo tardan millones de años.', 'Pregunta cuánto tarda en volver a formarse.'),
+    x('pinta-tipos', 'Pinta cada efecto con la pata del desarrollo que toca.', { doc: PARAMO, plumas: ['económica', 'social', 'ambiental'],
+      ...P(['Se crean empleos.', 0, '¿Habla de dinero, de la gente o de la naturaleza?'], ['Se envenena un río.', 2, '¿Habla de dinero, de la gente o de la naturaleza?'], ['Se expulsa a una comunidad.', 1, '¿Habla de dinero, de la gente o de la naturaleza?'], ['Aumentan las ventas.', 0, '¿Habla de dinero, de la gente o de la naturaleza?'], ['Se recupera el suelo.', 2, '¿Habla de dinero, de la gente o de la naturaleza?']), bien: 'Dinero, gente y naturaleza.' },
+      'Empleos y ventas son económicos; la comunidad, social; río y suelo, ambientales.', 'Di quién o qué gana o pierde con cada efecto.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: PARAMO, nums: [1, 3, 5], pregunta: 'Queda en pie', queda: 'El páramo se puede proteger sin expulsar a su gente.',
+      ...T(['Lo renovable nunca se acaba.', 1, 'Busca qué pasa si se usa muy rápido.'], ['En los páramos no vive nadie.', 2, 'Busca quién vive allí.'], ['Lo que más emite el país son las fábricas.', 9, 'Busca la mayor fuente.']), bien: 'Se acaba, vive gente y deforestación.' },
+      'Un bosque talado muy rápido se acaba, en los páramos vive gente y la mayor fuente es la deforestación.', 'Saca la palabra clave: nunca, nadie, fábricas.'),
+    x('voz-de-la-fuente', 'Ata cada preocupación a quien la tendría.', { ayuda: 'Tira un hilo desde cada preocupación hasta quien la tendría.', doc: PARAMO, portadas: [['Campesina del páramo', 'actor'], ['Acueducto de la ciudad', 'actor'], ['Empresa minera', 'actor'], ['Comunidad consultada', 'actor']],
+      ...T(['perder su siembra de papa', 0, '¿Quién vive de la tierra?'], ['que disminuya el agua', 1, '¿Quién la lleva a las casas?'], ['no poder extraer', 2, '¿Quién busca minerales?'], ['que no se oiga su voz', 3, '¿Para quién existe la consulta?']), bien: 'Cada actor, su interés.' },
+      'La campesina teme por su siembra, el acueducto por el agua, la empresa por extraer y la comunidad por ser oída.', 'Piensa qué perdería cada uno si se decide sin él.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: PARAMO, frases: [[3, 'la ley habla de ', 'reconversión', ''], [5, 'es muy ', 'vulnerable', ''], [4, 'envenena un río ', 'cojea', '']],
+      ...F(['cambio gradual de actividad', 0, '¿Qué busca la ley con los campesinos?'], ['fácil de afectar', 1, '¿Qué le pasa al país con el clima?'], ['está incompleta', 2, '¿Qué le falta a esa mesa?'], ['expulsión', null, 'Es lo contrario de lo que busca la ley.'], ['muy fuerte', null, 'Es lo contrario de lo que le pasa.']), bien: 'El contexto las explica.' },
+      'Reconversión es cambiar poco a poco, vulnerable es fácil de afectar y cojear es estar incompleta.', 'Lee el ejemplo que da el texto alrededor.'),
+    x('balanza-tesis', 'Propuesta: «prohibir toda siembra en el páramo desde mañana». ¿Qué hace cada dato?', { doc: PARAMO, tesis: 'Prohibir toda siembra desde mañana',
+      ...F(['El ganado y la siembra secan el suelo que guarda agua.', 0, '¿Es una razón a favor?'], ['Trescientas familias viven solo de esa siembra.', 1, '¿A quién deja sin sustento?'], ['Donde se ayudó a cambiar, el agua se recuperó sin expulsar a nadie.', 1, '¿Hacía falta prohibir de golpe?'], ['Las papas son amarillas.', 2, '¿Cambia la decisión?']), bien: 'Proteger sí, ¿de golpe?' },
+      'El suelo la apoya; las familias y el cambio gradual la debilitan; el color no pesa.', 'Pregunta si el dato hace más o menos conveniente prohibir ya.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 4 la oración que **define** el desarrollo sostenible.', { doc: PARAMO, nums: [4], apuesta: 'Hoy sí, sin quitarle a mañana.', ...S(['4.0'], { '4.1': 'Dice cuáles son sus partes.', '4.2': 'Dice qué pasa si falta una.', '4.3': 'Da ejemplos que cojean.' }), bien: 'Necesidades de hoy y de mañana.' },
+      'La primera oración lo define: satisfacer lo de hoy sin quitarles a las generaciones futuras.', 'Busca la oración que dice qué es lo que busca.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: PARAMO, lineas: ['Renovable no significa infinito.', 'La neblina es blanca.', 'Los páramos dan agua y allí vive gente.', 'Lo sostenible cuida economía, sociedad y ambiente.', 'Hay vacas.', 'Las decisiones deben oír a quienes viven en el territorio.'], ...S([1, 4], { 0: 'Es la primera idea.', 2: 'Es el ejemplo central.', 3: 'Es el concepto.', 5: 'Es el cierre.' }), bien: 'Recursos, páramo, sostenible y voces.' },
+      'La neblina blanca y las vacas son detalles; lo demás resume.', 'Deja lo que usarías para evaluar otro proyecto.'),
+  ]);
+
+  const PUERTO = {
+    id: 'icf-puerto', title: 'El puerto de Bahía Mangle',
+    paras: [
+      'Bahía Mangle es un municipio de ocho mil habitantes en una costa de manglares. Dos de cada tres adultos viven de la pesca o de sacar piangua, un molusco que crece entre las raíces. Un mapa físico muestra allí una entrada honda y tranquila, ideal para barcos grandes. Un mapa de biodiversidad muestra, en el mismo punto, el criadero de peces más importante de la zona.',
+      'En 2023 una empresa propuso construir un puerto. Ofreció seiscientos empleos durante la obra y noventa después. El gobierno nacional apoyó la idea: las mercancías del interior ahorrarían once horas de camino. El alcalde también, porque los impuestos alcanzarían para el hospital que el pueblo pide desde hace veinte años.',
+      'El consejo comunitario pidió la consulta previa a la que tiene derecho. En las reuniones, los jóvenes se dividieron. «Yo no quiero sacar piangua toda la vida», dijo uno. «Y yo no quiero pedirle permiso a una empresa para entrar a mi playa», contestó otra. Las mujeres piangueras llevaron un mapa hecho por ellas, con los sitios donde trabajan, los caminos de agua y los nombres que les dieron sus abuelas. Ninguno aparecía en los planos de la empresa.',
+      'Los estudios ambientales calcularon que se perdería un tercio del manglar. La empresa ofreció sembrar el doble en otra bahía, a sesenta kilómetros. Una bióloga advirtió que un manglar tarda unos quince años en volver a ser criadero y que, además, frena las olas en las tormentas, cada vez más fuertes.',
+      'Después de un año acordaron un muelle más pequeño, en una punta sin manglar, aunque menos honda. Entrarán barcos medianos. Serán menos empleos, pero con cupos y formación para gente del municipio. El mapa de las piangueras quedó pegado al acuerdo como documento oficial: es el primero de la región en el que los lugares llevan los nombres que usa quien los camina.',
+    ],
+  };
+  const Q = preg(PUERTO, 'sociales');
+  return mundo('icf-sc-geografia', 'Territorio y Ambiente', 'sociales', [l1, l2], [
+    ['icf-sc-geografia-1', 'Un mapa temático muestra un solo asunto.', Q('El mapa de biodiversidad y el físico muestran cosas distintas del mismo punto porque:', ['Uno está equivocado', 'Cada mapa escoge qué representar', 'Son de países distintos', 'Tienen el mismo tema'], 1, 'Uno muestra la profundidad y otro, el criadero: cada uno escoge.', 'Relee qué se ve en cada mapa en el párrafo 1.')],
+    ['icf-sc-geografia-1', 'Un mapa puede dejar por fuera a la gente.', Q('El mapa de las piangueras es importante porque:', ['Es más bonito', 'Está a una escala menor', 'Muestra usos y nombres que los planos de la empresa no incluían', 'Fue hecho por el gobierno'], 2, 'Ninguno de esos sitios aparecía en los planos de la empresa.', 'Relee el final del párrafo 3 del texto.')],
+    ['icf-sc-geografia-1', 'La población y su trabajo dependen del territorio.', Q('El dato de que dos de cada tres adultos viven de la pesca o la piangua permite deducir que:', ['El puerto afectaría el sustento de la mayoría', 'Nadie quiere el puerto', 'El municipio es muy rico', 'Todos son pescadores'], 0, 'Si el manglar se pierde, se afecta la actividad de la mayoría.', 'Une ese dato con lo que pasaría con el manglar.')],
+    ['icf-sc-geografia-2', 'Sostenible: tres patas.', Q('El acuerdo final se acerca al desarrollo sostenible porque:', ['Elimina el puerto', 'Da el máximo de empleos', 'Busca equilibrar empleo, comunidad y manglar', 'Siembra en otra bahía'], 2, 'Menos empleos pero con formación, sin talar el manglar y con la comunidad.', 'Revisa qué pasa con cada pata.')],
+    ['icf-sc-geografia-2', 'Compensar en otro lugar puede no reemplazar.', Q('La advertencia de la bióloga cuestiona la compensación porque:', ['Sembrar es ilegal', 'La otra bahía es más grande', 'Los manglares no existen', 'El daño es aquí y ahora; la recuperación, lejos y en quince años'], 3, 'El manglar nuevo estaría a sesenta kilómetros y tardaría años.', 'Compara dónde y cuándo se pierde y dónde y cuándo se recupera.')],
+    ['icf-sc-geografia-2', 'La consulta previa busca oír a quienes viven en el territorio.', Q('La consulta previa permitió en este caso:', ['Que el gobierno decidiera solo', 'Que se prohibiera pescar', 'Que la empresa se fuera del país', 'Que la comunidad aportara información y cambiara el proyecto'], 3, 'Las piangueras llevaron su mapa y el proyecto cambió.', 'Compara el proyecto del comienzo con el acuerdo.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-sc-economia.js
+// Preicfes · Sociales y Ciudadanas · mundo 9 «Economía y Globalización» (spec 2026-11-25-preicfes-estructura). Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const MERCADO = {
+    id: 'icf-mercado-papa', title: 'Lo que dice un precio',
+    ficha: { autor: 'Cuaderno de economía', fuente: 'Colección «Cuentas claras»', fecha: 'Febrero de 2026' },
+    paras: [
+      'Un precio es un mensaje. Cuando mucha gente quiere algo y hay poco, sube; cuando sobra, baja. La cantidad que los compradores quieren a cada precio se llama demanda; la que los vendedores ofrecen, oferta. El precio en que las dos coinciden es el de equilibrio.',
+      'En el mercado de Villa Rica, una helada dañó la mitad de la papa. El bulto pasó de 80 mil a 140 mil pesos. Nadie se puso de acuerdo para subirlo: había menos papa y las mismas ganas de comerla. Algunas familias se pasaron a la yuca, que también subió un poco. Cuando un producto puede reemplazar a otro, se llaman sustitutos.',
+      'No todos los mercados se parecen. Si hay muchos vendedores, compiten y ninguno manda. Si hay uno solo, es un monopolio: puede cobrar caro y atender mal. Si unos pocos se ponen de acuerdo en secreto para fijar el precio, forman un cartel, y en Colombia eso es ilegal.',
+      'El Estado interviene por varias razones. Regula los monopolios, protege al consumidor y paga lo que el mercado no paga, como un faro o una campaña de vacunas. También pone límites: si una fábrica ensucia el río, el daño lo pagan otros, y a eso los economistas le dicen externalidad. Puede incluso fijar un precio máximo, pero si lo pone muy bajo los vendedores ofrecen menos y aparecen la escasez y la reventa.',
+      'Para hacer todo eso cobra impuestos. Los directos, como el de renta, dependen de lo que cada quien gana o tiene. Los indirectos, como el IVA, se pagan al comprar: el mismo peso de impuesto sale del bolsillo de un rico y del de un pobre, aunque al pobre le duele más. Un impuesto es progresivo cuando cobra una proporción mayor a quien más tiene; es regresivo cuando termina pesando más sobre quien menos tiene.',
+      'El dinero recogido va al presupuesto. En él se ve qué le importa a un gobierno: cuánto pone en escuelas, en carreteras o en pagar deudas. Si gasta más de lo que recibe hay déficit, y debe pedir prestado, recortar o cobrar más. Cada salida tiene quien la aplauda y quien la pague.',
+    ],
+  };
+  const l1 = leccion('icf-sc-economia-1', 'Mercado, precios e impuestos', guion(
+    ['Oferta y demanda', 'El precio sube si hay poco y muchos lo quieren; baja si sobra.'],
+    ['Competencia, monopolio y cartel', 'Muchos compiten; uno solo manda; unos pocos se ponen de acuerdo.'],
+    ['El papel del Estado', 'Regula, protege y paga lo que el mercado no paga.'],
+    ['Impuestos', 'Directos e indirectos; progresivos y regresivos.']), [
+    x('pinta-tipos', 'Pinta cada noticia con lo que cambió en el mercado.', { doc: MERCADO, plumas: ['baja la oferta', 'sube la oferta', 'sube la demanda'],
+      ...P(['Una plaga acabó con los limones.', 0, '¿Cambió lo que se ofrece o lo que se quiere?'], ['Hubo cosecha récord de tomate.', 1, '¿Cambió lo que se ofrece o lo que se quiere?'], ['Llegó la temporada escolar y todos buscan cuadernos.', 2, '¿Cambió lo que se ofrece o lo que se quiere?'], ['Cerró la mitad de las panaderías.', 0, '¿Cambió lo que se ofrece o lo que se quiere?']), bien: 'Vendedores o compradores.' },
+      'La plaga y los cierres bajan la oferta, la cosecha la sube y la temporada sube la demanda.', 'Pregunta si el cambio les ocurrió a los que venden o a los que compran.'),
+    x('genero-o-cita', '¿El impuesto es **directo** o **indirecto**?', { doc: MERCADO, rot: ['directo', 'indirecto'],
+      ...F(['El de renta, según lo que se gana', 0, '¿Depende de lo que se tiene o de comprar?'], ['El IVA de un jabón', 1, '¿Depende de lo que se tiene o de comprar?'], ['El predial de una casa', 0, '¿Depende de lo que se tiene o de comprar?'], ['El que va en el precio de una gaseosa', 1, '¿Depende de lo que se tiene o de comprar?']), bien: 'Tener o comprar.' },
+      'Renta y predial dependen de lo que se gana o se tiene; IVA y gaseosa, de comprar.', 'Mira si se paga por ganar o tener, o al momento de comprar.'),
+    x('pista-tipo', 'Ata cada nombre a su caso.', { doc: MERCADO, lineas: ['una sola empresa vende el agua del pueblo', 'tres fábricas acuerdan en secreto el precio del pañal', 'cuarenta puestos venden arepas', 'el humo de un horno enferma a los vecinos'],
+      ...T(['monopolio', 0, '¿Dónde hay un solo vendedor?'], ['cartel', 1, '¿Dónde hay un acuerdo secreto?'], ['competencia', 2, '¿Dónde hay muchos vendedores?'], ['externalidad', 3, '¿Dónde el daño lo pagan otros?']), bien: 'Uno, pocos, muchos y terceros.' },
+      'Uno solo es monopolio, el acuerdo es cartel, muchos compiten y el humo es externalidad.', 'Cuenta los vendedores y mira quién paga el daño.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: MERCADO, filas: [{ antes: 'La papa subió porque', topes: ['los vendedores se pusieron de acuerdo', 'el gobierno lo ordenó', 'había menos papa y la misma demanda'], va: 2 }, { antes: 'Un precio máximo muy bajo puede traer', topes: ['más producción', 'escasez y reventa', 'nada'], va: 1 }, { antes: 'Los carteles en Colombia son', topes: ['ilegales', 'legales', 'obligatorios'], va: 0 }], mira: ['Relee qué pasó después de la helada.', 'Relee el final del párrafo 4.', 'Relee el final del párrafo 3.'], luz: [[2, 'había menos papa'], [4, 'la escasez y la reventa'], [3, 'eso es ilegal']], bien: 'Menos papa, escasez e ilegales.' },
+      'Había menos papa, el precio muy bajo trae escasez y los carteles son ilegales.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: MERCADO, nums: [2, 3, 5], pregunta: 'Queda en pie', queda: 'El IVA se paga al comprar.',
+      ...T(['Los vendedores de papa hicieron un acuerdo.', 2, 'Busca qué no hizo nadie.'], ['Todos los mercados funcionan igual.', 5, 'Busca la oración más corta del párrafo 3.'], ['El IVA depende de cuánto gana cada quien.', 11, 'Busca qué se dice de los indirectos.']), bien: 'Nadie, no todos y al comprar.' },
+      'Nadie se puso de acuerdo, no todos los mercados se parecen y el IVA se paga al comprar.', 'Saca la palabra clave: acuerdo, igual, gana.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: MERCADO, nums: [2, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['El bulto llegó a 140 mil pesos.', 0, 'Léela junto a la helada.'], ['Para esas familias, la yuca es un sustituto de la papa.', 1, '¿Qué hicieron algunas familias?'], ['El mismo IVA quita una proporción mayor del ingreso de un pobre.', 1, 'Compara el mismo peso en dos bolsillos.'], ['La helada duró tres días.', 2, '¿Se dice cuánto duró?']),
+      luz: [[2, '140 mil'], [2, 'se pasaron a la yuca'], [5, 'al pobre le duele más']], bien: 'Sustitutos y proporciones.' },
+      'Los 140 mil están escritos; la yuca y la proporción se deducen; los días no aparecen.', 'Piensa qué significa en la práctica cada ejemplo del texto.'),
+    x('balanza-tesis', 'Propuesta: «fijar un precio máximo a los arriendos». ¿Qué hace cada dato?', { doc: MERCADO, tesis: 'Fijar un precio máximo a los arriendos',
+      ...F(['Miles de familias gastan en arriendo más de la mitad del sueldo.', 0, '¿A quién ayudaría?'], ['Donde se hizo, muchos dueños dejaron de arrendar.', 1, '¿Qué pasó con la oferta?'], ['Las casas tienen ventanas.', 2, '¿Cambia la decisión?']), bien: 'Ayuda a unos, reduce la oferta.' },
+      'El gasto de las familias la apoya; la oferta que bajó la debilita; las ventanas no pesan.', 'Pregunta si el dato hace más o menos conveniente la medida.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: MERCADO, lineas: ['El precio depende de la oferta y la demanda.', 'El bulto es de papa.', 'Hay competencia, monopolios y carteles.', 'El Estado interviene y cobra impuestos.', 'Hay un faro.', 'El presupuesto muestra las prioridades de un gobierno.'], ...S([1, 4], { 0: 'Es la idea del comienzo.', 2: 'Son las clases de mercado.', 3: 'Es el papel del Estado.', 5: 'Es el cierre.' }), bien: 'Precio, mercados, Estado y presupuesto.' },
+      'El bulto y el faro son detalles; lo demás resume.', 'Deja lo que usarías para explicar otro mercado.'),
+  ]);
+
+  const CANASTA = {
+    id: 'icf-canasta-rosa', title: 'La canasta de Rosa',
+    ficha: { autor: 'Cuaderno de economía', fuente: 'Colección «Cuentas claras»', fecha: 'Marzo de 2026' },
+    paras: [
+      'En enero, Rosa llenaba su canasta con 100 mil pesos. En diciembre, la misma canasta le costó 110 mil. Esa subida general de los precios se llama inflación: en su caso fue del 10 %. Que suba solo el tomate no es inflación; que suba casi todo, sí.',
+      'Rosa gana lo mismo que en enero. Su salario nominal, el que dice el recibo, no cambió; su salario real, que es lo que alcanza a comprar, bajó. Si se lo hubieran subido el 10 %, estaría igual. Quien guarda billetes debajo del colchón también pierde, y quien debe plata a una tasa fija a veces gana.',
+      'El banco central de un país, que en Colombia es el Banco de la República, intenta mantener la inflación baja. Su herramienta principal es la tasa de interés. Si la sube, los préstamos salen caros, la gente gasta menos y los precios se frenan. El costo es que también se frenan las ventas y el empleo.',
+      'La tasa de desempleo mide qué parte de la fuerza laboral busca trabajo y no lo encuentra. Quien no busca no cuenta: ni el estudiante de tiempo completo, ni quien se cansó de buscar. Por eso la tasa puede bajar por dos razones muy distintas. Además, muchos de los que trabajan lo hacen en la informalidad: sin contrato, ni salud, ni pensión.',
+      'La pobreza se mide de más de una forma. La monetaria compara el ingreso con lo que cuesta una canasta básica. La multidimensional mira también la escuela, la salud, el agua y la vivienda. Una familia puede pasar la línea del ingreso y seguir sin acueducto. También hay hogares que salen de la pobreza y vuelven a entrar varias veces en pocos años.',
+      'La desigualdad es otra cosa: mira cómo se reparte. El índice de Gini va de 0, cuando todos tienen lo mismo, a 1, cuando uno solo lo tiene todo. Un país puede volverse más rico y más desigual a la vez. El producto interno bruto por persona divide la torta por igual en el papel, no en la mesa.',
+    ],
+  };
+  const l2 = leccion('icf-sc-economia-2', 'Inflación, desempleo y pobreza', guion(
+    ['Inflación', 'Subida general de los precios; baja lo que alcanza el salario.'],
+    ['Tasa de interés', 'Si sube, se gasta menos y los precios se frenan; también el empleo.'],
+    ['Desempleo', 'Solo cuenta a quien busca trabajo y no lo encuentra.'],
+    ['Pobreza y desigualdad', 'Cuánto falta y cómo se reparte son preguntas distintas.']), [
+    x('genero-o-cita', '¿La medida habla de **pobreza** o de **desigualdad**?', { doc: CANASTA, rot: ['pobreza', 'desigualdad'],
+      ...F(['Hogares que no alcanzan la canasta básica', 0, '¿Mira lo que falta o cómo se reparte?'], ['Índice de Gini', 1, '¿Mira lo que falta o cómo se reparte?'], ['Viviendas sin agua potable', 0, '¿Mira lo que falta o cómo se reparte?'], ['Parte del ingreso que recibe el 10 % más rico', 1, '¿Mira lo que falta o cómo se reparte?']), bien: 'Lo que falta o el reparto.' },
+      'La canasta y el agua miran lo que falta; el Gini y la parte del más rico, el reparto.', 'Pregunta si se compara con una línea o entre personas.'),
+    x('pasos-del-proceso', 'Ordena lo que ocurre cuando el banco central frena la inflación. El primero está en su puesto.', { doc: CANASTA, que: 'el freno', de: 'La canasta de Rosa', fija: 1, ini: [0, 2, 4, 1, 3], tiras: ['Los precios suben mucho.', 'El banco sube la tasa de interés.', 'Los préstamos salen caros.', 'La gente gasta menos.', 'Los precios se frenan.'], mira: ['', 'Es la herramienta del banco.', 'Es lo primero que cambia con la tasa.', 'Es lo que hace la gente con créditos caros.', 'Es el resultado buscado.'], bien: 'Tasa, préstamos, gasto y precios.' },
+      'Sube la tasa, se encarecen los préstamos, se gasta menos y los precios se frenan.', 'Pregunta qué tuvo que pasar antes de cada paso.'),
+    x('pinta-tipos', 'Pinta cada persona según cómo cuenta en la tasa de desempleo.', { doc: CANASTA, plumas: ['desempleada', 'ocupada', 'no está en la fuerza laboral'],
+      ...P(['Busca trabajo hace tres meses y no encuentra.', 0, '¿Trabaja? ¿Busca?'], ['Vende tintos sin contrato.', 1, '¿Trabaja? ¿Busca?'], ['Estudia todo el día y no busca trabajo.', 2, '¿Trabaja? ¿Busca?'], ['Se cansó de buscar y ya no busca.', 2, '¿Trabaja? ¿Busca?']), bien: 'Trabajar, buscar o ninguna.' },
+      'La que busca es desempleada, la que vende está ocupada y quienes no buscan no cuentan.', 'Haz dos preguntas: si trabaja y, si no, si está buscando.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CANASTA, filas: [{ antes: 'El salario nominal de Rosa', topes: ['subió', 'bajó', 'no cambió'], va: 2 }, { antes: 'Su salario real', topes: ['subió', 'bajó', 'no cambió'], va: 1 }, { antes: 'Un Gini de 0 significa', topes: ['que todos tienen lo mismo', 'que uno lo tiene todo', 'que nadie trabaja'], va: 0 }], mira: ['Relee qué dice el recibo.', 'Relee lo que alcanza a comprar.', 'Relee entre qué números va el índice.'], luz: [[2, 'no cambió'], [2, 'lo que alcanza a comprar, bajó'], [6, 'cuando todos tienen lo mismo']], bien: 'Igual, menos y todos igual.' },
+      'El nominal no cambió, el real bajó y un Gini de 0 es que todos tienen lo mismo.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CANASTA, nums: [1, 4, 6], pregunta: 'Queda en pie', queda: 'Un país puede crecer y volverse más desigual.',
+      ...T(['Si sube el tomate, hay inflación.', 3, 'Busca el ejemplo del tomate.'], ['Todo el que no trabaja cuenta como desempleado.', 5, 'Busca quién no cuenta.'], ['El PIB por persona muestra lo que recibe cada quien.', 11, 'Busca la torta.']), bien: 'Casi todo, quien busca y el papel.' },
+      'Que suba solo el tomate no es inflación, quien no busca no cuenta y la torta se reparte igual solo en el papel.', 'Saca la palabra clave: tomate, no trabaja, por persona.'),
+    x('voz-de-la-fuente', 'Con inflación alta, ata cada efecto a quien lo vive.', { ayuda: 'Tira un hilo desde cada efecto hasta quien lo vive.', doc: CANASTA, portadas: [['Empleada con sueldo fijo', 'actor'], ['Quien guarda billetes', 'actor'], ['Quien debe a tasa fija', 'actor'], ['Banco central', 'actor']],
+      ...T(['compra menos con lo mismo que gana', 0, '¿Quién recibe igual cada mes?'], ['sus ahorros alcanzan para menos', 1, '¿Quién tiene la plata quieta?'], ['lo que paga vale cada vez menos', 2, '¿Quién puede ganar?'], ['debe subir la tasa', 3, '¿Quién tiene esa herramienta?']), bien: 'No todos la viven igual.' },
+      'El sueldo alcanza menos, los billetes pierden, la deuda fija pesa menos y el banco sube la tasa.', 'Piensa qué tiene cada uno y si ese valor cambia.'),
+    x('balanza-tesis', 'Afirmación: «bajó el desempleo, así que hay más gente trabajando». ¿Qué hace cada dato?', { doc: CANASTA, tesis: 'Hay más gente trabajando',
+      ...F(['Aumentó en 200 mil el número de ocupados.', 0, '¿Creció el número que importa?'], ['Muchos dejaron de buscar y hay los mismos ocupados.', 1, '¿Por qué bajó la tasa?'], ['La encuesta se imprimió en papel azul.', 2, '¿Dice algo del empleo?']), bien: 'La tasa baja por dos razones.' },
+      'Más ocupados la apoya; dejar de buscar la debilita; el papel no pesa.', 'Recuerda que la tasa puede bajar por dos razones.'),
+    x('cambia-palabra', 'Pon en cada hueco lo que dice lo mismo. Sobran dos.', { doc: CANASTA, frases: [[2, 'Su salario ', 'nominal', ', el que dice el recibo'], [4, 'lo hacen en la ', 'informalidad', ''], [1, 'Esa subida ', 'general', ' de los precios']],
+      ...F(['en pesos', 0, '¿Qué mira el recibo?'], ['falta de protección', 1, '¿Qué no tienen: contrato, salud?'], ['de casi todos', 2, '¿Sube uno o muchos?'], ['de uno solo', null, 'Es lo contrario de general.'], ['en compras', null, 'Eso sería el salario real.']), bien: 'El contexto las explica.' },
+      'Nominal es en pesos, informalidad es falta de protección y general es de casi todos.', 'Lee el ejemplo que da el texto alrededor.'),
+  ]);
+
+  const CAMISETA = {
+    id: 'icf-camiseta', title: 'La camiseta que dio la vuelta al mundo',
+    ficha: { autor: 'Cuaderno de economía', fuente: 'Colección «Cuentas claras»', fecha: 'Abril de 2026' },
+    paras: [
+      'La camiseta que lleva puesta Nico dice «Hecho en Vietnam». El algodón creció en la India, la tela se tejió en China, el diseño se dibujó en España y el barco que la trajo navega con bandera de Panamá. A esa red de países conectados por el comercio, el dinero, la información y las personas se le llama globalización.',
+      'No es nueva. Hace siglos, la seda y la plata ya cruzaban el mundo. Lo nuevo es la velocidad: los contenedores abarataron el transporte, internet acercó las oficinas y los tratados bajaron los aranceles, que son los impuestos a lo que entra de otro país.',
+      'Un tratado de libre comercio abre la puerta en los dos sentidos. Quien exporta flores o café encuentra más compradores; quien produce arroz o leche debe competir con fincas gigantes que a veces reciben subsidios de sus gobiernos. El consumidor suele pagar menos. El pequeño productor, si nadie lo ayuda a prepararse, puede quebrar.',
+      'Las multinacionales llevan empleo y tecnología a los países donde se instalan. También buscan dónde los salarios y las exigencias ambientales son menores. Si un país sube sus reglas, pueden amenazar con irse. Por eso algunos proponen reglas comunes: un impuesto mínimo y derechos laborales que valgan en todas partes.',
+      'La cultura también viaja. Millones de migrantes envían dinero a sus casas y llevan consigo recetas, palabras, canciones y fiestas de su tierra. Nico oye música coreana y, en Seúl, una muchacha baila salsa caleña. Unos temen que todo termine pareciéndose; otros ven mezclas nuevas. A lo local que se cruza con lo global algunos le dicen «glocal»: una hamburguesa con patacón.',
+      'Estar conectados también contagia los problemas. Una crisis en los bancos de un país deja sin empleo a gente de otro; un virus da la vuelta al mundo en semanas; una guerra lejana encarece el pan. Organismos como la ONU, el Fondo Monetario Internacional o la Organización Mundial del Comercio intentan coordinar respuestas. No todos los países pesan lo mismo en ellos.',
+    ],
+  };
+  const l3 = leccion('icf-sc-economia-3', 'Globalización', guion(
+    ['Una red', 'Países conectados por comercio, dinero, información y personas.'],
+    ['Libre comercio', 'Bajan los aranceles: unos ganan mercados y otros pierden el suyo.'],
+    ['Empresas y reglas', 'Las multinacionales llevan empleo y buscan costos bajos.'],
+    ['Cultura y crisis', 'También viajan las costumbres y los problemas.']), [
+    x('pinta-tipos', 'Pinta cada ejemplo con la dimensión de la globalización que muestra.', { doc: CAMISETA, plumas: ['económica', 'cultural', 'política'],
+      ...P(['Se exportan flores a otro continente.', 0, '¿Comercio, costumbres o gobierno?'], ['Se baila salsa en Seúl.', 1, '¿Comercio, costumbres o gobierno?'], ['Varios países firman un acuerdo en la ONU.', 2, '¿Comercio, costumbres o gobierno?'], ['Una hamburguesa lleva patacón.', 1, '¿Comercio, costumbres o gobierno?']), bien: 'Comercio, costumbres y acuerdos.' },
+      'Las flores son economía, la salsa y la hamburguesa cultura, y el acuerdo política.', 'Pregunta qué cruza la frontera: cosas, costumbres o decisiones.'),
+    x('genero-o-cita', 'Con un tratado de libre comercio, ¿más bien **gana** o **arriesga**?', { doc: CAMISETA, rot: ['gana', 'arriesga'],
+      ...F(['Quien exporta café', 0, '¿Encuentra compradores o competidores?'], ['Quien siembra arroz en una finca pequeña', 1, '¿Encuentra compradores o competidores?'], ['Quien compra más barato', 0, '¿Paga menos o más?'], ['Quien vende leche sin ayuda para prepararse', 1, '¿Encuentra compradores o competidores?']), bien: 'La puerta se abre en los dos sentidos.' },
+      'Exportador y consumidor ganan; arroz y leche de pequeños productores arriesgan.', 'Piensa a quién se le abre un mercado y a quién le llega un competidor.'),
+    x('pista-tipo', 'Ata cada término a su ejemplo.', { doc: CAMISETA, lineas: ['impuesto a lo que entra de otro país', 'fábrica con sedes en nueve países', 'ayuda de un gobierno a sus fincas', 'arepa rellena de sushi'],
+      ...T(['arancel', 0, '¿Cuál se cobra en la frontera?'], ['multinacional', 1, '¿Cuál está en muchos países?'], ['subsidio', 2, '¿Cuál es una ayuda?'], ['glocal', 3, '¿Cuál mezcla lo local y lo global?']), bien: 'Impuesto, empresa, ayuda y mezcla.' },
+      'El arancel se cobra al entrar, la multinacional está en varios países, el subsidio ayuda y lo glocal mezcla.', 'Busca en el texto la explicación que acompaña cada término.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CAMISETA, filas: [{ antes: 'La globalización', topes: ['empezó con internet', 'ya terminó', 'no es nueva'], va: 2 }, { antes: 'En los organismos internacionales los países', topes: ['pesan todos igual', 'no pesan todos lo mismo', 'no participan'], va: 1 }, { antes: 'Los tratados', topes: ['bajaron los aranceles', 'subieron los aranceles', 'crearon la seda'], va: 0 }], mira: ['Relee el comienzo del párrafo 2.', 'Relee el final del texto.', 'Relee lo nuevo del párrafo 2.'], luz: [[2, 'No es nueva'], [6, 'No todos los países pesan lo mismo'], [2, 'bajaron los aranceles']], bien: 'No es nueva, no pesan igual y bajaron.' },
+      'No es nueva, los países no pesan lo mismo y los tratados bajaron los aranceles.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CAMISETA, nums: [2, 4, 6], pregunta: 'Queda en pie', queda: 'Un problema lejano puede afectar lo que se paga aquí.',
+      ...T(['El comercio entre continentes es un invento reciente.', [0, 1], 'Busca la seda y la plata.'], ['Las multinacionales solo buscan donde hay más exigencias.', 4, 'Busca qué buscan también.'], ['Una crisis se queda siempre en el país donde nace.', [7, 8], 'Busca el ejemplo de los bancos.']), bien: 'Seda, menores y otro país.' },
+      'La seda cruzaba hace siglos, las multinacionales buscan exigencias menores y la crisis pasa a otro país.', 'Saca la palabra clave: reciente, exigencias, crisis.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CAMISETA, nums: [1, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['El algodón creció en la India.', 0, 'Léela junto a la camiseta.'], ['La etiqueta no cuenta todos los países que participaron.', 1, 'Compara lo que dice con los países que nombra el texto.'], ['Al arrocero le convendría ayuda antes de firmar el tratado.', 1, '¿Qué le puede pasar si nadie lo prepara?'], ['Nico pagó veinte mil por la camiseta.', 2, '¿Se dice cuánto pagó?']),
+      luz: [[1, 'El algodón creció en la India'], [1, '«Hecho en Vietnam»'], [3, 'si nadie lo ayuda a prepararse']], bien: 'Comparar y prever.' },
+      'La India está escrita; la etiqueta y la ayuda se deducen; el precio no aparece.', 'Compara lo que muestra la etiqueta con lo que cuenta el texto.'),
+    x('voz-de-la-fuente', 'Ata cada opinión sobre un tratado a quien la diría.', { ayuda: 'Tira un hilo desde cada opinión hasta quien la diría.', doc: CAMISETA, portadas: [['Exportadora de flores', 'actor'], ['Arrocero pequeño', 'actor'], ['Sindicato', 'actor'], ['Comprador', 'actor']],
+      ...T(['«por fin entro a ese mercado»', 0, '¿A quién se le abre una puerta?'], ['«no puedo competir con sus subsidios»', 1, '¿Quién enfrenta fincas gigantes?'], ['«que los derechos valgan aquí y allá»', 2, '¿Quién defiende a los trabajadores?'], ['«ahora me sale más barato»', 3, '¿Quién paga menos?']), bien: 'Cada quien desde su lugar.' },
+      'La exportadora gana mercado, el arrocero compite, el sindicato pide derechos y el comprador ahorra.', 'Pregunta qué le cambia el tratado a cada uno.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: CAMISETA, lineas: ['La globalización conecta países.', 'El barco lleva bandera.', 'El libre comercio beneficia a unos y golpea a otros.', 'La cultura también viaja y se mezcla.', 'El patacón va con hamburguesa.', 'Las crisis se contagian y piden coordinación.'], ...S([1, 4], { 0: 'Es la definición.', 2: 'Es la idea sobre el comercio.', 3: 'Es la idea sobre la cultura.', 5: 'Es el cierre.' }), bien: 'Red, comercio, cultura y crisis.' },
+      'La bandera y el patacón son detalles; lo demás resume.', 'Deja lo que sirve para entender otro producto o país.'),
+  ]);
+
+  const CAFE = {
+    id: 'icf-cooperativa-cafe', title: 'La taza y la montaña',
+    paras: [
+      'En Alto Brisas, trescientas familias siembran café. Durante años se lo vendieron al único comprador que subía con camión. Pagaba lo que quería: no había otro. En 2023 las familias formaron una cooperativa, compraron su propio camión y empezaron a vender directo a tostadores de Japón y Alemania. El precio que reciben por carga subió un 40 %.',
+      'No todo fue ganancia. El precio del café se decide en una bolsa, a miles de kilómetros. Cuando en Brasil hay buena cosecha, baja en Alto Brisas, aunque allí no haya cambiado nada. En la última caída, la carga pasó de un millón a setecientos mil pesos en cuatro meses. Ese mismo año, los fertilizantes importados se encarecieron por una guerra en otro continente.',
+      'Con los ingresos de los primeros años, la cooperativa pagó mejor a los recolectores. Pero en el pueblo los precios subieron 12 % y el jornal, solo 8 %. «Gano más pesos y compro menos mercado», resumió doña Elvira, recolectora. La mayoría trabaja sin contrato, y fuera de la cosecha muchos dejan de buscar empleo porque saben que no hay. Las cifras oficiales dicen que el desempleo del municipio es bajo.',
+      'El alcalde propuso un impuesto igual para todas las familias: cien mil pesos al año para arreglar la carretera. La cooperativa respondió con otra idea: que cada quien pague un porcentaje de lo que vende. «Cien mil pesos es un almuerzo para el hotel y un mes de mercado para un recolector», dijo su gerente. Después de varias asambleas se aprobó el porcentaje.',
+      'Un estudiante calculó que el ingreso promedio por persona del municipio se había duplicado en seis años. También que casi todo el aumento había quedado en el 10 % de las familias, las dueñas de más tierra. En la plaza hay ahora un café con letrero en inglés donde una taza cuesta lo que un recolector gana en media mañana. Los turistas le toman fotos a la montaña. «Yo a esa montaña la conozco por debajo», dice doña Elvira, «que es por donde se recoge».',
+    ],
+  };
+  const Q = preg(CAFE, 'sociales');
+  return mundo('icf-sc-economia', 'Economía y Globalización', 'sociales', [l1, l2, l3], [
+    ['icf-sc-economia-1', 'Un solo comprador tiene mucho poder.', Q('Antes de la cooperativa, el comprador podía pagar lo que quería porque:', ['Era el único que compraba', 'El café era malo', 'Lo ordenaba la ley', 'Había muchos compradores'], 0, 'Sin otros compradores, las familias no tenían a quién más vender.', 'Relee qué dice el texto del único camión.')],
+    ['icf-sc-economia-1', 'Progresivo: paga más quien más tiene.', Q('El argumento del gerente contra los cien mil pesos iguales es que esa cuota:', ['Es ilegal', 'No alcanza para la carretera', 'Pesa más sobre quien menos tiene', 'La cobran en dólares'], 2, 'Es un almuerzo para el hotel y un mes de mercado para un recolector.', 'Compara qué significa esa suma para cada uno.')],
+    ['icf-sc-economia-2', 'El salario real es lo que se alcanza a comprar.', Q('La frase «gano más pesos y compro menos mercado» significa que doña Elvira:', ['Perdió su empleo', 'Tiene más salario real', 'Tiene el mismo salario nominal', 'Tiene más salario nominal y menos salario real'], 3, 'El jornal subió 8 % y los precios, 12 %.', 'Compara la subida del jornal con la de los precios.')],
+    ['icf-sc-economia-2', 'Quien no busca no cuenta como desempleado.', Q('El desempleo oficial puede ser bajo aunque fuera de la cosecha falte trabajo porque:', ['Todos tienen contrato', 'Quienes dejan de buscar no se cuentan', 'La cooperativa miente', 'Los turistas cuentan como empleados'], 1, 'Muchos dejan de buscar y salen de la cuenta.', 'Recuerda a quién cuenta la tasa de desempleo.')],
+    ['icf-sc-economia-2', 'Promedio alto y reparto desigual.', Q('Los cálculos del estudiante muestran que el municipio:', ['Es más rico y más desigual', 'Es más pobre', 'Reparte todo por igual', 'No ha cambiado'], 0, 'El promedio se duplicó y casi todo quedó en el 10 % de las familias.', 'Une los dos datos del estudiante.')],
+    ['icf-sc-economia-3', 'Lo que pasa lejos llega hasta aquí.', Q('Un ejemplo de que la globalización contagia problemas en Alto Brisas es:', ['La compra del camión', 'El letrero en inglés', 'Las asambleas', 'El alza de los fertilizantes por una guerra lejana'], 3, 'Una guerra en otro continente encareció un insumo local.', 'Busca un hecho lejano con efecto en el pueblo.')],
+    ['icf-sc-economia-3', 'La puerta se abre en los dos sentidos.', Q('La relación de la cooperativa con el mercado mundial se describe mejor como:', ['Solo beneficios', 'Una oportunidad que también trae riesgos', 'Solo pérdidas', 'Un asunto que no la afecta'], 1, 'Subió el precio que reciben, pero dependen de la bolsa y de los insumos.', 'Compara el final del párrafo 1 con el párrafo 2.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-sc-modelos.js
+// Preicfes · Sociales y Ciudadanas · mundo 10 «Modelos para Decidir» (spec 2026-11-25-preicfes-estructura). Textos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, preg, guion } = ICF;
+
+  const CONCEPTOS = {
+    id: 'icf-conceptos', title: 'Las palabras que ordenan el mundo',
+    ficha: { autor: 'Cuaderno de ciencias sociales', fuente: 'Colección «Ideas»', fecha: 'Febrero de 2026' },
+    paras: [
+      'En una clase, Samir preguntó si Colombia es un Estado, una nación o un país. La profesora contestó que depende de qué se quiera mirar. Un concepto es una herramienta: sirve para ver una parte de la realidad y deja otra en la sombra. Usar uno por otro hace que dos personas discutan sin hablar de lo mismo.',
+      'El Estado es una organización que gobierna un territorio y una población, y que tiene la autoridad para hacer leyes y hacerlas cumplir. Tiene soberanía cuando ningún otro manda sobre él. El gobierno es apenas el grupo de personas que lo dirige por un tiempo: los gobiernos cambian y el Estado continúa.',
+      'La nación es otra cosa: un grupo que se reconoce unido por una historia, una lengua o unas costumbres. Un Estado puede reunir varias naciones, como ocurre en Bolivia, que se define como plurinacional. Y hay naciones sin Estado propio, como el pueblo kurdo, repartido entre varios países.',
+      'Poder es la capacidad de influir en lo que hacen otros. A veces se ejerce por la fuerza; a veces, porque la gente reconoce que quien manda tiene derecho a hacerlo. A eso último se le llama legitimidad. Algo puede ser legal y perder legitimidad: una norma aprobada según las reglas, pero que casi todos consideran injusta.',
+      'La sociedad también se mira por capas. La clase social agrupa según los ingresos, el trabajo o la propiedad; la etnia, según una cultura y un origen compartidos; el género, según lo que una sociedad espera de hombres y mujeres. Una misma persona está en todas a la vez. Cuando es posible subir o bajar de posición, se habla de movilidad social.',
+      'La cultura no es solo arte ni folclor: son los modos de vivir, creer y hacer que se aprenden. Juzgar otra cultura con la medida de la propia es etnocentrismo; tratar de entenderla desde sus propias razones es relativismo cultural. Entender, aclaró la profesora, no obliga a aprobarlo todo: los derechos humanos ponen un límite.',
+    ],
+  };
+  const l1 = leccion('icf-sc-modelos-1', 'Conceptos básicos', guion(
+    ['Para qué un concepto', 'Deja ver una parte de la realidad.'],
+    ['Estado, gobierno y nación', 'Una organización, quienes la dirigen y un grupo que se siente unido.'],
+    ['Poder y legitimidad', 'Influir en otros; y que reconozcan el derecho a mandar.'],
+    ['Sociedad y cultura', 'Clase, etnia, género; y modos de vivir que se aprenden.']), [
+    x('pinta-tipos', 'Pinta cada ejemplo con el concepto que le corresponde.', { doc: CONCEPTOS, plumas: ['Estado', 'gobierno', 'nación'],
+      ...P(['El presidente y sus ministros de este periodo.', 1, '¿Organización, personas o grupo unido?'], ['Un pueblo que comparte lengua e historia, sin país propio.', 2, '¿Organización, personas o grupo unido?'], ['La organización que hace leyes en un territorio.', 0, '¿Organización, personas o grupo unido?'], ['Lo que continúa cuando cambian los gobernantes.', 0, '¿Organización, personas o grupo unido?']), bien: 'Organización, personas y grupo.' },
+      'Los ministros son gobierno, el pueblo es nación y la organización que continúa, Estado.', 'Pregunta si cambia con las elecciones y si depende de sentirse unidos.'),
+    x('genero-o-cita', '¿Es poder por la **fuerza** o por **legitimidad**?', { doc: CONCEPTOS, rot: ['fuerza', 'legitimidad'],
+      ...F(['Obedecen porque los amenazan con armas', 0, '¿Reconocen el derecho a mandar?'], ['Aceptan al alcalde porque lo eligieron', 1, '¿Reconocen el derecho a mandar?'], ['Siguen a la mayora por respeto a su sabiduría', 1, '¿Reconocen el derecho a mandar?'], ['Pagan una «vacuna» por miedo', 0, '¿Reconocen el derecho a mandar?']), bien: 'Miedo o reconocimiento.' },
+      'Armas y miedo son fuerza; la elección y el respeto, legitimidad.', 'Piensa si obedecerían aunque nadie los amenazara.'),
+    x('pista-tipo', 'Ata cada concepto a su caso.', { doc: CONCEPTOS, lineas: ['la hija de un obrero llega a ser jueza', '«qué raro comen ellos, lo normal es lo nuestro»', 'estudiar por qué otro pueblo entierra así a sus muertos', 'ningún otro país decide por este'],
+      ...T(['movilidad social', 0, '¿Dónde cambia la posición?'], ['etnocentrismo', 1, '¿Dónde se juzga con la medida propia?'], ['relativismo cultural', 2, '¿Dónde se intenta entender?'], ['soberanía', 3, '¿Dónde nadie manda de afuera?']), bien: 'Cada caso, su palabra.' },
+      'Subir es movilidad, juzgar es etnocentrismo, entender es relativismo y no recibir órdenes, soberanía.', 'Busca en el texto la explicación que acompaña cada palabra.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CONCEPTOS, filas: [{ antes: 'Un Estado', topes: ['tiene una sola nación', 'no tiene naciones', 'puede reunir varias naciones'], va: 2 }, { antes: 'Algo legal', topes: ['siempre es legítimo', 'puede perder legitimidad', 'nunca es legítimo'], va: 1 }, { antes: 'Entender otra cultura', topes: ['no obliga a aprobarlo todo', 'obliga a aprobarlo todo', 'es imposible'], va: 0 }], mira: ['Relee el ejemplo de Bolivia.', 'Relee el final del párrafo 4.', 'Relee lo que aclaró la profesora.'], luz: [[3, 'puede reunir varias naciones'], [4, 'puede ser legal y perder legitimidad'], [6, 'no obliga a aprobarlo todo']], bien: 'Varias, puede y no obliga.' },
+      'Puede reunir varias naciones, lo legal puede perder legitimidad y entender no obliga a aprobar.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CONCEPTOS, nums: [2, 3, 6], pregunta: 'Queda en pie', queda: 'El gobierno dirige el Estado por un tiempo.',
+      ...T(['Cuando cambia el gobierno, el Estado termina.', 2, 'Busca qué cambia y qué continúa.'], ['Toda nación tiene su propio Estado.', 5, 'Busca el pueblo kurdo.'], ['La cultura es solo el arte y el folclor.', 6, 'Busca qué no es la cultura solamente.']), bien: 'Continúa, sin Estado y no solo.' },
+      'El Estado continúa, hay naciones sin Estado y la cultura no es solo arte.', 'Saca la palabra clave: termina, toda, solo.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CONCEPTOS, nums: [3, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Bolivia se define como plurinacional.', 0, 'Léela junto al ejemplo.'], ['Estado y nación no siempre coinciden.', 1, 'Compara los dos ejemplos del párrafo 3.'], ['Dos personas de la misma clase pueden ser de distinta etnia.', 1, '¿Por qué cosas agrupa cada capa?'], ['El pueblo kurdo tiene treinta lenguas.', 2, '¿Se dice cuántas tiene?']),
+      luz: [[3, 'se define como plurinacional'], [3, 'naciones sin Estado propio'], [5, 'Una misma persona está en todas a la vez']], bien: 'Comparar ejemplos.' },
+      'Lo plurinacional está escrito; que no coinciden y las capas se deducen; las lenguas no aparecen.', 'Une los ejemplos con las definiciones del texto.'),
+    x('balanza-tesis', 'Idea: «en este municipio hay poca movilidad social». ¿Qué hace cada dato?', { doc: CONCEPTOS, tesis: 'Hay poca movilidad social',
+      ...F(['Nueve de cada diez hijos de jornaleros son jornaleros.', 0, '¿Cambian de posición?'], ['La mitad de los hijos de jornaleros terminó la universidad y cambió de oficio.', 1, '¿Cambian de posición?'], ['El municipio tiene un río.', 2, '¿Habla de posiciones?']), bien: 'Subir o quedarse.' },
+      'Que repitan el oficio la apoya; que cambien la debilita; el río no pesa.', 'Recuerda qué significa movilidad social y compara padres e hijos.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: CONCEPTOS, lineas: ['Un concepto deja ver una parte de la realidad.', 'Samir hizo una pregunta en clase.', 'Estado, gobierno y nación son cosas distintas.', 'El poder puede apoyarse en la fuerza o en la legitimidad.', 'Los kurdos viven en varios países.', 'Clase, etnia, género y cultura ayudan a mirar la sociedad.'], ...S([1, 4], { 0: 'Es la idea del comienzo.', 2: 'Es la primera distinción.', 3: 'Es la idea sobre el poder.', 5: 'Son las otras herramientas.' }), bien: 'Herramientas y distinciones.' },
+      'La pregunta de Samir y los kurdos son ejemplos; lo demás resume.', 'Deja lo que serviría para analizar otro país.'),
+  ]);
+
+  const MODELOS = {
+    id: 'icf-rio-manso', title: 'Cuatro maneras de arreglar un pueblo',
+    ficha: { autor: 'Cuaderno de ciencias sociales', fuente: 'Colección «Ideas»', fecha: 'Marzo de 2026' },
+    paras: [
+      'Río Manso tiene un hospital viejo, una escuela llena y poco dinero. El concejo pidió propuestas. Llegaron cuatro, y detrás de cada una había una idea distinta de lo que debe hacer un Estado. A esas ideas simplificadas, que ayudan a comparar, las ciencias sociales les dicen modelos.',
+      'La primera propone bajar impuestos y dejar que empresas privadas compitan por atender a la gente. Confía en la libertad de cada quien y en el mercado: el Estado debe ser pequeño y cuidar las reglas. Es la lógica liberal en lo económico. Sus críticos preguntan qué pasa con quien no puede pagar.',
+      'La segunda propone cobrar más a quienes más tienen y ofrecer salud y escuela gratuitas para todos. Es la lógica del Estado de bienestar, que mantiene el mercado y reparte una parte de lo que produce. Sus críticos preguntan cuánto puede cobrarse antes de que las empresas se vayan.',
+      'La tercera propone que el municipio sea dueño de las principales empresas y decida qué producir. Es la lógica socialista: lo que es de todos debe servir a todos. Sus críticos señalan que, sin competencia ni controles, quien administra puede volverse ineficiente o abusar del poder.',
+      'La cuarta viene de la vereda: que las comunidades decidan en asamblea, según sus costumbres, y que el bienestar no se mida solo en dinero, sino en agua limpia, tiempo y vida en común. Es la lógica comunitaria, cercana a lo que varios pueblos andinos llaman buen vivir. Sus críticos preguntan si funciona para una ciudad de un millón de personas.',
+      'El concejo terminó mezclando: salud pública, un parque industrial privado y presupuesto votado en las veredas. Casi ningún país usa un modelo puro. Reconocerlos sirve para otra cosa: ante una decisión, preguntar qué valor pone primero, si la libertad, la igualdad, la propiedad común o la comunidad; a quién beneficia, y qué deja por fuera. Ningún modelo es neutral; tampoco lo es quien lo critica. Por eso conviene comparar las respuestas que da cada uno y no solo su nombre.',
+    ],
+  };
+  const l2 = leccion('icf-sc-modelos-2', 'Modelos y decisiones públicas', guion(
+    ['Modelo', 'Una idea simplificada que ayuda a comparar.'],
+    ['Cuatro lógicas', 'Liberal, de bienestar, socialista y comunitaria.'],
+    ['Valores', 'Cada una pone primero un valor y recibe críticas.'],
+    ['Mezclas', 'Casi ningún país usa un modelo puro.']), [
+    x('pista-tipo', 'Ata cada medida a la lógica que tiene detrás.', { doc: MODELOS, lineas: ['menos impuestos y más competencia', 'impuesto progresivo para salud gratuita', 'el municipio compra la fábrica de leche', 'la asamblea decide el turno del agua'],
+      ...T(['liberal', 0, '¿Cuál confía en el mercado?'], ['de bienestar', 1, '¿Cuál mantiene el mercado y reparte?'], ['socialista', 2, '¿Cuál vuelve pública la empresa?'], ['comunitaria', 3, '¿Cuál decide en asamblea?']), bien: 'Mercado, reparto, propiedad y asamblea.' },
+      'Competir es liberal, repartir es de bienestar, ser dueños es socialista y la asamblea, comunitaria.', 'Pregunta quién decide y quién es dueño en cada medida.'),
+    x('pinta-tipos', 'Pinta cada frase con el valor que pone primero.', { doc: MODELOS, plumas: ['libertad', 'igualdad', 'comunidad'],
+      ...P(['«Que cada quien escoja su médico y lo pague».', 0, '¿Escoger, repartir o vivir juntos?'], ['«Que nadie se quede sin escuela por ser pobre».', 1, '¿Escoger, repartir o vivir juntos?'], ['«Decidamos juntos, como nos enseñaron los mayores».', 2, '¿Escoger, repartir o vivir juntos?'], ['«El Estado no debe decirme qué vender».', 0, '¿Escoger, repartir o vivir juntos?']), bien: 'Escoger, repartir y juntos.' },
+      'Escoger y vender sin permiso es libertad, la escuela para todos igualdad y decidir juntos, comunidad.', 'Busca la palabra que delata lo que más le importa a quien habla.'),
+    x('voz-de-la-fuente', 'Ata cada crítica a la propuesta que la recibe.', { ayuda: 'Tira un hilo desde cada crítica hasta la propuesta.', doc: MODELOS, portadas: [['Primera: mercado', 'propuesta'], ['Segunda: bienestar', 'propuesta'], ['Tercera: socialista', 'propuesta'], ['Cuarta: comunitaria', 'propuesta']],
+      ...T(['deja por fuera a quien no puede pagar', 0, '¿Cuál depende de pagar?'], ['las empresas podrían irse', 1, '¿Cuál cobra más?'], ['quien administra puede abusar', 2, '¿Cuál concentra la propiedad?'], ['quizás no sirve en una gran ciudad', 3, '¿Cuál se piensa para comunidades?']), bien: 'Cada modelo, su crítica.' },
+      'El mercado excluye a quien no paga, cobrar espanta empresas, concentrar permite abusos y la asamblea es difícil en grande.', 'Busca la última oración del párrafo de cada propuesta.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: MODELOS, filas: [{ antes: 'Los modelos son', topes: ['copias exactas de un país', 'leyes', 'ideas simplificadas'], va: 2 }, { antes: 'El Estado de bienestar', topes: ['elimina el mercado', 'mantiene el mercado', 'no cobra impuestos'], va: 1 }, { antes: 'Un modelo puro lo usa', topes: ['casi ningún país', 'la mitad de los países', 'todo país'], va: 0 }], mira: ['Relee el final del párrafo 1.', 'Relee la segunda propuesta.', 'Relee el párrafo 6.'], luz: [[1, 'ideas simplificadas'], [3, 'mantiene el mercado'], [6, 'Casi ningún país usa un modelo puro']], bien: 'Simplificadas, mantiene y casi ninguno.' },
+      'Son ideas simplificadas, el de bienestar mantiene el mercado y casi ningún país usa uno puro.', 'Busca en el texto la oración exacta de cada perilla.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: MODELOS, nums: [2, 5, 6], pregunta: 'Queda en pie', queda: 'Conviene preguntar a quién beneficia una decisión.',
+      ...T(['Para la lógica liberal, el Estado debe ser grande.', 1, 'Busca cómo debe ser el Estado.'], ['El buen vivir mide el bienestar solo en dinero.', 4, 'Busca en qué más se mide.'], ['El concejo escogió una sola propuesta.', 7, 'Busca qué terminó haciendo.']), bien: 'Pequeño, no solo y mezclando.' },
+      'El Estado debe ser pequeño, el bienestar no se mide solo en dinero y el concejo mezcló.', 'Saca la palabra clave: grande, solo, una sola.'),
+    x('comprueba-apuesta', 'Subraya en el párrafo 1 la oración que **define** qué es un modelo.', { doc: MODELOS, nums: [1], apuesta: 'Una idea simplificada para comparar.', ...S(['1.3'], { '1.0': 'Describe los problemas del pueblo.', '1.1': 'Cuenta lo que hizo el concejo.', '1.2': 'Dice qué había detrás, pero no lo define.' }), bien: 'Ideas simplificadas que ayudan a comparar.' },
+      'La última oración lo define: ideas simplificadas, que ayudan a comparar.', 'Busca la oración que pone el nombre y dice para qué sirve.'),
+    x('balanza-tesis', 'Propuesta: «que una empresa privada maneje el hospital de Río Manso». ¿Qué hace cada dato?', { doc: MODELOS, tesis: 'Que una empresa privada maneje el hospital',
+      ...F(['En un pueblo parecido, la empresa redujo a la mitad las filas sin cobrar más.', 0, '¿Mejoró la atención?'], ['Seis de cada diez habitantes no podrían pagar las tarifas previstas.', 1, '¿A quién deja por fuera?'], ['El hospital está pintado de blanco.', 2, '¿Cambia la decisión?']), bien: 'Eficiencia y acceso.' },
+      'Las filas la apoyan; las tarifas la debilitan; el color no pesa.', 'Pregunta si el dato hace más o menos conveniente la medida para la gente.'),
+    x('tacha-resumen', 'Tacha las dos oraciones que sobran en el resumen.', { doc: MODELOS, lineas: ['Los modelos son ideas simplificadas sobre lo que debe hacer un Estado.', 'La escuela está llena.', 'Hay lógicas liberal, de bienestar, socialista y comunitaria.', 'Cada una pone primero un valor y recibe críticas.', 'Habrá un parque industrial.', 'Casi siempre se mezclan.'], ...S([1, 4], { 0: 'Es la definición.', 2: 'Son los modelos.', 3: 'Es lo que permite compararlos.', 5: 'Es la conclusión.' }), bien: 'Definición, modelos, valores y mezcla.' },
+      'La escuela y el parque son detalles; lo demás resume.', 'Deja lo que usarías para analizar otra decisión.'),
+  ]);
+
+  const AGUA = {
+    id: 'icf-acueducto-alto', title: 'El agua de Cerro Alto',
+    paras: [
+      'Cerro Alto tiene cuatro mil habitantes y un acueducto construido a mano por sus abuelos. Lo maneja una junta de vecinos elegida cada dos años. Cobra una tarifa baja e igual para todos y, cuando falta plata, se llama a convite: un día de trabajo por familia. «Aquí el agua no es de nadie, por eso la cuidamos todos», dice la fundadora.',
+      'En 2023 la sequía bajó el caudal y los nuevos conjuntos de casas aumentaron el consumo. Hubo semanas con agua un día sí y otro no. La alcaldía, elegida el año anterior con una votación alta, propuso entregar el servicio a una empresa privada por veinte años. La empresa prometió arreglar las tuberías, poner contadores y cobrar según lo que gaste cada casa. «El que gasta más debe pagar más; así nadie desperdicia», explicó su representante.',
+      'El contrato era legal: cumplía todas las normas. Pero en la audiencia casi nadie lo apoyó. «Ustedes fueron elegidos para dirigir, no para entregar lo que hicimos nosotros», dijo un vecino. Una concejala propuso otra salida: que el municipio fuera el dueño y que las casas de mayor valor pagaran una tarifa más alta para subsidiar a las de menor valor. Un grupo de jóvenes recordó que en la vereda de abajo vive una comunidad indígena que considera sagrado el nacimiento y que nadie la había consultado.',
+      'Un profesor hizo un cuadro en el tablero. En cada columna puso una propuesta; en cada fila, una pregunta: quién decide, quién es dueño, quién paga y quién queda por fuera. «No les voy a decir cuál es mejor», advirtió. «Les pido que no comparen los nombres, sino las respuestas».',
+      'Después de cinco meses acordaron que la junta siguiera administrando, con contadores y cobro según el consumo, una tarifa menor para los hogares de menos ingresos y apoyo técnico del municipio. La comunidad indígena quedó con un puesto y con derecho a opinar sobre el nacimiento. El profesor borró el tablero y dejó solo las preguntas. «Esas sirven para el próximo problema», dijo.',
+    ],
+  };
+  const Q = preg(AGUA, 'sociales');
+  return mundo('icf-sc-modelos', 'Modelos para Decidir', 'sociales', [l1, l2], [
+    ['icf-sc-modelos-1', 'Legal y legítimo no son lo mismo.', Q('El contrato con la empresa era legal, pero en la audiencia se mostró que le faltaba:', ['Soberanía', 'Legitimidad', 'Movilidad social', 'Territorio'], 1, 'Cumplía las normas, pero casi nadie lo reconocía como aceptable.', 'Compara lo que dice la norma con lo que aceptó la gente.')],
+    ['icf-sc-modelos-1', 'El gobierno dirige por un tiempo.', Q('La frase «fueron elegidos para dirigir, no para entregar lo que hicimos nosotros» distingue entre:', ['Etnia y género', 'Nación y cultura', 'El gobierno de turno y lo que pertenece a la comunidad', 'La clase alta y la clase baja'], 2, 'El vecino reconoce que pueden dirigir, pero no disponer de lo construido por todos.', 'Pregunta qué les reconoce y qué les niega.')],
+    ['icf-sc-modelos-1', 'La cultura son modos de vivir y creer.', Q('Que la comunidad indígena considere sagrado el nacimiento muestra que:', ['El agua es también un asunto cultural', 'El agua no sirve para beber', 'El acueducto es ilegal', 'La alcaldía es indígena'], 0, 'Un mismo lugar tiene un sentido que viene de los modos de creer de un grupo.', 'Relee qué significa el nacimiento para esa comunidad.')],
+    ['icf-sc-modelos-2', 'Cada lógica responde distinto quién decide y quién paga.', Q('La forma en que la junta manejaba el acueducto al comienzo corresponde sobre todo a una lógica:', ['Liberal', 'De bienestar', 'Colonial', 'Comunitaria'], 3, 'Decisión de vecinos, convite y cuidado común.', 'Mira quién decide y cómo se trabaja.')],
+    ['icf-sc-modelos-2', 'Propiedad pública y subsidio.', Q('La propuesta de la concejala pone primero:', ['La igualdad, porque quien más tiene ayuda a quien menos tiene', 'La libertad de escoger empresa', 'La competencia', 'El lucro del municipio'], 0, 'Las casas de mayor valor subsidian a las de menor valor.', 'Relee quién pagaría más y para qué.')],
+    ['icf-sc-modelos-2', 'Comparar respuestas, no nombres.', Q('El cuadro del profesor sirve para:', ['Mostrar que todas son iguales', 'Escoger la más barata', 'Comparar propuestas con los mismos criterios', 'Defender a la empresa'], 2, 'Las mismas preguntas se aplican a cada propuesta.', 'Mira qué puso en las filas y qué pidió.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-cn-indaga.js
+// Preicfes · Ciencias Naturales · mundo 1 «Indagación Científica» (spec 2026-11-20-curso-preicfes): la competencia que más
+// pregunta la prueba de ciencias: la pregunta de un experimento, sus variables, el control, los datos y qué se puede concluir.
+// Estándar de diez: el experimento se lee con juegos LEC y sus datos se manejan con juegos de lienzo; un juego en movimiento y la
+// zona de examen al final. Experimentos escritos para Zuka (los resultados siguen lo que pasa de verdad).
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, sol, err, opc } = ICF;
+
+  const FRIJOL = {
+    id: 'icf-frijol', title: 'Frijoles a oscuras',
+    ficha: { autor: 'Grupo de ciencias de un colegio público', fuente: 'Informe de laboratorio de grado once', fecha: 'Abril de 2026' },
+    paras: [
+      'Un grupo de grado once se preguntó si la cantidad de luz que recibe una planta de frijol cambia lo que crece en sus primeras dos semanas de vida.',
+      'Antes de empezar escribieron su hipótesis: «Las plantas que reciben más horas de luz crecerán más altas». Les parecía evidente, porque las plantas necesitan luz para fabricar su alimento.',
+      'Sembraron 40 semillas del mismo paquete en 40 vasos con la misma tierra y las repartieron en cuatro grupos de diez. Cada grupo recibió 0, 4, 8 o 12 horas diarias de luz de una lámpara, dentro de cajas que se mantuvieron a la misma temperatura. Todas recibieron 20 mililitros de agua al día. Lo único que cambiaba de un grupo a otro era la luz.',
+      'A los 14 días midieron la altura de cada plántula y contaron sus hojas. Germinaron casi todas las semillas en los cuatro grupos. La altura promedio fue de 12 cm en el grupo sin luz, 10 cm con 4 horas, 8 cm con 8 horas y 7 cm con 12 horas. Las plántulas que crecieron a oscuras eran amarillas, delgadas y casi no tenían hojas; las de 12 horas eran verdes, gruesas y tenían en promedio seis hojas.',
+      'El resultado contradijo la hipótesis. La profesora les explicó que una plántula a oscuras se estira buscando la luz, con la energía que tenía guardada en la semilla: es más alta, pero no más sana. El grupo concluyó que la altura no era una buena medida de lo que querían saber.',
+      'Para mejorar el estudio propusieron medir también la masa de las plantas secas y repetir el experimento con otra variedad de frijol, para saber si el resultado se mantiene.',
+    ],
+  };
+
+  const PENDULO = {
+    id: 'icf-pendulo', title: 'El péndulo de la clase',
+    ficha: { autor: 'Profesora de física', fuente: 'Bitácora de laboratorio', fecha: 'Mayo de 2026' },
+    paras: [
+      'En una clase de física, dos equipos se preguntaron de qué depende el tiempo que tarda un péndulo en ir y volver, lo que se llama su período. El equipo de Samuel pensaba que dependía de la masa: una pesa más pesada debería oscilar más rápido. El equipo de Lucía creía que dependía de la longitud de la cuerda.',
+      'Para probar la primera idea, ataron a una cuerda de un metro pesas de 50, 100 y 200 gramos. Soltaron cada una desde el mismo ángulo pequeño y midieron con un cronómetro el tiempo de diez oscilaciones completas, para dividirlo después entre diez. El período fue de 2.0 segundos en los tres casos.',
+      'Para probar la segunda, usaron siempre la pesa de 100 gramos y cambiaron la longitud: 25, 50, 100 y 200 centímetros. Los períodos fueron 1.0, 1.4, 2.0 y 2.8 segundos. Al cuadruplicar la longitud, de 25 a 100 centímetros, el período se duplicó.',
+      'Samuel propuso una conclusión: «Ninguna variable importa mucho, porque el período casi no cambió». Lucía le mostró la tabla: con la masa el período no cambió nada, pero con la longitud sí, y siempre en la misma dirección: a mayor longitud, mayor período. Además, la relación no es proporcional, porque duplicar la longitud no duplica el período.',
+      'La profesora agregó dos advertencias. Primero, medir diez oscilaciones y dividir reduce el error del cronómetro, que depende de los reflejos de quien lo maneja. Segundo, los resultados valen para ángulos pequeños; con oscilaciones muy amplias el período cambia un poco.',
+      'Al final, los dos equipos escribieron una conclusión común: en sus mediciones, el período depende de la longitud de la cuerda y no de la masa de la pesa.',
+    ],
+  };
+
+  const l1 = leccion('icf-cn-indaga-1', 'Preguntas, variables y control', [
+    sc(6, 'Casi un tercio de la prueba de Ciencias es **indagación**: no pregunta un dato de memoria, sino cómo se averigua algo con un experimento.', { title: 'Cómo se averigua' }),
+    sc(7, 'Todo experimento empieza con una **pregunta** y una **hipótesis**, una respuesta posible que se puede poner a prueba.', { title: 'Pregunta e hipótesis' }),
+    sc(7, 'La **variable independiente** es la que el investigador cambia; la **dependiente**, la que mide para ver el efecto; las **controladas** se mantienen iguales para que no confundan el resultado.', { title: 'Tres clases de variables' }),
+    sc(7, 'Ejemplo: para saber si el abono hace crecer más el pasto, se abonan unas macetas y otras no, con la misma semilla, la misma agua y la misma luz. Si se riega más a las abonadas, ya no se sabe qué causó la diferencia.', { title: 'Cambiar una sola cosa' }),
+    sc(6, 'Un resultado que contradice la hipótesis no es un fracaso: es información. La hipótesis se corrige y el experimento se mejora.', { title: 'Cuando la hipótesis falla' }),
+  ], [
+    x('descarta-prueba', 'Estas tres afirmaciones son falsas. Ata cada una a la oración que la desmiente.', { doc: FRIJOL, nums: [3, 4, 5], pregunta: 'Queda en pie', queda: 'La única diferencia entre los grupos fue la luz.',
+      ...T(['Cada grupo recibió distinta agua.', [2, 3], 'Busca qué recibieron todas o qué cambiaba entre los grupos.'], ['Sin luz, las semillas no germinan.', 5, 'Busca la oración que dice cuántas germinaron.'], ['Los datos confirmaron la hipótesis.', 8, 'Busca la oración que compara resultado e hipótesis.']), bien: 'Los datos mandan sobre lo que uno esperaba.' },
+      'Todas recibieron 20 mililitros, germinaron casi todas y el resultado contradijo la hipótesis.', 'Busca la palabra clave de cada afirmación: agua, germinar, hipótesis.'),
+    x('genero-o-cita', 'En el experimento de los frijoles, ¿qué **cambió** a propósito el grupo y qué no?', { doc: FRIJOL, rot: ['lo que cambiaron', 'lo que midieron o dejaron igual'],
+      ...F(['Las horas de luz', 0, '¿Los cuatro grupos recibieron lo mismo?'], ['La altura a los 14 días', 1, '¿La escogieron ellos o la leyeron con la regla?'], ['El agua diaria', 1, '¿Los cuatro grupos recibieron cantidades distintas?'], ['La tierra de los vasos', 1, '¿Los cuatro grupos tenían tierras distintas?'], ['El número de hojas', 1, '¿Lo decidieron antes o lo contaron al final?']), luz: [[3, 'Lo único que cambiaba de un grupo a otro era la luz']], bien: 'Se cambia una sola cosa; lo demás se mide o se controla.' },
+      'La luz es la variable independiente; la altura y las hojas se miden; el agua y la tierra se controlan.', 'Pregunta por cada una: ¿la decidieron distinta para cada grupo?'),
+    x('pista-tipo', 'Ata cada parte de la investigación a su oración.', { doc: FRIJOL, lineas: ['¿Cambia la luz lo que crece una planta de frijol?', 'Con más luz crecerán más altas.', 'La altura promedio sin luz fue de 12 cm.', 'La altura no era una buena medida.'],
+      ...T(['la pregunta', 0, 'Busca la oración que no afirma nada todavía.'], ['la hipótesis', 1, 'Busca lo que se espera antes de medir.'], ['un resultado', 2, 'Busca un dato leído con un instrumento.'], ['una conclusión', 3, 'Busca lo que se piensa después de ver los datos.']), bien: 'Pregunta, hipótesis, resultado y conclusión.' },
+      'La pregunta abre, la hipótesis predice, el resultado es un dato medido y la conclusión interpreta.', 'Piensa cuándo se escribe cada cosa: antes de medir, al medir o después.'),
+    x('balanza-tesis', 'Conclusión: «a oscuras el frijol se estira, pero no crece más sano». ¿Qué hace cada dato?', { doc: FRIJOL, tesis: 'A oscuras se estira, pero no crece más sano',
+      ...F(['Sin luz eran altas, amarillas y sin hojas.', 0, '¿Muestra altura y mala salud a la vez?'], ['Con 12 horas tenían más masa seca.', 0, 'Más masa, ¿habla de mejor o de peor crecimiento?'], ['A oscuras, otra variedad tuvo más hojas y masa.', 1, '¿Crecieron mejor o peor sin luz?'], ['Los vasos eran blancos.', 2, '¿Tiene que ver con la luz o con la salud?']), bien: 'Un dato pesa si cambia lo que se puede concluir.' },
+      'Altas y amarillas, y más masa con luz, apoyan; una variedad más sana a oscuras debilita; el color del vaso no pesa.', 'Supón que cada dato es cierto: ¿creerías más o menos en la conclusión?'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: FRIJOL, nums: [4, 5], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['Con 12 horas tuvieron unas seis hojas.', 0, 'Léela junto a la última oración del párrafo 4.'], ['A más luz, menos altura.', 1, 'No está escrita: mira las cuatro alturas en orden.'], ['Con 24 horas no crecerían.', 2, '¿Probaron ese número de horas?'], ['La plántula a oscuras es más alta, pero no más sana.', 0, 'Léela junto a la explicación de la profesora.']),
+      luz: [[4, '12 cm en el grupo sin luz, 10 cm con 4 horas'], [5, 'es más alta, pero no más sana']], bien: 'Lo que no se probó no se puede afirmar.' },
+      'Las hojas y la salud están escritas; la tendencia sale de los cuatro datos; 24 horas no se probaron.', 'Mira hasta dónde llegan los datos: más allá de ellos solo se puede suponer.'),
+    x('lee-escala', 'La gráfica muestra la altura promedio de tres grupos. Pon la altura de **cada uno** y cuánto suman.', { vals: [12, 10, 7], rot: ['0 h', '4 h', '12 h'], hi: 16, st: 4, et: ['0 h', '4 h', '12 h', 'suma'], ops: ['+', '+', '='], metas: ['12', '10', '7', '29'], fichas: ['12', '10', '7', '29', '9', '8', '3'],
+      mira: ['Mira en qué línea termina la barra.', 'Está a mitad de camino entre 8 y 12.', 'Está un poco abajo de la línea del 8.', 'Suma las tres barras.'], trampas: { '1:9': 'Entre 8 y 12 hay 4: la mitad son 2 más que 8.', '2:8': 'No alcanza la línea del 8.', '2:3': 'Cada línea vale 4: cuenta desde abajo.' }, ok: 'La escala manda: aquí va de 4 en 4.' },
+      'Las líneas van de 4 en 4: 12 cae en una línea, 10 está a la mitad entre 8 y 12, y 7 un poco abajo de 8.', 'Antes de leer, mira cuánto vale cada línea del eje y cuánto es la mitad de ese espacio.'),
+    sol('Una estudiante quiere saber si la temperatura del agua cambia el tiempo que tarda en disolverse una pastilla efervescente. ¿Cómo debe organizar su experimento?',
+      ['La variable que ella cambia es [[la temperatura del agua]]', 'La variable que mide es [[el tiempo de disolución]]', 'Debe mantener igual [[la cantidad de agua]] y el tipo de pastilla', 'Para confiar en el resultado, cada temperatura se prueba [[varias veces]]'],
+      ['una sola vez', 'la opinión de sus compañeros', 'el color de la pastilla al final'],
+      'La temperatura es la independiente y el tiempo la dependiente. Si cambiara también la cantidad de agua, no sabría qué causó la diferencia; y repetir cada prueba reduce el efecto de los errores al medir.',
+      'Pregúntate qué cambia ella a propósito, qué mide con el cronómetro y qué podría confundir el resultado si no lo deja igual.'),
+    err('Para saber si un fertilizante hace crecer más el maíz, un agricultor diseña este experimento.',
+      ['Siembra dos parcelas iguales con la misma semilla', 'A la parcela A le pone fertilizante y a la B no', 'Riega la parcela A todos los días y la B una vez por semana', 'Al mes compara la altura de las plantas de las dos parcelas'], 2,
+      ['Riega las dos parcelas con la misma cantidad y frecuencia', 'Riega la parcela B todos los días y la A una vez por semana', 'Riega más la parcela que vaya creciendo menos'],
+      'El riego distinto agrega una segunda diferencia: si A crece más, no se sabría si fue el fertilizante o el agua. El agua debe ser una variable controlada, igual en las dos parcelas.',
+      'Busca el paso en que las dos parcelas dejan de ser iguales en algo distinto del fertilizante.'),
+    opc('Una investigadora quiere saber si la cantidad de sal en el agua afecta la germinación de semillas de rábano. Pone 20 semillas en cada uno de cuatro platos con agua que tiene 0, 1, 2 y 4 gramos de sal por litro. ¿Cuál de las siguientes condiciones debe ser igual en los cuatro platos?',
+      ['La cantidad de sal del agua', 'El número de semillas que germinan', 'La temperatura y la luz que reciben', 'El tiempo que tarda cada semilla en germinar'], 2,
+      'La sal es la variable que ella cambia y las semillas que germinan (y cuándo) son lo que mide. La temperatura y la luz deben ser iguales para que no confundan el resultado.',
+      'Separa lo que se cambia a propósito, lo que se mide y lo que hay que dejar fijo.'),
+  ]);
+
+  const l2 = leccion('icf-cn-indaga-2', 'Datos y conclusiones', [
+    sc(6, 'Una conclusión vale si los datos la respaldan. La prueba pregunta mucho: «¿cuál conclusión es válida según la tabla?».', { title: 'Lo que dicen los datos' }),
+    sc(7, 'Una variable **no influye** si al cambiarla el resultado no cambia; **influye** si el resultado cambia siempre en la misma dirección.', { title: 'Influye o no influye' }),
+    sc(7, 'Ejemplo: si al duplicar la carga de una bicicleta el frenado pasa de 4 a 8 metros, la relación parece **proporcional**. Si pasa de 4 a 6, aumenta, pero no es proporcional.', { title: 'Proporcional o solo creciente' }),
+    sc(7, 'Repetir una medición y promediar reduce el error. Y una conclusión solo vale para las condiciones medidas: no se puede extender a lo que nadie probó.', { title: 'Errores y límites' }),
+    sc(6, 'Muchos fenómenos crecen o decrecen por multiplicación: las bacterias se duplican y los medicamentos se reducen a la mitad. Se reconocen porque cada paso multiplica por lo mismo.', { title: 'Patrones que multiplican' }),
+  ], [
+    x('ajusta-alcance', 'Mueve cada perilla hasta que la conclusión diga lo que muestran los datos del péndulo.', { doc: PENDULO, filas: [{ antes: 'Al cambiar la masa, el período', topes: ['aumenta', 'no cambia', 'disminuye'], va: 1 }, { antes: 'Al alargar la cuerda, el período', topes: ['disminuye', 'no cambia', 'aumenta'], va: 2 }, { antes: 'Si la longitud se cuadruplica, el período', topes: ['se duplica', 'se triplica', 'se cuadruplica'], va: 0 }], mira: ['Relee los tres casos del párrafo 2.', 'Mira los cuatro períodos del párrafo 3 en orden.', 'Compara el período de 25 con el de 100 centímetros.'], luz: [[2, '2.0 segundos en los tres casos'], [3, '1.0, 1.4, 2.0 y 2.8 segundos'], [3, 'el período se duplicó']], bien: 'Cada conclusión, con su dato.' },
+      'Con la masa dio 2.0 s siempre; con la longitud subió de 1.0 a 2.8 s; de 25 a 100 cm pasó de 1.0 a 2.0 s.', 'Lleva cada frase a su serie de datos y compara el primero con el último.'),
+    x('pinta-tipos', 'Pinta cada oración: ¿es un **dato**, una **hipótesis** o una **conclusión**?', { doc: PENDULO, plumas: ['dato', 'hipótesis', 'conclusión'],
+      ...P(['Una pesa más pesada debería oscilar más rápido.', 1, '¿Se midió ya o se espera que pase?'], ['El período fue de 2.0 segundos.', 0, '¿Se leyó en un instrumento o se pensó después?'], ['El período depende de la longitud y no de la masa.', 2, '¿Es una medida o una idea que las junta?'], ['Con 200 cm tardó 2.8 segundos.', 0, '¿Se leyó en un instrumento o se pensó después?']), bien: 'Se espera, se mide y se concluye.' },
+      'La hipótesis se dice antes de medir, el dato se lee en el cronómetro y la conclusión junta los datos.', 'Pregúntate si la oración sale del cronómetro, de antes de usarlo o de mirar toda la tabla.'),
+    x('pasos-del-proceso', 'Ordena cómo se prueba una idea. El primer paso está en su puesto.', { que: 'el método', de: 'La prueba de la longitud', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Preguntarse de qué depende el período.', 'Proponer que depende de la longitud.', 'Fijar la masa y el ángulo y cambiar la cuerda.', 'Medir diez oscilaciones con cada cuerda.', 'Comparar los períodos y concluir.'], mira: ['', 'La propuesta responde una pregunta que ya se hizo.', 'El diseño prueba una propuesta que ya se tiene.', 'Se mide cuando ya se sabe qué se cambia.', 'Se compara lo que ya se midió.'], bien: 'Pregunta, hipótesis, diseño, medida y conclusión.' },
+      'Se pregunta, se propone, se diseña cambiando una sola cosa, se mide y solo al final se concluye.', 'Cada paso usa lo que dejó el anterior: ¿qué hace falta tener antes?'),
+    x('comprueba-apuesta', 'Subraya la oración del párrafo 4 que muestra por qué Samuel se **equivoca**.', { doc: PENDULO, nums: [4], apuesta: 'Ninguna variable importa mucho.', ...S(['4.1'], { '4.0': 'Es lo que dijo Samuel, no lo que lo desmiente.', '4.2': 'Agrega cómo es la relación; que sí exista ya se dijo antes.' }), bien: 'Con la longitud sí cambia, y siempre en la misma dirección.' },
+      'Lucía separa las dos series: con la masa no cambia nada, pero con la longitud crece siempre.', 'Busca la oración que compara las dos variables con la tabla en la mano.'),
+    x('genero-o-cita', 'Para probar **solo** la longitud, ¿sirve esta prueba?', { doc: PENDULO, rot: ['sí sirve', 'mezcla variables'],
+      ...F(['Misma pesa y ángulo, cuerdas de 40 y 80 cm', 0, '¿Cuántas cosas cambian entre las dos?'], ['Pesa grande en cuerda larga, chica en corta', 1, '¿Cuántas cosas cambian entre las dos?'], ['Misma pesa y ángulo, cinco cuerdas distintas', 0, '¿Cuántas cosas cambian entre las cinco?'], ['Cuerda larga con ángulo grande, corta con chico', 1, 'Además de la cuerda, ¿cambia algo más?']), bien: 'Si cambian dos cosas, no se sabe cuál fue.' },
+      'Solo sirven las pruebas en las que la cuerda es lo único distinto; en las otras no se sabe a qué se debe el cambio.', 'Cuenta cuántas cosas cambian de una medida a la otra: solo puede ser una.'),
+    x('mayor-tramo', 'La gráfica muestra el período (en décimas de segundo) con 25, 50, 100 y 200 cm. Toca el tramo que más creció **en porcentaje**.', { v: [10, 14, 20, 28] },
+      'De 10 a 14 y de 20 a 28 sube el 40 %; de 14 a 20 sube 6 de 14, cerca del 43 %: ese es el mayor, aunque el último suba más décimas.', 'Divide lo que subió cada tramo entre el valor con que empezó ese tramo.'),
+    sol('Una estudiante calienta agua y registra la temperatura cada minuto: 20, 26, 32, 38 y 44 °C en los minutos 0 a 4. Si la tendencia sigue igual, ¿qué temperatura tendrá a los 7 minutos y hasta cuándo vale la predicción?',
+      ['Cada minuto la temperatura sube [[6]] °C', 'A los 7 minutos: 20 °C más 7 veces lo que sube por minuto, [[62]] °C', 'La temperatura cambia de forma [[constante]] mientras se calienta', 'La predicción vale solo hasta que el agua llegue a unos [[100]] °C, donde hierve'],
+      ['44', 'variable', '50'],
+      'Los datos suben 6 °C por minuto, así que a los 7 minutos el agua estaría a 62 °C. La tendencia no sigue para siempre: al hervir, la temperatura deja de subir aunque se siga calentando.',
+      'Halla cuánto sube por minuto restando dos datos seguidos, y piensa qué le pasa al agua cuando hierve.'),
+    err('Un estudiante cuelga masas de un resorte y mide cuánto se estira: 100 g, 2 cm; 200 g, 4 cm; 300 g, 6 cm. Este es su análisis.',
+      ['Cada 100 g, el resorte se estira 2 cm más', 'El estiramiento es directamente proporcional a la masa', 'Con 500 g el resorte se estirará 8 cm', 'Con 50 g se estirará 1 cm'], 2,
+      ['Con 500 g el resorte se estirará 10 cm', 'Con 500 g el resorte se estirará 5 cm', 'Con 500 g el resorte ya no se estirará más'],
+      'Si son proporcionales, 500 g son 5 veces 100 g: $5 \\cdot 2 = 10$ cm. El 8 sale de sumar 2 cm a los 6 que había con 300 g, como si 500 g fueran solo 100 g más.',
+      'Revisa la predicción con 500 g: ¿cuántas veces cabe 100 g en 500 g?'),
+    opc('Una investigadora mide el oxígeno disuelto en un río en cinco puntos, desde su nacimiento hasta la salida de una ciudad: 9, 9, 8, 5 y 3 mg/L. Los dos últimos puntos están después de una descarga de aguas residuales. La conclusión mejor respaldada por estos datos es:',
+      ['Las aguas residuales son la única causa de la falta de oxígeno en todos los ríos', 'El oxígeno del río aumenta a medida que se acerca a la ciudad', 'En el nacimiento del río no hay peces', 'En este río hay menos oxígeno después de la descarga de aguas residuales'], 3,
+      'Los datos muestran que el oxígeno baja a 5 y 3 mg/L justo después de la descarga. No permiten hablar de todos los ríos ni de los peces, y el oxígeno disminuye, no aumenta.',
+      'Descarta las conclusiones que hablan de algo que no se midió o que van más allá de este río.'),
+  ]);
+
+  return mundo('icf-cn-indaga', 'Indagación Científica', 'ciencias', [l1, l2], [
+    ['icf-cn-indaga-1', 'Dos variables son inversamente proporcionales cuando su producto se mantiene.',
+      play('grafica-relacion', 'A temperatura constante, un gas ocupa 6 L con una presión de 2 atm. Si presión y volumen son inversamente proporcionales, mueve los puntos', { kind: 'inversa', k: 12, given: [[2, 6]], xs: [3, 4, 6], tol: 0.25, xmax: 8, ymax: 8 },
+        'El producto presión por volumen se mantiene en 12: con 3 atm, 4 L; con 4 atm, 3 L; con 6 atm, 2 L.', { hint: 'Multiplica las coordenadas del punto dado: ese producto debe ser igual en todos los puntos.' })],
+    ['icf-cn-indaga-1', 'Antes de leer una barra, mira cuánto vale cada raya de la escala.',
+      play('lee-barras', 'Plantas de tomate con distintas dosis de abono: altura a las tres semanas, en cm. ¿Cuánto mide el grupo C?', { rounds: [{ bars: [['A', 18], ['B', 24], ['C', 27], ['D', 21]], hi: 30, step: 6, q: 'val', a: 2, max: 30, tstep: 1 }] },
+        'Las rayas van de 6 en 6: la barra C llega a la mitad entre 24 y 30, es decir, 27 cm.', { hint: 'Calcula cuánto vale cada raya del eje y ubica la barra entre dos de ellas.' })],
+    ['icf-cn-indaga-1', 'La variable dependiente es la que se mide para ver el efecto de la que se cambia.',
+      opc('Un estudiante quiere saber si la cantidad de sal disuelta cambia la temperatura a la que se congela el agua. Prepara vasos con 0, 5, 10 y 15 g de sal en 100 mL de agua y los pone en el mismo congelador. La variable dependiente de su experimento es:',
+        ['La cantidad de sal de cada vaso', 'La cantidad de agua de cada vaso', 'La temperatura a la que se congela el agua', 'El congelador que usa'], 2,
+        'Él cambia la sal (independiente) y mide la temperatura de congelación (dependiente). El agua y el congelador son iguales en todos los vasos: son variables controladas.', 'Pregúntate qué mide el estudiante al final para saber si la sal tuvo efecto.')],
+    ['icf-cn-indaga-2', 'Cuando una cantidad se reduce a la mitad cada cierto tiempo, se cuentan las mitades.',
+      play('media-vida', 'Una muestra de 160 g de una sustancia radiactiva se reduce a la mitad cada 5 horas. ¿Cuándo quedan 20 g?', { rounds: [{ A0: 160, T: 5, target: 20, thing: 'sustancia', unit: 'g' }] },
+        '160, 80, 40 y 20 g: tres medias vidas, 15 horas.', { hint: 'Parte 160 por la mitad hasta llegar a 20 y cuenta cuántas veces lo hiciste.' })],
+    ['icf-cn-indaga-2', 'En una mezcla, el porcentaje compara una parte con el total.',
+      play('mezcla', 'Hay 40 g de alcohol. Añade agua hasta que la solución tenga 25 % de alcohol', { solute: 40, target: 25, step: 10, max: 300 },
+        'Si 40 g son el 25 %, la mezcla pesa 160 g: se añaden 120 g de agua.', { hint: 'El alcohol tiene que ser la cuarta parte de toda la mezcla.' })],
+    ['icf-cn-indaga-2', 'Una conclusión válida describe lo que muestran los datos medidos, sin ir más allá.',
+      opc('En el experimento de la sal, los vasos con 0, 5, 10 y 15 g de sal se congelaron a 0, −3, −6 y −9 °C. La conclusión que mejor se apoya en estos datos es:',
+        ['La sal hace que el agua hierva a menor temperatura', 'A más sal disuelta, más baja es la temperatura a la que se congela el agua', 'Con 20 g de sal el agua ya no se congela nunca', 'La sal no tiene ningún efecto sobre el agua'], 1,
+        'Cada 5 g de sal bajan 3 °C la temperatura de congelación. Nadie midió la ebullición ni 20 g de sal, y los datos sí muestran un efecto.', 'Quédate con la opción que describe la tendencia de la tabla sin hablar de lo que no se midió.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-cn-celula.js
+// Preicfes · Ciencias Naturales · mundo 2 «Célula y Organismos» (spec 2026-11-25-preicfes-estructura). Experimentos y datos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, sol, err, opc, guion } = ICF;
+
+  const PAPA = {
+    id: 'icf-papa', title: 'La papa que pesó distinto',
+    ficha: { autor: 'Grupo de biología de grado once', fuente: 'Informe de laboratorio', fecha: 'Febrero de 2026' },
+    paras: [
+      'Toda célula está rodeada por una membrana que deja pasar unas sustancias y otras no. El agua la atraviesa con facilidad; la sal, muy poco. Un grupo quiso ver qué ocurre con las células de una papa en agua con distinta cantidad de sal.',
+      'Cortaron doce cilindros iguales de una misma papa, los pesaron y los repartieron en cuatro vasos: agua destilada y soluciones con 1 %, 3 % y 5 % de sal. A la media hora los secaron con papel y volvieron a pesarlos.',
+      'En agua destilada los cilindros aumentaron su masa 8 %; con 1 % de sal casi no cambiaron; con 3 % perdieron 6 % y con 5 %, 11 %. Los del agua destilada quedaron rígidos; los de 5 %, blandos.',
+      'La explicación es la ósmosis: el agua pasa por la membrana hacia donde hay más sal disuelta. En agua destilada hay más sal dentro de la célula, así que el agua entra. En la solución de 5 % hay más sal afuera, y el agua sale.',
+      'Con 1 % la cantidad de sal era parecida adentro y afuera; por eso entraba tanta agua como salía. Las células vegetales, además, tienen una pared rígida que impide que se revienten cuando se llenan de agua. Un glóbulo rojo, que no la tiene, sí se rompe en agua destilada.',
+      'La ósmosis no gasta energía de la célula. Para mover sustancias en sentido contrario, de donde hay menos a donde hay más, la célula debe usar energía: es el transporte activo.',
+    ],
+  };
+  const l1 = leccion('icf-cn-celula-1', 'Célula y transporte', guion(
+    ['La puerta', 'La membrana decide qué entra y qué sale: el agua pasa fácil; la sal, muy poco.'],
+    ['Ósmosis', 'El agua va hacia donde hay más sal disuelta.'],
+    ['Sin gasto o con gasto', 'Ir a favor no gasta energía; ir en contra, de menos a más, sí: transporte activo.'],
+    ['La pared', 'Las células vegetales tienen pared: se ponen rígidas en vez de reventar.']), [
+    x('comprueba-apuesta', 'Subraya en el párrafo 4 la oración que da la **regla** de la ósmosis.', { doc: PAPA, nums: [4], apuesta: 'El agua se mueve hacia donde hay más sal.', ...S(['4.0'], { '4.1': 'Aplica la regla al agua destilada.', '4.2': 'Aplica la regla a la solución de 5 %.' }), bien: 'Lo demás son casos de la regla.' },
+      'La primera oración enuncia la regla; las otras dos la aplican a cada vaso.', 'Busca la oración que vale para cualquier vaso.'),
+    x('genero-o-cita', '¿Hacia dónde va el agua: **entra** a la célula o **sale**?', { doc: PAPA, rot: ['entra', 'sale'],
+      ...F(['Papa en agua destilada', 0, '¿Dónde hay más sal: adentro o afuera?'], ['Papa en sal al 5 %', 1, '¿Dónde hay más sal: adentro o afuera?'], ['Lechuga salada en la ensalada', 1, '¿Dónde quedó la sal?'], ['Uva pasa en agua pura', 0, '¿Dónde hay más azúcar disuelto?']), bien: 'El agua va hacia donde hay más disuelto.' },
+      'En agua pura hay más soluto dentro y el agua entra; con sal afuera, sale.', 'Compara dónde hay más sustancia disuelta: hacia allá va el agua.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: PAPA, nums: [3, 5, 6], pregunta: 'Queda en pie', queda: 'Con 1 % entraba tanta agua como salía.',
+      ...T(['Con 3 % de sal la masa aumentó.', 0, 'Busca los cambios de masa.'], ['Un glóbulo rojo resiste en agua destilada.', 4, 'Busca qué pasa con los glóbulos.'], ['La ósmosis gasta energía.', 5, 'Busca lo que no gasta la célula.']), bien: 'Los datos y la explicación coinciden.' },
+      'Con 3 % perdieron masa, el glóbulo se rompe y la ósmosis no gasta energía.', 'Busca la palabra clave de cada afirmación en el texto.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo que muestran los datos.', { doc: PAPA, filas: [{ antes: 'Al aumentar la sal de 1 % a 5 %, la masa', topes: ['sube', 'baja', 'no cambia'], va: 1 }, { antes: 'Con 1 % de sal, la masa', topes: ['casi no cambia', 'se duplica', 'se pierde toda'], va: 0 }, { antes: 'La variable que cambió el grupo fue', topes: ['la papa', 'el tiempo', 'la sal'], va: 2 }], mira: ['Compara 1 %, 3 % y 5 % en orden.', 'Relee la primera oración del párrafo 3.', 'Relee en qué se diferenciaban los vasos.'], luz: [[3, 'perdieron 6 %'], [3, 'casi no cambiaron'], [2, '1 %, 3 % y 5 % de sal']], bien: 'Cada frase, con su dato.' },
+      'De 1 % a 5 % la masa baja cada vez más; con 1 % casi no cambia, y lo único distinto era la sal.', 'Lee los datos en orden, de menos sal a más sal.'),
+    x('pista-tipo', 'Ata cada papel a lo que le corresponde en el experimento.', { doc: PAPA, lineas: ['La cantidad de sal del agua', 'El cambio de masa', 'El tamaño de los cilindros', 'El agua pasa hacia donde hay más sal'],
+      ...T(['variable independiente', 0, '¿Qué cambió el grupo a propósito?'], ['variable dependiente', 1, '¿Qué midieron para ver el efecto?'], ['variable controlada', 2, '¿Qué dejaron igual?'], ['explicación', 3, '¿Qué dice por qué ocurre?']), bien: 'Tres papeles y una explicación.' },
+      'La sal se cambia, la masa se mide, el tamaño se controla y la ósmosis explica.', 'Pregunta qué se cambió, qué se midió y qué se dejó igual.'),
+    x('lee-escala', 'En otro experimento, la gráfica muestra cuánta masa **perdieron** unos cilindros (en décimas de %). Pon cada valor y la diferencia entre 5 % y 3 %.', { vals: [60, 110, 80], rot: ['3 %', '5 %', '4 %'], hi: 120, st: 40, et: ['3 %', '5 %', '4 %', '5 % menos 3 %'], ops: ['', '', ''], metas: ['60', '110', '80', '50'], fichas: ['60', '110', '80', '50', '45', '85', '170'],
+      mira: ['Está a mitad de camino entre 40 y 80.', 'Está a tres cuartos del camino entre 80 y 120.', 'Mira en qué línea termina.', 'Resta la de 3 % a la de 5 %.'], trampas: { '0:45': 'Cada línea vale 40: la mitad son 20, no 5.', '1:85': 'Cada línea vale 40: tres cuartos son 30, no 5.', '3:170': 'Eso es la suma.' }, ok: 'La escala manda.' },
+      'Las líneas van de 40 en 40: 60 y 110 no caen en una línea, 80 sí. La diferencia es $110 - 60 = 50$.', 'Mira cuánto vale cada línea y qué parte del espacio alcanza la barra.'),
+    sol('En un vaso con 2 % de sal, un cilindro de papa de 25 g queda en 24 g. ¿Qué porcentaje de su masa perdió y qué ocurrió con el agua?', ['Perdió $25 - 24 =$ [[1]] gramo', 'Es $1 \\div 25 =$ [[0.04]], es decir, el [[4]] %', 'El agua [[salió]] de las células'], ['25', '0.25', 'entró'], 'El cambio se compara con la masa inicial: 4 %. Si perdió masa, salió agua.', 'Divide lo que cambió entre la masa del comienzo.'),
+    err('Un estudiante explica por qué se marchita una lechuga con sal.', ['La sal queda afuera de las células', 'Hay más sal afuera que adentro', 'El agua entra a las células', 'Las células pierden rigidez'], 2, ['El agua sale de las células', 'La sal entra rápido a las células', 'La pared de las células se rompe'], 'El agua va hacia donde hay más sal, que es afuera: sale y la hoja se ablanda.', 'Aplica la regla: ¿hacia dónde va el agua si hay más sal afuera?'),
+    opc('A una persona deshidratada no se le inyecta agua destilada en la sangre, sino suero con una cantidad de sal parecida a la de la sangre. Esto se hace porque con agua destilada:', ['Los glóbulos rojos perderían agua y se arrugarían', 'El agua entraría a los glóbulos rojos y podrían romperse', 'La sal de los glóbulos gastaría energía', 'La membrana de los glóbulos dejaría de existir'], 1, 'Dentro del glóbulo habría más sal que afuera: el agua entra y, como no tiene pared, puede reventar.', 'Decide dónde habría más sal y recuerda que el glóbulo no tiene pared.'),
+  ]);
+
+  const AZUCAR = {
+    id: 'icf-glucosa', title: 'El termostato del azúcar',
+    ficha: { autor: 'Equipo de un hospital universitario', fuente: 'Boletín de salud', fecha: 'Marzo de 2026' },
+    paras: [
+      'Nuestro cuerpo trabaja para que su interior cambie poco aunque afuera cambie mucho. A ese equilibrio se le llama homeostasis. La temperatura, el agua y el azúcar de la sangre se mantienen dentro de ciertos límites gracias a varios sistemas que se avisan unos a otros.',
+      'Después de comer, el sistema digestivo rompe los alimentos en moléculas pequeñas. La glucosa pasa del intestino delgado a la sangre y el sistema circulatorio la reparte. El páncreas, que pertenece al sistema endocrino, detecta que la glucosa subió y libera insulina, una hormona que ayuda a las células a tomarla.',
+      'Para comprobarlo, se midió la glucosa de dos voluntarios antes de un desayuno y cada hora después. En la persona A los valores fueron 90, 130, 105 y 90 miligramos por decilitro. En la persona B, 140, 240, 230 y 210.',
+      'En A la glucosa subió y volvió a su valor inicial: su cuerpo respondió. En B subió mucho más y a las tres horas seguía alta. Los médicos sospecharon que su cuerpo produce poca insulina o no responde bien a ella, como ocurre en la diabetes; para confirmarlo pidieron más exámenes.',
+      'El ejercicio también participa. Al moverse, los músculos gastan glucosa y piden más oxígeno; entonces el corazón late más rápido y la respiración se acelera. El dióxido de carbono que producen las células sale por los pulmones, y el calor sobrante, con el sudor.',
+      'Ningún sistema trabaja solo. Si los riñones fallan, los desechos se acumulan en la sangre aunque el corazón esté sano; si los pulmones fallan, al músculo le falta oxígeno aunque haya glucosa de sobra.',
+    ],
+  };
+  const l2 = leccion('icf-cn-celula-2', 'Sistemas del cuerpo y homeostasis', guion(
+    ['Equilibrio', 'Homeostasis: mantener el interior estable aunque afuera cambie.'],
+    ['El aviso', 'Sube la glucosa, el páncreas libera insulina y las células la toman: la glucosa baja.'],
+    ['Trabajo en equipo', 'Digestivo, circulatorio, respiratorio, excretor y endocrino dependen unos de otros.'],
+    ['Leer la curva', 'Lo importante es si el valor vuelve al punto de partida.']), [
+    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: AZUCAR,
+      ...F(['¿Qué es la homeostasis?', 0, 'Busca el comienzo que habla de que el interior cambie poco.'], ['¿Quién libera la insulina?', 1, 'Busca el comienzo que habla de comer.'], ['¿Qué hace el cuerpo al moverse?', 4, 'Busca el comienzo que nombra el ejercicio.']),
+      luz: [[1, 'homeostasis'], [2, 'libera insulina'], [5, 'el corazón late más rápido']], bien: 'Equilibrio, comida y ejercicio.' },
+      'El primer párrafo define el equilibrio, el segundo explica la comida y el quinto, el ejercicio.', 'Busca en los comienzos la idea más cercana a la pregunta.'),
+    x('pasos-del-proceso', 'Ordena lo que pasa después de comer. El primer paso está en su puesto.', { que: 'el aviso', de: 'De la comida a la célula', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Los alimentos se rompen en moléculas.', 'La glucosa pasa a la sangre.', 'El páncreas detecta que subió.', 'Libera insulina.', 'Las células toman la glucosa.'], mira: ['', 'Pasa a la sangre lo que ya se rompió.', 'Se detecta algo que ya está en la sangre.', 'La hormona responde a un aviso.', 'Las células la toman con ayuda de la hormona.'], bien: 'Digestión, sangre, aviso, hormona y célula.' },
+      'Se digiere, pasa a la sangre, el páncreas lo detecta, libera insulina y las células la toman.', 'Cada paso necesita lo que dejó el anterior.'),
+    x('voz-de-la-fuente', 'Ata cada tarea a su sistema.', { ayuda: 'Tira un hilo desde cada tarea hasta su sistema.', doc: AZUCAR, portadas: [['Digestivo', 'sistema'], ['Circulatorio', 'sistema'], ['Respiratorio', 'sistema'], ['Excretor', 'sistema']],
+      ...T(['Rompe los alimentos', 0, '¿Dónde se vuelve pequeña la comida?'], ['Reparte la glucosa por el cuerpo', 1, '¿Quién lleva cosas a todas partes?'], ['Saca el dióxido de carbono', 2, '¿Por dónde sale ese gas?'], ['Filtra desechos de la sangre', 3, '¿Qué hacen los riñones?']), bien: 'Cada sistema, su tarea.' },
+      'Romper es del digestivo, repartir del circulatorio, sacar el gas del respiratorio y filtrar del excretor.', 'Piensa en el órgano que hace cada tarea y a qué sistema pertenece.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: AZUCAR, nums: [3, 4], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['A volvió a su valor inicial.', 0, 'Léela junto a la primera oración del párrafo 4.'], ['A las tres horas B tenía más que A en su punto más alto.', 1, 'Compara 210 con los valores de A.'], ['Hacen falta más exámenes para confirmar.', 0, 'Léela junto al final del párrafo 4.'], ['B come demasiado dulce.', 2, '¿Se midió lo que come?']),
+      luz: [[4, 'volvió a su valor inicial'], [3, '140, 240, 230 y 210'], [4, 'pidieron más exámenes']], bien: 'Sospechar no es confirmar.' },
+      'El regreso y los exámenes están escritos; comparar 210 con 130 se deduce; la dieta de B no se midió.', 'Revisa los números de las dos personas antes de decidir.'),
+    x('balanza-tesis', 'Hipótesis: el cuerpo de B no regula bien la glucosa. ¿Qué hace cada dato?', { doc: AZUCAR, tesis: 'El cuerpo de B no regula bien la glucosa',
+      ...F(['Tres horas después seguía en 210.', 0, '¿Volvió a su valor inicial?'], ['Otro día, en ayunas, también dio alta.', 0, '¿Apoya que el problema se repite?'], ['El medidor de B estaba dañado.', 1, '¿Se puede confiar en sus valores?'], ['B es más alto que A.', 2, '¿La estatura mide la glucosa?']), bien: 'Un aparato dañado cambia todo.' },
+      'Seguir alta y repetirse apoyan; un medidor dañado debilita; la estatura no pesa.', 'Supón cierto cada dato y mira si creerías más o menos.'),
+    x('mayor-tramo', 'La gráfica muestra las pulsaciones (en decenas) de un corredor: reposo, trote, carrera y pique. Toca el tramo que más creció **en porcentaje**.', { v: [6, 9, 12, 16] },
+      'De 6 a 9 sube 50 %; de 9 a 12 y de 12 a 16, cerca de 33 %. El último sube más pulsaciones, pero no más porcentaje.', 'Divide lo que subió cada tramo entre el valor con que empezó.'),
+    sol('La persona A tenía 90 mg/dL en ayunas y 135 una hora después de una fruta. ¿En qué porcentaje subió?', ['Subió $135 - 90 =$ [[45]]', 'Se compara con el valor de [[antes]]: 90', '$45 \\div 90 = 0.5$: subió el [[50]] %'], ['después', '33', '135'], 'El aumento se compara con el valor inicial: la mitad de 90 es 45, un 50 %.', '¿Con cuál de los dos valores se compara el cambio?'),
+    err('Un estudiante describe qué ocurre cuando alguien corre.', ['Los músculos gastan más glucosa', 'Necesitan más oxígeno', 'El corazón late más despacio para ahorrar energía', 'Sale más dióxido de carbono por los pulmones'], 2, ['El corazón late más rápido para llevar oxígeno', 'El corazón se detiene un momento', 'El corazón deja de llevar glucosa'], 'Si los músculos piden más oxígeno y glucosa, la sangre debe circular más rápido.', 'Piensa cómo llega el oxígeno a los músculos.'),
+    opc('En un día muy caluroso una persona suda y orina menos que en un día fresco, aunque beba lo mismo. La explicación más adecuada es que:', ['Los riñones dejan de funcionar con el calor', 'El sudor se convierte en orina', 'El cuerpo conserva agua por los riñones porque pierde más por la piel', 'La sangre se evapora'], 2, 'Para mantener estable el agua, si se pierde más con el sudor se elimina menos por la orina: homeostasis.', 'Piensa cómo mantiene el cuerpo la misma cantidad de agua.'),
+  ]);
+
+  const ADN = {
+    id: 'icf-proteina', title: 'Una receta copiada con errores',
+    ficha: { autor: 'Profesora de biología molecular', fuente: 'Guía para docentes', fecha: 'Abril de 2026' },
+    paras: [
+      'El ADN guarda las instrucciones para fabricar proteínas. Está escrito con cuatro letras, las bases A, T, C y G, y en las células de las plantas y los animales casi todo permanece en el núcleo. Las proteínas, en cambio, se fabrican fuera de él, en los ribosomas. ¿Cómo llega la receta de un lugar a otro?',
+      'El primer paso se llama transcripción: se abre una parte del ADN y se copia en una molécula más corta, el ARN mensajero. En el ARN no hay T; en su lugar aparece U. Donde el ADN tiene A, el ARN lleva U; donde tiene T, lleva A; donde tiene C, lleva G, y donde tiene G, lleva C.',
+      'El segundo paso es la traducción. El ribosoma lee el ARN mensajero de tres en tres letras. Cada grupo de tres, llamado codón, indica un aminoácido. Los ARN de transferencia traen los aminoácidos y el ribosoma los une en fila: esa fila es la proteína.',
+      'Con cuatro letras se pueden formar 64 codones, pero solo hay unos veinte aminoácidos comunes. Por eso varios codones indican el mismo. Por ejemplo, GAA y GAG indican ácido glutámico, mientras que GUA indica valina.',
+      'Un cambio en una letra del ADN es una mutación. Si el codón nuevo indica el mismo aminoácido, la proteína no cambia. Si indica otro, puede cambiar. Es lo que ocurre en la anemia falciforme: una sola letra distinta pone valina donde iba ácido glutámico, y la hemoglobina se deforma.',
+      'Agregar o quitar una letra suele ser peor, porque desde ese punto todos los grupos de tres se corren. Es como leer una frase con los espacios en el lugar equivocado: las letras son casi las mismas, pero ya no dicen nada.',
+    ],
+  };
+  const l3 = leccion('icf-cn-celula-3', 'Del ADN a la proteína', guion(
+    ['La receta', 'El ADN guarda instrucciones en el núcleo; las proteínas se hacen en los ribosomas.'],
+    ['Transcripción', 'ADN → ARN mensajero: A con U, T con A, C con G, G con C.'],
+    ['Traducción', 'El ribosoma lee de tres en tres: cada codón indica un aminoácido.'],
+    ['Mutación', 'Cambiar una letra puede no cambiar nada; agregar o quitar una corre todos los grupos.']), [
+    x('pasos-del-proceso', 'Ordena el camino del ADN a la proteína. El primer paso está en su puesto.', { doc: ADN, que: 'el proceso', de: 'Del ADN a la proteína', fija: 1, ini: [0, 3, 1, 4, 2], tiras: ['Se abre una parte del ADN.', 'Se copia en ARN mensajero.', 'El ARN llega al ribosoma.', 'El ribosoma lee de tres en tres.', 'Los aminoácidos se unen en fila.'], mira: ['', 'Se copia lo que ya está a la vista.', 'Llega al ribosoma lo que ya se copió.', 'Se lee lo que ya llegó.', 'Se unen según lo que se leyó.'], bien: 'Abrir, copiar, llevar, leer y unir.' },
+      'El ADN se abre y se copia; el ARN llega al ribosoma, que lee codones y une aminoácidos.', 'Distingue lo que pasa en el núcleo de lo que pasa en el ribosoma.'),
+    x('genero-o-cita', '¿Pasa en la **transcripción** o en la **traducción**?', { doc: ADN, rot: ['transcripción', 'traducción'],
+      ...F(['Se forma ARN mensajero', 0, '¿Se copia o se lee?'], ['Se leen codones', 1, '¿Se copia o se lee?'], ['A del ADN se vuelve U', 0, '¿Se copia o se lee?'], ['Se unen aminoácidos', 1, '¿Se copia o se arma la proteína?'], ['Trabaja el ribosoma', 1, '¿Dónde está: en el núcleo o fuera?']), bien: 'Copiar y leer.' },
+      'Copiar el ADN en ARN es transcripción; leer codones y unir aminoácidos, traducción.', 'Pregunta si se está copiando la receta o si ya se está cocinando.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: ADN, nums: [1, 2, 5], pregunta: 'Queda en pie', queda: 'Una letra puede cambiar una proteína.',
+      ...T(['Las proteínas se fabrican en el núcleo.', 2, 'Busca dónde se fabrican.'], ['El ARN usa la letra T.', [5, 6], 'Busca qué aparece en lugar de T.'], ['Toda mutación cambia la proteína.', 8, 'Busca cuándo la proteína no cambia.']), bien: 'Lugar, letra y excepción.' },
+      'Se fabrican en los ribosomas, el ARN lleva U y hay mutaciones que no cambian la proteína.', 'Busca en cada opción la palabra que el texto corrige.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: ADN, filas: [{ antes: 'El ribosoma lee las letras de', topes: ['dos en dos', 'tres en tres', 'cuatro en cuatro'], va: 1 }, { antes: 'Un mismo aminoácido puede tener', topes: ['varios codones', 'ningún codón', 'solo un codón'], va: 0 }, { antes: 'Quitar una letra suele', topes: ['no hacer nada', 'mejorar la proteína', 'correr los grupos'], va: 2 }], mira: ['Relee el párrafo 3: ¿cómo lee?', 'Relee el párrafo 4: GAA y GAG.', 'Relee el párrafo 6: ¿qué pasa desde ese punto?'], luz: [[3, 'de tres en tres letras'], [4, 'varios codones indican el mismo'], [6, 'todos los grupos de tres se corren']], bien: 'Tres reglas del código.' },
+      'Se lee de tres en tres, varios codones indican lo mismo y quitar una letra corre todo.', 'Cada regla está en un párrafo distinto: 3, 4 y 6.'),
+    x('pilares', 'El techo es una afirmación. ¿Qué la sostiene y qué no?', { doc: ADN, idea: 'Una mutación puede no cambiar la proteína',
+      ...F(['GAA y GAG indican lo mismo.', 0, '¿Muestra un cambio de letra sin efecto?'], ['Hay 64 codones y unos 20 aminoácidos.', 0, '¿Explica que sobren codones?'], ['El ADN está en el núcleo.', 1, '¿Dice algo de cambiar letras?'], ['El ARN usa U.', 1, '¿Dice algo de cambiar letras?']), bien: 'Sobran codones: por eso caben cambios sin efecto.' },
+      'Que varios codones indiquen lo mismo sostiene la idea; el lugar del ADN y la U son ciertos, pero no la apoyan.', 'Una oración puede ser cierta y no sostener la idea.'),
+    x('lee-escala', 'La gráfica cuenta proteínas normales en tres muestras. Pon cada valor y cuántas **menos** tiene C que A.', { vals: [80, 60, 30], rot: ['A', 'B', 'C'], hi: 80, st: 20, et: ['A', 'B', 'C', 'A menos C'], ops: ['', '', ''], metas: ['80', '60', '30', '50'], fichas: ['80', '60', '30', '50', '25', '110', '21'],
+      mira: ['Mira en qué línea termina.', 'Mira en qué línea termina.', 'Está a mitad de camino entre 20 y 40.', 'Resta la de C a la de A.'], trampas: { '2:25': 'Cada línea vale 20: la mitad son 10.', '2:21': 'Cada línea vale 20: la mitad son 10.', '3:110': 'Eso es la suma.' }, ok: 'La muestra C es la que menos tiene.' },
+      'Las líneas van de 20 en 20; C queda a mitad entre 20 y 40. La diferencia es $80 - 30 = 50$.', 'Mira cuánto vale cada línea antes de leer la barra de C.'),
+    sol('Un trozo de ADN dice TAC. ¿Cuál es su ARN mensajero?', ['Donde el ADN tiene T, el ARN lleva [[A]]', 'Donde tiene A, lleva [[U]]', 'Donde tiene C, lleva [[G]]', 'El ARN mensajero es [[AUG]]'], ['T', 'ATG', 'C'], 'T con A, A con U y C con G: AUG. El ARN no usa T.', 'Copia letra por letra con la regla y recuerda que el ARN no tiene T.'),
+    err('Alguien traduce un ARN mensajero de 12 letras.', ['El ribosoma lee de tres en tres', 'Son $12 \\div 3 = 4$ codones', 'Cada codón indica un aminoácido', 'La fila tiene 12 aminoácidos'], 3, ['La fila tiene 4 aminoácidos', 'La fila tiene 3 aminoácidos', 'La fila tiene 36 aminoácidos'], 'Un aminoácido por codón: 4 codones, 4 aminoácidos.', '¿Cuántos codones se contaron en el segundo paso?'),
+    opc('En un gen se cambia una letra y el codón pasa de GAA a GAG. Según el texto, la proteína:', ['No cambia, porque los dos codones indican ácido glutámico', 'Pierde todos sus aminoácidos', 'Cambia ácido glutámico por valina', 'Se fabrica en el núcleo'], 0, 'GAA y GAG indican el mismo aminoácido; el cambio a valina ocurre con GUA.', 'Busca en el párrafo 4 qué indica cada codón.'),
+  ]);
+
+  const AGUA = {
+    id: 'icf-pez', title: 'El pez de dos aguas',
+    paras: [
+      'El salmón nace en ríos de agua dulce, vive en el mar y vuelve al río a reproducirse. En cada lugar su cuerpo enfrenta un problema distinto: conservar la misma cantidad de sal y de agua por dentro.',
+      'En el río, el agua de afuera tiene menos sal que su sangre. Por ósmosis entra agua a su cuerpo; el pez casi no bebe y produce mucha orina muy diluida.',
+      'En el mar ocurre lo contrario: afuera hay más sal y el agua tiende a salir. El pez bebe agua de mar, orina poco y elimina el exceso de sal por células de las branquias, que gastan energía para sacarla.',
+      'Un grupo midió la sal en la sangre de salmones pasados del río al mar. El primer día subió de 150 a 190 unidades; al quinto día había bajado a 160 y se mantuvo así. En peces de otra especie, que solo viven en ríos, subió a 260 y murieron.',
+      'Los investigadores encontraron que, antes de salir al mar, los salmones fabrican más de una proteína de las branquias que bombea sal. Esa proteína se produce a partir de un gen que los peces de río también tienen, pero que en ellos se usa poco.',
+    ],
+  };
+  const pl = (g, q, p, e, h) => play(g, q, { doc: AGUA, ...p }, e, { hint: h });
+  return mundo('icf-cn-celula', 'Célula y Organismos', 'ciencias', [l1, l2, l3], [
+    ['icf-cn-celula-1', 'El agua va hacia donde hay más sal disuelta.', pl('donde-buscar', '¿A qué párrafo vuelves para responder?', { cards: [['¿Por qué entra agua en el río?', [2]], ['¿Cuánto bebe y orina en el mar?', [3]], ['¿Qué pasó con los peces de río?', [4]]] }, 'El río está en el 2, el mar en el 3 y el experimento en el 4.', 'Busca la palabra clave de cada pregunta: río, beber, experimento.')],
+    ['icf-cn-celula-1', 'Ir en contra, de menos a más, gasta energía.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Sacar una sustancia hacia donde ya hay más de ella exige gastar energía.', cards: [['Una célula que mete potasio aunque adentro ya hay más.', true], ['Una raíz que absorbe un mineral del que ya tiene más que el suelo.', true], ['Agua que entra a una pasa en un vaso.', false], ['Oxígeno que pasa de donde hay mucho a donde hay poco.', false]] }, 'Meter potasio o un mineral que ya abunda adentro va en contra y gasta; la pasa y el oxígeno van a favor.', 'Pregunta si va de más a menos (gratis) o de menos a más (con gasto).')],
+    ['icf-cn-celula-1', 'Compara dónde hay más sal antes de decir hacia dónde va el agua.', opc('Si un pez de río se pone en agua de mar, lo primero que ocurre es que:', ['Entra agua a su cuerpo y se hincha', 'Deja de tener membranas', 'Gana agua por la orina', 'Sale agua de su cuerpo por ósmosis'], 3, 'Afuera hay más sal: el agua sale del pez.', 'Decide dónde hay más sal: en su sangre o en el mar.')],
+    ['icf-cn-celula-2', 'Homeostasis: volver a un valor estable después de un cambio.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['Al quinto día la sal bajó a 160.', 0], ['El salmón recuperó el equilibrio; el pez de río, no.', 1], ['Los salmones beben agua en el mar.', 0], ['El salmón vive más de diez años.', 2]] }, 'Los 160 y el agua que bebe están escritos; el equilibrio se deduce al comparar; la edad no aparece.', 'Compara lo que pasó con los dos grupos de peces.')],
+    ['icf-cn-celula-2', 'Un sistema puede ajustar lo que entra y lo que sale.', pl('intruso-excepto', 'Pregunta EXCEPTO', { ask: 'En el mar, el salmón hace todo esto, EXCEPTO:', cards: [['Beber agua', [3]], ['Orinar poco', [3]], ['Sacar sal por las branquias', [3, 5]], ['Producir mucha orina diluida', null]] }, 'La orina abundante y diluida es del río, no del mar.', 'Revisa en qué lugar ocurre cada cosa.')],
+    ['icf-cn-celula-2', 'Lo importante de una curva es si vuelve al punto de partida.', opc('Los datos de los salmones muestran que su cuerpo:', ['No reaccionó al cambio', 'Reguló la sal hasta un valor cercano al inicial', 'Aumentó la sal sin límite', 'Cambió de especie'], 1, 'Subió a 190 y volvió a 160, cerca de los 150 iniciales.', 'Compara el primer valor, el más alto y el último.')],
+    ['icf-cn-celula-3', 'Tener un gen no significa usarlo: puede estar casi apagado.', pl('resume-parrafo', 'Cada párrafo en una frase', { paras: [3, 5], options: ['En el mar el pez bebe y gasta energía para sacar sal.', 'Los salmones usan más un gen que otros peces también tienen.', 'Los peces de río no tienen genes para la sal.', 'En el mar el pez no necesita agua.'], key: [0, 1] }, 'El 3 explica qué hace en el mar; el 5, que el gen existe en ambos y se usa distinto.', 'El resumen no puede contradecir el párrafo: mira «también tienen».')],
+    ['icf-cn-celula-3', 'Del gen a la proteína: transcripción y traducción.', pl('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { labels: ['plantea el problema', 'explica lo que pasa en el río', 'explica lo que pasa en el mar', 'da los datos de un experimento', 'explica la causa en las proteínas', 'cuenta una leyenda'], key: [0, 1, 2, 3, 4] }, 'Problema, río, mar, datos y explicación; no hay leyenda.', 'Busca las palabras río, mar, midió y proteína.')],
+    ['icf-cn-celula-3', 'Para fabricar más proteína hay que copiar más el gen.', opc('Que los salmones fabriquen más de la proteína que bombea sal implica que en sus branquias:', ['El ADN se convirtió en sal', 'Apareció un gen que no existía', 'Se transcribe y traduce más ese gen', 'Los ribosomas entraron al núcleo'], 2, 'Para tener más proteína, el gen se copia más en ARN y se traduce más. El gen ya existía.', 'Recuerda los dos pasos que llevan del gen a la proteína.')],
+  ]);
+})());
+;
+//#archivo js/courses/preicfes-cn-movimiento.js
+// Preicfes · Ciencias Naturales · mundo 3 «Movimiento y Fuerzas» (spec 2026-11-25-preicfes-estructura). Experimentos y datos escritos para Zuka.
+PI_MUNDOS.push((() => {
+  const { leccion, mundo, x, F, T, P, S, sol, err, opc, guion } = ICF;
+
+  const CARRO = {
+    id: 'icf-carrito', title: 'Dos carritos y un cronómetro',
+    ficha: { autor: 'Curso de física de grado once', fuente: 'Bitácora de laboratorio', fecha: 'Marzo de 2026' },
+    paras: [
+      'Para describir un movimiento hay que decir desde dónde se mide, en qué lugar está el objeto y en qué momento. La posición es ese lugar; la velocidad dice cuánto cambia la posición en cada segundo, y hacia dónde; la aceleración, cuánto cambia la velocidad en cada segundo.',
+      'El curso soltó dos carritos sobre rieles y anotó su posición cada segundo. El carrito A, movido por un motor, estuvo en 0, 20, 40, 60 y 80 centímetros. El carrito B, que bajaba por una rampa, en 0, 5, 20, 45 y 80.',
+      'Los dos llegaron a los 80 centímetros en cuatro segundos, así que su velocidad media fue la misma: 20 centímetros por segundo. Sin embargo, no se movieron igual. A recorrió 20 centímetros en cada segundo: su velocidad fue constante. B recorrió 5, luego 15, luego 25 y luego 35: cada segundo avanzó 10 más que en el anterior, es decir, su velocidad aumentó siempre en la misma cantidad.',
+      'Al dibujar la posición contra el tiempo, la gráfica de A es una recta; la de B, una curva que se empina. En la gráfica de A la inclinación es la velocidad: si fuera más empinada, A sería más rápido. Un tramo horizontal significaría que está quieto, no que va por un camino plano.',
+      'Un estudiante afirmó que, como las dos gráficas se cruzan a los cuatro segundos, en ese momento iban a la misma velocidad. Su compañera lo corrigió: el cruce solo dice que están en el mismo lugar. En ese instante, la curva de B es más empinada; B iba más rápido.',
+      'Para terminar, pusieron a A en sentido contrario. La posición pasó de 80 a 0 en cuatro segundos, y la velocidad fue de −20 centímetros por segundo. El signo menos no significa que vaya más despacio: indica el sentido.',
+    ],
+  };
+  const l1 = leccion('icf-cn-movimiento-1', 'Posición, velocidad y aceleración', guion(
+    ['Tres preguntas', 'Posición: dónde está. Velocidad: cuánto cambia la posición por segundo. Aceleración: cuánto cambia la velocidad.'],
+    ['La recta y la curva', 'En la gráfica de posición, una recta es velocidad constante; una curva, velocidad que cambia.'],
+    ['La inclinación', 'Más empinada, más rápido. Horizontal, quieto.'],
+    ['El signo', 'Dice el sentido, no la rapidez.']), [
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo que muestran los datos.', { doc: CARRO, filas: [{ antes: 'La velocidad del carrito A', topes: ['aumenta', 'es constante', 'disminuye'], va: 1 }, { antes: 'La velocidad media de A y la de B son', topes: ['muy distintas', 'cero', 'iguales'], va: 2 }, { antes: 'En cada segundo B avanza 10 cm', topes: ['más que antes', 'en total', 'menos que antes'], va: 0 }], mira: ['Mira cuánto avanza A en cada segundo.', 'Compara cuánto recorrieron y en cuánto tiempo.', 'Compara 5, 15, 25 y 35.'], luz: [[3, 'su velocidad fue constante'], [3, 'su velocidad media fue la misma'], [3, '10 más que en el anterior']], bien: 'Constante, igual media y en aumento.' },
+      'A avanza siempre 20; los dos hacen 80 en 4 segundos; y B suma 10 más cada vez.', 'Resta las posiciones seguidas para ver cuánto avanza en cada segundo.'),
+    x('genero-o-cita', '¿Describe la **velocidad** o la **aceleración**?', { doc: CARRO, rot: ['velocidad', 'aceleración'],
+      ...F(['Avanza 20 cm cada segundo', 0, '¿Cambia la posición o cambia la rapidez?'], ['Cada segundo va 10 cm/s más rápido', 1, '¿Cambia la posición o cambia la rapidez?'], ['Una moto frena antes de la curva', 1, '¿Cambia la posición o cambia la rapidez?'], ['Un tren va a 80 km/h por la recta', 0, '¿Cambia la posición o cambia la rapidez?']), bien: 'Cambia el lugar o cambia la rapidez.' },
+      'Avanzar es velocidad; ganar o perder rapidez, aceleración. Frenar también es acelerar.', 'Pregunta si lo que cambia es dónde está o qué tan rápido va.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: CARRO, nums: [4, 5, 6], pregunta: 'Queda en pie', queda: 'La gráfica de A es una recta.',
+      ...T(['Un tramo horizontal es un camino plano.', 2, 'Busca qué significa horizontal.'], ['Al cruzarse iban igual de rápido.', [4, 5], 'Busca qué dice de verdad el cruce.'], ['El signo menos indica que va despacio.', 8, 'Busca qué indica el signo.']), bien: 'La gráfica no es el dibujo del camino.' },
+      'Horizontal es quieto, el cruce es el mismo lugar y el menos indica el sentido.', 'Busca en cada opción la palabra que el texto corrige.'),
+    x('tres-viajes', 'Completa el dato que falta en cada movimiento.', { viajes: [{ n: 'trote', d: 12, v: 8, t: 1.5, falta: 'd' }, { n: 'bici', d: 60, v: 20, t: 3, falta: 't' }, { n: 'bus', d: 150, v: 60, t: 2.5, falta: 'v' }], fichas: ['12', '3', '60', '9.5', '40', '147'] },
+      '$8 \\cdot 1.5 = 12$; $60 \\div 20 = 3$; $150 \\div 2.5 = 60$.', 'Distancia es velocidad por tiempo; las otras dos se despejan dividiendo.'),
+    x('dice-deduce', 'Lleva cada afirmación a su escalón.', { doc: CARRO, nums: [2, 3], rot: ['lo dice', 'se deduce', 'ni lo dice ni se deduce'],
+      ...F(['B estuvo en 45 cm a los tres segundos.', 1, 'Cuenta: la primera posición es a los cero segundos.'], ['A llevaba un motor.', 0, 'Léela junto a la descripción de A.'], ['A los 5 segundos B estaría en 125 cm si siguiera igual.', 1, 'Suma lo que avanzaría en el segundo siguiente.'], ['B pesa más que A.', 2, '¿Se pesaron los carritos?']),
+      luz: [[2, 'movido por un motor'], [2, '0, 5, 20, 45 y 80']], bien: 'Los datos permiten ir un paso más.' },
+      'El motor está escrito; los 45 a los 3 s y los $80 + 45 = 125$ se deducen; el peso no se midió.', 'Ordena las posiciones con su segundo: 0, 1, 2, 3 y 4.'),
+    x('lee-escala', 'La gráfica muestra cuánto avanzó otro carrito en tres segundos seguidos (en cm). Pon cada avance y el total.', { vals: [10, 30, 50], rot: ['1.º', '2.º', '3.º'], hi: 60, st: 20, et: ['1.º', '2.º', '3.º', 'total'], ops: ['+', '+', '='], metas: ['10', '30', '50', '90'], fichas: ['10', '30', '50', '90', '5', '25', '45'],
+      mira: ['Está a mitad de camino entre 0 y 20.', 'Está a mitad de camino entre 20 y 40.', 'Está a mitad de camino entre 40 y 60.', 'Suma los tres avances.'], trampas: { '0:5': 'Cada línea vale 20: la mitad son 10.', '1:25': 'Cada línea vale 20: la mitad son 10.', '2:45': 'Cada línea vale 20: la mitad son 10.' }, ok: 'Cada segundo avanza 20 más: acelera.' },
+      'Las líneas van de 20 en 20: $10 + 30 + 50 = 90$ cm. Cada segundo avanza 20 más.', 'Mira cuánto vale cada línea y cuánto es la mitad.'),
+    sol('Un carro pasa de 10 m/s a 25 m/s en 5 segundos. ¿Cuál es su aceleración?', ['El cambio de velocidad es $25 - 10 =$ [[15]] m/s', 'Ocurre en [[5]] segundos', 'La aceleración es $15 \\div 5 =$ [[3]] m/s cada segundo'], ['5 m', '35', '7'], 'La aceleración es cuánto cambia la velocidad por segundo: 3 m/s².', 'Halla cuánto cambió la velocidad y repártelo en los segundos.'),
+    err('Un estudiante lee una gráfica de posición contra tiempo con un tramo horizontal entre 2 s y 6 s.', ['El eje vertical es la posición', 'Entre 2 s y 6 s la posición no cambia', 'El objeto avanza por un camino plano'], 2, ['El objeto está quieto', 'El objeto acelera', 'El objeto se devuelve'], 'Si la posición no cambia con el tiempo, el objeto no se mueve.', 'Si la posición es la misma cuatro segundos, ¿se movió?'),
+    opc('Dos atletas corren 100 metros en 14 segundos. La primera va siempre a la misma velocidad; la segunda empieza despacio y acelera. Es correcto afirmar que:', ['Tienen la misma velocidad media', 'La segunda recorrió más distancia', 'La primera tuvo mayor aceleración', 'En todo momento fueron igual de rápidas'], 0, 'Misma distancia en el mismo tiempo: misma media, aunque en cada instante fueran distinto.', 'La velocidad media solo mira la distancia total y el tiempo total.'),
+  ]);
+
+  const CAJA = {
+    id: 'icf-caja', title: 'La caja que no se quería mover',
+    ficha: { autor: 'Equipo de un taller de mecánica', fuente: 'Cartilla para aprendices', fecha: 'Abril de 2026' },
+    paras: [
+      'Una fuerza es un empujón o un jalón. Se mide en newtons y tiene dirección: no es lo mismo empujar hacia la derecha que hacia arriba. Cuando sobre un objeto actúan varias fuerzas, lo que importa es la fuerza neta, es decir, lo que resulta al juntarlas.',
+      'En el taller hay una caja de 20 kilogramos. Dos aprendices la empujan hacia la derecha con 50 y 30 newtons, y el piso la frena con 80. La fuerza neta es cero. La caja, que estaba quieta, sigue quieta. Si ya venía moviéndose, seguiría a la misma velocidad: con fuerza neta cero, un objeto no cambia su movimiento.',
+      'Esto sorprende, porque estamos acostumbrados a que todo se detenga. Pero lo que detiene a una caja que se suelta es el roce, que también es una fuerza. Sobre una pista de hielo, donde el roce es pequeño, la misma caja avanza mucho más con el mismo empujón.',
+      'Después, los aprendices empujaron con 140 newtons en total. Ahora la fuerza neta era de 60 hacia la derecha, y la caja aceleró 3 metros por segundo cada segundo. Con el doble de fuerza neta habría acelerado el doble; con el doble de masa y la misma fuerza, la mitad. Esa relación se escribe: fuerza neta igual a masa por aceleración.',
+      'Uno de los aprendices preguntó por qué le dolían las manos si era él quien empujaba. La respuesta es que las fuerzas vienen por pares: cuando empujas la caja, la caja te empuja a ti con la misma fuerza y en sentido contrario. No se anulan, porque actúan sobre objetos distintos: una sobre la caja y la otra sobre ti.',
+      'Por último, pesaron la caja. El peso es la fuerza con que la Tierra la atrae, unos 200 newtons; la masa, 20 kilogramos, es la cantidad de materia. En la Luna, la masa sería la misma y el peso, cerca de la sexta parte.',
+    ],
+  };
+  const l2 = leccion('icf-cn-movimiento-2', 'Fuerzas y equilibrio', guion(
+    ['Fuerza neta', 'Las fuerzas se juntan: hacia el mismo lado se suman; en sentidos contrarios se restan.'],
+    ['Neta cero', 'El objeto no cambia su movimiento: quieto sigue quieto; si se mueve, sigue igual.'],
+    ['F = m · a', 'Más fuerza, más aceleración; más masa, menos aceleración.'],
+    ['Pares', 'Si empujas algo, te empuja igual en sentido contrario.']), [
+    x('comprueba-apuesta', 'Subraya en el párrafo 2 la oración con la **regla** para fuerza neta cero.', { doc: CAJA, nums: [2], apuesta: 'Con fuerza neta cero, el movimiento no cambia.', ...S(['2.4'], { '2.0': 'Presenta la caja y su masa.', '2.1': 'Dice qué fuerzas actúan.', '2.2': 'Calcula la fuerza neta de este caso.', '2.3': 'Dice qué pasó con la caja quieta.' }), bien: 'Quieto o a la misma velocidad.' },
+      'La última oración termina con la regla general: con fuerza neta cero no cambia el movimiento.', 'Busca la oración que vale para cualquier objeto.'),
+    x('genero-o-cita', '¿La fuerza neta es **cero** o **no**?', { doc: CAJA, rot: ['es cero', 'no es cero'],
+      ...F(['Un libro quieto sobre la mesa', 0, '¿Cambia su movimiento?'], ['Un bus que arranca', 1, '¿Cambia su movimiento?'], ['Un carro a 60 km/h constantes en línea recta', 0, '¿Cambia su movimiento?'], ['Un balón que frena en el pasto', 1, '¿Cambia su movimiento?']), bien: 'Si el movimiento no cambia, neta cero.' },
+      'El libro y el carro constante no cambian; el bus que arranca y el balón que frena, sí.', 'No preguntes si se mueve: pregunta si cambia su movimiento.'),
+    x('pista-tipo', 'Ata cada idea a su situación.', { doc: CAJA, lineas: ['Con el doble de masa, acelera la mitad.', 'Al remar, el agua empuja al bote.', 'La caja avanza más en el hielo.', 'En la Luna pesa menos.'],
+      ...T(['fuerza, masa y aceleración', 0, 'Busca la que compara cuánto acelera.'], ['las fuerzas vienen por pares', 1, 'Busca la que habla de dos cosas que se empujan.'], ['el roce frena', 2, 'Busca la que compara pisos.'], ['el peso no es la masa', 3, 'Busca la que cambia de lugar en el espacio.']), bien: 'Cuatro ideas, cuatro casos.' },
+      'La masa y la aceleración, el par agua y bote, el roce del piso y el peso en otro lugar.', 'Busca la palabra de cada idea: masa, empuja, frena o pesa.'),
+    x('ajusta-alcance', 'Mueve cada perilla hasta que diga lo mismo que el texto.', { doc: CAJA, filas: [{ antes: 'Con 140 N hacia la derecha y 80 de roce, la fuerza neta es', topes: ['220 N', '60 N', '0 N'], va: 1 }, { antes: 'Con el doble de fuerza neta, la aceleración', topes: ['se duplica', 'no cambia', 'baja a la mitad'], va: 0 }, { antes: 'En la Luna la masa', topes: ['desaparece', 'se reduce', 'es la misma'], va: 2 }], mira: ['El roce va en sentido contrario.', 'Relee el final del párrafo 4.', 'Relee la última oración del texto.'], luz: [[4, '60 hacia la derecha'], [4, 'habría acelerado el doble'], [6, 'la masa sería la misma']], bien: 'Restar, duplicar y conservar.' },
+      '$140 - 80 = 60$; el doble de fuerza da el doble de aceleración; la masa no cambia de lugar a lugar.', 'Busca la oración exacta para cada perilla.'),
+    x('balanza-tesis', 'Afirmación: «todo objeto en movimiento se detiene solo». ¿Qué hace cada dato?', { doc: CAJA, tesis: 'Todo objeto en movimiento se detiene solo',
+      ...F(['Una nave sigue viajando sin motores.', 1, '¿La nave se detuvo?'], ['En el hielo la caja llega más lejos.', 1, '¿Se detiene por sí sola o por el roce?'], ['Un experimento sin roce mostró que se frena igual.', 0, 'Si fuera cierto, ¿a quién le daría la razón?'], ['La caja es de madera.', 2, '¿Dice algo del movimiento?']), bien: 'Lo que frena es el roce.' },
+      'La nave y el hielo la debilitan; que se frenara sin roce la apoyaría; la madera no pesa.', 'Piensa qué tendría que pasar si la afirmación fuera cierta.'),
+    x('mayor-tramo', 'La gráfica muestra la aceleración de una caja con cuatro empujones cada vez mayores. Toca el tramo que más creció **en porcentaje**.', { v: [8, 14, 20, 30] },
+      'De 8 a 14 sube 75 %; de 14 a 20, cerca de 43 %; de 20 a 30, 50 %. El último sube más unidades, no más porcentaje.', 'Divide lo que subió cada tramo entre el valor con que empezó.'),
+    sol('Una lancha de 400 kg recibe 1 500 N hacia adelante del motor y 300 N hacia atrás del agua. ¿Cuál es su aceleración?', ['La fuerza neta es $1\\,500 - 300 =$ [[1 200]] N', 'Se divide entre la masa: [[400]] kg', 'La aceleración es [[3]] m/s²'], ['1 800', '4.5', '480 000'], '$1\\,200 \\div 400 = 3$: fuerza neta entre masa.', 'Junta primero las fuerzas; el agua empuja en contra.'),
+    err('Un niño empuja una pared con 100 N y la pared no se mueve. Alguien lo explica.', ['El niño empuja la pared con 100 N', 'La pared empuja al niño con 100 N', 'Esas dos fuerzas se anulan y por eso la pared no se mueve'], 2, ['No se anulan, porque actúan sobre objetos distintos; a la pared la sostienen otras fuerzas', 'La pared no hace ninguna fuerza', 'La pared empuja con más fuerza que el niño'], 'El par acción y reacción actúa sobre cuerpos distintos. La pared no se mueve porque el piso y la estructura la sujetan.', '¿Sobre quién actúa cada una de esas fuerzas?'),
+    opc('Un paracaidista cae a velocidad constante. Las fuerzas que actúan sobre él son el peso, hacia abajo, y la resistencia del aire, hacia arriba. Se puede afirmar que:', ['El peso es mayor, porque baja', 'No actúa ninguna fuerza', 'La resistencia del aire es mayor', 'Las dos fuerzas son iguales, porque su velocidad no cambia'], 3, 'Velocidad constante es fuerza neta cero: el peso y la resistencia se equilibran, aunque se mueva hacia abajo.', 'Pregunta si su movimiento cambia, no si se mueve.'),
+  ]);
+
+  const LUNA = {
+    id: 'icf-gravedad', title: 'Por qué la Luna no se cae',
+    ficha: { autor: 'Observatorio de un colegio', fuente: 'Boletín de astronomía', fecha: 'Mayo de 2026' },
+    paras: [
+      'Todos los objetos con masa se atraen. A esa atracción se le llama gravedad. Es más fuerte cuanto mayores son las masas y más débil cuanto más lejos están. Por eso notamos la de la Tierra, que es enorme, y no la de una silla.',
+      'Cerca del suelo, todos los objetos caen con la misma aceleración si el aire no estorba: cada segundo su velocidad aumenta unos 10 metros por segundo. En un tubo al vacío, una pluma y una moneda llegan al tiempo. En el aire, la pluma se demora, no porque pese menos, sino porque el aire la frena más en proporción a su peso.',
+      'El grupo soltó una bola desde una torre y, con una cámara, calculó su velocidad: 0 al comienzo, 10 a un segundo, 20 a los dos y 30 a los tres metros por segundo. Luego soltó otra del doble de masa. Los valores fueron los mismos, dentro del error de la cámara.',
+      'Si la Tierra atrae a la Luna, ¿por qué no se cae? Porque además de caer se mueve de lado. Imaginemos una montaña muy alta y una bola lanzada cada vez con más velocidad: primero cae cerca; después, más lejos; con la velocidad justa, cae siguiendo la curva de la Tierra y nunca llega al suelo. Eso es una órbita: caer sin alcanzar el piso.',
+      'La gravedad también explica las mareas. La Luna atrae más el agua del lado que le queda cerca que el centro de la Tierra, y menos el agua del lado opuesto. Esa diferencia estira los océanos y forma dos abultamientos; al girar la Tierra, cada costa pasa por ellos dos veces al día, más o menos.',
+      'El peso cambia con el lugar porque depende de la gravedad. Una persona de 60 kilogramos pesa unos 600 newtons en la Tierra y unos 100 en la Luna. Su masa es la misma en los dos sitios. Los astronautas de una estación flotan no porque allá no haya gravedad, sino porque ellos y la estación caen juntos.',
+    ],
+  };
+  const l3 = leccion('icf-cn-movimiento-3', 'Gravedad', guion(
+    ['Se atraen', 'Más masa, más atracción; más lejos, menos.'],
+    ['Caer', 'Sin aire, todo cae igual: unos 10 m/s más cada segundo.'],
+    ['Órbita', 'Es caer mientras se avanza de lado.'],
+    ['Peso y masa', 'El peso cambia con el lugar; la masa, no.']), [
+    x('donde-mirar', 'Lleva cada pregunta al párrafo donde la buscarías.', { doc: LUNA,
+      ...F(['¿De qué depende la fuerza de gravedad?', 0, 'Busca el comienzo que habla de que se atraen.'], ['¿Por qué la Luna no cae al suelo?', 3, 'Busca el comienzo que hace esa pregunta.'], ['¿Por qué cambia el peso?', 5, 'Busca el comienzo que nombra el peso.']),
+      luz: [[1, 'más fuerte cuanto mayores son las masas'], [4, 'además de caer se mueve de lado'], [6, 'depende de la gravedad']], bien: 'Atracción, órbita y peso.' },
+      'La atracción abre el 1, la Luna el 4 y el peso el 6.', 'Busca en los comienzos la palabra clave de cada pregunta.'),
+    x('genero-o-cita', '¿Es **masa** o **peso**?', { doc: LUNA, rot: ['masa', 'peso'],
+      ...F(['Sesenta kilogramos en la Tierra y en la Luna', 0, '¿Cambia con el lugar?'], ['Cien newtons en la Luna', 1, '¿Es una fuerza o una cantidad de materia?'], ['La fuerza con que la Tierra te atrae', 1, '¿Es una fuerza o una cantidad de materia?'], ['La cantidad de materia', 0, '¿Es una fuerza o una cantidad de materia?']), bien: 'Materia o fuerza.' },
+      'La masa es materia y no cambia; el peso es una fuerza, en newtons, que depende del lugar.', 'Mira la unidad: kilogramos o newtons. Y si cambia con el lugar.'),
+    x('descarta-prueba', 'Estas tres opciones son falsas. Ata cada una a la oración que la desmiente.', { doc: LUNA, nums: [2, 3, 6], pregunta: 'Queda en pie', queda: 'La gravedad depende de la masa y de la distancia.',
+      ...T(['La pluma cae lento porque pesa menos.', [1, 2], 'Busca por qué se demora.'], ['Con el doble de masa cayó más rápido.', 5, 'Busca cómo fueron los valores.'], ['En la estación no hay gravedad.', 9, 'Busca por qué flotan.']), bien: 'El aire, los datos y caer juntos.' },
+      'La frena el aire, los valores fueron iguales y los astronautas caen junto con la estación.', 'Busca la palabra clave de cada opción: pluma, masa y estación.'),
+    x('pasos-del-proceso', 'Ordena los lanzamientos desde la montaña, de menor a mayor velocidad. El primero está en su puesto.', { doc: LUNA, que: 'lo que pasa', de: 'La bola en la montaña', fija: 1, ini: [0, 2, 3, 1], tiras: ['Se suelta: cae al pie.', 'Se lanza suave: cae cerca.', 'Se lanza fuerte: cae lejos.', 'Con la velocidad justa: da la vuelta.'], mira: ['', 'Va con poca velocidad de lado.', 'Va más rápido, pero todavía toca el suelo.', 'Es la única que no llega al suelo.'], bien: 'Caer, cada vez más lejos, hasta no llegar.' },
+      'A más velocidad de lado, más lejos cae, hasta que la curva de la Tierra se lo impide.', 'Piensa qué tan lejos llega cada lanzamiento.'),
+    x('balanza-tesis', 'Tesis: sin aire, la masa no cambia la caída. ¿Qué hace cada dato?', { doc: LUNA, tesis: 'Sin aire, la masa no cambia la caída',
+      ...F(['Pluma y moneda llegan al tiempo en el vacío.', 0, '¿Cayeron igual con masas distintas?'], ['Dos bolas de distinta masa dieron los mismos valores.', 0, '¿Cayeron igual con masas distintas?'], ['En otro tubo al vacío la moneda llegó antes.', 1, '¿Cayeron igual?'], ['La torre es de ladrillo.', 2, '¿Dice algo de la caída?']), bien: 'Dos apoyan, uno debilitaría.' },
+      'El tubo y las dos bolas apoyan; otro tubo con resultado distinto debilitaría; la torre no pesa.', 'Supón cierto cada dato y compara masas y tiempos.'),
+    x('lee-escala', 'La gráfica muestra la velocidad de una bola que cae (en m/s) a 1, 2 y 3 segundos. Pon cada una y cuánto creció de 1 s a 3 s.', { vals: [10, 20, 30], rot: ['1 s', '2 s', '3 s'], hi: 40, st: 20, et: ['1 s', '2 s', '3 s', 'creció'], ops: ['', '', ''], metas: ['10', '20', '30', '20'], fichas: ['10', '20', '30', '20', '5', '25', '60'],
+      mira: ['Está a mitad de camino entre 0 y 20.', 'Mira en qué línea termina.', 'Está a mitad de camino entre 20 y 40.', 'Resta la velocidad de 1 s a la de 3 s.'], trampas: { '0:5': 'Cada línea vale 20: la mitad son 10.', '2:25': 'Cada línea vale 20: la mitad son 10.', '3:60': 'Eso es la suma de las tres.' }, ok: 'Crece 10 m/s en cada segundo.' },
+      'Las líneas van de 20 en 20: 10, 20 y 30. De 1 s a 3 s creció 20 m/s.', 'Mira cuánto vale cada línea antes de leer.'),
+    sol('Una piedra se suelta desde un puente y tarda 4 segundos en llegar al agua. Si cada segundo gana 10 m/s, ¿con qué velocidad llega y cuál fue su velocidad media?', ['Llega con $4 \\cdot 10 =$ [[40]] m/s', 'Empezó en [[0]] m/s', 'La media, entre la inicial y la final, es [[20]] m/s'], ['10', '14', '80'], 'Gana 10 cada segundo: llega a 40. La media entre 0 y 40 es 20 m/s.', 'La velocidad crece parejo desde que se suelta.'),
+    err('Alguien compara a una astronauta en la Tierra y en la Luna.', ['Su masa en la Tierra es 70 kg', 'En la Luna la gravedad es menor', 'En la Luna su masa es cerca de 12 kg'], 2, ['En la Luna su masa sigue siendo 70 kg', 'En la Luna su masa es 420 kg', 'En la Luna no tiene masa'], 'Lo que baja a la sexta parte es el peso, no la masa.', '¿Cuál de los dos depende del lugar: la masa o el peso?'),
+    opc('Un satélite da vueltas alrededor de la Tierra con los motores apagados. No cae al suelo porque:', ['A esa altura no hay gravedad', 'Se mueve de lado tan rápido que cae siguiendo la curva de la Tierra', 'El aire lo sostiene', 'Pesa muy poco'], 1, 'La gravedad lo hace caer todo el tiempo, pero su velocidad lateral lo mantiene en órbita.', 'Recuerda la bola lanzada desde la montaña.'),
+  ]);
+
+  const FRENO = {
+    id: 'icf-frenado', title: 'Cuánto tarda en parar una moto',
+    paras: [
+      'Un grupo estudió la distancia que recorre una moto desde que el conductor ve un obstáculo hasta que se detiene. Esa distancia tiene dos partes: la de reacción, mientras el conductor decide frenar, y la de frenado, mientras la moto pierde velocidad.',
+      'En pavimento seco, a 10 metros por segundo, la de reacción fue de 10 metros y la de frenado, de 7. A 20 metros por segundo, la de reacción fue de 20 y la de frenado, de 28. Al duplicar la velocidad, la reacción se duplicó y el frenado se cuadruplicó.',
+      'Repitieron la prueba en pavimento mojado. La reacción fue igual; el frenado casi se duplicó, porque el roce entre la llanta y el piso es menor.',
+      'También probaron con un pasajero. La moto, con más masa, necesitó más fuerza para frenar en la misma distancia; con la misma fuerza de frenos, se detuvo más adelante.',
+      'El grupo concluyó que mirar el celular, que aumenta el tiempo de reacción, y la lluvia, que reduce el roce, alargan la distancia por razones distintas, y que sus efectos se suman.',
+    ],
+  };
+  const MARTE = {
+    id: 'icf-marte', title: 'Una piedra en tres mundos',
+    paras: [
+      'Una misma piedra de 6 kilogramos se lleva, en un relato, a la Tierra, a Marte y a la Luna. Su masa no cambia en el viaje, porque tiene la misma cantidad de materia.',
+      'Su peso sí cambia: unos 60 newtons en la Tierra, 22 en Marte y 10 en la Luna, porque la gravedad es distinta en cada lugar.',
+      'Al soltarla desde la misma altura, sin aire, tarda más en la Luna que en la Tierra, pues allá gana menos velocidad en cada segundo.',
+      'Si en la Luna se suelta además una pluma, las dos llegan al tiempo: sin aire, la masa no cambia la caída.',
+    ],
+  };
+  const pl = (g, q, p, e, h) => play(g, q, { doc: FRENO, ...p }, e, { hint: h });
+  return mundo('icf-cn-movimiento', 'Movimiento y Fuerzas', 'ciencias', [l1, l2, l3], [
+    ['icf-cn-movimiento-1', 'A velocidad constante, la distancia crece parejo con el tiempo.', pl('donde-buscar', '¿A qué párrafo vuelves para responder?', { cards: [['¿Qué dos partes tiene la distancia?', [1]], ['¿Qué pasó al duplicar la velocidad?', [2]], ['¿Qué cambia con la lluvia?', [3]]] }, 'Las partes están en el 1, la velocidad en el 2 y la lluvia en el 3.', 'Busca la palabra clave de cada pregunta.')],
+    ['icf-cn-movimiento-1', 'Compara cómo cambia una cantidad cuando otra se duplica.', pl('lupa-evidencia', '¿Lo dice, se deduce o no lo dice?', { cards: [['Al duplicar la velocidad, el frenado se cuadruplicó.', 0], ['A 20 m/s el total en seco fue de 48 metros.', 1], ['A 30 m/s la moto se cae.', 2], ['A 10 m/s el total en seco fue de 17 metros.', 1]] }, 'Lo del frenado está escrito; $20 + 28 = 48$ y $10 + 7 = 17$ se deducen; lo de 30 m/s no aparece.', 'Suma las dos partes cuando haga falta.')],
+    ['icf-cn-movimiento-1', 'Distancia es velocidad por tiempo.', opc('Durante la reacción la moto sigue a velocidad constante. A 20 m/s recorrió 20 m; el tiempo de reacción fue de:', ['0.5 s', '20 s', '2 s', '1 s'], 3, '$20 \\div 20 = 1$ segundo.', 'Divide la distancia entre la velocidad.')],
+    ['icf-cn-movimiento-2', 'El roce es una fuerza que frena.', pl('intruso-excepto', 'Pregunta EXCEPTO', { ask: 'Alargan la distancia total todas estas, EXCEPTO:', cards: [['El pavimento mojado', [3, 5]], ['Llevar un pasajero', [4]], ['Mirar el celular', [5]], ['Pintar la moto de rojo', null]] }, 'La lluvia está en el 3 y el 5, el pasajero en el 4 y el celular en el 5; el color no aparece.', 'Busca cada opción como causa.')],
+    ['icf-cn-movimiento-2', 'Con más masa hace falta más fuerza para el mismo cambio.', pl('caso-nuevo', 'La idea del texto, en otros casos', { principle: 'Con la misma fuerza, un objeto con más masa tarda más en cambiar su movimiento.', cards: [['Un camión lleno frena más lejos que vacío con los mismos frenos.', true], ['Una carreta cargada arranca más despacio con el mismo caballo.', true], ['Una bombilla alumbra más con más corriente.', false], ['Una planta crece más con agua.', false]] }, 'El camión y la carreta tienen más masa y la misma fuerza; las otras no hablan de fuerza y masa.', 'Busca casos donde cambie la masa y no la fuerza.')],
+    ['icf-cn-movimiento-2', 'Fuerza neta es masa por aceleración.', opc('Si la moto lleva el doble de masa y los frenos hacen la misma fuerza, su desaceleración es:', ['El doble', 'La mitad', 'Igual', 'Cero'], 1, 'Con la misma fuerza y el doble de masa, la aceleración es la mitad.', 'Usa fuerza igual a masa por aceleración.')],
+    ['icf-cn-movimiento-3', 'La masa no cambia con el lugar; el peso, sí.', pl('mapa-del-texto', 'Ponle a cada párrafo lo que hace', { doc: MARTE, labels: ['dice lo que no cambia: la masa', 'compara el peso en tres lugares', 'compara cómo cae en dos lugares', 'compara dos objetos que caen', 'cuenta cómo se hizo el viaje'], key: [0, 1, 2, 3] }, 'Masa, peso, caída en dos lugares y caída de dos objetos; el viaje no se narra.', 'Mira qué se compara en cada párrafo.')],
+    ['icf-cn-movimiento-3', 'Sin aire, la masa no cambia la caída; la gravedad del lugar, sí.', pl('resume-parrafo', 'Cada párrafo en una frase', { doc: MARTE, paras: [2, 3, 4], options: ['El peso depende de la gravedad del lugar.', 'Con menos gravedad, la caída es más lenta.', 'Sin aire, objetos de distinta masa caen igual.', 'En la Luna la piedra tiene menos masa.', 'La pluma cae más lento por ser liviana.'], key: [0, 1, 2] }, 'El 2 habla del peso, el 3 de la gravedad al caer y el 4 de la masa. Las otras dos contradicen el texto.', 'El resumen no puede contradecir el párrafo.')],
+    ['icf-cn-movimiento-3', 'En la Luna el peso es menor y la masa es la misma.', opc('Si la misma moto estuviera en la Luna, es correcto afirmar que:', ['Tendría menos masa y el mismo peso', 'No tendría masa ni peso', 'Tendría la misma masa y menos peso', 'Tendría el mismo peso y más masa'], 2, 'La masa es la cantidad de materia; el peso depende de la gravedad, que allá es menor.', 'Separa lo que depende del lugar de lo que no.')],
   ]);
 })());

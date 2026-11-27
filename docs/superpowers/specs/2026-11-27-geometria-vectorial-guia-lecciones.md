@@ -97,3 +97,44 @@ la solución anunciada, productos de matrices bien hechos, inversas exactas, ope
 
 Responde con: lista de juegos nuevos (nombre, armazón y qué hace, una línea), resultado de las pruebas, y cualquier cosa que no
 pudiste cumplir o que la prueba pide y te parece equivocada (no cambies la prueba: dilo).
+
+## Gimnasio y simulacros (después de que las lecciones del mundo o del corte estén hechas)
+
+**Gimnasio** — `js/gimnasio-gva-<n>.js` (n = número del mundo, 1 a 6): **dos retos de Fuerza (nivel 2) y dos de Élite (nivel 3)** por
+mundo, más difíciles que las lecciones y con datos nuevos. Cada reto tiene 2 a 4 pasos, cada paso un ejercicio con escena hecho con los
+juegos del curso (`js/games/gva-escena-*.js`, de cualquier lección del mundo o de antes), con **params nuevos** (ningún paso repite un
+ejercicio de una lección o de una evaluación). Modelo: `js/gimnasio-mate.js` (y el armazón en `js/gimnasio.js`). Se escribe así:
+
+```js
+{
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-gva-${id}`, after, level,
+    title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+  reto('sistemas-1', ['geo-1', 'geo-2'], 2, 'Título', 'Estrategia corta', 'El problema completo (> 30 letras)…', [
+    ['Título del paso', 'Lo que dice el entrenador', 'nombre-del-juego', 'Enunciado del paso', { …params… }, 'Explicación', ['Ayuda 1', 'Ayuda 2'], 'nota corta'],
+    …
+  ], 'La respuesta del reto', 'El cierre: la idea que queda');
+}
+```
+
+`after` = las lecciones del mundo que el reto pide (el reto aparece en ese mundo). Un problema de Élite encadena varias ideas (por
+ejemplo: plantear el sistema, escalonarlo y leer el tipo de solución). Nada nombra la fuente.
+
+**Simulacros** — `js/courses/vectorial-pruebas-<n>.js` (n = corte 1 a 4, ver `GVA_CORTES` en `js/courses/vectorial-base.js`): el
+simulacro del parcial n y el quiz n, como en el semestre real:
+
+```js
+(() => {
+  const { prueba, x, opc } = GVA;
+  prueba('parcial', 1, [[ 'geo-1', 'nota de repaso (> 15 letras)', x(…) | opc(…) ], …]);   // 10 a 14 preguntas
+  prueba('quiz', 1, [[ 'geo-2', 'nota…', … ], …]);                                         // 4 a 6 preguntas
+})();
+```
+
+- El parcial pregunta por **todas** las lecciones de su corte; el quiz, por las de su tema (`GVA_CORTES`). Al menos un tercio con
+  escena (juegos del curso con datos nuevos) y al menos dos `opc`. No van `sol` ni `err`. Ningún ejercicio repite uno de una lección,
+  de una evaluación o de otro simulacro. Claves A–D repartidas (ninguna letra con más del 40 % en todos los simulacros juntos).
+- Problemas del nivel de un parcial universitario (encadenan ideas, contextos de ingeniería), inspirados en los parciales del material
+  (`parcial*`, `Primer_Parcial_*`, `Segundo_Parcial_*`, `Tercer_Parcial_*`, `parcial4_*`) con otros números. Nada dice «parcial»,
+  «taller», «quiz», universidad ni libro dentro de los ejercicios.
+- Pruebas: `node --test tests/geometria-vectorial.test.js` (bloques «simulacros» y «gimnasio»).

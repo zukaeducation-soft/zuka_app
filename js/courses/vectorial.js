@@ -17,3 +17,27 @@
     GVA_HECHOS.push(u.world);
   }
 })();
+
+// Simulacros de los parciales y de los quices (GVA_PRUEBAS): una sección en la pantalla del curso, debajo de los mundos. Cada uno
+// se presenta con el motor de las evaluaciones (startExam) sobre una unidad hecha a la medida: sus lecciones son las del corte.
+const gvaUnidad = (c, P) => ({ lessons: c.units.flatMap(u => u.lessons).filter(l => P.lessons.includes(l.id)), exam: P });
+function gvaPruebasHTML(c) {
+  if (c.id !== 'geo' || !GVA_PRUEBAS.length) return '';
+  const llave = c.units.find(u => u.exam)?.exam.id, cerrado = typeof planMotivo === 'function' && llave && planMotivo(llave);
+  const card = n => {
+    const ps = GVA_PRUEBAS.filter(P => P.n === n).sort((a, b) => (a.tipo === 'quiz' ? -1 : 1) - (b.tipo === 'quiz' ? -1 : 1));
+    if (!ps.length) return '';
+    return `<article class="simi-card"><header><b>Corte ${n}</b><span>${GVA_CORTES[n - 1][1].length} lecciones</span></header>
+      <div class="simi-pr">${ps.map(P => { const best = S.exams?.[P.id]?.best;
+        return `<button type="button" data-gva-prueba="${P.id}"${cerrado ? ' data-lock="1"' : ''}><span>${esc(P.tipo === 'parcial' ? `Parcial ${n}` : `Quiz ${n}`)}</span><small>${cerrado ? ICON.lock : best != null ? `Mejor: ${best} %` : `${P.items.length} preguntas · ${P.minutes} min`}</small></button>`; }).join('')}</div></article>`;
+  };
+  return `<section class="simi" aria-label="Simulacros de parciales y quices"><h2 class="comp-title">Parciales y quices</h2><p class="simi-p">Simulacros con reloj de los cuatro cortes del semestre: preguntas nuevas, sin avisos hasta el final y un informe con lo que debes repasar.</p>
+    ${[1, 2, 3, 4].map(card).join('')}</section>`;
+}
+function gvaPruebasBind(root, c) {
+  root.querySelectorAll('[data-gva-prueba]').forEach(b => { b.onclick = () => {
+    if (b.dataset.lock) return openBloqueo(c.units.find(u => u.exam)?.exam.id);
+    const P = GVA_PRUEBAS.find(x => x.id === b.dataset.gvaPrueba);
+    if (P) startExam(c, gvaUnidad(c, P));
+  }; });
+}

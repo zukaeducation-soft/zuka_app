@@ -1304,6 +1304,792 @@
     'La lista repetida y la falta de control dejan otras explicaciones.', 'Busca qué más cambió y cómo quitarlo.');
 }
 ;
+//#archivo js/gimnasio-gva-1.js
+// Gimnasio de Geometría Vectorial y Analítica, mundo 1 «Álgebra Matricial» (spec 2026-11-27-curso-geometria-vectorial): dos retos
+// de Fuerza y dos de Élite, con los juegos de escena de js/games/gva-escena-1.js a -4.js y datos nuevos. Va después de gimnasio.js.
+{
+  // Un paso: [título, entrenador, juego, enunciado, datos, explicación, [ayuda, ayuda], nota].
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-gva-${id}`, after, level,
+    title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+
+  // ------------------------------------------------------------------------------------------- Fuerza
+  reto('sistemas-1', ['geo-1'], 2, 'Los dos fertilizantes', 'Dibuja y luego elimina',
+    'Cada paquete del fertilizante 1 lleva 3 kg del compuesto A y 1 kg del B; cada paquete del 2, 2 kg de A y 4 kg de B. Hay 24 kg de A y 18 kg de B, y se quiere gastar todo. ¿Cuántos paquetes de cada uno?', [
+      ['El cruce de las condiciones', 'Cada compuesto da una recta: los puntos que lo gastan justo. Busca el que está en las dos.', 'cruce-de-rectas',
+        'Con $x$ paquetes del fertilizante 1 e $y$ del 2 se gastan $3x + 2y$ kg de A y $x + 4y$ kg de B. Hay **24** kg de A y **18** de B. Arrastra el punto a la **solución**.',
+        { E: [[3, 2, 24], [1, 4, 18]], et: ['compuesto A', 'compuesto B'], sol: [6, 3], ini: [1, 1],
+          mira: ['Ese punto gasta justo el compuesto A, pero no el B: síguelo por la recta de A.', 'Ese punto gasta justo el compuesto B, pero no el A: síguelo por la recta de B.', 'Ese punto no gasta justo ninguno de los dos: llévalo a una recta y recórrela.'],
+          ok: 'El cruce gasta todo a la vez: 6 paquetes del fertilizante 1 y 3 del 2.' },
+        'El cruce es $(6, 3)$: $3 \\cdot 6 + 2 \\cdot 3 = 24$ kg de A y $6 + 4 \\cdot 3 = 18$ kg de B. Cumple las dos ecuaciones a la vez.',
+        ['Un punto sobre una sola recta gasta justo un solo compuesto. El que sirve está en las dos rectas.', 'Recorre la recta de B y mira en cuál de sus puntos la de A da 24.'], 'el punto común (6, 3)'],
+      ['La cuenta que lo confirma', 'Ahora sin dibujo: un múltiplo de una ecuación borra la x de la otra.', 'multiplo-elimina',
+        'El mismo sistema: $3x + 2y = 24$ ($E_1$) y $x + 4y = 18$ ($E_2$). Elige el múltiplo $k$ de $E_2$ que, sumado a $E_1$, hace **desaparecer la x**.',
+        { E: [[3, 2, 24], [1, 4, 18]], s: 1, elim: 'x', P: [6, 3], k0: 0, mira: 'La x todavía no desaparece: el múltiplo tiene que cancelar su coeficiente.',
+          trampa: 'Así desapareció la y, no la x.', ok: 'Sin la x queda $-10y = -30$: la recta nueva es horizontal, $y = 3$, y pasa por el mismo punto.' },
+        'Con $k = -3$: $3x + 2y - 3(x + 4y) = 24 - 54$, es decir $-10y = -30$ e $y = 3$; en $E_2$, $x = 18 - 12 = 6$.',
+        ['La x tiene 3 en $E_1$ y 1 en $E_2$. ¿Cuántas veces $E_2$ cancelan esos 3?', 'El múltiplo es negativo: hay que restar tres veces $E_2$.'], 'k = −3 deja −10y = −30'],
+    ], '6 paquetes del fertilizante 1 y 3 del fertilizante 2.', 'Cada condición es una recta; el cruce es la solución, y la eliminación lo confirma sin dibujar.');
+
+  reto('matrices-1', ['geo-2'], 2, 'El pedido de la carpintería', 'Primero las tallas, después las casillas',
+    'Dos tiendas piden mesas y sillas (matriz P), cada mueble gasta madera y horas de trabajo (matriz Q) y cada recurso tiene un costo (matriz C). ¿Qué producto tiene sentido y qué gasta cada tienda?', [
+      ['Qué se puede multiplicar', 'Dos matrices encajan si las columnas de la primera son tantas como las filas de la segunda.', 'domino-dimensiones',
+        'P es $2 \\times 3$ (tiendas por muebles), Q es $3 \\times 2$ (muebles por recursos) y C es $2 \\times 1$ (costo por recurso). Ponlas en el **único orden** en que el producto existe y di su tamaño.',
+        { piezas: [['Q', 3, 2], ['P', 2, 3], ['C', 2, 1]], orden: [1, 0, 2], extra: ['3×3', '2×2'] },
+        '$P$ $(2 \\times 3)$ por $Q$ $(3 \\times 2)$ da $2 \\times 2$, y por $C$ $(2 \\times 1)$ da $2 \\times 1$: el costo total de cada tienda. Ningún otro orden encaja.',
+        ['Mira las medidas de adentro: deben coincidir en cada unión.', 'Empieza por la matriz cuyas filas son las tiendas: el resultado es por tienda.'], 'P·Q·C mide 2 × 1'],
+      ['El pedido de una tienda', 'Un pedido por una matriz es una combinación de sus columnas: cada mueble pesa lo que se pide de él.', 'columnas-del-pedido',
+        'Una mesa gasta 4 m de madera y 6 h de trabajo; una silla, 2 m y 3 h. La tienda 1 pide **3** mesas y **5** sillas. Pon los pesos de cada columna y lo que gasta.',
+        { A: [[4, 2], [6, 3]], x: [3, 5], filas: ['madera', 'horas'], cols: ['mesa', 'silla'], extra: ['42', '21'] },
+        '$3\\,(4, 6) + 5\\,(2, 3) = (12 + 10,\\; 18 + 15) = (22, 33)$: 22 m de madera y 33 horas.',
+        ['La columna de la mesa va multiplicada por las mesas pedidas; la de la silla, por las sillas.', 'Suma renglón por renglón lo que aporta cada columna.'], '3·(4, 6) + 5·(2, 3) = (22, 33)'],
+      ['Las dos tiendas a la vez', 'El producto PQ pone cada tienda (fila) contra cada recurso (columna).', 'fila-por-columna',
+        'Pedidos $P$: la tienda 1 pide 3 mesas y 5 sillas; la tienda 2, 2 mesas y 4 sillas. Recursos $Q$: mesa 4 m y 6 h; silla 2 m y 3 h. Llena $PQ$.',
+        { P: [[3, 5], [2, 4]], Q: [[4, 6], [2, 3]], fp: ['tienda 1', 'tienda 2'], mid: ['mesa', 'silla'], cq: ['madera', 'horas'], extra: ['12', '44', '30'] },
+        '$PQ = \\begin{pmatrix} 3 \\cdot 4 + 5 \\cdot 2 & 3 \\cdot 6 + 5 \\cdot 3 \\\\ 2 \\cdot 4 + 4 \\cdot 2 & 2 \\cdot 6 + 4 \\cdot 3 \\end{pmatrix} = \\begin{pmatrix} 22 & 33 \\\\ 16 & 24 \\end{pmatrix}$.',
+        ['La casilla de una tienda y un recurso usa la fila de esa tienda en P y la columna de ese recurso en Q.', 'Pareja por pareja y se suma: mesas por lo de la mesa más sillas por lo de la silla.'], 'la primera fila repite (22, 33)'],
+    ], 'P·Q·C es 2 × 1; la tienda 1 gasta 22 m y 33 h, la tienda 2, 16 m y 24 h.', 'Las tallas dicen qué se puede multiplicar; cada casilla es una fila por una columna.');
+
+  // -------------------------------------------------------------------------------------------- Élite
+  reto('sistemas-2', ['geo-1', 'geo-3'], 3, 'El tráfico del centro', 'Escalona, mira qué queda libre y acota',
+    'Cuatro calles de una vía forman un cuadrado con esquinas A, B, C y D. En A salen 40 carros por hora, en B entran 60, en C salen 30 y en D entran 10. ¿Cuántas soluciones hay y cuál es el menor flujo posible en la calle x₄?', [
+      ['Lo que deja la escalera', 'Cada esquina da una ecuación (lo que entra es lo que sale). Escalonada, la cuarta se vuelve 0 = 0.', 'pivote-o-libre',
+        'Las ecuaciones de las esquinas, escalonadas, quedan así (la cuarta fila se volvió $0 = 0$). Rotula cada columna como **pivote** o **libre** y di cuántas soluciones hay.',
+        { M: [[1, 0, 0, -1, -40], [0, 1, 0, -1, 20], [0, 0, 1, -1, -10]], extra: ['única', 'ninguna'] },
+        'Hay pivote en $x_1$, $x_2$ y $x_3$; $x_4$ no tiene pivote y queda libre. Nada dice $0 = c$ con $c \\neq 0$: infinitas soluciones, $x_1 = t - 40$, $x_2 = t + 20$, $x_3 = t - 10$, $x_4 = t$.',
+        ['Un pivote es el primer número distinto de cero de una fila.', 'Si alguna incógnita se queda sin pivote y nada es imposible, hay infinitas soluciones.'], 'x₄ = t libre: infinitas'],
+      ['El menor flujo', 'Matemáticamente t puede ser cualquier número, pero un carro no anda en contra: todas las calles deben quedar ≥ 0.', 'red-de-flujo',
+        'Con $x_4 = t$: $x_1 = t - 40$, $x_2 = t + 20$, $x_3 = t - 10$. Elige el **menor** $t$ con el que ninguna calle lleva carros en contra.',
+        { e: [-40, 60, -30, 10] },
+        'Se necesita $t - 40 \\geq 0$, $t + 20 \\geq 0$ y $t - 10 \\geq 0$ a la vez: la más exigente es $t \\geq 40$. Con $t = 40$: $x_1 = 0$, $x_2 = 60$, $x_3 = 30$, $x_4 = 40$.',
+        ['Cada calle pone una condición sobre t; la que manda es la más exigente.', 'Mira cuál de las expresiones resta más: esa es la primera en volverse negativa.'], 't ≥ 40: el menor es 40'],
+    ], 'Infinitas soluciones con x₄ = t libre; el menor flujo en x₄ es 40 carros por hora.', 'Una variable libre da infinitas soluciones; el contexto decide cuáles sirven.');
+
+  reto('inversa-1', ['geo-2', 'geo-4'], 3, 'La clave del mensaje', 'Clave invertible, inversa y descifrado',
+    'Un mensaje se cifra por parejas de letras con c = A·m, donde A = [[3, 1], [c, 2]]. Primero hay que elegir una c que deje A invertible; con c = 5 se halla A⁻¹ y se leen las letras de dos parejas cifradas.', [
+      ['La clave que no sirve', 'Si las columnas de A quedan en la misma recta, el plano se aplasta y el mensaje no se puede recuperar.', 'aplasta-paralelogramo',
+        'La clave es $A = \\begin{pmatrix} 3 & 1 \\\\ c & 2 \\end{pmatrix}$. Desliza $c$ hasta el **único** valor con el que $A$ **no tiene inversa**: esa clave está prohibida.',
+        { a: 3, b: 1, d: 2, min: -3, max: 6, ini: 0, ok: 'Con c = 6 las columnas (3, 6) y (1, 2) quedan en la misma recta: ad − bc = 0 y nadie podría descifrar.' },
+        'Sin inversa cuando $ad - bc = 3 \\cdot 2 - 1 \\cdot c = 0$, es decir $c = 6$. Cualquier otra $c$ sirve; con $c = 5$, $ad - bc = 1$.',
+        ['El número que decide es $ad - bc$: iguálalo a cero con c como letra.', 'Con $c = 6$ la primera columna es el triple de la segunda.'], 'c = 6 aplasta; se usa c = 5'],
+      ['La llave de vuelta', 'Para 2 × 2: se intercambian a y d, se les cambia el signo a b y a c, y se divide entre ad − bc.', 'formula-inversa',
+        'Con $c = 5$ la clave es $A = \\begin{pmatrix} 3 & 1 \\\\ 5 & 2 \\end{pmatrix}$. Arma $A^{-1}$ con la fórmula.',
+        { A: [[3, 1], [5, 2]], extra: ['1/11', '5', '−3'],
+          mira: ['Afuera va 1 dividido entre ad − bc, con ad − bc = 3·2 − 1·5.', 'Arriba a la izquierda va d: a y d cambian de lugar.', 'La b se queda en su sitio, pero con el signo cambiado.', 'La c se queda en su sitio, pero con el signo cambiado.', 'Abajo a la derecha va a: a y d cambian de lugar.'],
+          trampas: { '0:1/11': 'Sumaste: el número es ad − bc = 6 − 5, no ad + bc.', '3:5': 'Falta cambiarle el signo a c.', '4:−3': 'La a cambia de lugar, pero no de signo.', '1:3': 'Dejaste la a en su sitio: a y d se intercambian.' },
+          ok: 'A⁻¹ = [2 −1; −5 3], y A·A⁻¹ = I: la clave tiene llave de vuelta.' },
+        '$ad - bc = 6 - 5 = 1$, así que $A^{-1} = \\begin{pmatrix} 2 & -1 \\\\ -5 & 3 \\end{pmatrix}$. Comprobación: $3 \\cdot 2 + 1 \\cdot (-5) = 1$ y $3 \\cdot (-1) + 1 \\cdot 3 = 0$.',
+        ['Primero el número $ad - bc$; después intercambia a y d y cambia los signos de b y c.', 'Comprueba multiplicando: A por tu matriz debe dar la identidad.'], 'A⁻¹ = [2 −1; −5 3]'],
+      ['Leer el mensaje', 'Cada letra sale de una fila de A⁻¹ por el par cifrado (A = 1, B = 2, …, Z = 26).', 'descifra-pares',
+        'Descifra con $m = A^{-1} c$, letra por letra. Puedes fallar **una** vez.',
+        { A: [[3, 1], [5, 2]], tiros: [
+          { q: 'Par cifrado $c = (75, 132)$. ¿Cuál es su **primera** letra?', c: [75, 132], i: 0, r: 18, k: 'm_1 = 2 \\cdot 75 - 132 = 18 \\to \\text{R}', e: { 21: 'Esa es la segunda letra del par: usaste la otra fila de A⁻¹.' } },
+          { q: 'El mismo par $c = (75, 132)$. ¿Cuál es su **segunda** letra?', c: [75, 132], i: 1, r: 21, k: 'm_2 = -5 \\cdot 75 + 3 \\cdot 132 = 21 \\to \\text{U}', e: { 18: 'Esa es la primera letra del par: usa la segunda fila de A⁻¹.' } },
+          { q: 'Otro par: $c = (61, 102)$. ¿Cuál es su **primera** letra?', c: [61, 102], i: 0, r: 20, k: 'm_1 = 2 \\cdot 61 - 102 = 20 \\to \\text{T}', e: { 1: 'Esa es la segunda letra del par: usaste la otra fila de A⁻¹.' } }] },
+        'Con $A^{-1} = \\begin{pmatrix} 2 & -1 \\\\ -5 & 3 \\end{pmatrix}$: $(75, 132) \\to (18, 21)$, R y U; $(61, 102) \\to (20, 1)$, T y A. El mensaje empieza «RUTA».',
+        ['La primera letra usa la primera fila de A⁻¹, (2, −1); la segunda, la fila (−5, 3).', 'Multiplica la fila por el par, pareja por pareja, y suma.'], 'R, U, T: el mensaje es RUTA'],
+    ], 'Se prohíbe c = 6; con c = 5, A⁻¹ = [2 −1; −5 3] y el mensaje dice RUTA.', 'Una clave sirve si ad − bc ≠ 0; descifrar es multiplicar por la inversa.');
+}
+;
+//#archivo js/gimnasio-gva-2.js
+// Gimnasio de Geometría Vectorial y Analítica, mundo 2 «Inversión y Determinante» (spec 2026-11-27-curso-geometria-vectorial): dos
+// retos de Fuerza y dos de Élite, con los juegos de escena de js/games/gva-escena-5.js a -8.js y datos nuevos. Va después de gimnasio.js.
+{
+  // Un paso: [título, entrenador, juego, enunciado, datos, explicación, [ayuda, ayuda], nota].
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-gva-${id}`, after, level,
+    title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+
+  // ------------------------------------------------------------------------------------------- Fuerza
+  reto('inversa-2', ['geo-5'], 2, 'La planta de concentrados', 'Clave válida, inversa comprobada y pedidos',
+    'Tres concentrados X, Y y Z aportan proteína, fibra y grasa según una matriz A con una entrada c por fijar. Primero hay que descartar la c que deja A sin inversa; con c = 5 se completa A⁻¹ y se atienden varios pedidos sin volver a resolver nada.', [
+      ['La c prohibida', 'Escalona con c como letra: si la última fila de la izquierda puede volverse de ceros, esa c no sirve.', 'gj-fila-de-ceros',
+        'La matriz de los concentrados (columnas X, Y, Z) es $A = \\begin{pmatrix} 1 & 1 & 2 \\\\ 2 & 3 & 5 \\\\ 1 & 3 & c \\end{pmatrix}$. Desliza **c** hasta el valor con el que, al reducir $[A \\mid I]$, aparece una **fila de ceros** a la izquierda.',
+        { A: [[1, 1, 2], [2, 3, 5], [1, 3, null]], min: -3, max: 9, ini: 0, ok: 'Con c = 4 la fila 3 se vuelve (0, 0, 0): con esa c la planta no podría deshacer la mezcla.' },
+        '$R_2 - 2R_1 = (0, 1, 1)$ y $R_3 - R_1 = (0, 2, c - 2)$; luego $R_3 - 2R_2 = (0, 0, c - 4)$. La fila es de ceros justo con $c = 4$; con cualquier otra c, A tiene inversa.',
+        ['Haz ceros debajo del primer pivote y luego debajo del segundo, sin darle valor a c.', 'Al final la fila 3 queda $(0, 0, c - 4)$: ¿qué c la anula?'], 'c = 4 deja una fila de ceros'],
+      ['La entrada que falta', 'Con la c del enunciado la planta ya tiene llave de vuelta. Para comprobar una inversa basta multiplicar: A·B debe ser I.', 'gj-comprueba-identidad',
+        'Con $c = 5$, $A = \\begin{pmatrix} 1 & 1 & 2 \\\\ 2 & 3 & 5 \\\\ 1 & 3 & 5 \\end{pmatrix}$. Su inversa B salió de Gauss-Jordan, pero se borró la entrada **t** (fila 2, columna 1). Ajusta t para que $AB = I$.',
+        { A: [[1, 1, 2], [2, 3, 5], [1, 3, 5]], pos: [1, 0], min: -6, max: 6, ok: 'Con t = −5, A·B = I: B = [0 1 −1; −5 3 −1; 3 −2 1] es la inversa.' },
+        'La columna 1 de $AB$ es $A(0, t, 3) = (t + 6,\\ 3t + 15,\\ 3t + 15)$ y debe ser $(1, 0, 0)$: $t = -5$. Así $A^{-1} = \\begin{pmatrix} 0 & 1 & -1 \\\\ -5 & 3 & -1 \\\\ 3 & -2 & 1 \\end{pmatrix}$.',
+        ['t solo cambia la columna 1 de $AB$: multiplica cada fila de A por esa columna de B.', 'La primera fila da $t + 6$, y en la identidad ahí va un 1.'], 't = −5 completa A⁻¹'],
+      ['Tres pedidos, una inversa', 'Cada pedido b se resuelve con x = A⁻¹b: la fila i de la inversa da los bultos del concentrado i.', 'gj-dosifica-mezclas',
+        'Con $A^{-1} = \\begin{pmatrix} 0 & 1 & -1 \\\\ -5 & 3 & -1 \\\\ 3 & -2 & 1 \\end{pmatrix}$, atiende cada pedido $\\vec b$ (proteína, fibra, grasa). Puedes fallar **una** vez.',
+        { Ainv: [[0, 1, -1], [-5, 3, -1], [3, -2, 1]], et: ['X', 'Y', 'Z'], tiros: [
+          { q: 'Pedido $\\vec b = (7, 18, 16)$. ¿Cuántos bultos de **X**?', b: [7, 18, 16], i: 0, r: 2, k: 'x_1 = 18 - 16 = 2', e: { 3: 'Esos son los bultos de Y: usaste la fila 2 de A⁻¹.', 1: 'Esos son los bultos de Z: usaste la fila 3 de A⁻¹.' } },
+          { q: 'Pedido $\\vec b = (9, 22, 19)$. ¿Cuántos bultos de **Y**?', b: [9, 22, 19], i: 1, r: 2, k: 'x_2 = -45 + 66 - 19 = 2', e: { 3: 'Esos son los bultos de X: Y sale de la fila 2 de A⁻¹.', 4: 'Revisa los signos de la fila 2: −5·9 + 3·22 − 19.' } },
+          { q: 'Pedido $\\vec b = (8, 18, 13)$. ¿Cuántos bultos de **X**?', b: [8, 18, 13], i: 0, r: 5, k: 'x_1 = 18 - 13 = 5', e: { 1: 'Ese número es el de Y o el de Z: X es la fila 1 de A⁻¹ por b.', 10: 'La fila 1 es (0, 1, −1): la proteína no cuenta y la grasa se resta.' } }] },
+        '$\\vec x = A^{-1}\\vec b$: $(7, 18, 16) \\to (2, 3, 1)$, $(9, 22, 19) \\to (3, 2, 2)$ y $(8, 18, 13) \\to (5, 1, 1)$. Comprobación del primero: $2 + 3 + 2 = 7$, $4 + 9 + 5 = 18$, $2 + 9 + 5 = 16$.',
+        ['La fila i de $A^{-1}$ por $\\vec b$, pareja por pareja, da los bultos del concentrado i.', 'X usa la fila (0, 1, −1), Y la fila (−5, 3, −1) y Z la fila (3, −2, 1).'], 'una inversa sirve para todos los pedidos'],
+    ], 'Se prohíbe c = 4; con c = 5, A⁻¹ = [0 1 −1; −5 3 −1; 3 −2 1], y los pedidos piden 2 de X, 2 de Y y 5 de X.', 'Una fila de ceros dice que no hay inversa; si la hay, se calcula una vez y resuelve cualquier pedido.');
+
+  reto('area-2', ['geo-6'], 2, 'El terreno en el plano', 'Área por coordenadas y factor |det|',
+    'Un terreno tiene esquinas A = (0, 0), B = (4, 0), C = (4, 3) y una cuarta D por ubicar, y debe medir 9 unidades². Luego un programa de planos lo transforma con varias matrices: hay que diseñar una que lo agrande 3 veces y lo voltee, y predecir el área de cada imagen.', [
+      ['La esquina que falta', 'Con A en el origen, el área es la mitad de la suma de los determinantes de esquinas vecinas.', 'lote-por-coordenadas',
+        'Esquinas $A = (0, 0)$, $B = (4, 0)$, $C = (4, 3)$ y D (recorridas contra las agujas). Arrastra D para que el terreno mida **9**, con área $\\tfrac{1}{2}\\sum \\det(P_i, P_{i+1})$.',
+        { P: [[0, 0], [4, 0], [4, 3]], meta: 9, ini: [1, 5], ok: 'D = (2, 3): ½(0 + 12 + 6 + 0) = 9.' },
+        'Con $D = (x, y)$: $\\tfrac{1}{2}[0 + \\det(B, C) + \\det(C, D) + 0] = \\tfrac{1}{2}(12 + 4y - 3x)$. Vale 9 si $4y - 3x = 6$: con $D = (2, 3)$ queda un trapecio de bases 4 y 2 y altura 3.',
+        ['$\\det(B, C) = 4 \\cdot 3 - 0 \\cdot 4 = 12$; falta $\\det(C, D) = 4y - 3x$.', 'La suma tiene que dar el doble del área: 18.'], 'D = (2, 3)'],
+      ['La matriz que voltea', 'Las columnas de T son u y w; det T = u₁w₂ − u₂w₁ mide cuánto crece el área y su signo dice si voltea.', 'area-signo-columnas',
+        'El programa usa $T = [\\vec u\\ \\vec w]$ con $\\vec u = (3, 1)$. Para que el terreno de 9 u² pase a **27** u² y quede **volteado**, se necesita $\\det T = -3$. Arrastra la punta de $\\vec w$.',
+        { u: [3, 1], meta: -3, ini: [1, 2], ok: '3w₂ − w₁ = −3: el área se triplica y el giro de u a w va al revés.' },
+        'Se pide $3w_2 - w_1 = -3$; sirven $\\vec w = (3, 0)$, $(0, -1)$ o $(-3, -2)$, entre otros. El área de la imagen es $|-3| \\cdot 9 = 27$ y el signo menos dice que la figura sale volteada.',
+        ['Triplicar el área pide que $|\\det T|$ sea el factor de área; voltear pide el signo menos.', 'w tiene que quedar girando a la derecha de u, con $3w_2 - w_1 = -3$.'], 'det T = −3'],
+      ['Predecir cada imagen', 'Toda área se multiplica por |det T|: el signo solo dice si voltea.', 'sello-escala-area',
+        'El terreno de 9 u² pasa por tres matrices distintas. Fija el área de cada imagen y suelta. Puedes fallar **una** vez.',
+        { tiros: [
+          { q: 'Con $T = \\begin{pmatrix} 3 & 1 \\\\ 1 & 1 \\end{pmatrix}$, ¿cuánto mide la imagen?', M: [[3, 1], [1, 1]], fig: [[0, 0], [4, 0], [4, 3], [2, 3]], area: 9, r: 18,
+            k: '|\\det T| \\cdot 9 = |3 - 1| \\cdot 9 = 18', e: { 2: 'Ese es det T: falta multiplicarlo por el área del terreno, 9.', 9: 'Ese es el área del terreno: la imagen la multiplica por |det T|.', 36: 'Sumaste: det T es ad − bc = 3 − 1.' } },
+          { q: 'Con $T = \\begin{pmatrix} 3 & -3 \\\\ 1 & -2 \\end{pmatrix}$, que lo voltea, ¿cuánto mide la imagen?', M: [[3, -3], [1, -2]], fig: [[0, 0], [4, 0], [4, 3], [2, 3]], area: 9, r: 27,
+            k: '|\\det T| \\cdot 9 = |-6 + 3| \\cdot 9 = 27', e: { 3: 'Ese es |det T|: falta multiplicarlo por 9.', 0: 'Voltear no borra el área: se usa el valor absoluto del determinante.' } },
+          { q: 'Con $T = 2I = \\begin{pmatrix} 2 & 0 \\\\ 0 & 2 \\end{pmatrix}$, ¿cuánto mide la imagen?', M: [[2, 0], [0, 2]], fig: [[0, 0], [4, 0], [4, 3], [2, 3]], area: 9, r: 36,
+            k: '|\\det(2I)| \\cdot 9 = 4 \\cdot 9 = 36', e: { 18: '2I estira por 2 el ancho y también el alto: el área se multiplica por 2 · 2 = 4.', 4: 'Ese es det(2I): falta multiplicarlo por 9.' } }] },
+        'Imagen $= |\\det T| \\cdot 9$: $2 \\cdot 9 = 18$, $|-3| \\cdot 9 = 27$ y $\\det(2I) = 4$, así que $4 \\cdot 9 = 36$.',
+        ['Calcula $ad - bc$ de cada T, quítale el signo y multiplícalo por 9.', 'Con $2I$ se duplican las dos direcciones: el área no se duplica, se cuadruplica.'], '18, 27 y 36 u²'],
+    ], 'D = (2, 3); una w con 3w₂ − w₁ = −3; las imágenes miden 18, 27 y 36 u².', 'El área de un polígono sale de determinantes, y toda transformación la multiplica por |det T|.');
+
+  // -------------------------------------------------------------------------------------------- Élite
+  reto('det-2', ['geo-6', 'geo-7'], 3, 'La cadena de operaciones', 'Triangula, sigue el factor y multiplica',
+    'Una matriz A de 3 × 3 se lleva a triangular para hallar det A. Después, con tres operaciones de fila, se arma B; se escala a kB y, por último, cuadrados de área 1 pasan por A, B y una máquina desconocida. ¿Cuánto valen det A, det B, el k pedido y los determinantes de los productos?', [
+      ['det A por la triangular', 'Cada operación deja su factor; al final det U es det A multiplicado por esos factores.', 'diagonal-y-factor',
+        'Para hallar $\\det A$ con $A = \\begin{pmatrix} 0 & 1 & 2 \\\\ 1 & 2 & 1 \\\\ 2 & 4 & -1 \\end{pmatrix}$ se lleva A a la triangular U. Pon el factor de cada operación, el producto de la diagonal de U y $\\det A$.',
+        { A: [[0, 1, 2], [1, 2, 1], [2, 4, -1]], ops: ['R₁ ↔ R₂', 'R₃ − 2R₁'], M: [[1, 2, 1], [0, 1, 2], [2, 4, -1]], U: [[1, 2, 1], [0, 1, 2], [0, 0, -3]],
+          metas: ['−1', '1', '−3', '3'], extra: ['−2', '0', '9'],
+          mira: ['Intercambiar R₁ y R₂ multiplica el determinante por −1.', 'Restarle a R₃ dos veces R₁ no cambia el determinante: factor 1.', 'La diagonal de U es 1, 1 y −3: se multiplican.', 'det U = −3 y el factor fue −1: det A = −3 ÷ (−1).'],
+          trampas: { '1:−2': 'El −2 multiplica a R₁ antes de sumarla; la fila 3 no se multiplicó. Esa operación no cambia el determinante.', '1:0': 'Sumar un múltiplo deja el determinante igual: el factor es 1.', '3:−3': 'Ese es det U. El intercambio cambió el signo: hay que deshacerlo.' },
+          ok: 'det U = 1 · 1 · (−3) = −3 = (−1) · det A, así que det A = 3.' },
+        'Factores $-1$ (intercambio) y $1$ ($R_3 - 2R_1$). La diagonal de U da $1 \\cdot 1 \\cdot (-3) = -3$ y $\\det U = (-1)\\det A$, así que $\\det A = 3$.',
+        ['Anota el factor de cada flecha: un intercambio vale −1 y sumar un múltiplo de otra fila vale 1.', 'Al final divide det U entre el producto de los factores.'], 'det A = 3'],
+      ['De A a B', 'Ahora sin matriz a la vista: solo el factor de cada operación.', 'rastro-determinante',
+        'Con $\\det A = 3$, B sale de A con tres operaciones de fila, una tras otra. Pon al lado de cada una el determinante que queda.',
+        { d0: 3, ops: ['R₁ ↔ R₃', 'R₂ → −2R₂', 'R₃ → R₃ + 5R₁'], metas: ['−3', '6', '6'], extra: ['3', '−6', '30'],
+          mira: ['Intercambiar dos filas cambia el signo: 3 pasa a −3.', 'Multiplicar una fila por −2 multiplica el determinante por −2, con su signo.', 'Sumar a una fila un múltiplo de otra no cambia el determinante.'],
+          trampas: { '0:3': 'Intercambiar dos filas sí cambia algo: el signo.', '1:−6': 'El factor es −2, no 2: (−2)(−3) = 6.', '2:30': 'Sumar 5 veces otra fila no multiplica por 5: esa operación no cambia el determinante.' },
+          ok: 'Factores −1, −2 y 1: det B = (−1)(−2)(1) · 3 = 6.' },
+        'Intercambio $\\times(-1)$: $3 \\to -3$; $R_2 \\to -2R_2$ $\\times(-2)$: $-3 \\to 6$; $R_3 + 5R_1$ $\\times 1$: queda $6$. Así $\\det B = 6$.',
+        ['Intercambiar cambia el signo, multiplicar una fila por k multiplica por k y sumar un múltiplo de otra fila no cambia nada.', 'Con k negativo el signo también entra: −3 por −2.'], 'det B = 6'],
+      ['El escalado', 'kB multiplica las tres filas por k: el determinante gana k tres veces.', 'escala-todo-volumen',
+        'B es de 3 × 3 y $\\det B = 6$. Desliza **k** hasta que $\\det(kB) = -48$.',
+        { d0: 6, meta: -48, min: -4, max: 5, nom: 'B', ok: 'Con k = −2: (−2)³ · 6 = −48. El volumen se multiplicó por 8 y la orientación se volteó.' },
+        '$\\det(kB) = k^3 \\det B = 6k^3 = -48$ da $k^3 = -8$ y $k = -2$. Con $k = -8$ se habría multiplicado una sola fila.',
+        ['kB no multiplica una sola fila por k: multiplica las tres.', 'Busca un k con $k^3 = -8$: el signo de $k^3$ es el de k.'], 'k = −2'],
+      ['Máquinas en serie', 'El determinante de un producto es el producto de los determinantes, en el orden que sea.', 'maquinas-en-serie',
+        'Un cuadrado de área 1 pasa por máquinas con $\\det A = 3$ y $\\det B = 6$. Cada una multiplica su área con signo por su determinante. Fija el valor que falta y suelta. Puedes fallar **una** vez.',
+        { tiros: [
+          { q: 'Primero A y luego B. ¿Cuánto vale $\\det(BA)$?', pide: 'det(BA)', maq: [['A', 3], ['B', 6]], fin: null, r: 18, k: '\\det(BA) = \\det B \\cdot \\det A = 6 \\cdot 3 = 18', e: { 9: 'Sumaste: los determinantes se multiplican.', 2: 'Dividiste: cada máquina multiplica el área.' } },
+          { q: 'Primero B, luego una máquina X y luego A; el cuadrado llega con $-36$. ¿Cuánto vale $\\det X$?', pide: 'det X', maq: [['B', 6], ['X', null], ['A', 3]], fin: -36, r: -2, k: '\\det X = \\dfrac{-36}{6 \\cdot 3} = -2', e: { 2: 'Con 2 el cuadrado llega en 36, sin voltear: X tiene que voltearlo.', '-27': 'Restaste: los determinantes se multiplican, así que aquí se divide.' } },
+          { q: 'A pasa dos veces seguidas. ¿Cuánto vale $\\det(A^2)$?', pide: 'det(A²)', maq: [['A', 3], ['A', 3]], fin: null, r: 9, k: '\\det(A^2) = 3 \\cdot 3 = 9', e: { 6: 'Sumaste: la segunda pasada vuelve a multiplicar por 3.', 3: 'A pasa dos veces: su determinante cuenta dos veces.' } }] },
+        '$\\det(BA) = 6 \\cdot 3 = 18$; $6 \\cdot \\det X \\cdot 3 = -36$ da $\\det X = -2$; y $\\det(A^2) = 3^2 = 9$.',
+        ['Cada máquina multiplica el área con signo por su determinante.', 'Si falta una máquina, divide la llegada entre el producto de las otras.'], '18, −2 y 9'],
+    ], 'det A = 3, det B = 6, k = −2, det(BA) = 18, det X = −2 y det(A²) = 9.', 'Cada operación de fila deja un factor; kA gana kⁿ; y el determinante de un producto es el producto.');
+
+  reto('cramer-2', ['geo-8'], 3, 'La fundición', 'Determinante distinto de cero, luego Cramer',
+    'Una fundición funde barras de las aleaciones P y Q para cumplir pedidos de cobre y zinc; la barra Q lleva k kg de cobre. Hay que hallar la k con la que el pedido no tiene solución única, resolver pedidos con otras k y, al añadir una tercera aleación R, ver cuándo sirve y cuántas barras de cada una se funden.', [
+      ['La k que falla', 'Sin solución única pasa justo cuando det A = 0: las dos rectas quedan paralelas o son la misma.', 'rectas-paralelas-k',
+        'Con x barras de P e y de Q: cobre $3x + ky = 18$ y zinc $x + 2y = 8$. Desliza **k** hasta el valor con el que el pedido **no** tiene solución única.',
+        { A0: [[3, 0], [1, 2]], Ak: [[0, 1], [0, 0]], b: [18, 8], min: -2, max: 9, ini: 2, ok: 'Con k = 6 las rectas quedan paralelas: ningún número de barras cumple los dos pedidos a la vez.' },
+        '$\\det A = 3 \\cdot 2 - k \\cdot 1 = 6 - k$, que se anula con $k = 6$. Entonces $3x + 6y = 18$ es $x + 2y = 6$, que choca con $x + 2y = 8$: rectas paralelas, sin solución.',
+        ['Escribe $\\det A$ en términos de k e iguálalo a cero.', 'Con ese k, divide la primera ecuación entre 3 y compárala con la segunda.'], 'k = 6: ninguna solución'],
+      ['Pedidos con otras k', 'Con det A ≠ 0 hay una sola solución, y Cramer la da: cambia por b la columna de la incógnita.', 'cramer-lanza-incognita',
+        'El mismo pedido, cobre 18 y zinc 8, con barras Q de distinta k. Halla con Cramer la incógnita que se pide y lánzala. Puedes fallar **una** vez.',
+        { tiros: [
+          { q: 'Con $k = 4$: $3x + 4y = 18$, $x + 2y = 8$. ¿Cuántas barras de **Q**?', A: [[3, 4], [1, 2]], b: [18, 8], et: ['barras de P', 'barras de Q'], i: 1, r: 3 },
+          { q: 'Con $k = 3$: $3x + 3y = 18$, $x + 2y = 8$. ¿Cuántas barras de **P**?', A: [[3, 3], [1, 2]], b: [18, 8], et: ['barras de P', 'barras de Q'], i: 0, r: 4 },
+          { q: 'Con $k = 0$ (Q sin cobre): $3x = 18$, $x + 2y = 8$. ¿Cuántas barras de **P**?', A: [[3, 0], [1, 2]], b: [18, 8], et: ['barras de P', 'barras de Q'], i: 0, r: 6 }] },
+        'Con $k = 4$: $\\det A = 2$ e $y = \\tfrac{3 \\cdot 8 - 18 \\cdot 1}{2} = 3$. Con $k = 3$: $\\det A = 3$ y $x = \\tfrac{18 \\cdot 2 - 3 \\cdot 8}{3} = 4$. Con $k = 0$: $\\det A = 6$ y $x = \\tfrac{36}{6} = 6$.',
+        ['Primero escribe $\\det A$ en función de $k$; después cambia por (18, 8) la columna de la incógnita y divide.', 'Para y se cambia la segunda columna; para x, la primera.'], '3, 4 y 6 barras'],
+      ['La tercera aleación', 'Si la columna de R está en el plano de P y Q, R no aporta nada nuevo: det A = 0.', 'caja-aplastada-k',
+        'Con estaño en la cuenta, las barras son columnas (cobre, zinc, estaño): $P = (3, 1, 1)$, $Q = (4, 2, 0)$ y $R = (k, 2, 1)$. Desliza **k** hasta el valor con el que R es una mezcla de P y Q y la caja se aplasta.',
+        { c1: [3, 1, 1], c2: [4, 2, 0], c3: ['k', 2, 1], min: 0, max: 8, ini: 2, ok: 'Con k = 5, R = P + ½Q: queda en el plano de P y Q y A no tiene inversa.' },
+        '$\\det A = 3(2 - 0) - 4(1 - 2) + k(0 - 2) = 10 - 2k$, que se anula con $k = 5$. Entonces $R = (5, 2, 1) = P + \\tfrac{1}{2}Q$: no sirve como tercera aleación.',
+        ['Desarrolla $\\det A$ por la primera fila, con k como letra.', 'Comprueba con el valor hallado que R es P más media Q.'], 'k = 5 aplasta'],
+      ['Tres aleaciones, un pedido', 'Con R = (2, 2, 1), det A = 6 ≠ 0: cada incógnita es el det de su matriz entre det A.', 'cramer-tres-incognitas',
+        'Con $R = (2, 2, 1)$ se pide 16 kg de cobre, 10 de zinc y 5 de estaño: $A\\vec x = \\vec b$ con columnas P, Q, R. Las matrices P, Q y R de la escena tienen $\\vec b$ en una columna cada una. Fija x, y, z.',
+        { A: [[3, 4, 2], [1, 2, 2], [1, 0, 1]], b: [16, 10, 5], orden: [1, 2, 0], et: ['barras de P', 'barras de Q', 'barras de R'], max: 6, ok: '2, 1 y 3 barras: 6 + 4 + 6 = 16, 2 + 2 + 6 = 10 y 2 + 0 + 3 = 5.' },
+        '$\\det A = 6$. La matriz con $\\vec b$ en la columna 1 tiene det 12: $x = 2$; en la columna 2, det 6: $y = 1$; en la columna 3, det 18: $z = 3$.',
+        ['Cada incógnita usa la matriz con $\\vec b$ en **su** columna: mira cuál está resaltada en P, Q y R.', 'Divide cada determinante entre $\\det A = 6$ y comprueba con el estaño: $x + z = 5$.'], 'x = 2, y = 1, z = 3'],
+    ], 'Falla con k = 6; con k = 4, 3 y 0 salen 3, 4 y 6 barras; R sirve si k ≠ 5, y con R = (2, 2, 1) se funden 2, 1 y 3 barras.', 'Solución única si y solo si det A ≠ 0; entonces Cramer la da incógnita por incógnita.');
+}
+;
+//#archivo js/gimnasio-gva-3.js
+// Gimnasio de Geometría Vectorial y Analítica, mundo 3 «Geometría Vectorial» (spec 2026-11-27-curso-geometria-vectorial): dos retos
+// de Fuerza y dos de Élite, con los juegos de escena de js/games/gva-escena-9.js a -13.js y datos nuevos. Va después de gimnasio.js.
+{
+  // Un paso: [título, entrenador, juego, enunciado, datos, explicación, [ayuda, ayuda], nota].
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-gva-${id}`, after, level,
+    title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+
+  // ------------------------------------------------------------------------------------------- Fuerza
+  reto('viento-3', ['geo-9', 'geo-11'], 2, 'La avioneta fumigadora', 'Resta el viento, mide con el coseno y ubica el cuadrante',
+    'Una avioneta fumigadora vuela tres tramos con viento. En el primero debe avanzar respecto al suelo por un rumbo fijo y hay que hallar hacia dónde apuntar; en el segundo se conocen las rapideces y el ángulo entre ellas, y en el tercero las velocidades llegan en componentes y se pide la dirección real.', [
+      ['Apuntar contra el viento', 'Lo que ve el suelo es propia + viento. Si se conoce el rumbo, la propia es rumbo − viento.', 'corrige-el-viento',
+        'Cada cuadro es 20 km/h. La avioneta debe avanzar respecto al suelo según la flecha punteada **rumbo**, $(-3, 4)$ cuadros, y el **viento** sopla $(2, -1)$. Arrastra la punta **P** de su velocidad propia $\\vec p$ para que $\\vec p + \\vec w$ sea el rumbo.',
+        { t: [-3, 4], w: [2, -1], ini: [2, 2], et: ['rumbo', 'viento'],
+          mira: { suma: 'Sumaste el viento al rumbo, y así el viento empuja dos veces. A la propia hay que quitarle el viento: p = rumbo − viento.',
+            sin: 'Así apuntas justo al rumbo, pero el viento te corre hacia la derecha y hacia abajo: hay que apuntar contra él.',
+            otro: 'Pon la cola del viento en tu punta P: la punta del viento tiene que caer justo en la punta del rumbo.' },
+          ok: 'p = (−3, 4) − (2, −1) = (−5, 5): la avioneta apunta más a la izquierda y más arriba, y el viento la endereza.' },
+        '$\\vec p = \\vec t - \\vec w = (-3 - 2,\\ 4 - (-1)) = (-5, 5)$ cuadros, es decir $(-100, 100)$ km/h. Con la cola del viento en la punta de $\\vec p$ se llega a la punta del rumbo, $(-3, 4)$.',
+        ['Si $\\vec p + \\vec w = \\vec t$, despeja $\\vec p$ y resta componente a componente.', 'El viento empuja a la derecha y hacia abajo: la propia debe apuntar más a la izquierda y más arriba que el rumbo.'], 'p = (−5, 5) cuadros'],
+      ['La rapidez real', 'Con v en la punta de u, el ángulo del triángulo es el suplemento del ángulo entre los vectores.', 'diagonal-por-coseno',
+        'En el segundo tramo la avioneta lleva **15 m/s** propios y el viento sopla a **7 m/s**; entre la proa y el viento hay **120°**. ¿Cuánto mide la velocidad respecto al suelo, $\\|\\vec u + \\vec v\\|$?',
+        { a: 15, b: 7, th: 120, r: 13, max: 24, uni: 'm/s', et: ['propia', 'viento'],
+          mira: { mas: 'Se pasa de la punta de la diagonal: calcula a² + b² + 2ab·cos θ y saca la raíz.', menos: 'No llega a la punta de la diagonal: calcula a² + b² + 2ab·cos θ y saca la raíz.' },
+          trampas: { 22: 'Sumaste 15 + 7: eso pasa solo si el viento sopla justo a favor. Con 120° entre ellos, el viento frena.',
+            8: 'Restaste 15 − 7: eso pasa solo si el viento sopla justo en contra, con 180° entre ellos.',
+            19: 'Usaste cos 120° con el signo cambiado: cos 120° = −½, así que 2·15·7·cos 120° resta 105.' },
+          ok: 'La rapidez respecto al suelo es de 13 m/s: el viento casi de frente le quita 2 m/s a la avioneta.' },
+        '$\\|\\vec u + \\vec v\\|^2 = 15^2 + 7^2 + 2 \\cdot 15 \\cdot 7 \\cos 120^{\\circ} = 225 + 49 - 105 = 169$, así que la rapidez es de 13 m/s. En el triángulo de la suma el ángulo es $60^{\\circ}$ y la ley del coseno da lo mismo: $225 + 49 - 2 \\cdot 105 \\cdot \\tfrac12$.',
+        ['Usa $\\|\\vec u + \\vec v\\|^2 = \\|\\vec u\\|^2 + \\|\\vec v\\|^2 + 2\\|\\vec u\\|\\|\\vec v\\|\\cos\\theta$ con $\\theta = 120^{\\circ}$.', '$\\cos 120^{\\circ} = -\\tfrac12$: el último término resta $15 \\cdot 7 = 105$.'], '13 m/s'],
+      ['La dirección real', 'Suma por componentes; los signos dicen el cuadrante y la tangente, el ángulo de referencia.', 'brujula-del-cuadrante',
+        'En el tercer tramo la velocidad propia es $(-50, 10)$ km/h y el viento $(10, 30)$ km/h. La velocidad respecto al suelo es su suma. Gira la aguja hasta su **dirección**, desde 0° y contra las agujas del reloj.',
+        { a: '−40', b: '40', c: [-40, 40], g: 135, uni: 'km/h', que: 'propia + viento',
+          trampas: { 315: 'La calculadora da −45°, que es 315°, porque tan θ = −1. Pero x < 0 e y > 0: la avioneta va hacia arriba y a la izquierda.',
+            45: 'En 45° las dos componentes son positivas; aquí la x es negativa.', 225: 'En 225° las dos componentes son negativas; aquí la y es positiva.',
+            165: 'Esa es casi la dirección de la propia sola, (−50, 10): falta sumarle el viento.' },
+          otro: 'Primero suma: (−50 + 10, 10 + 30). Luego mira los signos para el cuadrante y usa tan θ = |y| / |x| para el ángulo de referencia.',
+          ok: 'Dirección 135°: la suma es (−40, 40), en el segundo cuadrante, con ángulo de referencia 45°.' },
+        '$(-50, 10) + (10, 30) = (-40, 40)$. Como $\\tan\\theta = \\tfrac{40}{-40} = -1$, el ángulo de referencia es $45^{\\circ}$, y con $x < 0$, $y > 0$ el vector está en el segundo cuadrante: $\\theta = 180^{\\circ} - 45^{\\circ} = 135^{\\circ}$. Su rapidez es $40\\sqrt{2} \\approx 56.6$ km/h.',
+        ['Suma las dos velocidades componente a componente antes de buscar el ángulo.', 'Con $x$ negativa e $y$ positiva el vector está en el segundo cuadrante: $\\theta = 180^{\\circ}$ menos el ángulo de referencia.'], 'θ = 135°'],
+    ], 'Propia (−5, 5) cuadros = (−100, 100) km/h; rapidez real de 13 m/s; dirección real de 135°.', 'Las velocidades se suman como flechas: para compensar se resta, para medir se usa el coseno y para orientar, las componentes.');
+
+  reto('ruta-3', ['geo-12'], 2, 'El dron de la costa', 'De dos instantes a la recta, sus formas y su perpendicular',
+    'Un dron topógrafo recorre en línea recta la orilla del mar y deja trazada la recta de la costa. Con ella hay que escribir la costa en sus formas escalares, construir desde un faro un muelle perpendicular y calcular en qué instantes los móviles de la zona pasan por lugares clave.', [
+      ['La recta por dos instantes', 'La velocidad es lo que avanza en una unidad de tiempo: (B − A) dividido entre el tiempo.', 'dron-por-dos-instantes',
+        'Cada cuadro es 1 km. El dron está en **A** $= (4, 3)$ a las 0 h y en **B** $= (-5, -3)$ a las 3 h, a velocidad constante. Su ruta es $X = A + t\\vec v$. Arrastra la punta de $\\vec v$, lo que avanza en **una** hora.',
+        { A: [4, 3], B: [-5, -3], T: 3, min: [-5, -4], max: [2, 1], ini: [1, 0], uni: 'km', ok: 'v = (−3, −2): a las 3 h el dron está en A + 3v = B.' },
+        '$B - A = (-9, -6)$ es lo que avanza en 3 horas; en una hora avanza $\\vec v = \\tfrac13(-9, -6) = (-3, -2)$. La costa es $X = (4, 3) + t\\,(-3, -2)$: con $t = 3$ da $(-5, -3) = B$.',
+        ['Cuenta cuánto cambia cada coordenada de A a B y reparte ese cambio en 3 horas.', 'Las dos componentes de $B - A$ son negativas: la flecha apunta hacia abajo y a la izquierda.'], 'v = (−3, −2)'],
+      ['La costa en otras formas', 'La pendiente es d₂/d₁; un normal es (d₂, −d₁) y c sale de poner el punto.', 'convierte-forma-recta',
+        'La costa es $X = (4, 3) + t\\,(-3, -2)$. Escríbela con su pendiente, el intercepto b de $y = mx + b$ y la forma general $ax + by = c$, con $a > 0$ y sin factor común.',
+        { P: [4, 3], d: [-3, -2], extra: ['3/2', '−2/3', '−1/3', '3', '1'],
+          trampas: { '0:3/2': 'Esa es d₁/d₂, al revés. La pendiente es lo que sube entre lo que avanza: (−2)/(−3).',
+            '0:−2/3': 'Revisa el signo: d₁ y d₂ son negativos, así que la pendiente (−2)/(−3) es positiva.',
+            '1:−1/3': 'y = 3 + (2/3)(x − 4) = (2/3)x − 8/3 + 3: el intercepto es −8/3 + 3 = 1/3.',
+            '3:3': 'Con el normal (2, −3), b es −3: cambiaste el signo de b sin cambiar el de a.',
+            '4:1': 'c = 2·4 − 3·3 = 8 − 9 = −1: revisa el signo.' },
+          ok: 'm = 2/3, y = (2/3)x + 1/3 y 2x − 3y = −1: las tres formas pasan por (4, 3) y por (−5, −3).' },
+        '$m = \\tfrac{-2}{-3} = \\tfrac23$; $y - 3 = \\tfrac23(x - 4)$ da $y = \\tfrac23 x + \\tfrac13$. Un normal es $(d_2, -d_1) = (-2, 3)$, o con $a > 0$, $(2, -3)$: $2x - 3y = 2 \\cdot 4 - 3 \\cdot 3 = -1$. Se comprueba con B: $-10 + 9 = -1$.',
+        ['Para la general, el par $(a, b)$ es perpendicular al director: $(-2, 3)$ o su opuesto.', 'c se obtiene metiendo el punto $(4, 3)$ en $2x - 3y$.'], '2x − 3y = −1'],
+      ['El muelle perpendicular', 'El normal (a, b) de la costa ax + by = c es perpendicular a ella: es el director del muelle.', 'muelle-perpendicular',
+        'El faro está en $(3, -2)$ y la costa es $2x - 3y = -1$. El muelle sale del faro y debe llegar a la costa **en ángulo recto**. Arrastra la punta de su director $\\vec w$.',
+        { L: [2, -3, -1], Q: [3, -2], ini: [1, 0], ok: 'w = (2, −3), el normal de la costa: el muelle llega a ella en (1, 1), en ángulo recto.' },
+        'El normal de $2x - 3y = -1$ es $(2, -3)$, así que el muelle es $X = (3, -2) + s\\,(2, -3)$. Llega a la costa cuando $2(3 + 2s) - 3(-2 - 3s) = -1$, es decir $12 + 13s = -1$: en $s = -1$, el punto $(1, 1)$. Con pendientes: $\\tfrac23 \\cdot \\left(-\\tfrac32\\right) = -1$.',
+        ['En la forma general $ax + by = c$, el par $(a, b)$ es perpendicular a la recta.', 'La costa tiene pendiente $\\tfrac23$: el muelle necesita una pendiente cuyo producto con ella dé $-1$.'], 'w = (2, −3)'],
+      ['Instantes clave', 'Iguala la coordenada que manda la condición y despeja t.', 'instante-del-cruce',
+        'Tres móviles de la zona, tres rectas con t como tiempo. En cada una, halla el instante que se pide y lánzalo. Puedes fallar **una** vez.',
+        { tiros: [
+          { q: 'El dron sigue $X = (4, 3) + t\\,(-3, -2)$, con t en horas. ¿En qué instante pasa por el pie del muelle, donde $x = 1$?', P: [4, 3], d: [-3, -2], eje: 0, valor: 1, ver: [0, 1], linea: 'x = 1', r: 1,
+            e: { 2: 'A t = 2 el dron ya va en (−2, −1): se pasó del pie del muelle.' } },
+          { q: 'Una lancha sigue $X = (-6, -4) + t\\,(2, 1)$, con t en minutos. El canal de entrada es la recta $y = 0$. ¿En qué instante lo cruza?', P: [-6, -4], d: [2, 1], eje: 1, valor: 0, ver: [0, 1], linea: 'canal: y = 0', r: 4 },
+          { q: 'Un globo sonda sube por $X = (1, -2, 3) + t\\,(1, 2, 3)$, con t en minutos. ¿En qué instante alcanza la altura $z = 18$?', P: [1, -2, 3], d: [1, 2, 3], eje: 2, valor: 18, ver: [0, 2], linea: 'z = 18', r: 5,
+            e: { 6: 'A t = 6 el globo ya va en z = 21: se pasó de 18.' } }] },
+        'Dron: $4 - 3t = 1$ da $t = 1$, justo en $(1, 1)$, el pie del muelle. Lancha: $-4 + t = 0$ da $t = 4$. Globo: $3 + 3t = 18$ da $t = 5$.',
+        ['Escoge la coordenada que nombra la condición ($x$, $y$ o $z$) y escribe esa componente de $P + t\\vec d$.', 'Iguala esa componente al valor pedido y despeja t: es una ecuación de primer grado.'], 't = 1, 4 y 5'],
+    ], 'v = (−3, −2); la costa es y = (2/3)x + 1/3, o 2x − 3y = −1; el muelle sigue w = (2, −3) hasta (1, 1); instantes 1, 4 y 5.', 'Dos puntos dan una recta; su normal da la perpendicular, y cada condición sobre una coordenada fija un instante.');
+
+  // -------------------------------------------------------------------------------------------- Élite
+  reto('vitrina-3', ['geo-10', 'geo-11'], 3, 'La vitrina inclinada', 'Cierra el paralelogramo, pruébalo y escribe sus puntos con los lados',
+    'Una vitrina de vidrio con forma de paralelogramo ABCD tiene tres esquinas ya fijadas. Hay que ubicar la cuarta, probar con vectores que, si las diagonales se cortan en su punto medio, la figura es un paralelogramo, y describir un soporte y un tornillo como combinación de los lados u = AB y v = AD.', [
+      ['La cuarta esquina', 'En ABCD, la flecha BC trasladada a A llega a D: d = a + c − b.', 'cuarto-vertice-marco',
+        'Las esquinas de la vitrina $ABCD$ (en ese orden) están en $A = (2, 2)$, $B = (5, 1)$ y $C = (6, 4)$. Arrastra **D** para que $\\overrightarrow{AD} = \\overrightarrow{BC}$.',
+        { A: [2, 2], B: [5, 1], C: [6, 4], ini: [10, 8],
+          mira: { abdc: 'Así queda el paralelogramo ABDC: D quedó frente a A. En ABCD, D va unido a C y a A, frente a B.',
+            acbd: 'Ahí D queda frente a C. En ABCD, D es vecino de A y de C.',
+            otro: 'Desde A, haz el mismo recorrido que va de B a C: uno a la derecha y tres hacia arriba.' },
+          ok: 'D = (3, 5): AD = BC = (1, 3) y AB = DC = (3, −1).' },
+        '$\\vec d = \\vec a + \\vec c - \\vec b = (2 + 6 - 5,\\ 2 + 4 - 1) = (3, 5)$. Se comprueba: $\\overrightarrow{AD} = (1, 3) = \\overrightarrow{BC}$ y $\\overrightarrow{AB} = (3, -1) = \\overrightarrow{DC}$. Las dos diagonales tienen el mismo punto medio, $(4, 3)$.',
+        ['Cuenta cuántos cuadros hay de B a C en cada dirección y repite ese recorrido desde A.', 'Con números: $\\vec d = \\vec a + \\vec c - \\vec b$.'], 'D = (3, 5)'],
+      ['El recíproco, demostrado', 'Se parte de las mitades iguales y se llega a dos pares de lados opuestos que son la misma flecha.', 'diagonales-se-bisecan',
+        'Prueba el recíproco: si las diagonales de $ABCD$ se cortan en su punto medio, $\\tfrac12(\\vec a + \\vec c) = \\tfrac12(\\vec b + \\vec d)$, entonces $ABCD$ es un paralelogramo. Completa cada renglón, con $\\vec a, \\vec b, \\vec c, \\vec d$ las flechas desde O.',
+        { filas: ['Por 2 a cada lado:', 'Se restan a y d:', 'Como flechas:', 'Y restando a y b:'],
+          metas: ['a + c = b + d', 'c − d = b − a', 'DC = AB', 'AD = BC'],
+          fichas: ['a + c = b + d', 'c − d = b − a', 'DC = AB', 'AD = BC', 'a − c = b − d', 'd − c = b − a', 'CD = AB', 'AD = CB'],
+          mira: ['Multiplica por 2 los dos lados de la igualdad de los puntos medios.', 'Quita a y d de los dos lados de a + c = b + d: a la izquierda queda c − d y a la derecha b − a.',
+            'b − a va de A a B y c − d va de D a C.', 'Ahora quita a y b de a + c = b + d: queda c − b = d − a; cada lado es una flecha de la figura.'],
+          trampas: { '0:a − c = b − d': 'El punto medio es la mitad de la suma, no de la resta: al multiplicar por 2 queda a + c = b + d.',
+            '1:d − c = b − a': 'Al restar d de los dos lados, a la izquierda queda c − d, no d − c.',
+            '2:CD = AB': 'c − d es punta menos cola: la flecha va de D a C, es DC. CD apuntaría al revés.',
+            '3:AD = CB': 'c − b va de B a C: es BC. CB es su opuesto.' },
+          ok: 'Con DC = AB y AD = BC, los lados opuestos son la misma flecha: ABCD es un paralelogramo.' },
+        'De $\\tfrac12(\\vec a + \\vec c) = \\tfrac12(\\vec b + \\vec d)$ sale $\\vec a + \\vec c = \\vec b + \\vec d$. Restando $\\vec a + \\vec d$: $\\vec c - \\vec d = \\vec b - \\vec a$, o sea $\\overrightarrow{DC} = \\overrightarrow{AB}$. Restando $\\vec a + \\vec b$: $\\vec d - \\vec a = \\vec c - \\vec b$, o sea $\\overrightarrow{AD} = \\overrightarrow{BC}$. Con la vitrina: $\\tfrac12(A + C) = \\tfrac12(B + D) = (4, 3)$.',
+        ['Una flecha de la figura es punta menos cola: $\\overrightarrow{AB} = \\vec b - \\vec a$.', 'Desde $\\vec a + \\vec c = \\vec b + \\vec d$, pasa términos de lado para que en cada lado quede una resta.'], 'DC = AB y AD = BC'],
+      ['El soporte de afuera', 'Busca un camino por los lados: cada tramo es un múltiplo de u o de v.', 'combina-dos-lados',
+        'En la vitrina, $\\vec u = \\overrightarrow{AB}$ y $\\vec v = \\overrightarrow{AD}$. El soporte **X** se pone prolongando el lado $DC$ más allá de C, la **mitad** de su largo. Elige $r$ y $s$ con $\\overrightarrow{AX} = r\\,\\vec u + s\\,\\vec v$.',
+        { X: [1.5, 1], et: 'X: medio lado DC más allá de C',
+          mira: { cambia: 'Cambiaste los números: X está a la altura del lado DC, que es v entera, y avanza u y media.',
+            r: 'La parte de v está bien; por el lado DC se avanza u entera y luego la mitad más.',
+            s: 'La parte de u está bien; falta subir hasta el lado DC: eso es v completa.',
+            otro: 'Ve de A a D (eso es v), luego de D a C (eso es u, porque DC = AB) y sigue media u más.' },
+          ok: 'AX = 1.5u + v: se sube por AD y se recorre DC una vez y media.' },
+        '$\\overrightarrow{AX} = \\overrightarrow{AD} + \\overrightarrow{DC} + \\tfrac12\\overrightarrow{DC}$. Como $\\overrightarrow{DC} = \\overrightarrow{AB} = \\vec u$, queda $\\vec v + \\tfrac32\\vec u$: $r = 1.5$ y $s = 1$. En la vitrina, $X = A + 1.5(3, -1) + (1, 3) = (7.5, 3.5)$.',
+        ['Por el paso anterior, $\\overrightarrow{DC} = \\overrightarrow{AB} = \\vec u$.', 'Recorre $A \\to D \\to C$ y luego media flecha $\\vec u$ más.'], 'r = 1.5, s = 1'],
+      ['El tornillo en la base de los lados', 'Las coordenadas en otra base salen de igualar componente a componente a·u + b·v.', 'coordenadas-en-otra-base',
+        'Con A como origen, $\\vec u = \\overrightarrow{AB} = (3, -1)$ y $\\vec v = \\overrightarrow{AD} = (1, 3)$. Un tornillo está en $(1, 9)$, así que desde A queda en $Q = (-1, 7)$. Elige $a$ y $b$ con $a\\,\\vec u + b\\,\\vec v = Q$.',
+        { e1: [3, -1], e2: [1, 3], Q: [-1, 7], a: -1, b: 2, ini: { a: 1, b: 1 }, base: ['\\vec u', '\\vec v'], et: 'lados de la vitrina',
+          trampas: { '2,-1': 'Cambiaste a y b: 2u − v llega a (5, −5).', '1,2': 'u + 2v llega a (5, 5): la x se pasa; u tiene que ir al revés.' },
+          ok: 'Q = −u + 2v: en la base de los lados, el tornillo tiene coordenadas (−1, 2).' },
+        'Se iguala componente a componente: $3a + b = -1$ y $-a + 3b = 7$. De la segunda, $a = 3b - 7$; en la primera, $9b - 21 + b = -1$, así que $b = 2$ y $a = -1$. Se comprueba: $-(3, -1) + 2(1, 3) = (-1, 7)$.',
+        ['Plantea dos ecuaciones, una con las x y otra con las y, o cuenta los pasos en la rejilla inclinada.', 'Q tiene x negativa y u apunta a la derecha: a debe ser negativo.'], 'a = −1, b = 2'],
+    ], 'D = (3, 5); de las mitades iguales salen DC = AB y AD = BC; AX = 1.5u + v; el tornillo es −u + 2v.', 'Con flechas, un teorema se vuelve una cuenta: los lados opuestos iguales y las diagonales que se bisecan dicen lo mismo, y todo punto se escribe con dos lados.');
+
+  reto('pueblos-3', ['geo-13'], 3, 'El pozo de los tres pueblos', 'Dos mediatrices se cortan en el punto que equidista de los tres',
+    'Tres pueblos están en A(0, 4), B(2, 0) y C(9, 7), en km. Se abrirá un pozo a la misma distancia de los tres, sobre la carretera y = 4. Hay que escribir la mediatriz de AB, ubicar en la carretera el punto que equidista de B y C, comprobar que también está en la mediatriz de AB y, con una antena en el pozo, calcular los radios de cobertura.', [
+      ['La mediatriz de AB', 'La mediatriz pasa por el punto medio y sus coeficientes son los de B − A.', 'mediatriz-en-fichas',
+        'Los pueblos **A(0, 4)** y **B(2, 0)**: los puntos a igual distancia de los dos forman la mediatriz de AB. Arrastra su punto medio, el vector $B - A$ y su ecuación.',
+        { A: [0, 4], B: [2, 0], metas: ['(1, 2)', '(2, −4)', 'x − 2y = −3'], fichas: ['(1, 2)', '(2, −4)', 'x − 2y = −3', '(2, 4)', '(1, −2)', '(−2, 4)', '2x + y = 4', 'x − 2y = −8'],
+          mira: ['El punto medio es el promedio de A y B, coordenada por coordenada.', 'El vector va de A a B: a cada coordenada de B se le resta la de A.', 'La mediatriz pasa por M con normal B − A: $2(x - 1) - 4(y - 2) = 0$, y se simplifica entre 2.'],
+          trampas: { '0:(2, 4)': 'Eso es A + B: falta dividir entre 2.', '0:(1, −2)': 'Esa es la mitad de B − A, no el punto medio: el punto medio promedia A y B.',
+            '1:(−2, 4)': 'Ese es A − B: la flecha de A a B es B − A.', '1:(1, −2)': 'Esa es la mitad del vector; B − A = (2 − 0, 0 − 4).',
+            '2:2x + y = 4': 'Esa es la recta que pasa por A y por B. La mediatriz es perpendicular a ella y pasa por el punto medio.',
+            '2:x − 2y = −8': 'Esa recta es perpendicular a AB, pero pasa por A, no por el punto medio (1, 2).' },
+          ok: 'M = (1, 2), B − A = (2, −4) y la mediatriz es x − 2y = −3.' },
+        '$M = \\tfrac12(A + B) = (1, 2)$ y $B - A = (2, -4)$. La mediatriz es $(B - A) \\cdot (X - M) = 0$: $2(x - 1) - 4(y - 2) = 0$, es decir $2x - 4y = -6$, o $x - 2y = -3$.',
+        ['El punto de la mediatriz más fácil de hallar es el punto medio de AB.', 'El vector $B - A$ es perpendicular a la mediatriz: sus componentes son los coeficientes de x y de y.'], 'x − 2y = −3'],
+      ['El pozo en la carretera', 'Un punto del lugar «igual distancia de B y C» que además esté en la carretera.', 'pozo-equidistante',
+        'Ahora los pueblos **B(2, 0)** y **C(9, 7)**. El pozo va sobre la carretera $y = 4$ y a la **misma distancia** de B y de C. Arrastra el pozo **P** a ese sitio.',
+        { A: [2, 0], B: [9, 7], c: 4, ini: [9, 1], et: ['B', 'C'],
+          mira: { carretera: 'El pozo está en la carretera, pero no a igual distancia de B y de C: compara $PB^2$ con $PC^2$.',
+            medio: 'Ese es el punto medio de BC: equidista, pero no está en la carretera.',
+            mediatriz: 'Ese punto equidista de B y de C, pero no está en la carretera y = 4.',
+            otro: 'El pozo debe cumplir dos cosas: estar en y = 4 y en la mediatriz de BC.' },
+          ok: 'P = (5, 4): PB² = 9 + 16 = 25 y PC² = 16 + 9 = 25.' },
+        'La mediatriz de BC es $2(7, 7) \\cdot X = 81 + 49 - 4$: $14x + 14y = 126$, o $x + y = 9$. Con $y = 4$ queda $x = 5$. Además $5 - 2 \\cdot 4 = -3$: P también está en la mediatriz de AB, así que equidista de **los tres** pueblos.',
+        ['Escribe la mediatriz de BC y córtala con la recta $y = 4$.', 'Comprueba con distancias: $PB^2$ y $PC^2$ deben salir iguales.'], 'P = (5, 4)'],
+      ['La antena del pozo', 'El radio es la distancia: la raíz de la suma de los cuadrados de las diferencias.', 'onda-de-antena',
+        'En el pozo $P(5, 4)$ se pone una antena. Calcula el radio que pide cada caso y suelta: la señal se abre desde la antena. Puedes fallar **una** vez.',
+        { tiros: [
+          { q: '¿Qué radio, en km, necesita la antena en $(5, 4)$ para llegar **justo** a los tres pueblos?', C: [5, 4], casas: [[0, 4, 'A'], [2, 0, 'B'], [9, 7, 'C']], r: 5, max: 12, sc: 18,
+            trampas: { 7: '7 es 3 + 4: la distancia es la raíz de la suma de los cuadrados, $\\sqrt{3^2 + 4^2}$.', 4: 'Esa es solo una de las diferencias: falta la otra y sacar la raíz.' }, cuenta: '$PA = PB = PC = \\sqrt{25} = 5$ km' },
+          { q: 'La vereda D está en $(-1, 12)$. ¿Qué radio necesita la antena en $(5, 4)$ para llegar justo a ella?', C: [5, 4], casas: [[-1, 12, 'D']], r: 10, max: 16, sc: 9,
+            trampas: { 14: '14 es 6 + 8: hay que sumar los cuadrados y sacar la raíz.' }, cuenta: '$\\sqrt{6^2 + 8^2} = \\sqrt{100} = 10$ km' },
+          { q: 'Otra empresa ofrece cubrir $x^2 + y^2 - 4x + 6y - 23 \\le 0$, con la antena en el centro. ¿Cuál es su radio?', C: [2, -3], casas: [], eq: 'x² + y² − 4x + 6y − 23 = 0', r: 6, max: 12, sc: 14,
+            trampas: { 5: 'Con 5 tomaste r² ≈ 23, solo el número que pasa a la derecha. Al completar cuadrados también pasan 4 y 9: r² = 23 + 4 + 9 = 36.' }, cuenta: '$(x - 2)^2 + (y + 3)^2 = 23 + 4 + 9 = 36$: radio 6 km' }] },
+        'A los tres pueblos: $PA^2 = 25 + 0$, $PB^2 = 9 + 16$ y $PC^2 = 16 + 9$, así que el radio es 5. A la vereda: $\\sqrt{36 + 64} = 10$. La otra cobertura es $(x - 2)^2 + (y + 3)^2 = 36$: radio 6.',
+        ['La distancia entre dos puntos es $\\sqrt{(\\Delta x)^2 + (\\Delta y)^2}$.', 'Para la ecuación, completa cuadrados en x y en y: el radio al cuadrado es lo que queda a la derecha.'], '5, 10 y 6 km'],
+    ], 'La mediatriz de AB es x − 2y = −3; el pozo va en (5, 4), a 5 km de los tres pueblos; la vereda queda a 10 km y la otra cobertura tiene radio 6.', 'El punto que equidista de tres puntos es el corte de dos mediatrices: el centro de la circunferencia que pasa por los tres.');
+}
+;
+//#archivo js/gimnasio-gva-4.js
+// Gimnasio de Geometría Vectorial y Analítica, mundo 4 «Productos Vectoriales» (spec 2026-11-27-curso-geometria-vectorial): dos retos
+// de Fuerza y dos de Élite, con los juegos de escena de js/games/gva-escena-14.js a -18.js y datos nuevos. Va después de gimnasio.js.
+{
+  // Un paso: [título, entrenador, juego, enunciado, datos, explicación, [ayuda, ayuda], nota].
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-gva-${id}`, after, level,
+    title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+
+  // ------------------------------------------------------------------------------------------- Fuerza
+  reto('rampa-4', ['geo-14', 'geo-15'], 2, 'La rampa de carga', 'Mide el ángulo con el coseno, parte el peso con la proyección y suma trabajos con el signo',
+    'En una bodega, un carro sube por una rampa jalado por el cable de un malacate. Hay que hallar el ángulo real entre el cable y la rampa, partir el peso de una caja en la parte que la hace resbalar y la que la aprieta contra la rampa, y calcular el trabajo de cada fuerza que actúa sobre el carro.', [
+      ['El ángulo del cable', 'En perspectiva los ángulos engañan: la cuenta manda. Producto escalar entre el producto de las normas.', 'punto-transportador-3d',
+        'La rampa sube en la dirección $\\vec u = (2, 1, 1)$ y el cable del malacate tira en la dirección $\\vec v = (1, 0, 1)$. Abre el transportador al ángulo **de verdad** entre el cable y la rampa.',
+        { u: [2, 1, 1], v: [1, 0, 1], th: 30, ini: 90,
+          trampas: { 60: 'Ese ángulo tiene coseno ½. Aquí cos θ = 3/√12 = √3/2, que es mayor: el ángulo es más cerrado.',
+            150: 'El producto escalar da 3, positivo: el ángulo es agudo, no obtuso.',
+            45: 'Ese tendría coseno √2/2 ≈ 0.71; aquí el coseno es 3/√12 ≈ 0.87.' },
+          mira: { poco: 'Te quedaste corto: calcula cos θ = u · v / (‖u‖‖v‖) y busca qué ángulo tiene ese coseno.', mucho: 'Te pasaste: calcula cos θ = u · v / (‖u‖‖v‖) y busca qué ángulo tiene ese coseno.' },
+          ok: 'cos θ = 3/(√6 · √2) = √3/2: el cable forma 30° con la rampa.' },
+        '$\\vec u \\cdot \\vec v = 2 + 0 + 1 = 3$, $\\|\\vec u\\| = \\sqrt 6$ y $\\|\\vec v\\| = \\sqrt 2$, así que $\\cos\\theta = \\tfrac{3}{\\sqrt{12}} = \\tfrac{3}{2\\sqrt 3} = \\tfrac{\\sqrt 3}{2}$ y $\\theta = 30^{\\circ}$.',
+        ['Calcula $\\vec u \\cdot \\vec v$ y las dos normas; el cociente es el coseno del ángulo.', '$\\sqrt 6 \\cdot \\sqrt 2 = \\sqrt{12} = 2\\sqrt 3$: el coseno queda $\\tfrac{3}{2\\sqrt 3}$, un valor notable.'], 'θ = 30°'],
+      ['La parte que aprieta', 'El peso se parte en su sombra sobre la rampa y lo que sobra; lo que sobra forma ángulo recto con la rampa.', 'peso-que-aprieta-rampa',
+        'Vista de lado, cada cuadro es 10 N. Otra rampa baja hacia la derecha con la dirección $\\vec v = (1, -1)$ y una caja pesa $\\vec F = (0, -6)$. Arrastra **Q** a la punta de la parte de $\\vec F$ **perpendicular** a la rampa: la que aprieta la caja contra ella.',
+        { F: [0, -6], v: [1, -1], ini: [2, 2],
+          trampas: { '3,-3': 'Esa es la proyección del peso sobre la rampa: la parte que hace resbalar la caja rampa abajo. La que aprieta es lo que sobra.',
+            '0,-6': 'Ese es el peso entero. Una parte va a lo largo de la rampa; la que aprieta es la otra.',
+            '3,3': 'Esa flecha es perpendicular a la rampa, pero apunta hacia afuera: es como la rampa empuja la caja. La parte del peso apunta hacia la rampa.',
+            '1,-1': 'Esa es la dirección de la rampa. La parte que aprieta forma ángulo recto con ella.' },
+          otro: 'Proyecta el peso sobre v: (F · v / ‖v‖²) v. Luego réstale esa sombra al peso; lo que queda forma ángulo recto con la rampa.',
+          ok: 'El peso se parte en (3, −3), que hace resbalar la caja, y (−3, −3), que la aprieta: 30√2 ≈ 42 N cada una.' },
+        '$\\vec F \\cdot \\vec v = 6$ y $\\|\\vec v\\|^2 = 2$: $\\operatorname{proy}_{\\vec v}\\vec F = 3\\,(1, -1) = (3, -3)$, rampa abajo. La parte que aprieta es $(0, -6) - (3, -3) = (-3, -3)$, y $(-3, -3) \\cdot (1, -1) = 0$. En newtons, cada parte mide $30\\sqrt 2 \\approx 42$ N.',
+        ['Primero la proyección: $\\tfrac{\\vec F \\cdot \\vec v}{\\|\\vec v\\|^2}\\,\\vec v$. Lo que aprieta es $\\vec F$ menos eso.', 'Comprueba con el producto escalar: la parte que aprieta debe dar 0 con $\\vec v = (1, -1)$.'], 'Q = (−3, −3)'],
+      ['El trabajo de cada fuerza', 'Trabajo = fuerza · avance = ‖F‖ ‖d‖ cos θ, con θ el ángulo entre la fuerza y el avance.', 'punto-trineo-trabajo',
+        'Sobre el carro que sube por la rampa actúan varias fuerzas. Fija el trabajo de cada una y suelta: el carro avanza. Puedes fallar **una** vez.',
+        { tiros: [
+          { q: 'El cable tira con **12 N** formando **60°** con la rampa, y el carro sube **5 m** por ella. ¿Cuánto trabajo hace el cable?', F: 12, th: 60, d: 5, r: 30, min: 0, max: 60,
+            cuenta: '$12 \\cdot 5 \\cdot \\cos 60^{\\circ} = 30$ J', trampas: { 60: 'Usaste la fuerza entera: solo cuenta la parte a lo largo del avance, 12 · cos 60° = 6 N.', 52: 'Usaste el seno: la parte de la fuerza a lo largo del avance lleva el coseno.' } },
+          { q: 'El carro pesa **20 N** y sube **3 m** por una rampa inclinada **30°**. Entre el peso, que apunta hacia abajo, y el avance hay **120°**. ¿Cuánto trabajo hace el peso?', F: 20, th: 120, d: 3, r: -30, min: -70, max: 60,
+            cuenta: '$20 \\cdot 3 \\cdot \\cos 120^{\\circ} = -30$ J: el peso frena la subida', trampas: { 30: 'El ángulo entre el peso y el avance es 120°, no 60°: el peso apunta hacia abajo y el carro sube, así que el trabajo es negativo.',
+              52: 'Usaste los 30° de la rampa como ángulo entre el peso y el avance. El peso es vertical: forma 90° + 30° = 120° con la rampa.', [-60]: 'Usaste el peso entero: solo cuenta su parte a lo largo de la rampa, 20 · cos 120° = −10 N.' } },
+          { q: 'La rampa empuja al carro con **16 N** perpendiculares a ella mientras sube **5 m**. ¿Cuánto trabajo hace ese empuje?', F: 16, th: 90, d: 5, r: 0, min: -40, max: 40,
+            cuenta: '$16 \\cdot 5 \\cdot \\cos 90^{\\circ} = 0$ J: una fuerza perpendicular al avance no trabaja', trampas: { 80: 'Multiplicaste fuerza por distancia, pero la fuerza forma 90° con el avance: cos 90° = 0.' } }] },
+        'Cable: $12 \\cdot 5 \\cdot \\tfrac12 = 30$ J. Peso: $20 \\cdot 3 \\cdot \\left(-\\tfrac12\\right) = -30$ J, porque el peso vertical forma $90^{\\circ} + 30^{\\circ}$ con la rampa. Empuje de la rampa: $\\cos 90^{\\circ} = 0$, así que no trabaja.',
+        ['El trabajo es $\\|\\vec F\\|\\,\\|\\vec d\\|\\cos\\theta$, con $\\theta$ el ángulo entre la fuerza y el avance, no con el suelo.', 'Si el ángulo es obtuso el trabajo es negativo; si es recto, es cero.'], '30, −30 y 0 J'],
+    ], 'El cable forma 30° con la rampa; la caja se aprieta con (−3, −3) cuadros; los trabajos son 30 J, −30 J y 0 J.', 'El producto escalar mide cuánto acompaña una flecha a otra: da el ángulo, parte una fuerza en dos y dice cuánto trabaja.');
+
+  reto('carretera-4', ['geo-16'], 2, 'La casa junto a la carretera', 'De dos mojones a la normal; de la normal a la distancia y al ángulo',
+    'Una carretera recta pasa por dos mojones. Hay que hallar su vector normal y su ecuación, ubicar el punto de la carretera más cercano a una casa para el camino de entrada y medir el ángulo con el que una avenida nueva cruza la carretera justo en ese punto.', [
+      ['La normal de la carretera', 'Un normal es perpendicular al director B − A: su producto escalar con él da cero.', 'normal-de-la-carretera',
+        'La carretera pasa por los mojones **A** $= (-1, 3)$ y **B** $= (5, -1)$. Arrastra la punta del vector $\\vec n$ que sale de A para que sea **normal** a la carretera.',
+        { A: [-1, 3], B: [5, -1], ini: [1, 1], sol: [2, 3],
+          mira: { director: 'Esa flecha va a lo largo de la carretera: es paralela a B − A = (6, −4). La normal forma ángulo recto con ella.',
+            nulo: 'El vector nulo no tiene dirección: arrastra la punta fuera de A.',
+            otro: 'Calcula n · (B − A) con B − A = (6, −4): debe dar 0. Simplifica el director a (3, −2), intercambia sus componentes y cambia un signo.' },
+          ok: 'n · (6, −4) = 0: con n = (2, 3) la carretera es 2x + 3y = 7.' },
+        'El director es $B - A = (6, -4) = 2\\,(3, -2)$, y $\\vec n = (2, 3)$ cumple $(2, 3) \\cdot (6, -4) = 12 - 12 = 0$. Con $\\vec n \\cdot (X - A) = 0$: $2(x + 1) + 3(y - 3) = 0$, es decir, $2x + 3y = 7$. B lo cumple: $10 - 3 = 7$.',
+        ['El director es $B - A$; simplifícalo antes de buscar la normal.', 'De un director $(a, b)$ sale una normal intercambiando sus componentes y cambiando un signo; compruébala con el producto escalar.'], 'n = (2, 3)'],
+      ['El camino de entrada', 'El camino más corto llega en ángulo recto: va por la normal de la carretera.', 'casa-a-la-carretera',
+        'Cada cuadro es 10 m. La casa está en **Q** $= (4, 4)$ y la carretera es $2x + 3y = 7$. Arrastra **H** por la carretera hasta el punto **más cercano** a la casa: ahí empieza el camino de entrada.',
+        { abc: [2, 3, 7], P0: [-1, 3], Q: [4, 4], W: [-5, 8, -3, 6], t0: -1, tmin: -1, tmax: 2.5, paso: 0.5, uni: 'cuadros',
+          mira: { vertical: 'Bajaste en vertical desde la casa. El camino más corto es perpendicular a la carretera, en la dirección de la normal (2, 3).',
+            horizontal: 'Fuiste en horizontal, con la misma y de la casa. El camino más corto es perpendicular a la carretera, no horizontal.',
+            otro: 'Desde ese H el camino a la casa no forma ángulo recto con la carretera: muévelo hasta que Q − H sea un múltiplo de la normal (2, 3).' },
+          ok: 'Q − H = (2, 3), la normal: el camino más corto mide √13 cuadros, unos 36 m.' },
+        'La recta por la casa con la dirección de la normal es $(4, 4) + s\\,(2, 3)$; corta la carretera cuando $2(4 + 2s) + 3(4 + 3s) = 7$, es decir $20 + 13s = 7$: $s = -1$ y $H = (2, 1)$. La distancia es $\\tfrac{|2 \\cdot 4 + 3 \\cdot 4 - 7|}{\\sqrt{13}} = \\tfrac{13}{\\sqrt{13}} = \\sqrt{13}$ cuadros, unos 36 m.',
+        ['Desde la casa, el camino más corto va en la dirección de la normal, que se lee en la ecuación.', 'Busca un punto H de la carretera con $Q - H$ múltiplo de $(2, 3)$.'], 'H = (2, 1)'],
+      ['La avenida que cruza', 'El ángulo entre dos rectas es el de sus normales; con el valor absoluto sale el agudo.', 'angulo-entre-avenidas',
+        'Por el pie del camino, $H = (2, 1)$, pasará una avenida nueva: $x - 5y = -3$. Elige el ángulo **agudo** $\\theta$ con que cruza la carretera $2x + 3y = 7$.',
+        { L1: [2, 3, 7], L2: [1, -5, -3], th: 45, g0: 0,
+          mira: { obtuso: 'n₁ · n₂ = 2 − 15 = −13 es negativo: 135° es el ángulo entre las normales. Entre dos rectas se toma el agudo, con |n₁ · n₂|.',
+            recto: 'Serían perpendiculares si n₁ · n₂ = 0, y aquí da 2·1 + 3·(−5) = −13.',
+            otro: 'Calcula cos θ = |n₁ · n₂| / (‖n₁‖‖n₂‖) con n₁ = (2, 3) y n₂ = (1, −5).' },
+          ok: 'cos θ = 13/(√13 · √26) = √2/2: la avenida cruza la carretera a 45°.' },
+        '$\\vec n_1 \\cdot \\vec n_2 = 2 - 15 = -13$, $\\|\\vec n_1\\| = \\sqrt{13}$ y $\\|\\vec n_2\\| = \\sqrt{26} = \\sqrt{13}\\sqrt 2$. Entonces $\\cos\\theta = \\tfrac{13}{13\\sqrt 2} = \\tfrac{\\sqrt 2}{2}$ y $\\theta = 45^{\\circ}$; el otro ángulo del cruce mide $135^{\\circ}$. Se comprueba que pasa por H: $2 - 5 = -3$.',
+        ['Lee las normales en las ecuaciones: los coeficientes de x y de y.', 'El producto escalar sale negativo; con el valor absoluto se obtiene el ángulo agudo.'], 'θ = 45°'],
+    ], 'n = (2, 3) y la carretera es 2x + 3y = 7; el camino de entrada empieza en H = (2, 1) y mide √13 cuadros; la avenida cruza a 45°.', 'La normal de una recta lo dice todo: su ecuación, el camino más corto hasta ella y el ángulo con otra recta.');
+
+  // -------------------------------------------------------------------------------------------- Élite
+  reto('techo-4', ['geo-16', 'geo-18'], 3, 'El techo de la bodega', 'Tres puntos dan la normal; la normal da ángulos y distancias',
+    'El techo plano e inclinado de una bodega se apoya en tres columnas. Con sus puntas hay que hallar la normal del techo y su ecuación, medir el ángulo con que lo atraviesa un tubo de ventilación y calcular a qué distancia del techo quedan una lámpara, un dron y el cielo raso, que es paralelo al techo.', [
+      ['La normal por tres columnas', 'Los lados AB y AC están sobre el techo: su producto vectorial es perpendicular a los dos.', 'normal-de-tres-postes',
+        'Las columnas terminan en $A(1, 2, 5)$, $B(3, 0, 2)$ y $C(4, 4, 3)$, en metros. Ajusta las componentes de $\\vec n$ para que sea una **normal** del techo (vale cualquier múltiplo).',
+        { A: [1, 2, 5], B: [3, 0, 2], C: [4, 4, 3], ini: [0, 0, 1],
+          trampas: { '2,1,2': 'Revisa la componente del medio de AB × AC: lleva signo menos, −((2)(−2) − (−3)(3)) = −5.',
+            '2,-2,-3': 'Esa es la flecha AB: está sobre el techo, no es perpendicular a él.', '3,2,-2': 'Esa es la flecha AC: está sobre el techo, no es perpendicular a él.' },
+          ok: 'AB × AC = (10, −5, 10) = 5 (2, −1, 2): el techo es 2x − y + 2z = 10.' },
+        '$\\overrightarrow{AB} = (2, -2, -3)$ y $\\overrightarrow{AC} = (3, 2, -2)$, así que $\\overrightarrow{AB} \\times \\overrightarrow{AC} = ((-2)(-2) - (-3)(2),\\ -(2 \\cdot (-2) - (-3) \\cdot 3),\\ 2 \\cdot 2 - (-2) \\cdot 3) = (10, -5, 10) = 5\\,(2, -1, 2)$. Con A: $2 - 2 + 10 = 10$, y el techo es $2x - y + 2z = 10$; B y C lo cumplen.',
+        ['Calcula $\\overrightarrow{AB} = B - A$ y $\\overrightarrow{AC} = C - A$, y luego su producto vectorial.', 'El resultado tiene un factor común: divídelo para que quepa en las reglas.'], 'n = (2, −1, 2)'],
+      ['El tubo de ventilación', 'Con la normal se usa el coseno; con el techo, el complemento: el seno.', 'antena-sobre-el-techo',
+        'Un tubo de ventilación atraviesa el techo $2x - y + 2z = 10$ en la dirección $\\vec d = (1, 1, 4)$. Elige el ángulo $\\varphi$ que forma el tubo **con el techo**.',
+        { n: [2, -1, 2], c: 10, d: [1, 1, 4], phi: 45, g0: 0,
+          mira: { normal: 'Ese es el ángulo entre el tubo y la normal. Con el techo forma el complemento: usa el seno.',
+            otro: 'Calcula |d · n| / (‖d‖‖n‖) con n = (2, −1, 2): es el seno del ángulo entre el tubo y el techo.' },
+          ok: 'sen φ = 9/(3√2 · 3) = √2/2: el tubo forma 45° con el techo, y también 45° con su normal.' },
+        '$\\vec d \\cdot \\vec n = 2 - 1 + 8 = 9$, $\\|\\vec d\\| = \\sqrt{18} = 3\\sqrt 2$ y $\\|\\vec n\\| = 3$. Con la normal, $\\cos\\alpha = \\tfrac{9}{9\\sqrt 2} = \\tfrac{\\sqrt 2}{2}$: $\\alpha = 45^{\\circ}$. Con el techo, el complemento: $\\varphi = 90^{\\circ} - 45^{\\circ} = 45^{\\circ}$.',
+        ['Primero el producto escalar del tubo con la normal y las dos normas.', 'Ese cociente es el coseno del ángulo con la normal y el seno del ángulo con el techo.'], 'φ = 45°'],
+      ['Distancias al techo', 'Distancia a un plano: |ax₀ + by₀ + cz₀ − d| / ‖n‖. Dos planos paralelos, primero con la misma normal.', 'baja-por-la-normal',
+        'La sonda baja por la normal del techo $2x - y + 2z = 10$ la distancia que fijes, en metros, y debe tocarlo justo. Fija la distancia y suelta. Puedes fallar **una** vez.',
+        { tiros: [
+          { q: 'Una lámpara cuelga dentro de la bodega en $(2, 5, 1)$. ¿A qué distancia está del techo $2x - y + 2z = 10$?', de: 'lámpara', a: 'techo', r: 3, max: 10,
+            cuenta: '$\\tfrac{|4 - 5 + 2 - 10|}{3} = \\tfrac{9}{3} = 3$ m', trampas: { 9: 'Ese es |2·2 − 5 + 2·1 − 10| = 9 sin dividir entre ‖n‖ = 3.' } },
+          { q: 'Un dron de inspección vuela sobre la bodega en $(5, 0, 6)$. ¿A qué distancia está del techo?', de: 'dron', a: 'techo', r: 4, max: 10,
+            cuenta: '$\\tfrac{|10 - 0 + 12 - 10|}{3} = \\tfrac{12}{3} = 4$ m', trampas: { 2: 'Olvidaste el coeficiente de z: es 2 · 6 = 12, así que 2·5 − 0 + 12 − 10 = 12, y 12 / 3 = 4.' } },
+          { q: 'El cielo raso es el plano $-4x + 2y - 4z = 10$, paralelo al techo. ¿Qué distancia los separa?', de: 'cielo raso', a: 'techo', r: 5, max: 10,
+            cuenta: '$-4x + 2y - 4z = 10$ es $2x - y + 2z = -5$: $\\tfrac{|10 - (-5)|}{3} = 5$ m', trampas: {} }] },
+        'Lámpara: $\\tfrac{|4 - 5 + 2 - 10|}{3} = 3$ m. Dron: $\\tfrac{|22 - 10|}{3} = 4$ m. El cielo raso, dividido entre $-2$, es $2x - y + 2z = -5$, con la misma normal que el techo: $\\tfrac{|10 - (-5)|}{3} = 5$ m.',
+        ['Reemplaza el punto en $2x - y + 2z - 10$, toma el valor absoluto y divide entre $\\|\\vec n\\| = 3$.', 'Para el cielo raso, divide su ecuación entre $-2$ para que tenga la normal $(2, -1, 2)$, y compara los números de la derecha.'], '3, 4 y 5 m'],
+    ], 'n = (2, −1, 2) y el techo es 2x − y + 2z = 10; el tubo forma 45° con el techo; la lámpara está a 3 m, el dron a 4 m y el cielo raso a 5 m.', 'Tres puntos dan dos lados; su producto vectorial da la normal, y con la normal salen la ecuación, los ángulos y las distancias.');
+
+  reto('vitrina-4', ['geo-17', 'geo-18'], 3, 'La vitrina inclinada', 'El triple producto mide volúmenes; si vale cero, los puntos están en un plano',
+    'Un museo encarga vitrinas de vidrio con forma de caja inclinada. Hay que calcular un producto vectorial de dos aristas, los litros de aire que caben en varias vitrinas y, para la tarima donde irán, la altura del cuarto apoyo que deja las cuatro puntas en un mismo plano.', [
+      ['Dos aristas en cruz', 'Cada componente es un determinante 2 × 2; la del medio lleva signo menos.', 'pvec-tapa-columnas',
+        'Desde una esquina, la vitrina tiene las aristas $\\vec a = (2, 1, 3)$, $\\vec b = (1, 2, -1)$ y $\\vec c = (3, 0, 2)$, en dm. Calcula $\\vec b \\times \\vec c$: aquí $\\vec u = \\vec b$ y $\\vec v = \\vec c$. Tapa la columna de cada componente y arrastra lo que da.',
+        { u: [1, 2, -1], v: [3, 0, 2], metas: ['4', '−5', '−6'], fichas: ['4', '−5', '−6', '−4', '5', '6', '1'],
+          mira: ['La componente en î: tapa la primera columna y calcula u₂v₃ − u₃v₂.', 'La componente en ĵ: tapa la segunda columna; el 2 × 2 que queda va con signo menos.', 'La componente en k̂: tapa la tercera columna y calcula u₁v₂ − u₂v₁.'],
+          trampas: { '0:−4': 'Restaste al revés: es u₂v₃ − u₃v₂ = 2 · 2 − (−1) · 0 = 4.', '1:5': 'Te faltó el signo menos de la componente del medio: −(1 · 2 − (−1) · 3) = −5.',
+            '1:1': 'Restar un negativo es sumar: 1 · 2 − (−1) · 3 = 2 + 3 = 5, y con el signo del medio, −5.', '2:6': 'Restaste al revés: es u₁v₂ − u₂v₁ = 1 · 0 − 2 · 3 = −6.' },
+          ok: 'b × c = (4, −5, −6): su producto escalar con b y con c da 0.' },
+        '$\\vec b \\times \\vec c = \\big(2 \\cdot 2 - (-1) \\cdot 0,\\; -(1 \\cdot 2 - (-1) \\cdot 3),\\; 1 \\cdot 0 - 2 \\cdot 3\\big) = (4, -5, -6)$. Se comprueba: $\\vec b \\cdot (4, -5, -6) = 4 - 10 + 6 = 0$ y $\\vec c \\cdot (4, -5, -6) = 12 + 0 - 12 = 0$.',
+        ['Escribe el determinante con $\\hat\\imath, \\hat\\jmath, \\hat k$ arriba, $\\vec b$ en el medio y $\\vec c$ abajo.', 'Comprueba el resultado: su producto escalar con $\\vec b$ y con $\\vec c$ debe dar 0.'], 'b × c = (4, −5, −6)'],
+      ['Los litros de cada vitrina', 'Volumen = |a · (b × c)|; un prisma de base triangular es la mitad de la caja.', 'pvec-llena-oblicua',
+        'En dm el volumen sale en litros. Fija los litros que caben en cada vitrina y suelta: se vierten. Puedes fallar **una** vez.',
+        { tiros: [
+          { q: 'La vitrina tiene aristas $\\vec a = (2, 1, 3)$, $\\vec b = (1, 2, -1)$ y $\\vec c = (3, 0, 2)$, con $\\vec b \\times \\vec c = (4, -5, -6)$. ¿Cuántos litros le caben?', u: [2, 1, 3], v: [1, 2, -1], w: [3, 0, 2], r: 15, min: 0, max: 40,
+            cuenta: '$\\vec a \\cdot (\\vec b \\times \\vec c) = 8 - 5 - 18 = -15$: el signo es la orientación; caben 15 L', trampas: { 31: 'Sumaste sin los signos: (2, 1, 3) · (4, −5, −6) = 8 − 5 − 18.' } },
+          { q: 'Una vitrina es un prisma de base triangular: la base es el triángulo de lados $(2, 2, 0)$ y $(-1, 3, 0)$, y la arista inclinada es $(1, -1, 3)$, en dm. ¿Cuántos litros le caben?', u: [2, 2, 0], v: [-1, 3, 0], w: [1, -1, 3], prisma: true, r: 12, min: 0, max: 40,
+            cuenta: '$(2, 2, 0) \\cdot \\big((-1, 3, 0) \\times (1, -1, 3)\\big) = (2, 2, 0) \\cdot (9, 3, -2) = 24$, y el prisma es la mitad: 12 L', trampas: { 24: 'Ese es el volumen de la caja entera; el prisma de base triangular es la mitad.' } },
+          { q: 'La última vitrina tiene una esquina en $O(1, 0, 0)$ y las esquinas vecinas en $(3, 1, 0)$, $(1, 3, 1)$ y $(2, 0, 4)$, en dm. ¿Cuántos litros le caben?', u: [2, 1, 0], v: [0, 3, 1], w: [1, 0, 4], r: 25, min: 0, max: 40,
+            cuenta: 'Las aristas son $(2, 1, 0)$, $(0, 3, 1)$ y $(1, 0, 4)$: $(2, 1, 0) \\cdot (12, 1, -3) = 25$ L', trampas: { 34: 'Usaste las esquinas como si las aristas salieran del origen. Las aristas son las esquinas vecinas menos O.' } }] },
+        'Primera: $(2, 1, 3) \\cdot (4, -5, -6) = -15$, así que caben 15 L. Prisma: la caja tendría $24$ L y el prisma es la mitad, 12 L. Última: las aristas son las esquinas menos $O$, $(2, 1, 0)$, $(0, 3, 1)$ y $(1, 0, 4)$; $(0, 3, 1) \\times (1, 0, 4) = (12, 1, -3)$ y el triple producto es $24 + 1 = 25$ L.',
+        ['Haz el producto escalar de la primera arista con el producto vectorial de las otras dos y toma el valor absoluto.', 'Si te dan esquinas, réstales la esquina común para tener las aristas.'], '15, 12 y 25 L'],
+      ['La tarima que no cojea', 'Cuatro puntos están en un plano cuando la caja de sus tres aristas no tiene volumen: triple producto cero.', 'cuarta-pata-de-la-tarima',
+        'La tarima de las vitrinas se apoya en cuatro postes. Tres puntas están en $A(0, 1, 2)$, $B(5, 0, 4)$ y $C(0, 5, 1)$, en dm; la cuarta va en $D(5, 4, h)$. Arrastra **D** para que las cuatro puntas queden en un mismo plano.',
+        { A: [0, 1, 2], B: [5, 0, 4], C: [0, 5, 1], D: [5, 4], V: 0, max: 6, ini: 0, uni: 'dm',
+          trampas: { 4: 'h = 4 copia la altura de B, el poste más cercano, pero el plano de A, B y C está inclinado en las dos direcciones: el triple producto da 20.',
+            2: 'h = 2 copia la altura de A, pero el plano de A, B y C no es horizontal: el triple producto da −20.' },
+          ok: 'Con h = 3 el triple producto vale 0: D cae en el plano de A, B y C y la tarima no cojea.' },
+        '$\\overrightarrow{AB} = (5, -1, 2)$, $\\overrightarrow{AC} = (0, 4, -1)$ y $\\overrightarrow{AD} = (5, 3, h - 2)$. Entonces $\\overrightarrow{AB} \\times \\overrightarrow{AC} = (-7, 5, 20)$ y el triple producto es $-35 + 15 + 20(h - 2) = 20h - 60$, que vale 0 con $h = 3$.',
+        ['Escribe las tres aristas que salen de A, con la de D en función de h.', 'Calcula $\\overrightarrow{AB} \\times \\overrightarrow{AC}$ primero: es la normal del plano, y su producto escalar con $\\overrightarrow{AD}$ debe dar 0.'], 'h = 3 dm'],
+    ], 'b × c = (4, −5, −6); caben 15, 12 y 25 L; el cuarto poste mide h = 3 dm.', 'El triple producto es el volumen con signo de una caja inclinada: mide lo que cabe y, cuando vale cero, dice que cuatro puntos están en un plano.');
+}
+;
+//#archivo js/gimnasio-gva-5.js
+// Gimnasio de Geometría Vectorial y Analítica, mundo 5 «Fuerza, Trabajo y Momento» (spec 2026-11-27-curso-geometria-vectorial): dos
+// retos de Fuerza y dos de Élite, con los juegos de escena de js/games/gva-escena-19.js a -21.js y datos nuevos. Va después de gimnasio.js.
+{
+  // Un paso: [título, entrenador, juego, enunciado, datos, explicación, [ayuda, ayuda], nota].
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-gva-${id}`, after, level,
+    title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+
+  // ------------------------------------------------------------------------------------------- Fuerza
+  reto('andamio-5', ['geo-19', 'geo-21'], 2, 'La carga del andamio', 'Equilibrio en el nudo, trabajo con signo y la sombra de la fuerza',
+    'En una obra, una carga cuelga de dos cables iguales mientras se prepara la subida. Después una grúa la lleva por el espacio hasta la plataforma, con el viento en contra, y al final un malacate la sube por una rampa. Hay que hallar las tensiones, el trabajo total de la subida y el trabajo en la rampa.', [
+      ['Dos cables iguales', 'Con los dos ángulos iguales, las tensiones también lo son: cada cable sostiene la mitad del peso con su parte vertical.', 'semaforo-dos-cables',
+        'Una carga de **240 N** cuelga de dos cables; cada uno forma $37^{\\circ}$ con la horizontal. Desliza las tensiones $T_1$ y $T_2$ hasta que el nudo quede en equilibrio. Usa $\\sin 37^{\\circ} = 0.6$ y $\\cos 37^{\\circ} = 0.8$.',
+        { W: 240, a: [37, 37], max: 250, ok: 'T₁ = T₂ = 200 N: cada cable sostiene 120 N con su parte vertical, y entre los dos cargan más que el peso.' },
+        'En x: $0.8\\,T_1 = 0.8\\,T_2$, así que $T_1 = T_2 = T$. En y: $0.6\\,T + 0.6\\,T = 240$, es decir $1.2\\,T = 240$ y $T = 200$ N. Cada cable aguanta 200 N aunque solo sostiene 120 N del peso: el resto de su tirón es horizontal y se cancela con el del otro cable.',
+        ['Escribe ΣFx = 0 y ΣFy = 0. Con ángulos iguales, la primera dice que las dos tensiones son iguales.', 'Cada cable sostiene solo su parte vertical, $T\\sin 37^{\\circ}$: dos de ellas suman el peso.'], 'T₁ = T₂ = 200 N'],
+      ['El trabajo de la subida', 'Primero el desplazamiento B − A; luego el producto escalar de cada fuerza con él, cada uno con su signo.', 'trabajo-total-resultante',
+        'La grúa lleva la carga de $A(1, 3, 2)$ a $B(2, 1, 6)$ m. Actúan la cuerda, el viento y el peso (en la figura, en N). Arrastra el trabajo de cada fuerza y el trabajo total, en joules.',
+        { A: [1, 3, 2], B: [2, 1, 6], F: [['cuerda', [20, 0, 250]], ['viento', [-10, 15, 0]], ['peso', [0, 0, -240]]], extra: ['1000', '40', '960', '2020'],
+          trampas: { '0:1000': 'Solo usaste la componente z de la cuerda. También tira 20 N en x, y la carga avanza 1 m en x: W₁ = 20 + 0 + 1000.',
+            '1:40': 'Revisa el signo: d = (1, −2, 4), así que (−10)·1 + 15·(−2) = −10 − 30 = −40.',
+            '2:960': 'El peso va hacia abajo y la carga sube 4 m: su trabajo es negativo, (−240)·4.',
+            '3:2020': 'Sumaste los trabajos sin signo. El total respeta los signos: 1020 − 40 − 960.' },
+          mira: ['W₁ = F₁ · d, con d = B − A = (1, −2, 4).', 'W₂ = F₂ · d, componente a componente; ojo con los signos de d.', 'W₃ = F₃ · d: el peso solo multiplica a la componente z del desplazamiento.',
+            'El trabajo total es la suma con signos, que es también R · d con R = F₁ + F₂ + F₃.'],
+          ok: 'W = 1020 − 40 − 960 = 20 J, lo mismo que R · d = (10, 15, 10) · (1, −2, 4) = 20 J.' },
+        '$\\vec d = B - A = (1, -2, 4)$ m. $W_1 = 20 + 0 + 1000 = 1020$ J, $W_2 = -10 - 30 + 0 = -40$ J y $W_3 = -960$ J. El total es $1020 - 40 - 960 = 20$ J, igual al trabajo de la resultante: $\\vec R = (10, 15, 10)$ y $\\vec R \\cdot \\vec d = 10 - 30 + 40 = 20$ J. Casi todo lo que hace la cuerda se lo quita el peso.',
+        ['Halla primero $\\vec d = B - A$; cada trabajo es el producto escalar de la fuerza con ese $\\vec d$.', 'El total es un número con signo: el peso y el viento restan. Compruébalo con $\\vec R \\cdot \\vec d$.'], 'W total = 20 J'],
+      ['La rampa del malacate', 'En una rampa solo trabaja la sombra de la fuerza sobre ella: F · û, por la distancia recorrida.', 'trabajo-componente-del-riel',
+        'Ya en la plataforma, la carga sube **3 m** por una rampa de dirección $\\hat u = \\tfrac{1}{5}(3, 4)$. El cable del malacate tira casi horizontal, con $\\vec F = (140, 20)$ N (cada cuadro, 20 N). Arrastra **S** por la rampa hasta la punta de la **parte de la fuerza que va a lo largo de ella**.',
+        { F: [7, 1], u: [3, 4], L: 3, N: 20, s0: 2,
+          mira: { x: 'Tomaste la componente horizontal de F (7 cuadros). La rampa está muy inclinada: la parte que trabaja es la sombra de F sobre ella, F · û.',
+            y: 'Tomaste la componente vertical (1 cuadro). Pero la rampa no es vertical: baja una perpendicular desde la punta de F hasta la rampa.',
+            otro: 'S debe quedar al pie de la perpendicular que baja desde la punta de F hasta la rampa: su largo es F · û = (7·3 + 1·4)/5.' },
+          ok: 'F · û = 5 cuadros = 100 N: esa parte trabaja, W = 100 · 3 = 300 J; el resto de la fuerza es perpendicular a la rampa.' },
+        'La parte de $\\vec F$ a lo largo de la rampa mide $\\vec F \\cdot \\hat u = \\tfrac{7 \\cdot 3 + 1 \\cdot 4}{5} = 5$ cuadros, es decir, $100$ N, aunque el cable tire con $\\sqrt{140^2 + 20^2} \\approx 141$ N. Así $W = 100 \\cdot 3 = 300$ J, igual que $\\vec F \\cdot \\vec d$ con $\\vec d = 3\\hat u = (1.8, 2.4)$ m: $252 + 48 = 300$ J.',
+        ['La sombra de F sobre la rampa se encuentra bajando una perpendicular desde la punta de F; su largo es $\\vec F \\cdot \\hat u$.', 'Con $\\hat u = \\tfrac15(3, 4)$, la cuenta es $\\tfrac{7 \\cdot 3 + 1 \\cdot 4}{5}$ cuadros.'], 'F · û = 100 N, W = 300 J'],
+    ], 'Cada cable soporta 200 N; el trabajo total de la subida es de 20 J; en la rampa trabajan 100 N y W = 300 J.', 'El equilibrio pide suma cero; el trabajo mide solo la parte de cada fuerza que va por el camino, con su signo.');
+
+  reto('rio-5', ['geo-19', 'geo-20'], 2, 'El bote del río', 'Suma con la corriente, cierra el polígono de fuerzas y mira desde el otro móvil',
+    'Un bote cruza un río caudaloso y luego sale a la bahía. Hay que elegir hacia dónde apuntar para cruzar derecho, encontrar la fuerza del motor que mantiene la velocidad constante y saber cuándo pasa más cerca de un velero.', [
+      ['Cruzar derecho', 'Lo que se ve desde la orilla es proa + corriente: la parte este de la proa debe cancelar la del río.', 'apunta-proa-corriente',
+        'El bote va a **10 m/s** respecto al agua y el río corre hacia el este a $(8, 0)$ m/s. La otra orilla está a 120 m. Gira la proa para que el bote cruce **derecho**.',
+        { c: [4, 0], esc: 2, uni: 'm/s', ancho: 120, medio: 'rio', k0: 3,
+          mira: { 3: 'Apuntaste derecho a la otra orilla: (0, 10) + (8, 0) = (8, 10), y en los 12 s del cruce el río te baja 96 m.',
+            4: 'Te faltó: (−6, 8) + (8, 0) = (2, 8) y el río todavía te corre 2 m/s al este.',
+            6: 'Así el bote no cruza: (−10, 0) + (8, 0) = (−2, 0) va río arriba pegado a la orilla.', 0: 'Así el bote va río abajo, a lo largo de la orilla: no cruza.',
+            1: 'Apuntaste río abajo: la corriente se suma y te lleva todavía más al este.', 2: 'Apuntaste río abajo: la corriente se suma y te lleva todavía más al este.' },
+          otro: 'La velocidad respecto a tierra es proa + corriente. Busca la proa de 10 m/s cuya parte este sea −8.', ok: 'La proa a (−8, 6): el bote cruza derecho a 6 m/s y tarda 20 s.' },
+        'La proa $(a, b)$ debe cumplir $a + 8 = 0$ y $a^2 + b^2 = 100$: $(-8, 6)$. Respecto a tierra, $(-8, 6) + (8, 0) = (0, 6)$: cruza derecho a 6 m/s y tarda $120 / 6 = 20$ s. Con la proa derecho a la orilla tardaría solo 12 s, pero llegaría 96 m río abajo.',
+        ['Suma la velocidad del bote y la del agua: para cruzar derecho, la suma no debe tener parte este.', 'La proa mide 10 m/s y su parte este es −8: la otra parte sale de Pitágoras, $\\sqrt{100 - 64}$.'], 'proa (−8, 6) m/s, 20 s'],
+      ['La fuerza del motor', 'A velocidad constante la suma de fuerzas es cero: el motor cierra el polígono.', 'nudo-equilibrante',
+        'Con velocidad constante, la suma de fuerzas sobre el bote es cero. La corriente lo empuja con $\\vec F_1 = (60, 0)$ N, el viento con $\\vec F_2 = (40, -20)$ N y el roce del casco con $\\vec F_3 = (-20, -40)$ N, dibujadas punta con cola (cada cuadro, 20 N). Arrastra la punta de la fuerza $\\vec E$ del **motor**.',
+        { F: [[3, 0], [2, -1], [-1, -2]], u: 20, ini: [1, 0], ok: 'E = (−80, 60) N: 100 N justo en la dirección de la proa, y el polígono se cierra.' },
+        'La suma de las tres es $(60 + 40 - 20,\\ 0 - 20 - 40) = (80, -60)$ N, y el motor la anula: $\\vec E = (-80, 60)$ N, de $\\sqrt{6400 + 3600} = 100$ N. Apunta como la proa $(-8, 6)$: el motor empuja hacia donde mira el bote.',
+        ['En equilibrio la cadena de flechas vuelve al punto de partida: la última termina donde empezó la primera.', 'Suma las tres fuerzas dadas; la del motor es su opuesta.'], 'E = (−80, 60) N, 100 N'],
+      ['El paso más cercano', 'Mira desde el bote: el velero se mueve con v_B − v_A y lo más cerca es el pie de la perpendicular.', 'acercamiento-mas-cercano',
+        'En la bahía el bote **A** sale de $(-5, -2)$ con $(2, 1)$ km/h y un velero **B** de $(0, 3)$ con $(-1, 0)$ km/h. Arrastra A por su recta (B avanza con el mismo reloj) hasta el instante en que están **más cerca**.',
+        { A0: [-5, -2], vA: [2, 1], B0: [0, 3], vB: [-1, 0], t0: 0, tmax: 4, uni: 'km', trampas: {},
+          ok: 'A las 2 h están lo más cerca: √10 ≈ 3.16 km, y luego se alejan.' },
+        'Visto desde A, el velero está en $\\vec d(t) = (5, 5) + t\\,(-3, -1)$. Es más corto cuando es perpendicular a $(-3, -1)$: $(5 - 3t)(-3) + (5 - t)(-1) = 10t - 20 = 0$, así que $t = 2$ h y $\\vec d(2) = (-1, 3)$, de largo $\\sqrt{10} \\approx 3.16$ km.',
+        ['Resta las posiciones: $\\vec d(t) = \\vec B(t) - \\vec A(t)$ es una recta con director $\\vec v_B - \\vec v_A$.', 'Lo más cerca ocurre cuando $\\vec d(t) \\cdot (\\vec v_B - \\vec v_A) = 0$.'], 't = 2 h, √10 km'],
+    ], 'La proa a (−8, 6) m/s y cruza en 20 s; el motor empuja con (−80, 60) N; el bote y el velero están lo más cerca a las 2 h, a √10 ≈ 3.16 km.', 'Las velocidades se suman con el medio, las fuerzas se anulan a velocidad constante y la distancia mínima es una perpendicular.');
+
+  // -------------------------------------------------------------------------------------------- Élite
+  reto('giros-5', ['geo-21'], 3, 'El taller de los giros', 'Fuerza por brazo, signo de r₁F₂ − r₂F₁ y momentos que se cancelan',
+    'En un taller hay que abrir una puerta pesada con el menor esfuerzo, ver hacia dónde gira una placa con varias fuerzas, equilibrar un balancín de tres personas y aflojar tuercas con distintas llaves. En todos los casos lo que hace girar es el momento: la fuerza por el brazo de palanca.', [
+      ['La puerta pesada', 'M = r F sen θ: hay dos ángulos con el mismo seno, uno a cada lado de la perpendicular.', 'momento-angulo-del-empuje',
+        'La puerta de la bodega gira en su bisagra **O**. Tiras de la manija, a **0.9 m** de la bisagra, con **60 N**. Gira la dirección de la fuerza para que el momento sea **27 N·m**, tirando a la vez **hacia afuera**, alejándote de la bisagra.',
+        { r: 0.9, F: 60, M: 27, hacia: false, g0: 90,
+          mira: { lejos: 'Ese ángulo también da 27 N·m (sen 150° = sen 30°), pero empuja hacia la bisagra. Se pedía tirar alejándote de ella.',
+            linea: 'La fuerza va a lo largo de la puerta: su línea pasa por la bisagra, el brazo es 0 y no hay giro.',
+            maximo: 'Perpendicular a la puerta el brazo es todo el largo, 0.9 m, y el momento es el máximo: 60 · 0.9 = 54 N·m. Se piden 27.',
+            coseno: 'Ese ángulo da 27 con el coseno. El momento usa el seno: solo hace girar la parte de la fuerza perpendicular a la puerta.' },
+          ok: 'Con 30° la línea de la fuerza pasa a 0.45 m de la bisagra: M = 60 · 0.45 = 27 N·m.' },
+        '$M = 0.9 \\cdot 60 \\cdot \\operatorname{sen}\\theta = 54\\operatorname{sen}\\theta = 27$ pide $\\operatorname{sen}\\theta = \\tfrac12$: $\\theta = 30^{\\circ}$ o $150^{\\circ}$. Alejándose de la bisagra, $\\theta = 30^{\\circ}$. El brazo de palanca es $0.9 \\operatorname{sen} 30^{\\circ} = 0.45$ m y $M = 60 \\cdot 0.45 = 27$ N·m: la mitad del máximo.',
+        ['Despeja $\\operatorname{sen}\\theta$ de $0.9 \\cdot 60 \\cdot \\operatorname{sen}\\theta = 27$.', 'Hay dos ángulos con ese seno; el que tira alejándose de la bisagra es el agudo.'], 'θ = 30°'],
+      ['La placa y sus fuerzas', 'El signo de M = r₁F₂ − r₂F₁ dice el sentido: positivo es antihorario; cero, si la línea pasa por O.', 'momento-sentido-de-giro',
+        'Una placa gira alrededor del perno **O** (cada cuadro, 1 m; fuerzas en N). Toca **todas** las fuerzas que la hacen girar en sentido **antihorario**.',
+        { signo: 1,
+          fz: [[[4, -1], [0, 2]], [[-3, 1], [0, -2]], [[2, 2], [1.5, 1.5]], [[0, -3], [3, 0]], [[-2, -2], [-2, 0]], [[-1, 3], [2, 0]], [[-3, 0], [-1.5, 0]], [[-2, 2], [1, 2]]],
+          falta: 'Te falta alguna: para cada fuerza calcula M = r₁F₂ − r₂F₁, con r del perno al punto de aplicación; es antihorario si sale positivo.',
+          ok: 'Las fuerzas 1, 2 y 4 tienen momento positivo: giran la placa en sentido antihorario.' },
+        'Con $M = r_1F_2 - r_2F_1$: la 1 da $8$, la 2 da $6$ y la 4 da $9$ N·m, positivos: antihorario. La 2 apunta hacia abajo y aun así gira en ese sentido, porque está a la izquierda del perno. La 5, la 6 y la 8 dan $-4$, $-6$ y $-6$: horario. La 3 y la 7 van por rectas que pasan por O: momento cero.',
+        ['No basta mirar si la flecha sube o baja: importa de qué lado del perno está. Calcula $r_1F_2 - r_2F_1$.', 'Si la flecha apunta hacia O o se aleja de él en línea recta, su momento es cero.'], '1, 2 y 4'],
+      ['El balancín de tres', 'Los momentos de la derecha se suman y deben igualar el de la izquierda.', 'momento-balancin-equilibrio',
+        'A la izquierda del apoyo de un balancín se sienta un adulto de **420 N** a **2.5 m**. A la derecha ya está un niño de **300 N** a **1.5 m**. Arrastra a la niña de **240 N** por ese mismo lado hasta el **equilibrio**.',
+        { izq: [[420, 2.5]], der: [[300, 1.5]], mov: 240, x0: 1, trampas: {},
+          ok: 'Los momentos se cancelan: 420 · 2.5 = 1050 = 300 · 1.5 + 240 · 2.5 N·m.' },
+        'A la izquierda, $420 \\cdot 2.5 = 1050$ N·m; a la derecha, $300 \\cdot 1.5 + 240\\,x = 450 + 240\\,x$. El equilibrio pide $450 + 240\\,x = 1050$, así que $x = 2.5$ m: a la misma distancia que el adulto, aunque pesa mucho menos, porque la ayuda el niño.',
+        ['Cada peso hace girar con su peso por su distancia al apoyo; los dos de la derecha se suman.', 'Iguala $450 + 240\\,x$ con el momento del adulto y despeja x.'], 'x = 2.5 m'],
+      ['Tres tuercas', 'Plano: fuerza por brazo o r₁F₂ − r₂F₁; espacio: la norma de r × F.', 'momento-suelta-la-tuerca',
+        'Tres tuercas, tres llaves. En cada una calcula el momento (su tamaño, en N·m), fíjalo y suelta: la llave gira la tuerca. Puedes fallar **una** vez.', { tiros: [
+          { q: 'Con una llave larga empujas a **0.5 m** de la tuerca con **60 N**, formando **30°** con el brazo. ¿Cuánto momento haces?', r: 15, max: 40,
+            cuenta: '$M = 0.5 \\cdot 60 \\cdot \\operatorname{sen} 30^{\\circ} = 15$ N·m',
+            trampas: { 30: 'Así sería empujando perpendicular al brazo. Con 30° solo gira la parte perpendicular: falta el seno, 0.5.', 26: 'Usaste el coseno: 0.5 · 60 · cos 30° ≈ 26. El momento usa el seno.' } },
+          { q: 'La mano queda en $\\vec r = (0.15, 0.2, 0)$ m desde la tuerca y empuja con $\\vec F = (0, 0, 120)$ N. ¿Cuánto vale $\\|\\vec r \\times \\vec F\\|$?', r: 30, max: 40,
+            cuenta: '$\\vec r \\times \\vec F = (24, -18, 0)$, de norma $\\sqrt{576 + 324} = 30$ N·m',
+            trampas: { 24: 'Esa es solo la primera componente de r × F = (24, −18, 0). Se pide su norma.', 18: 'Esa es solo una componente, en valor absoluto. La norma de (24, −18, 0) es 30.', 42: 'Sumaste 24 + 18: la norma es la raíz de la suma de los cuadrados.' } },
+          { q: 'En el plano, la mano está en $\\vec r = (0.3, 0.4)$ m de la tuerca y empuja con $\\vec F = (-20, 30)$ N. ¿Cuánto vale el momento $r_1F_2 - r_2F_1$?', r: 17, max: 40,
+            cuenta: '$M = 0.3 \\cdot 30 - 0.4 \\cdot (-20) = 9 + 8 = 17$ N·m, antihorario',
+            trampas: { 1: 'Cuidado con el signo: restar 0.4 · (−20) es sumar 8. M = 9 + 8.', 18: 'Multiplicaste ‖r‖ · ‖F‖ ≈ 0.5 · 36 = 18 y olvidaste el ángulo entre ellos. Calcula r₁F₂ − r₂F₁.' } }] },
+        'Primera: el brazo útil es $0.5 \\operatorname{sen} 30^{\\circ} = 0.25$ m y $M = 60 \\cdot 0.25 = 15$ N·m. Segunda: $\\vec r \\times \\vec F = (0.2 \\cdot 120,\\ -0.15 \\cdot 120,\\ 0) = (24, -18, 0)$, de norma 30 N·m; el brazo es $\\|\\vec r\\| = 0.25$ m, perpendicular a la fuerza. Tercera: $M = 9 + 8 = 17$ N·m, positivo: antihorario.',
+        ['Si la fuerza va inclinada, multiplica por el seno del ángulo con el brazo. En el espacio, calcula el producto vectorial y su norma.', 'En el plano, $r_1F_2 - r_2F_1$: ojo con restar un número negativo.'], '15, 30 y 17 N·m'],
+    ], 'θ = 30°; giran en sentido antihorario las fuerzas 1, 2 y 4; la niña a 2.5 m; momentos de 15, 30 y 17 N·m.', 'Lo que hace girar no es la fuerza sola sino la fuerza por su distancia al eje: el brazo de palanca.');
+
+  reto('feria-5', ['geo-20', 'geo-21'], 3, 'La feria de los empujes', 'Signo del trabajo, la parte de la fuerza que trabaja y el vuelo como suma de flechas',
+    'En una feria, un carrito sube por una rampa de lanzamiento empujado y frenado por varias fuerzas; en la parte plana se tira de otro carrito con una manija alta, y al final se lanzan pelotas desde una torre. Hay que saber qué fuerzas ayudan, con qué fuerza tirar y dónde caen las pelotas.', [
+      ['Quién ayuda en la rampa', 'El signo de F · d dice si la fuerza ayuda o frena, sin importar hacia dónde apunte la flecha.', 'trabajo-signo-de-cada-fuerza',
+        'El carrito sube por la rampa con desplazamiento $\\vec d = (12, 5)$ m. Toca **todas** las fuerzas que hacen trabajo **positivo** sobre él.',
+        { d: [12, 5], signo: 1,
+          fz: [['peso', [0, -260]], ['normal', [-25, 60]], ['cable', [48, 20]], ['roce', [-24, -10]], ['viento', [15, 0]], ['empujón', [10, -20]], ['ayudante', [0, 30]], ['tirón', [20, -50]]],
+          falta: 'Te falta alguna: calcula F · d = 12Fx + 5Fy para cada fuerza; es positivo si la fuerza tiene una parte a favor del avance.',
+          ok: 'El cable, el viento, el empujón y el ayudante tienen una parte a favor del avance: F · d > 0.' },
+        'Con $W = 12F_x + 5F_y$: el cable da $676$ J, el viento $180$ J, el empujón $120 - 100 = 20$ J y el ayudante $150$ J, todos positivos, aunque el empujón apunte un poco hacia abajo y el ayudante sea vertical. El tirón va hacia adelante pero da $240 - 250 = -10$ J; el peso ($-1300$ J) y el roce ($-338$ J) también frenan, y la normal es perpendicular a la rampa: $0$ J.',
+        ['Para cada fuerza calcula $12F_x + 5F_y$ y mira solo su signo.', 'Cuidado con las que apuntan hacia adelante y hacia abajo a la vez: la cuenta decide, no el dibujo.'], 'cable, viento, empujón y ayudante'],
+      ['Tirar de la manija alta', 'En un camino horizontal solo trabaja la parte horizontal de la fuerza; la vertical puede ser cualquiera.', 'trabajo-empuje-carrito',
+        'En la parte plana se tira de otro carrito desde una manija **alta**, y avanza **5 m**: $\\vec d = (5, 0)$ m. Cada cuadro de la fuerza vale **10 N**. Arrastra la punta de $\\vec F$ para que el trabajo sea **150 J**, tirando **hacia arriba y adelante**.',
+        { d: 5, u: 10, W: 150, cond: 'arriba', ini: [-1, 1], sol: [3, 2],
+          mira: { nulo: 'Sin fuerza no hay trabajo: arrastra la punta de F fuera de la manija.',
+            sentido: 'El trabajo da 150 J, pero esa fuerza no va hacia arriba. Desde una manija alta se tira hacia arriba y adelante.',
+            tamano: 'Usaste el tamaño de toda la fuerza: ‖F‖ · 5 = 150. Pero la parte vertical no mueve el carrito; solo trabaja la componente horizontal.' },
+          ok: 'F · d = 30 · 5 = 150 J: solo trabajan los 30 N horizontales; la parte que levanta no hace trabajo.' },
+        '$W = \\vec F \\cdot \\vec d = 5F_x + 0 \\cdot F_y = 5F_x = 150$, así que $F_x = 30$ N. La componente vertical puede ser cualquiera hacia arriba: es perpendicular al avance y no trabaja. Por ejemplo $\\vec F = (30, 20)$ N da $150$ J, igual que $(30, 40)$ N, aunque esta sea más grande.',
+        ['Con el desplazamiento horizontal, el producto escalar solo usa la componente horizontal de la fuerza.', '¿Cuántos newtons horizontales dan 150 J en 5 m? La parte vertical solo tiene que ir hacia arriba.'], 'Fx = 30 N, Fy > 0'],
+      ['Las pelotas de la torre', 'Separa r(t) en x e y: la altura es y₀ + v₀ᵧt − 5t² y el alcance sale cuando vale 0.', 'tiro-tres-flechas',
+        'Una pelota sigue $\\vec r(t) = \\vec r_0 + t\\,\\vec v_0 + \\tfrac12 t^2\\,\\vec g$ con $\\vec g = (0, -10)$ m/s². Fija los metros que pide cada tiro y suelta: la pelota sale. Puedes fallar **una** vez.', { tiros: [
+          { q: 'Sale del borde de una torre de 10 m con $\\vec v_0 = (3, 5)$ m/s. ¿A cuántos metros del pie de la torre cae?', r0: [0, 10], v0: [3, 5], que: 'alcance', r: 6, max: 15,
+            cuenta: '$10 + 5t - 5t^2 = 0$ da $t = 2$ s, y $x = 3 \\cdot 2 = 6$ m',
+            trampas: { 3: 'Así caería si saliera del suelo, al segundo. Sale a 10 m: 10 + 5t − 5t² = 0 da t = 2.' } },
+          { q: 'Sale del mismo borde, a 10 m, con $\\vec v_0 = (2, 10)$ m/s. ¿Qué **altura máxima** alcanza sobre el suelo?', r0: [0, 10], v0: [2, 10], que: 'altura', r: 15, max: 25,
+            cuenta: 'la velocidad vertical $10 - 10t$ se anula al segundo: $10 + 10 - 5 = 15$ m',
+            trampas: { 5: 'Eso es lo que sube desde el borde. Se pide la altura sobre el suelo: 10 + 5.', 20: 'Faltó el término ½t²·g: a t = 1 s resta 5 m. La cima es 10 + 10 − 5.' } },
+          { q: 'Desde el suelo, al pie de la torre, sale con $\\vec v_0 = (6, 15)$ m/s. ¿A cuántos metros cae?', r0: [0, 0], v0: [6, 15], que: 'alcance', r: 18, max: 25,
+            cuenta: '$15t - 5t^2 = 0$ da $t = 3$ s, y $x = 6 \\cdot 3 = 18$ m',
+            trampas: { 9: 'Ahí está la cima, a los 1.5 s. La pelota tarda otro tanto en bajar.' } }] },
+        'Primero: $t^2 - t - 2 = 0$, $t = 2$ s y $x = 6$ m. Segundo: la cima llega cuando $10 - 10t = 0$, al segundo, y $y = 10 + 10 - 5 = 15$ m. Tercero: $5t(3 - t) = 0$, $t = 3$ s y $x = 18$ m.',
+        ['La altura es $y_0 + v_{0y}t - 5t^2$; iguálala a 0 para el alcance y usa la x en ese instante.', 'La altura máxima llega cuando la velocidad vertical $v_{0y} - 10t$ vale 0.'], '6 m, 15 m y 18 m'],
+    ], 'Hacen trabajo positivo el cable, el viento, el empujón y el ayudante; se tira con Fx = 30 N hacia arriba; las pelotas caen a 6 m, suben a 15 m y caen a 18 m.', 'El trabajo es un producto escalar con signo, y el movimiento es una suma de flechas: posición, velocidad por tiempo y gravedad.');
+}
+;
+//#archivo js/gimnasio-gva-6.js
+// Gimnasio de Geometría Vectorial y Analítica, mundo 6 «Secciones Cónicas» (spec 2026-11-27-curso-geometria-vectorial): dos retos
+// de Fuerza y dos de Élite, con los juegos de escena de js/games/gva-escena-22.js y -23.js y datos nuevos. Va después de gimnasio.js.
+{
+  // Un paso: [título, entrenador, juego, enunciado, datos, explicación, [ayuda, ayuda], nota].
+  const reto = (id, after, level, title, strategy, problem, steps, answer, wrap) => GYM_RETOS.push({ id: `gym-gva-${id}`, after, level,
+    title, strategy, problem, answer, wrap,
+    steps: steps.map(([t, coach, game, q, params, explain, hints, note]) => ({ title: t, coach, ex: play(game, q, params, explain, { hint: hints[0] }), hints, note })) });
+
+  // ------------------------------------------------------------------------------------------- Fuerza
+  reto('antena-6', ['geo-22'], 2, 'La antena del mirador', 'Foco y directriz, completar el cuadrado y leer p en la figura',
+    'En un mirador se instala una antena parabólica y se hace pasar un camión bajo el arco del puente de entrada. Hay que entender el perfil como lugar de puntos, ubicar el foco desde la ecuación, subir el receptor a su sitio y saber qué tan alto puede ser el camión.', [
+      ['Igual distancia', 'Un punto de la parábola está tan lejos del foco como de la directriz: iguala las dos distancias.', 'equidista-foco-directriz',
+        'El técnico traza el perfil de la antena con los puntos que están a la **misma distancia** del foco **F(0, 0)** y de la recta $y = -2$. Arrastra **P** por la fila $y = 3$ hasta un punto de ese perfil, a la derecha del eje.',
+        { c: { eje: 'x', h: 0, k: -1, p: 1 }, fila: 3, ini: 0, min: -8, max: 8, lado: 1,
+          trampas: { 2: '2 es la mitad del lado recto, |4p|/2: ese punto está a la altura del foco, no en la fila y = 3.', '-2': '2 es la mitad del lado recto, |4p|/2: ese punto está a la altura del foco, no en la fila y = 3.' },
+          ok: 'P está a 5 del foco y a 5 de la recta: es un punto de la parábola x² = 4(y + 1).' },
+        'Con $P = (x, 3)$: $PF^2 = x^2 + 3^2$ y la distancia a $y = -2$ es $3 + 2 = 5$. Igualando, $x^2 + 9 = 25$, así que $x = 4$: un triángulo 3, 4, 5. El vértice queda en la mitad entre el foco y la directriz, $(0, -1)$, con $p = 1$, y la ecuación es $x^2 = 4(y + 1)$.',
+        ['La distancia a una recta horizontal es la diferencia de alturas; la distancia al foco sale con Pitágoras.', 'Iguala $\\sqrt{x^2 + 9}$ con 5.'], 'P(4, 3)'],
+      ['El foco desde la ecuación', 'Completa el cuadrado en x: lo que acompaña a (y − k) es 4p, y el foco está a p del vértice.', 'foco-de-la-ecuacion',
+        'Otra antena tiene el perfil $x^2 + 4x - 8y + 12 = 0$. Completa el cuadrado, ubica el vértice **V** marcado y arrastra el **foco** a su sitio.',
+        { c: { eje: 'x', h: -2, k: 1, p: 2 }, ini: [2, -2],
+          trampas: { '-2:9': 'Te moviste 4p = 8 desde el vértice. El foco está a p = 2: la cuarta parte.', '-2:-1': 'Ese punto está debajo del vértice: ahí pasa la directriz y = −1. Con 4p = 8 positivo, abre hacia arriba.',
+            '2:3': 'El signo: (x + 2)² es (x − (−2))², así que el eje es la recta x = −2.' },
+          ok: '(x + 2)² = 8(y − 1): p = 2 y el foco es (−2, 3).' },
+        '$x^2 + 4x + 4 = 8y - 12 + 4$, es decir $(x + 2)^2 = 8y - 8 = 8(y - 1)$. Vértice $(-2, 1)$, $4p = 8$ y $p = 2$: el foco es $(-2, 3)$ y la directriz $y = -1$.',
+        ['Deja de un lado lo que tiene x, suma el cuadrado de la mitad de 4 a los dos lados y saca el 8 como factor.', 'El foco va sobre el eje, a p del vértice, hacia donde abre.'], 'F(−2, 3)'],
+      ['El receptor', 'El borde del plato es un punto de x² = 4py: su x es la mitad del ancho y su y, la profundidad.', 'receptor-de-la-antena',
+        'La antena grande mide **16 dm** de ancho en la boca y solo **2 dm** de profundidad. Su perfil es $x^2 = 4py$ con el vértice en el fondo. Sube el receptor por el eje hasta el foco.',
+        { ancho: 16, hondo: 2, ini: 1.5, max: 10,
+          trampas: { 2: 'Esa es la profundidad del plato: el foco de un plato tan llano queda muy por encima del borde.', 1: 'La x va al cuadrado: el borde (8, 2) da 64 = 8p, no 8 = 8p.' },
+          ok: 'p = 8 dm: el receptor queda muy por encima de la boca, porque el plato es llano.' },
+        'El borde es $(8, 2)$: $8^2 = 4p \\cdot 2$, es decir $64 = 8p$ y $p = 8$ dm. Cuanto más llano es el plato, más lejos del fondo queda el foco: aquí el receptor va 6 dm por encima de la boca.',
+        ['Pon el vértice en el origen y reemplaza el punto del borde en $x^2 = 4py$.', 'El punto del borde está a media boca del eje y a la profundidad del plato; eleva su x al cuadrado antes de despejar p.'], 'p = 8 dm'],
+      ['El arco del puente', 'Escribe el arco como x² = 4p(y − H) y reemplaza la esquina del camión, a medio ancho del centro.', 'camion-bajo-el-arco',
+        'El arco del puente de entrada es una parábola con eje vertical y el suelo en $y = 0$. El camión pasa **centrado**. Fija la altura máxima que puede tener y suéltalo. Puedes fallar **una** vez.', { tiros: [
+          { q: 'El arco mide **16 m** de ancho en la base y **8 m** de alto. El camión tiene 8 m de ancho. ¿Qué altura máxima puede tener?', et: 'arco: 16 m de ancho, 8 m de alto', H: 8, p4: -8, x: 4, r: 6, max: 10,
+            cuenta: 'El arco $x^2 = 4p(y - 8)$ pasa por $(8, 0)$: $4p = -8$. En $x = 4$: $16 = -8(y - 8)$, $y = 6$ m',
+            trampas: { 4: 'Eso sería un arco en triángulo. La parábola baja despacio cerca de la cima: a 4 m del centro mide 6 m.' } },
+          { q: 'La cima del arco está a **12 m** y su lado recto, la cuerda por el foco paralela al suelo, mide **16 m**. El camión tiene 16 m de ancho. ¿Qué altura máxima puede tener?', et: 'cima a 12 m, lado recto de 16 m', H: 12, p4: -16, x: 8, r: 8, max: 14,
+            cuenta: '$|4p| = 16$: $x^2 = -16(y - 12)$. En $x = 8$: $64 = -16(y - 12)$, $y = 8$ m, justo la altura del foco',
+            trampas: { 11: 'El lado recto mide |4p| = 16, así que 4p = −16; tomaste p = −16.' } },
+          { q: 'El arco sigue $x^2 + 4y - 36 = 0$, en metros. El camión tiene 4 m de ancho. ¿Qué altura máxima puede tener?', et: 'arco: x² + 4y − 36 = 0', H: 9, p4: -4, x: 2, r: 8, max: 12,
+            cuenta: '$x^2 = -4(y - 9)$. En $x = 2$: $4 = -4(y - 9)$, así que $y = 8$ m',
+            trampas: { 5: 'Usaste el ancho completo, x = 4. La esquina del camión está a la mitad de su ancho del centro: x = 2.', 9: 'Esa es la cima, en el centro del arco. A 2 m del centro el arco ya bajó.' } }] },
+        'Primero: $64 = 4p(0 - 8)$ da $4p = -8$ y en $x = 4$, $y = 8 - 2 = 6$ m. Segundo: el lado recto mide $|4p| = 16$ y sus extremos están en $(\\pm 8, 12 - 4)$: un camión de 16 m de ancho cabe hasta la altura del foco, 8 m. Tercero: $x^2 = -4(y - 9)$ y en $x = 2$, $y = 9 - 1 = 8$ m.',
+        ['La cima es el vértice $(0, H)$; si conoces la base, reemplaza el punto $(\\text{medio ancho}, 0)$ para hallar 4p.', 'El lado recto mide $|4p|$ y pasa por el foco, a $|p|$ de la cima.'], '6 m, 8 m y 8 m'],
+    ], 'P(4, 3) está en el perfil x² = 4(y + 1); el foco de la segunda antena es (−2, 3); el receptor va a 8 dm del fondo; los camiones pueden medir 6, 8 y 8 m.', 'La parábola es foco más directriz: de su ecuación se lee p, y p dice dónde se juntan las señales y cuánto baja un arco.');
+
+  reto('parque-6', ['geo-22'], 2, 'El parque de las curvas', 'Tres puntos dan un sistema, el radio tangente es una distancia y el cuadrado se completa',
+    'En un parque nuevo hay una glorieta redonda que debe pasar por tres faroles, una antena cuyo alcance debe tocar justo la avenida y un tobogán con perfil de parábola. Hay que hallar la ecuación de la glorieta, el radio del alcance y los elementos del tobogán.', [
+      ['La glorieta', 'Resta las ecuaciones de dos en dos: se va la F y quedan dos ecuaciones en D y E.', 'circulo-tres-postes-def',
+        'La glorieta pasa por tres faroles: **A(−1, 3)**, **B(6, 2)** y **C(7, −1)**. Reemplaza cada uno en $x^2 + y^2 + Dx + Ey + F = 0$, resuelve el sistema y arrastra $D$, $E$, $F$, el centro y el radio.',
+        { pts: [[-1, 3], [6, 2], [7, -1]], metas: ['−4', '2', '−20', '(2, −1)', '5'], fichas: ['−4', '2', '−20', '(2, −1)', '5', '4', '−2', '20', '(−2, 1)', '25'],
+          mira: ['Resta la ecuación de A a las de B y de C: quedan 7D − E = −30 y 8D − 4E = −40.', 'Con D ya hallada, reemplázala en 7D − E = −30.', 'F sale de la ecuación de A: −D + 3E + F = −10.', 'El centro es (−D/2, −E/2).', 'r² = (D/2)² + (E/2)² − F; el radio es su raíz.'],
+          trampas: { '0:4': 'El signo: de 7D − E = −30 y 2D − E = −10 sale 5D = −20, D = −4.', '1:−2': 'Con D = −4: 7(−4) − E = −30 da E = 2.', '2:20': 'De A: F = −10 + D − 3E = −10 − 4 − 6 = −20.',
+            '3:(−2, 1)': 'Esos son D/2 y E/2: el centro es (−D/2, −E/2) = (2, −1).', '4:25': '25 es r²: el radio es √25 = 5.' },
+          ok: 'x² + y² − 4x + 2y − 20 = 0: centro (2, −1) y radio 5, y pasa por los tres faroles.' },
+        'B − A: $7D - E = -30$. C − A: $8D - 4E = -40$, o sea $2D - E = -10$. Restando, $5D = -20$: $D = -4$, $E = 2$ y $F = -10 + D - 3E = -20$. Completando, $(x - 2)^2 + (y + 1)^2 = 4 + 1 + 20 = 25$: centro $(2, -1)$ y radio 5.',
+        ['Cada farol da una ecuación lineal en D, E y F; al restar dos de ellas se cancela la F.', 'El centro sale de dividir D y E entre −2, y $r^2 = h^2 + k^2 - F$.'], 'centro (2, −1), r = 5'],
+      ['La antena y la avenida', 'Una recta es tangente cuando está a distancia r del centro.', 'aspersor-tangente-cerca',
+        'Una antena en **C(−1, 2)** cubre un círculo. Su alcance debe llegar **justo** a la avenida recta $5x + 12y = 58$, sin pasarla: la avenida es tangente al círculo. Desliza el radio (en km).',
+        { C: [-1, 2], a: 5, b: 12, c: 58, ini: 1, max: 6, uni: 'km',
+          ok: 'El radio es la distancia del centro a la avenida: 39/13 = 3 km.' },
+        'La distancia de $C(-1, 2)$ a $5x + 12y - 58 = 0$ es $\\dfrac{|5(-1) + 12(2) - 58|}{\\sqrt{25 + 144}} = \\dfrac{39}{13} = 3$. El alcance es $(x + 1)^2 + (y - 2)^2 = 9$ y toca la avenida en $\\left(\\tfrac{2}{13}, \\tfrac{62}{13}\\right)$.',
+        ['Pasa todo a un lado: $5x + 12y - 58 = 0$, y usa la fórmula de distancia de un punto a una recta.', 'El denominador es $\\sqrt{5^2 + 12^2} = 13$.'], 'r = 3 km'],
+      ['El tobogán', 'Primero divide entre el coeficiente de x²; luego completa el cuadrado y saca el factor de y.', 'parabola-completa-cuadrado',
+        'El tobogán sigue la curva $2x^2 - 12x - 8y + 34 = 0$. Llévala a la forma ordinaria y arrastra lo que se suma, el vértice, $p$, el foco y la directriz.',
+        { eq: '2x² − 12x − 8y + 34 = 0', paso: 'x² − 6x + ? = 4y − 17 + ?', c: { eje: 'x', h: 3, k: 2, p: 1 },
+          metas: ['9', '(3, 2)', '1', '(3, 3)', 'y = 1'], fichas: ['9', '(3, 2)', '1', '(3, 3)', 'y = 1', '36', '(2, 3)', '4', '(3, 6)', 'y = 3'],
+          mira: ['Después de dividir entre 2, se suma el cuadrado de la mitad de −6.', 'Queda (x − 3)² = 4y − 8 = 4(y − 2): lee h y k.', 'Compara con (x − h)² = 4p(y − k).', 'El eje es vertical y p > 0: el foco está p arriba del vértice.', 'La directriz está a p del vértice, del otro lado del foco.'],
+          trampas: { '0:36': 'Se suma el cuadrado de la mitad de −6: (−3)² = 9, no 6².', '1:(2, 3)': 'Las coordenadas al revés: en (x − 3)² = 4(y − 2), el 3 va con x y el 2 con y.', '2:4': '4 es 4p; p es su cuarta parte: 1.',
+            '3:(3, 6)': 'Te moviste 4p = 4 desde el vértice; el foco está a p = 1.', '4:y = 3': 'y = 3 pasa por el foco; la directriz está del otro lado del vértice: y = 2 − 1 = 1.' },
+          ok: '(x − 3)² = 4(y − 2): abre hacia arriba, con foco (3, 3) y directriz y = 1.' },
+        'Dividiendo entre 2: $x^2 - 6x - 4y + 17 = 0$. Entonces $x^2 - 6x + 9 = 4y - 17 + 9$, es decir $(x - 3)^2 = 4y - 8 = 4(y - 2)$. Vértice $(3, 2)$, $4p = 4$ y $p = 1$: foco $(3, 3)$ y directriz $y = 1$.',
+        ['Si $x^2$ trae un 2 delante, divide toda la ecuación entre 2 antes de completar el cuadrado.', 'Al final saca el 4 como factor común de $4y - 8$.'], 'V(3, 2), F(3, 3), y = 1'],
+    ], 'La glorieta es x² + y² − 4x + 2y − 20 = 0, de centro (2, −1) y radio 5; el alcance de la antena es de 3 km; el tobogán tiene vértice (3, 2), foco (3, 3) y directriz y = 1.', 'Las ecuaciones generales esconden la figura: un sistema, una distancia o un cuadrado completo la dejan ver.');
+
+  // -------------------------------------------------------------------------------------------- Élite
+  reto('sala-6', ['geo-23'], 3, 'La sala ovalada', 'Suma constante, cuadrados completos, c² = a² − b² y los focos que se escuchan',
+    'Un museo prepara una sala ovalada. Primero se marca la alfombra con una cuerda y dos estacas; luego hay que leer el plano de la sala en su ecuación general, completar la ficha de un espejo elíptico y ubicar a dos visitantes para que se oigan en susurros.', [
+      ['La cuerda y las estacas', 'Con el lápiz tenso, d₁ + d₂ es el largo de la cuerda; en el punto más alto los dos tramos son iguales.', 'cuerda-del-jardinero',
+        'Para marcar la alfombra se amarra una cuerda de **10 dm** a dos estacas separadas **6 dm** y se traza con el lápiz tenso. Arrastra el lápiz al **punto más alto** que alcanza (cada cuadro es 1 dm).',
+        { c: 3, L: 10, ini: [2, 1], ok: 'El punto más alto es (0, 4): cada tramo mide 5 dm y 5 + 5 = 10.' },
+        'La suma de los tramos es $2a = 10$, así que $a = 5$. En el punto más alto cada tramo mide 5 y es la hipotenusa de un triángulo con cateto $c = 3$: $b = \\sqrt{25 - 9} = 4$. La alfombra es $\\tfrac{x^2}{25} + \\tfrac{y^2}{16} = 1$.',
+        ['En el punto más alto el lápiz queda en medio: cada mitad de la cuerda va de una estaca al lápiz.', 'Usa Pitágoras con hipotenusa 5 y cateto 3.'], '(0, 4)'],
+      ['El plano de la sala', 'Agrupa x con x y y con y, saca los factores, completa y divide entre lo que queda a la derecha.', 'elipse-centro-y-semiejes',
+        'El plano de la sala es $25x^2 + 16y^2 - 100x + 32y - 284 = 0$ (en metros). Completa cuadrados y dibuja la elipse: arrastra el centro y las puntas de los dos semiejes.',
+        { h: 2, k: -1, A: 4, B: 5, ini: { h: 0, k: 0, A: 3, B: 3 }, ok: 'Centro (2, −1), semieje horizontal 4 y vertical 5: el eje mayor es vertical.' },
+        '$25(x^2 - 4x) + 16(y^2 + 2y) = 284$, y completando, $25(x - 2)^2 + 16(y + 1)^2 = 284 + 100 + 16 = 400$. Entre 400: $\\tfrac{(x - 2)^2}{16} + \\tfrac{(y + 1)^2}{25} = 1$. Centro $(2, -1)$, semiejes 4 y 5; $c = \\sqrt{25 - 16} = 3$ y los focos son $(2, 2)$ y $(2, -4)$.',
+        ['Lo que sumas dentro de cada paréntesis, multiplicado por su factor, pasa también al otro lado.', 'Bajo $(x - 2)^2$ queda $\\tfrac{400}{25} = 16$; el semieje es su raíz.'], 'centro (2, −1), semiejes 4 y 5'],
+      ['El espejo elíptico', 'Con a y b sale c; con c, los focos sobre el eje mayor, e = c/a y el lado recto 2b²/a.', 'ficha-de-la-elipse',
+        'Un espejo de la sala tiene el borde $\\dfrac{(x + 2)^2}{100} + \\dfrac{(y - 1)^2}{36} = 1$ (en dm). Arrastra a su ficha el valor de c, los focos, la excentricidad y el lado recto.',
+        { h: -2, k: 1, a: 10, b: 6, extra: ['√136', '(−2, 9)', '0.6', '33.33'],
+          trampas: { '0:√136': 'Sumaste: en la elipse c² = a² − b² = 100 − 36.', '1:(−2, 9)': 'Los focos van sobre el eje mayor, que aquí es horizontal: el 100 va bajo la x.',
+            '2:(−2, 9)': 'Los focos van sobre el eje mayor, que aquí es horizontal: el 100 va bajo la x.', '3:0.6': '0.6 es b/a; la excentricidad es c/a.', '4:33.33': 'El lado recto es 2b²/a = 2·36/10, no 2a²/b.' },
+          ok: 'c = 8, focos (6, 1) y (−10, 1), e = 0.8 y lado recto 7.2.' },
+        '$a = 10$ (horizontal) y $b = 6$: $c = \\sqrt{100 - 36} = 8$. Los focos son $(-2 \\pm 8, 1)$, o sea $(6, 1)$ y $(-10, 1)$. $e = \\tfrac{8}{10} = 0.8$, una elipse bastante alargada, y el lado recto mide $\\tfrac{2 \\cdot 36}{10} = 7.2$.',
+        ['El denominador mayor dice el eje mayor; en la elipse $c^2 = a^2 - b^2$.', 'La excentricidad y el lado recto se dividen entre a, el semieje mayor.'], 'c = 8, e = 0.8, lado recto 7.2'],
+      ['Los susurros', 'Lo que sale de un foco rebota en la pared y llega al otro: cada visitante va a c del centro.', 'galeria-de-susurros',
+        'La sala terminada mide **34 m** de largo y **16 m** de ancho. Dos visitantes se paran sobre el eje largo, a la misma distancia del centro, para oírse en susurros. Arrastra al que habla hasta su sitio (cada marca es 1 m).',
+        { a: 17, b: 8, et: ['habla', 'escucha'], ini: 2, ok: 'Cada uno a 15 m del centro: en los focos, a solo 2 m de la pared del fondo.' },
+        'Semiejes $a = 17$ y $b = 8$: $c^2 = 289 - 64 = 225$, así que $c = 15$ m. Los focos quedan a 2 m de cada extremo: lo que dice uno rebota en la pared curva y llega entero al otro, aunque estén a 30 m.',
+        ['Los semiejes son la mitad del largo y la mitad del ancho.', 'Calcula $c = \\sqrt{a^2 - b^2}$ con $a = 17$ y $b = 8$.'], 'c = 15 m'],
+    ], 'La alfombra llega hasta (0, 4); la sala tiene centro (2, −1) y semiejes 4 y 5; el espejo tiene c = 8, focos (6, 1) y (−10, 1), e = 0.8 y lado recto 7.2; los visitantes van a 15 m del centro.', 'La elipse es una suma constante de distancias: de ahí salen sus focos, su ecuación y su eco.');
+
+  reto('trueno-6', ['geo-23'], 3, 'El trueno y el barco', 'Signos de A y C, rectángulo auxiliar, c² = a² + b² y la diferencia de distancias',
+    'Una red de micrófonos y dos estaciones de radio en la costa trabajan con hipérbolas: hay que armar la ecuación de una por sus vértices y asíntotas, dibujar otra desde su ecuación general, ubicar los focos de una tercera y, al final, guiar un barco por la diferencia de distancias.', [
+      ['Armar la hipérbola', 'Signos distintos dan hipérbola; el término positivo dice hacia dónde abre. Divide entre 48 para ver los semiejes.', 'conica-por-signos',
+        'La ecuación $Ax^2 + Cy^2 = 48$ cambia de figura según A y C. Desliza A y C para que sea la hipérbola de vértices $(\\pm 4, 0)$ y asíntotas $y = \\pm\\tfrac{1}{2}x$.',
+        { A: 3, C: -12, R: 48, ini: { A: 2, C: 2 }, ok: '3x² − 12y² = 48, o sea x²/16 − y²/4 = 1.' },
+        'Abre a los lados, así que el término positivo es el de $x$: $A > 0$ y $C < 0$. Vértices en $\\pm 4$: $\\tfrac{48}{A} = 16$, $A = 3$. La pendiente $\\tfrac{b}{a} = \\tfrac12$ pide $b = 2$: $\\tfrac{48}{-C} = 4$, $C = -12$. Queda $\\tfrac{x^2}{16} - \\tfrac{y^2}{4} = 1$.',
+        ['Bajo $x^2$ queda $\\tfrac{48}{A}$, que debe ser $a^2 = 16$.', 'La pendiente de las asíntotas es $\\tfrac{b}{a}$: con $a = 4$ y pendiente $\\tfrac12$, $b = 2$.'], 'A = 3, C = −12'],
+      ['Desde la ecuación general', 'Completa cuadrados con cuidado: el −16 multiplica todo el paréntesis de y.', 'rectangulo-auxiliar-hiperbola',
+        'El rastro de otro sensor es $9x^2 - 16y^2 + 36x + 32y - 124 = 0$. Completa cuadrados y dibuja la hipérbola: arrastra el centro y la esquina del rectángulo auxiliar, y elige hacia dónde abre.',
+        { h: -2, k: 1, p: 4, q: 3, d: 0, ini: { h: 0, k: 0, p: 1, q: 1, d: 1 }, ok: 'Centro (−2, 1), rectángulo de 8 × 6, abre a los lados.' },
+        '$9(x^2 + 4x) - 16(y^2 - 2y) = 124$, y completando, $9(x + 2)^2 - 16(y - 1)^2 = 124 + 36 - 16 = 144$. Entre 144: $\\tfrac{(x + 2)^2}{16} - \\tfrac{(y - 1)^2}{9} = 1$. Centro $(-2, 1)$, abre a los lados con $a = 4$ y $b = 3$; las asíntotas son $y - 1 = \\pm\\tfrac34(x + 2)$ y los focos, $(3, 1)$ y $(-7, 1)$.',
+        ['Saca 9 de los términos en x y −16 de los términos en y; al completar, lo que sumas por dentro pasa multiplicado por su factor.', 'El término positivo, el de x, dice que abre a los lados.'], 'rectángulo de 8 por 6 con centro (−2, 1): abre a los lados'],
+      ['Los micrófonos', 'En la hipérbola el foco queda más afuera que el vértice: c² = a² + b², y e = c/a > 1.', 'focos-de-la-hiperbola',
+        'Dos micrófonos están en los focos de la hipérbola $\\dfrac{x^2}{9} - \\dfrac{y^2}{16} = 1$ (en km). Arrastra el de la derecha a su sitio (el otro se mueve igual) y desliza la excentricidad.',
+        { a: 3, b: 4, es: ['0.6', '0.8', '1', '1.25', '1.33', '1.67', '2'], ini: { c: 2, i: 2 }, ok: 'c = 5: los micrófonos en (±5, 0), y e = 5/3 ≈ 1.67.' },
+        '$c^2 = a^2 + b^2 = 9 + 16 = 25$: $c = 5$ y los micrófonos están en $(\\pm 5, 0)$, más afuera que los vértices $(\\pm 3, 0)$. La excentricidad es $e = \\tfrac{c}{a} = \\tfrac53 \\approx 1.67$; dividir entre $b$ daría 1.25, que no es.',
+        ['Aquí el semieje que va hacia los focos es $a = 3$, aunque $b = 4$ sea mayor.', 'Calcula $c = \\sqrt{9 + 16}$ y luego $\\tfrac{c}{a}$.'], 'c = 5, e ≈ 1.67'],
+      ['El barco', 'd_B es lo que navega y d_A, la hipotenusa: d_A − d_B fija en qué punto de la rama queda.', 'radar-de-dos-estaciones',
+        'Dos estaciones de la costa emiten a la vez; el barco mide cuánto antes le llega la señal de B, y eso da $d_A - d_B$. En cada caso fija cuánto navega hacia el norte desde B y suéltalo. Puedes fallar **una** vez.',
+        { tiros: [
+          { q: 'A y B están a 6 km. El barco sale de B hacia el norte. ¿Cuánto navega hasta que $d_A - d_B = 2$ km?', D: 6, k: 2, max: 12 },
+          { q: 'A y B están a 5 km. ¿Cuánto navega hacia el norte hasta que $d_A - d_B = 1$ km?', D: 5, k: 1, max: 15 },
+          { q: 'A y B están a 20 km. ¿Cuánto navega hacia el norte hasta que $d_A - d_B = 8$ km?', D: 20, k: 8, max: 25 }] },
+        'Con $d_B = y$ y $d_A = \\sqrt{D^2 + y^2}$, la condición $\\sqrt{D^2 + y^2} = y + k$ da $y = \\tfrac{D^2 - k^2}{2k}$: $\\tfrac{36 - 4}{4} = 8$ (con $d_A = 10$), $\\tfrac{25 - 1}{2} = 12$ (con $d_A = 13$) y $\\tfrac{400 - 64}{16} = 21$ (con $d_A = 29$). Cuanto menor es la diferencia, más lejos de la costa queda el barco.',
+        ['Eleva al cuadrado $\\sqrt{D^2 + y^2} = y + k$: el $y^2$ se cancela.', 'Despeja $y = \\tfrac{D^2 - k^2}{2k}$ y comprueba con un triángulo pitagórico.'], '8, 12 y 21 km'],
+    ], 'A = 3 y C = −12; la hipérbola tiene centro (−2, 1), rectángulo 8 × 6 y abre a los lados; los micrófonos van en (±5, 0) con e ≈ 1.67; el barco navega 8, 12 y 21 km.', 'La hipérbola es una diferencia constante de distancias: sus focos salen de c² = a² + b² y sirven para ubicar un barco.');
+}
+;
 //#archivo js/inicio.js
 // Inicio, Mis cursos y gimnasio flotante (spec 2026-11-19-inicio-mis-cursos, pruebas tests/inicio-mis-cursos.test.js).
 // Inicio muestra los cursos en grande y lo que se estudia ahora; Mis cursos, los cursos en que está inscrito el estudiante;
@@ -6034,7 +6820,7 @@ function renderLearn() {
           <span class="dk mini-bar" aria-hidden="true"><i style="width:${(wDone / u.lessons.length) * 100}%"></i></span></div>`;
       }).join('')}
     </div>
-    ${soonHTML(c, block)}
+    ${soonHTML(c, block)}${typeof gvaPruebasHTML === 'function' ? gvaPruebasHTML(c) : ''}
     ${cur ? '' : block ? `<div class="course-done">${ICON.star}<div><b>${soonOf(c, block).length ? 'Vas al día: terminaste los mundos publicados' : '¡Componente completado!'}</b><p>Repasa cualquier lección o vuelve a los componentes.</p></div></div>`
       : `<div class="course-done">${ICON.star}<div><b>¡Curso completado!</b><p>Repasa cualquier lección o prueba otro curso.</p></div></div>`}</div>
     ${gymFabHTML(c, courseLevelUi(c, block, { done: S.done, last: S.lastLesson }))}
@@ -6050,7 +6836,7 @@ function renderLearn() {
   });
   $('[data-install]', view)?.addEventListener('click', promptInstall);
   $('[data-hide-install]', view)?.addEventListener('click', () => { S.hideInstall = true; save(); renderLearn(); });
-  bindCourseHead(); bindAccesoAviso(); bindGymFab(c);
+  bindCourseHead(); bindAccesoAviso(); bindGymFab(c); if (typeof gvaPruebasBind === 'function') gvaPruebasBind(view, c);
   view.scrollTop = 0;   // arriba queda «Sigue aquí»; el mapa de mundos está debajo
 }
 
