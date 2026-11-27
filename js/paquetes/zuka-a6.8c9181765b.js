@@ -3272,11 +3272,6 @@ const PZ_CORTO = { algebra: 'Álgebra', trig: 'Trigo', calc: 'Cálculo', geo: 'G
 const PZ_ORDEN = ['preuda', 'preicfes', 'algebra', 'trig'];
 const pzOrdena = cs => [...cs].sort((a, b) => ((PZ_ORDEN.indexOf(a.id) + 1) || 99) - ((PZ_ORDEN.indexOf(b.id) + 1) || 99));
 const PZ_TABS = { 'Zuka, tu aliado': 'Inicio', 'Estudia desde cualquier lugar': 'Donde quieras', 'Preuniversitario UdeA': 'UdeA', 'Preicfes Saber 11': 'Saber 11', 'Fundamentación en Ingeniería y Ciencias': 'Ingeniería', 'Libros de admisión': 'Libros', 'Zuka para instituciones': 'Colegios' };
-// Palabra gigante y fichas de cada lámina.
-const PZ_GRAN = {
-  'Zuka, tu aliado': ['Zuka', ['x²', '√', 'π', '∑', 'θ']], 'Estudia desde cualquier lugar': ['donde sea', ['+', '÷', '=', '×', '%']], 'Preuniversitario UdeA': ['UdeA', ['A', 'B', 'C', 'D', '40']], 'Preicfes Saber 11': ['Saber', ['11', 'A', '?', '%', '¿']],
-  'Fundamentación en Ingeniería y Ciencias': ['ingeniería', ['∫', 'dx', 'lim', 'θ', 'Σ']], 'Libros de admisión': ['papel', ['Aa', '1', '2', '3', '4']], 'Zuka para instituciones': ['colegio', ['11A', '10B', '%', '✓', '9°']],
-};
 // Precio más bajo que se vende hoy, de lo que publica la tienda: { precio, meses } o null (entonces no se muestra nada).
 function pzDesdeCurso(productos, id) {
   const ps = (productos || []).filter(p => p.curso === id && p.activo && p.precio != null).sort((a, b) => a.precio - b.precio);
@@ -3355,8 +3350,11 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
   ]).join('');
   const prontos = todos.filter(c => !cursos.some(x => x.id === c.id) && !(hayFund && PZ_FUND.includes(c.id)));
   // Carrusel: la promesa con la foto, un programa por lámina y los libros. `data-c`: el color de la franja.
-  // Detrás de cada lámina va su palabra en gigante y alrededor flotan fichas a distinta profundidad (pzCarrusel las mueve con el paso).
-  const lamina = (c, name, cuerpo, fig, cls = '') => { const [w, fs] = PZ_GRAN[name] || [name.split(' ')[0], ['x', '+', '=', '?']]; return `<div class="pz-lamina ${cls}" data-c="${c}" data-w="${pzEsc(w)}" role="group" aria-roledescription="lámina" aria-label="${pzEsc(name)}"><span class="pz-gran" aria-hidden="true" style="--l:${[...w].length}">${pzEsc(w)}</span><span class="pz-fichas" aria-hidden="true">${fs.map((f, i) => `<i style="--i:${i}"><b>${pzEsc(f)}</b></i>`).join('')}</span><div class="pz-in pz-lam-in"><div class="pz-lam-txt">${cuerpo}</div><div class="pz-lam-fig">${fig}</div></div></div>`; };
+  const lamina = (c, name, cuerpo, fig, cls = '') => ({
+    tab: pzEsc(PZ_TABS[name] || name),
+    html: `<div class="pz-lamina ${cls}" data-c="${c}" role="group" aria-roledescription="lámina" aria-label="${pzEsc(name)}">
+      <div class="pz-in pz-lam-in"><div class="pz-lam-txt">${cuerpo}</div><div class="pz-lam-fig">${fig}</div></div></div>`,
+  });
   const mancha = f => `<div class="pz-mancha" data-inclina="7" aria-hidden="true">${f}</div>`;
   const laminas = [
     lamina('#a3e635', 'Zuka, tu aliado', `<h1>Tu aliado para <em>entrar</em> a la universidad y <em>terminarla</em></h1><p class="pz-lead">Cursos que se juegan, libros y asesorías para preparar la admisión y sacar adelante las matemáticas de la carrera.</p>
@@ -3390,9 +3388,16 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <button class="pz-menu" type="button" aria-label="Menú" aria-expanded="false" aria-controls="pz-nav">${pzI('menu')}</button></span></div></header>
     <main class="pz-main">
     <section class="pz-hero pz-tinta" aria-roledescription="carrusel" aria-label="Programas destacados">
-      <div class="pz-pista">${laminas.join('')}</div>
-      <button class="pz-fl pz-ant" type="button" aria-label="Lámina anterior">${pzI('fl')}</button><button class="pz-fl pz-sig" type="button" aria-label="Lámina siguiente">${pzI('fl')}</button>
-      <div class="pz-puntos"><button class="pz-pausa" type="button" aria-label="Pausar el carrusel"></button>${laminas.map((x, i) => { const n = (x.match(/aria-label="([^"]+)/) || [])[1] || '', tab = PZ_TABS[n] || n; return `<button type="button" class="pz-pto" aria-label="${tab}, lámina ${i + 1} de ${laminas.length}"${i ? '' : ' aria-current="true"'}><span aria-hidden="true">${tab}</span></button>`; }).join('')}</div>
+      <div class="pz-pista">${laminas.map(l => l.html).join('')}</div>
+      <div class="pz-in pz-controles" role="group" aria-label="Navegación del carrusel">
+        <div class="pz-puntos">${laminas.map(({ tab }, i) => `<button type="button" class="pz-pto" aria-label="${tab}, lámina ${i + 1} de ${laminas.length}"${i ? '' : ' aria-current="true"'}>${tab}</button>`).join('')}</div>
+        <select class="pz-selector" aria-label="Elegir lámina">${laminas.map(({ tab }, i) => `<option value="${i}">${tab}</option>`).join('')}</select>
+        <div class="pz-transporte">
+          <button class="pz-pausa" type="button" aria-label="Pausar el carrusel"></button>
+          <button class="pz-fl pz-ant" type="button" aria-label="Lámina anterior">${pzI('fl')}</button>
+          <button class="pz-fl pz-sig" type="button" aria-label="Lámina siguiente">${pzI('fl')}</button>
+        </div>
+      </div>
     </section>
     <section class="pz-sec pz-in pz-programas" id="pz-programas">
       <header class="pz-head pz-rev"><h2>Elige por dónde <em>empiezas</em></h2><p>Cursos, libros, asesorías y un plan para colegios.</p></header>
@@ -3685,27 +3690,33 @@ const PZ_PASA = 7000;
 function pzCarrusel(el, quieto) {
   const hero = el.querySelector('.pz-hero'), pista = hero.querySelector('.pz-pista'), ls = [...pista.children], ptos = [...hero.querySelectorAll('.pz-pto')], pausa = hero.querySelector('.pz-pausa');
   let i = 0, anda = !quieto, enc = false, reloj = 0;
-  // Cada capa se corre a su ritmo con el paso de la lámina, y las fichas siguen un poco al puntero.
-  let pide = 0;
-  const capas = () => { pide = 0; const w = pista.clientWidth || 1; ls.forEach((l, j) => { const d = pista.scrollLeft / w - j; if (Math.abs(d) < 1.2) l.style.setProperty('--d', d.toFixed(4)); }); };
-  if (!quieto) {
-    pista.addEventListener('scroll', () => { if (!pide) pide = requestAnimationFrame(capas); }, { passive: true });
-    if (matchMedia('(hover: hover) and (pointer: fine)').matches) { let va2 = 0, u = null; hero.addEventListener('pointermove', e => { u = e; if (!va2) va2 = requestAnimationFrame(() => { va2 = 0; const b = hero.getBoundingClientRect(); hero.style.setProperty('--mx', ((u.clientX - b.left) / b.width - .5).toFixed(3)); hero.style.setProperty('--my', ((u.clientY - b.top) / b.height - .5).toFixed(3)); }); }); }
+  const selector = hero.querySelector('.pz-selector');
+  const contacto = el.querySelector('.pz-flota');
+  if ('IntersectionObserver' in window) {
+    const visibilidad = new IntersectionObserver(([entrada]) => {
+      if (!hero.isConnected) return visibilidad.disconnect();
+      contacto.classList.toggle('sobre-portada', entrada.isIntersecting);
+    }, { root: el });
+    visibilidad.observe(hero);
   }
   const marca = k => {
     i = k; ls.forEach((l, j) => l.classList.toggle('va', j === k)); hero.style.backgroundColor = ls[k].dataset.c; hero.classList.toggle('azul', ls[k].classList.contains('pz-azul'));
     ls.forEach((l, j) => { l.inert = j !== k; });
+    selector.selectedIndex = k;
     ptos.forEach((b, j) => { if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
   };
   const va = k => pista.scrollTo({ left: ((k + ls.length) % ls.length) * pista.clientWidth, behavior: quieto ? 'auto' : 'smooth' });
-  const para = () => { anda = false; clearInterval(reloj); pausa.hidden = true; hero.classList.add('parado'); };   // también las fichas
+  const para = () => { anda = false; clearInterval(reloj); pausa.hidden = true; };
   let ancho = 0;   // al cambiar de ancho la lámina se queda en su sitio
   const mira = () => { const w = pista.clientWidth; if (w !== ancho) return; const k = Math.max(0, Math.min(ls.length - 1, Math.round(pista.scrollLeft / (w || 1)))); if (k !== i) marca(k); };
   pista.addEventListener('scroll', mira, { passive: true });
   hero.querySelector('.pz-ant').onclick = () => { para(); va(i - 1); };
   hero.querySelector('.pz-sig').onclick = () => { para(); va(i + 1); };
   ptos.forEach((b, k) => { b.onclick = () => { para(); va(k); }; });
-  pausa.onclick = () => { para(); ptos[i].focus({ preventScroll: true }); };
+  selector.onpointerdown = para;
+  selector.onkeydown = para;
+  selector.onchange = () => { para(); va(selector.selectedIndex); };
+  pausa.onclick = () => { para(); (selector.offsetWidth ? selector : ptos[i]).focus({ preventScroll: true }); };
   pista.addEventListener('pointerdown', para); pista.addEventListener('keydown', para);
   hero.addEventListener('pointerenter', () => { enc = true; }); hero.addEventListener('pointerleave', () => { enc = false; });
   const ro = new ResizeObserver(() => { if (!pista.isConnected) return ro.disconnect(); ancho = pista.clientWidth; pista.scrollLeft = i * ancho; }); ro.observe(pista);
