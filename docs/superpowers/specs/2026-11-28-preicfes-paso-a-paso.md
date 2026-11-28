@@ -39,12 +39,7 @@ dentro de un marco de foto con su propio fondo (`XLAB.foto(cuerpo, alto, fondo)`
 `hospital`), `persona` (con `cartel`), `moneda`, `billete`, `rio`. Inglés: `aviso` (`metal`, `verde`, `peligro`, `papel`, `rojo`,
 `azul`, con `poste`). Ciencias y Sociales llevan al menos una por lección.
 
-**Fotos reales** (autorizadas por el usuario el 2026-11-28): cada lección de Ciencias y Sociales abre su primer capítulo con una foto de
-Wikimedia Commons (60 fotos, 4.8 MB en `media/fotos/<idLección>.webp`) que la cámara recorre (`XLAB.real`: acercamiento `z`, centro
-`cx`/`cy`, aro `m` en `mx`/`my`, rótulo `r`) con el crédito abajo. Se escriben con `xpFotoReal(id, foto, texto, momentos, idea)` en
-`js/explora-icf-cn-fotos.js` y `js/explora-icf-sc-fotos.js` (después de todos los `-pasos.js`). Solo dominio público, CC0, CC BY y
-CC BY-SA. `node tools/fotos-commons.js busca "consulta"`, `toma <id> "File:…"` (baja, comprime a < 130 KB y apunta autor, licencia
-y página en `media/fotos/creditos.json`; rehace `js/explora-fotos-datos.js`, que no se edita a mano) y `mira <id>`.
+**Fotos reales: probadas y retiradas** (2026-11-28). Se pusieron 60 fotos de Wikimedia Commons al abrir las lecciones de Ciencias y Sociales, pero el usuario prefirió las ilustraciones dibujadas (`XLAB`) y se quitaron (commit `143d480` las tiene, con la herramienta `tools/fotos-commons.js`). Las explicaciones usan solo ilustraciones dibujadas.
 
 ## Lo que pregunta el examen (análisis de los cuadernillos 2024-2 y 2025-2)
 

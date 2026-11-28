@@ -57,31 +57,3 @@ for (const b of Object.keys(T)) {
   }
 }
 
-// Fotos reales (Wikimedia Commons, con licencia libre): cada lección de Ciencias y Sociales abre su primer capítulo con una.
-const XP_FOTOS = get(ctx, 'XP_FOTOS'), XFOTO = get(ctx, 'XFOTO');
-const CRED = JSON.parse(fs.readFileSync(path.join(ROOT, 'media/fotos/creditos.json'), 'utf8'));
-const LIBRE = /^(public domain|pd|cc0|cc by(-sa)? \d(\.\d)?|cc by(-sa)?$)/i;
-
-test('cada foto real tiene su archivo liviano, su crédito con autor y una licencia libre', () => {
-  assert.deepEqual(Object.keys(XFOTO).sort(), Object.keys(CRED).sort(), 'js/explora-fotos-datos.js está al día');
-  for (const [id, c] of Object.entries(CRED)) {
-    const f = path.join(ROOT, 'media/fotos', `${id}.webp`);
-    assert.ok(fs.existsSync(f), `falta ${f}`);
-    assert.ok(fs.statSync(f).size < 140 * 1024, `${id} pesa mucho`);
-    assert.match(c.licencia, LIBRE, `${id}: ${c.licencia}`);
-    assert.ok(c.autor && c.pagina && /commons\.wikimedia\.org/.test(c.pagina), id);
-    assert.ok(XFOTO[id].cred.length <= 78 && XFOTO[id].cred.includes(c.licencia), `${id}: crédito`);
-  }
-  assert.ok(html.indexOf('js/explora-fotos-datos.js') < html.indexOf('js/explora-icf-ma.js'));
-});
-
-for (const b of FOTO) for (const id of ids(b)) {
-  test(`${id}: abre con una foto real`, () => {
-    const foto = XP_FOTOS[id];
-    assert.ok(foto && CRED[foto], `${id} sin foto real`);
-    const p = EXPLORA[id].pasos[0];
-    assert.equal(p.en.foto, foto, 'la foto va primero');
-    for (const m of p.momentos) assert.ok(!/NaN|undefined/.test(D(p)({ ...V(p), ...m.v }, XPK)));
-    assert.match(D(p)(V(p), XPK), new RegExp(`media/fotos/${foto}\.webp`));
-  });
-}

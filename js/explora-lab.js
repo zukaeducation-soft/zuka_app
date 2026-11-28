@@ -69,21 +69,6 @@ const XLAB = (() => {
       return `<g class="xlab">${DEFS}${LDEFS}<clipPath id="${id}-marco-${H}"><rect x="1" y="1" width="338" height="${H - 2}" rx="10"/></clipPath>` +
         `<g clip-path="url(#${id}-marco-${H})">${f}${cuerpo}</g><rect x="1" y="1" width="338" height="${H - 2}" rx="10" fill="none" stroke="#000" stroke-opacity=".25"/></g>`;
     },
-    // Foto real de Wikimedia Commons (XFOTO, js/explora-fotos-datos.js) que cubre el marco de 340 × H. v: z (acercamiento, 1 a 3),
-    // cx, cy (punto de la foto que queda al centro, 0 a 1), m (0 a 1: aro que señala mx, my), r (rótulo arriba). Abajo, el crédito.
-    real(id, v = {}, H = 220) {
-      const f = (typeof XFOTO !== 'undefined' && XFOTO[id]) || { src: '', w: 4, h: 3, cred: '' };
-      const z = Math.max(1, v.z || 1), s = Math.max(340 / f.w, H / f.h) * z, W = f.w * s, A = f.h * s;
-      const x = Math.min(0, Math.max(340 - W, 170 - (v.cx ?? 0.5) * W)), y = Math.min(0, Math.max(H - A, H / 2 - (v.cy ?? 0.5) * A));
-      let h = `<image href="${f.src}" x="${n(x)}" y="${n(y)}" width="${n(W)}" height="${n(A)}" preserveAspectRatio="none"/>`;
-      if ((v.m || 0) > 0.01) {
-        const px = x + (v.mx ?? 0.5) * W, py = y + (v.my ?? 0.5) * A, r = 26 + 8 * (1 - Math.min(1, v.m));
-        h += `<circle cx="${n(px)}" cy="${n(py)}" r="${n(r)}" fill="none" stroke="#000" stroke-opacity="${n(0.35 * v.m)}" stroke-width="5"/><circle cx="${n(px)}" cy="${n(py)}" r="${n(r)}" fill="none" stroke="#ffd23f" stroke-opacity="${n(v.m)}" stroke-width="2.5"/>`;
-      }
-      if (v.r) h += X.rot(170, 24, v.r, 'oscuro');
-      h += `<rect x="0" y="${H - 17}" width="340" height="17" fill="#000" fill-opacity=".55"/>` + T(8, H - 5, f.cred.replace(/&/g, '&amp;').replace(/</g, '&lt;'), '#ffffff', 8.5, 'start', 500);
-      return X.foto(h, H, 'noche');
-    },
     // Placa con texto (rótulo sobre la foto).
     rot(x, y, s, tono = 'claro') {
       const w = Math.max(26, String(s).replace(/<[^>]+>/g, '').length * 6.4 + 14), osc = tono === 'oscuro';

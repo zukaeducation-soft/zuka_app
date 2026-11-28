@@ -2334,21 +2334,6 @@ const XLAB = (() => {
       return `<g class="xlab">${DEFS}${LDEFS}<clipPath id="${id}-marco-${H}"><rect x="1" y="1" width="338" height="${H - 2}" rx="10"/></clipPath>` +
         `<g clip-path="url(#${id}-marco-${H})">${f}${cuerpo}</g><rect x="1" y="1" width="338" height="${H - 2}" rx="10" fill="none" stroke="#000" stroke-opacity=".25"/></g>`;
     },
-    // Foto real de Wikimedia Commons (XFOTO, js/explora-fotos-datos.js) que cubre el marco de 340 × H. v: z (acercamiento, 1 a 3),
-    // cx, cy (punto de la foto que queda al centro, 0 a 1), m (0 a 1: aro que señala mx, my), r (rótulo arriba). Abajo, el crédito.
-    real(id, v = {}, H = 220) {
-      const f = (typeof XFOTO !== 'undefined' && XFOTO[id]) || { src: '', w: 4, h: 3, cred: '' };
-      const z = Math.max(1, v.z || 1), s = Math.max(340 / f.w, H / f.h) * z, W = f.w * s, A = f.h * s;
-      const x = Math.min(0, Math.max(340 - W, 170 - (v.cx ?? 0.5) * W)), y = Math.min(0, Math.max(H - A, H / 2 - (v.cy ?? 0.5) * A));
-      let h = `<image href="${f.src}" x="${n(x)}" y="${n(y)}" width="${n(W)}" height="${n(A)}" preserveAspectRatio="none"/>`;
-      if ((v.m || 0) > 0.01) {
-        const px = x + (v.mx ?? 0.5) * W, py = y + (v.my ?? 0.5) * A, r = 26 + 8 * (1 - Math.min(1, v.m));
-        h += `<circle cx="${n(px)}" cy="${n(py)}" r="${n(r)}" fill="none" stroke="#000" stroke-opacity="${n(0.35 * v.m)}" stroke-width="5"/><circle cx="${n(px)}" cy="${n(py)}" r="${n(r)}" fill="none" stroke="#ffd23f" stroke-opacity="${n(v.m)}" stroke-width="2.5"/>`;
-      }
-      if (v.r) h += X.rot(170, 24, v.r, 'oscuro');
-      h += `<rect x="0" y="${H - 17}" width="340" height="17" fill="#000" fill-opacity=".55"/>` + T(8, H - 5, f.cred.replace(/&/g, '&amp;').replace(/</g, '&lt;'), '#ffffff', 8.5, 'start', 500);
-      return X.foto(h, H, 'noche');
-    },
     // Placa con texto (rótulo sobre la foto).
     rot(x, y, s, tono = 'claro') {
       const w = Math.max(26, String(s).replace(/<[^>]+>/g, '').length * 6.4 + 14), osc = tono === 'oscuro';
@@ -2634,371 +2619,6 @@ const XLAB = (() => {
   };
   return X;
 })();
-;
-//#archivo js/explora-fotos-datos.js
-// Generado por tools/fotos-commons.js: no editar a mano. Fotos de Wikimedia Commons (licencias en media/fotos/creditos.json).
-const XFOTO = {
- "icf-cn-indaga-1": {
-  "src": "media/fotos/icf-cn-indaga-1.webp",
-  "w": 960,
-  "h": 638,
-  "cred": "Foto: Shixart1985 · CC BY 2.0 · Commons"
- },
- "icf-cn-indaga-2": {
-  "src": "media/fotos/icf-cn-indaga-2.webp",
-  "w": 960,
-  "h": 834,
-  "cred": "Foto: Ulflund · CC0 · Commons"
- },
- "icf-cn-celula-1": {
-  "src": "media/fotos/icf-cn-celula-1.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: loganrickert · CC BY 2.0 · Commons"
- },
- "icf-cn-celula-3": {
-  "src": "media/fotos/icf-cn-celula-3.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Deepa Manthravadi · CC BY-SA 3.0 · Commons"
- },
- "icf-cn-movimiento-1": {
-  "src": "media/fotos/icf-cn-movimiento-1.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: AXF02 · CC BY 4.0 · Commons"
- },
- "icf-cn-movimiento-2": {
-  "src": "media/fotos/icf-cn-movimiento-2.webp",
-  "w": 960,
-  "h": 540,
-  "cred": "Foto: Matti Blume · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-movimiento-3": {
-  "src": "media/fotos/icf-cn-movimiento-3.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Wmart07 · CC BY-SA 3.0 · Commons"
- },
- "icf-cn-materia-1": {
-  "src": "media/fotos/icf-cn-materia-1.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: GRAN · CC BY 3.0 · Commons"
- },
- "icf-cn-materia-2": {
-  "src": "media/fotos/icf-cn-materia-2.webp",
-  "w": 960,
-  "h": 750,
-  "cred": "Foto: Manuel María Paz Delgado. · Public domain · Commons"
- },
- "icf-cn-materia-3": {
-  "src": "media/fotos/icf-cn-materia-3.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: aPreciosdeRemate · CC BY-SA 3.0 · Commons"
- },
- "icf-cn-ecosistemas-1": {
-  "src": "media/fotos/icf-cn-ecosistemas-1.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: Eric Kilby from Somerville, MA, USA · CC BY-SA 2.0 · Commons"
- },
- "icf-cn-ecosistemas-2": {
-  "src": "media/fotos/icf-cn-ecosistemas-2.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: Supertita · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-constitucion-1": {
-  "src": "media/fotos/icf-sc-constitucion-1.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: JuanGris (Lucía Estévez) · CC BY-SA 3.0 · Commons"
- },
- "icf-cn-ecosistemas-3": {
-  "src": "media/fotos/icf-cn-ecosistemas-3.webp",
-  "w": 960,
-  "h": 636,
-  "cred": "Foto: PJeganathan · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-constitucion-2": {
-  "src": "media/fotos/icf-sc-constitucion-2.webp",
-  "w": 960,
-  "h": 538,
-  "cred": "Foto: Bernard Gagnon · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-participacion-1": {
-  "src": "media/fotos/icf-sc-participacion-1.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Remux · CC BY-SA 3.0 · Commons"
- },
- "icf-sc-participacion-2": {
-  "src": "media/fotos/icf-sc-participacion-2.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: XalD · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-participacion-3": {
-  "src": "media/fotos/icf-sc-participacion-3.webp",
-  "w": 960,
-  "h": 1280,
-  "cred": "Foto: MariaU3 · CC BY-SA 3.0 · Commons"
- },
- "icf-sc-perspectivas-1": {
-  "src": "media/fotos/icf-sc-perspectivas-1.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: Julianruizp · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-perspectivas-2": {
-  "src": "media/fotos/icf-sc-perspectivas-2.webp",
-  "w": 960,
-  "h": 480,
-  "cred": "Foto: Pedro Szekely from Los Angeles, USA · CC BY-SA 2.0 · Commons"
- },
- "icf-sc-perspectivas-3": {
-  "src": "media/fotos/icf-sc-perspectivas-3.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Fabiammoreno · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-fuentes-1": {
-  "src": "media/fotos/icf-sc-fuentes-1.webp",
-  "w": 960,
-  "h": 540,
-  "cred": "Foto: LAGALANA · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-fuentes-2": {
-  "src": "media/fotos/icf-sc-fuentes-2.webp",
-  "w": 960,
-  "h": 346,
-  "cred": "Foto: Agustín Ibáñez y Bojons · Public domain · Commons"
- },
- "icf-sc-fuentes-3": {
-  "src": "media/fotos/icf-sc-fuentes-3.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Ricardo Rendón · Public domain · Commons"
- },
- "icf-sc-sistemico-1": {
-  "src": "media/fotos/icf-sc-sistemico-1.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: CesarRincon · CC0 · Commons"
- },
- "icf-sc-sistemico-2": {
-  "src": "media/fotos/icf-sc-sistemico-2.webp",
-  "w": 960,
-  "h": 638,
-  "cred": "Foto: Hidroituango · CC BY 2.0 · Commons"
- },
- "icf-sc-sistemico-3": {
-  "src": "media/fotos/icf-sc-sistemico-3.webp",
-  "w": 960,
-  "h": 638,
-  "cred": "Foto: JoranL · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-historia-1": {
-  "src": "media/fotos/icf-sc-historia-1.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Felipe Restrepo Acosta · CC BY-SA 3.0 · Commons"
- },
- "icf-sc-historia-2": {
-  "src": "media/fotos/icf-sc-historia-2.webp",
-  "w": 960,
-  "h": 728,
-  "cred": "Foto: Ricardo S. Pereira. · Public domain · Commons"
- },
- "icf-sc-historia-3": {
-  "src": "media/fotos/icf-sc-historia-3.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Romain Bréget · CC BY-SA 3.0 · Commons"
- },
- "icf-sc-mundo-1": {
-  "src": "media/fotos/icf-sc-mundo-1.webp",
-  "w": 960,
-  "h": 472,
-  "cred": "Foto: Localcosmos · CC0 · Commons"
- },
- "icf-cn-energia-1": {
-  "src": "media/fotos/icf-cn-energia-1.webp",
-  "w": 960,
-  "h": 638,
-  "cred": "Foto: Hans van Dijk for Anefo · CC0 · Commons"
- },
- "icf-sc-mundo-2": {
-  "src": "media/fotos/icf-sc-mundo-2.webp",
-  "w": 960,
-  "h": 642,
-  "cred": "Foto: Raphaël Thiémard from Belgium. · CC BY-SA 2.0 · Commons"
- },
- "icf-sc-mundo-3": {
-  "src": "media/fotos/icf-sc-mundo-3.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: Tom Page · CC BY-SA 2.0 · Commons"
- },
- "icf-sc-geografia-1": {
-  "src": "media/fotos/icf-sc-geografia-1.webp",
-  "w": 960,
-  "h": 1086,
-  "cred": "Foto: Grundkarte Milenioscuro, Relief Alexrk2 · CC BY-SA 3.0 · Commons"
- },
- "icf-sc-geografia-2": {
-  "src": "media/fotos/icf-sc-geografia-2.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: U. S. Fish and Wildlife Service - North… · Public domain · Commons"
- },
- "icf-sc-economia-1": {
-  "src": "media/fotos/icf-sc-economia-1.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: Mussi Katz · CC0 · Commons"
- },
- "icf-sc-economia-2": {
-  "src": "media/fotos/icf-sc-economia-2.webp",
-  "w": 960,
-  "h": 560,
-  "cred": "Foto: Rjcastillo · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-economia-3": {
-  "src": "media/fotos/icf-sc-economia-3.webp",
-  "w": 960,
-  "h": 626,
-  "cred": "Foto: Jorge Gutiérrez · CC BY 3.0 · Commons"
- },
- "icf-sc-modelos-1": {
-  "src": "media/fotos/icf-sc-modelos-1.webp",
-  "w": 960,
-  "h": 522,
-  "cred": "Foto: Juanjo70000 · CC BY-SA 4.0 · Commons"
- },
- "icf-sc-modelos-2": {
-  "src": "media/fotos/icf-sc-modelos-2.webp",
-  "w": 960,
-  "h": 540,
-  "cred": "Foto: QueenCityCebu · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-atomo-2": {
-  "src": "media/fotos/icf-cn-atomo-2.webp",
-  "w": 960,
-  "h": 636,
-  "cred": "Foto: Zbynek Burival · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-energia-2": {
-  "src": "media/fotos/icf-cn-energia-2.webp",
-  "w": 960,
-  "h": 654,
-  "cred": "Foto: PedanticNarrativeController · CC0 · Commons"
- },
- "icf-cn-herencia-1": {
-  "src": "media/fotos/icf-cn-herencia-1.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: Rachael Gorjestani rachaelgorjestani · CC0 · Commons"
- },
- "icf-cn-herencia-2": {
-  "src": "media/fotos/icf-cn-herencia-2.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Yercaud-elango · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-herencia-3": {
-  "src": "media/fotos/icf-cn-herencia-3.webp",
-  "w": 960,
-  "h": 650,
-  "cred": "Foto: gailhampshire from Cradley, Malvern, U.K · CC BY 2.0 · Commons"
- },
- "icf-cn-reacciones-1": {
-  "src": "media/fotos/icf-cn-reacciones-1.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: katerha · CC BY 2.0 · Commons"
- },
- "icf-cn-reacciones-2": {
-  "src": "media/fotos/icf-cn-reacciones-2.webp",
-  "w": 960,
-  "h": 810,
-  "cred": "Foto: Делфина · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-reacciones-3": {
-  "src": "media/fotos/icf-cn-reacciones-3.webp",
-  "w": 960,
-  "h": 540,
-  "cred": "Foto: AgrisR · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-ondas-2": {
-  "src": "media/fotos/icf-cn-ondas-2.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: ShineÆXLVII · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-gases-1": {
-  "src": "media/fotos/icf-cn-gases-1.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: Sunridin · CC BY 3.0 · Commons"
- },
- "icf-cn-gases-2": {
-  "src": "media/fotos/icf-cn-gases-2.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Xemenendura · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-electrico-2": {
-  "src": "media/fotos/icf-cn-electrico-2.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: MikeRun · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-cts-2": {
-  "src": "media/fotos/icf-cn-cts-2.webp",
-  "w": 960,
-  "h": 640,
-  "cred": "Foto: Fotografía oficial de la Presidencia de… · CC0 · Commons"
- },
- "icf-cn-ondas-1": {
-  "src": "media/fotos/icf-cn-ondas-1.webp",
-  "w": 960,
-  "h": 688,
-  "cred": "Foto: Nic McPhee from Morris, MN, USA · CC BY-SA 2.0 · Commons"
- },
- "icf-cn-cts-1": {
-  "src": "media/fotos/icf-cn-cts-1.webp",
-  "w": 960,
-  "h": 638,
-  "cred": "Foto: David McClenaghan, CSIRO · CC BY 3.0 · Commons"
- },
- "icf-cn-cts-3": {
-  "src": "media/fotos/icf-cn-cts-3.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Africa Rice Center · CC BY-SA 3.0 · Commons"
- },
- "icf-cn-celula-2": {
-  "src": "media/fotos/icf-cn-celula-2.webp",
-  "w": 960,
-  "h": 946,
-  "cred": "Foto: Realmastery · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-atomo-1": {
-  "src": "media/fotos/icf-cn-atomo-1.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: Mouryan · CC BY-SA 4.0 · Commons"
- },
- "icf-cn-electrico-1": {
-  "src": "media/fotos/icf-cn-electrico-1.webp",
-  "w": 960,
-  "h": 720,
-  "cred": "Foto: ChristianSW · CC BY 3.0 · Commons"
- }
-};
 ;
 //#archivo js/explora-icf-ma-2.js
 // Preicfes · Matemáticas, mundo 2 «Proporciones y Porcentajes» (Explora, escenas «dibujo» y «fichas»). Ejemplos propios.
@@ -9161,3 +8781,101 @@ xpLec('icf-sc-historia-3', [
     cierre: 'Varias causas y varios actores: tierra, Estado ausente, narcotráfico, víctimas civiles e intentos de paz.',
   });
 }
+;
+//#archivo js/explora-icf-sc-7.js
+// Preicfes · Sociales y Ciudadanas, mundo 7 «Historia del Mundo» (Explora, escena «hoja»).
+xpLec('icf-sc-mundo-1', [
+  ['Dos clases de revolución',
+    xpMira('hoja', 'Empecemos por la idea: unas revoluciones cambian **quién manda**; otra cambió **cómo se produce**.', { letras: ['1', '2', '3', '4'], paras: [['1776: trece colonias se independizan'], ['1789: Francia contra el poder absoluto'], ['1791–1804: Haití'], ['Inglaterra: vapor y fábricas']] }, [
+      ['Aquí se cambia de gobierno.', { luz: [0], nota: { 0: 'política' } }],
+      ['Aquí cae el poder absoluto.', { luz: [1], nota: { 1: 'política' } }],
+      ['Aquí se liberan los esclavizados.', { luz: [2], nota: { 2: 'política' } }],
+      ['Aquí cambia el trabajo.', { luz: [3], nota: { 3: 'industrial' } }],
+      ['Ocurrieron casi a la vez.', {}],
+    ], 'Políticas: quién manda. Industrial: cómo se produce.'),
+    xpHaz('hoja', 'Subraya la que cambió **cómo se produce**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['La de Haití'], ['La francesa'], ['La del vapor en Inglaterra']], pista: 'Busca máquinas.' }, 'El vapor movió telares, trenes y barcos.')],
+  ['¿Derechos para todos?',
+    xpMira('hoja', 'Segunda idea: la palabra era **«todos»**; la práctica, no.', { paras: [['«Todos nacen iguales»'], ['Mujeres: sin voto'], ['Indígenas: sin tierra'], ['Esclavizados: sin libertad'], ['Haití: los esclavizados lo toman en serio']] }, [
+      ['Así decían los papeles.', { luz: [0] }],
+      ['La mitad de la gente quedaba por fuera.', { luz: [1], nota: { 1: 'por fuera' } }],
+      ['Y otros pueblos también.', { luz: [2, 3], nota: { 2: 'por fuera', 3: 'por fuera' } }],
+      ['En Haití hicieron cumplir la palabra.', { luz: [4], nota: { 4: 'la cumplen' } }],
+      ['Pregunta siempre quién entra en «todos».', { luz: [0] }],
+    ], 'Compara lo que se proclama con quién queda por fuera.'),
+    xpHaz('hoja', 'Subraya por qué Haití preocupó a los dueños de esclavos.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Porque vendía azúcar'], ['Porque mostró que los esclavizados podían vencer'], ['Porque era una isla']], pista: '¿Qué podría repetirse en otras partes?' }, 'Era un ejemplo posible para los demás.')],
+  ['Fábricas y nuevas ideas',
+    xpMira('hoja', 'Tercera idea: la fábrica trajo **riqueza**, **obreros** y **nuevas ideas**.', { paras: [['Más productos y ciudades grandes'], ['Jornadas de doce horas, niños obreros'], ['Sindicatos y leyes'], ['Liberalismo y socialismo']] }, [
+      ['Se produce mucho más.', { luz: [0] }],
+      ['Pero quienes trabajan viven mal.', { luz: [1], nota: { 1: 'conflicto' } }],
+      ['Se organizan para pedir derechos.', { luz: [2], nota: { 2: 'respuesta' } }],
+      ['Y se discute cómo repartir.', { luz: [3], nota: { 3: 'ideas' } }],
+      ['El voto se amplía despacio.', {}],
+    ], 'Del conflicto salen sindicatos, leyes e ideas.'),
+    xpHaz('hoja', 'Pon al margen la idea de cada persona.', { modo: 'margen', letras: ['A', 'B'], rotulos: ['liberalismo', 'socialismo'], meta: [1, 0], paras: [['Un obrero: «La fábrica debería ser de todos».'], ['Un dueño: «Que el gobierno no toque mi negocio».']], pista: 'Alguna no va ahí: ¿quién quiere compartir y quién, que no se metan?' }, 'El obrero, socialismo; el dueño, liberalismo.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'En 1789 un panadero francés paga impuestos y un conde no. Subraya qué cuestionó la revolución.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Los privilegios de nacimiento'], ['El precio de los telares'], ['La esclavitud en Haití']], pista: '¿Por qué el conde no paga?' }, 'Los estamentos daban privilegios según el nacimiento.')],
+], 'Qué cambió, para quién y qué lucha quedó abierta.');
+
+xpLec('icf-sc-mundo-2', [
+  ['La chispa y la pólvora',
+    xpMira('hoja', 'Empecemos por la idea: en 1914 un disparo fue la **chispa**; la **pólvora** llevaba años.', { paras: [['Colonias y mercados en disputa'], ['Dos alianzas'], ['Nacionalismo y prestigio'], ['Sarajevo, 1914']] }, [
+      ['Las potencias competían por el mundo.', { luz: [0], nota: { 0: 'de fondo' } }],
+      ['Si una peleaba, arrastraba a las otras.', { luz: [1], nota: { 1: 'de fondo' } }],
+      ['Y cada una quería ser la primera.', { luz: [2], nota: { 2: 'de fondo' } }],
+      ['El atentado lo disparó todo.', { luz: [3], nota: { 3: 'detonante' } }],
+      ['Sin alianzas quizá habría sido un conflicto local.', { luz: [1] }],
+    ], 'Colonias, alianzas y nacionalismo; Sarajevo, la chispa.'),
+    xpHaz('hoja', 'Subraya lo que convirtió un atentado en una guerra de **muchos países**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['El arma usada'], ['El sistema de alianzas'], ['El mes de junio']], pista: '¿Qué obligaba a unos a entrar por otros?' }, 'Cada aliado arrastró a los demás.')],
+  ['De una guerra a otra',
+    xpMira('hoja', 'Segunda idea: la paz mal hecha y la **crisis** abonaron la segunda guerra.', { paras: [['1919: Versalles culpa a Alemania'], ['1929: crisis mundial'], ['1933: Hitler, por vías legales'], ['1939: invasión de Polonia'], ['Holocausto: unos seis millones de judíos']] }, [
+      ['Vienen pagos y humillación.', { luz: [0] }],
+      ['Después, desempleo y miedo.', { luz: [1] }],
+      ['Alguien ofrece orden y culpables.', { luz: [2], nota: { 2: 'acaba la democracia' } }],
+      ['Y empieza otra guerra.', { luz: [3] }],
+      ['El racismo se volvió política de Estado.', { luz: [4], nota: { 4: 'genocidio' } }],
+    ], 'Humillación, crisis, dictadura, guerra y genocidio.'),
+    xpHaz('hoja', 'Subraya lo que es **correcto** sobre la llegada de Hitler al poder.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Fue un golpe militar.'], ['Ocurrió antes de Versalles.'], ['Llegó por vías legales y luego acabó la democracia.']], pista: 'Las democracias también se pueden perder desde adentro.' }, 'Usó la ley para llegar y después la destruyó.')],
+  ['Una guerra fría… para ellas',
+    xpMira('hoja', 'Tercera idea: dos **bloques** no se atacan de frente y pelean en otros países.', { paras: [['1945: ONU; 1948: Derechos Humanos'], ['Estados Unidos, capitalista'], ['Unión Soviética, comunista'], ['Corea, Vietnam, Angola, Centroamérica'], ['1989: cae el Muro']] }, [
+      ['Después del horror, reglas para todos.', { luz: [0] }],
+      ['Pero los vencedores se dividen.', { luz: [1, 2] }],
+      ['Con bombas atómicas, pelear de frente sería el fin.', { luz: [1, 2], nota: { 1: 'no se atacan' } }],
+      ['La guerra ocurre en otras tierras.', { luz: [3], nota: { 3: 'muy caliente' } }],
+      ['El Muro cae y, dos años después, la Unión Soviética.', { luz: [4] }],
+    ], 'Fría entre potencias, caliente en otros países.'),
+    xpHaz('hoja', 'Subraya por qué las dos potencias **no** se atacaron directamente.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Podían destruirse mutuamente.'], ['Eran aliadas.'], ['Quedaban muy cerca.']], pista: 'Piensa en las armas que tenían.' }, 'El miedo a la destrucción las frenó.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'En 1973 un militar derroca a un presidente elegido y dice: «Evité el comunismo». Subraya el contexto que lo explica.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['La Primera Guerra Mundial'], ['La Guerra Fría en América Latina'], ['La Revolución Industrial']], pista: 'Mira la fecha y la palabra que usa para justificarse.' }, 'El miedo al comunismo justificó golpes.')],
+], 'Chispa y pólvora, crisis y dictadura, dos bloques.');
+
+xpLec('icf-sc-mundo-3', [
+  ['Dejar de ser colonia',
+    xpMira('hoja', 'Empecemos por la idea: en treinta años casi todas las **colonias** fueron países.', { paras: [['Europa, débil tras la guerra'], ['Pueblos que no esperan más'], ['India, 1947: sin violencia'], ['Argelia, 1962: con guerra']] }, [
+      ['Una causa: las potencias estaban débiles.', { luz: [0], nota: { 0: 'causa' } }],
+      ['Otra, más importante: la gente se organizó.', { luz: [1], nota: { 1: 'causa' } }],
+      ['Un camino: desobedecer sin violencia.', { luz: [2] }],
+      ['Otro camino fue la guerra.', { luz: [3] }],
+      ['Los dos tuvieron costos.', { luz: [2, 3] }],
+    ], 'Dos causas y dos caminos.'),
+    xpHaz('hoja', 'Subraya un ejemplo de **desobediencia civil** no violenta.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [1], paras: [['Poner una bomba'], ['Fabricar sal aunque esté prohibido'], ['Cobrar un impuesto']], pista: 'Incumplir una norma injusta sin dañar a nadie.' }, 'Gandhi caminó hasta el mar para hacer sal.')],
+  ['Rayas y leyes',
+    xpMira('hoja', 'Segunda idea: quedaron **fronteras** ajenas y **leyes** que separaban.', { paras: [['Fronteras africanas trazadas en Europa'], ['Pueblos partidos, guerras después'], ['Sudáfrica: apartheid desde 1948'], ['1994: votan todos; Mandela, presidente']] }, [
+      ['Se trazaron con regla y sin preguntar.', { luz: [0] }],
+      ['Muchas guerras nacieron ahí.', { luz: [1], nota: { 1: 'herencia' } }],
+      ['El color decidía dónde vivir.', { luz: [2], nota: { 2: 'segregación' } }],
+      ['Se acabó tras una larga lucha.', { luz: [3], nota: { 3: 'cambio' } }],
+      ['Tener bandera no borra lo heredado.', { luz: [0, 1] }],
+    ], 'La independencia no borra las rayas ni las leyes.'),
+    xpHaz('hoja', 'Subraya lo que era el **apartheid**.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [2], paras: [['Una alianza militar'], ['Un impuesto a la sal'], ['La separación por color hecha ley']], pista: 'Decidía dónde podía estar cada persona.' }, 'Era segregación legal.')],
+  ['Movimientos sociales',
+    xpMira('hoja', 'Tercera idea: un **movimiento social** es gente organizada para cambiar algo injusto.', { paras: [['No es un partido'], ['No es un ejército'], ['Marcha, boicot, huelga, arte, ley'], ['Casi nunca gana todo; a veces cambia lo posible']] }, [
+      ['No busca llegar a gobernar.', { luz: [0] }],
+      ['Ni usa las armas.', { luz: [1] }],
+      ['Estas son sus herramientas.', { luz: [2], nota: { 2: 'herramientas' } }],
+      ['Y así cambia leyes y costumbres.', { luz: [3] }],
+      ['Derechos civiles, mujeres, estudiantes, pueblos indígenas.', {}],
+    ], 'Organizarse, fuera de las instituciones, para cambiar algo.'),
+    xpHaz('hoja', 'Pon al margen la herramienta.', { modo: 'margen', letras: ['A', 'B', 'C'], rotulos: ['huelga', 'boicot', 'ley'], meta: [1, 2, 0], paras: [['Nadie compra ese producto'], ['Se presenta un proyecto al Congreso'], ['Los trabajadores paran']], pista: 'Alguna no va ahí: ¿dejar de comprar, de trabajar o ir al Congreso?' }, 'Boicot, ley y huelga.')],
+  ['Ahora sí, un problema',
+    xpHaz('hoja', 'Unos vecinos dejan de usar un bus que cobra más a los del cerro, hasta que cambian la tarifa. Subraya qué es.', { modo: 'toca', letras: ['A', 'B', 'C'], meta: [0], paras: [['Un boicot de un movimiento social'], ['Un golpe de Estado'], ['Una descolonización']], pista: 'Dejan de usar algo para exigir un cambio.' }, 'Como el boicot de los buses de 1955.')],
+], 'Caminos, herencias y gente que se organiza.');

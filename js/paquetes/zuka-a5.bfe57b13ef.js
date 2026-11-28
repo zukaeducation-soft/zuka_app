@@ -3889,18 +3889,6 @@ function xpAmplia(id, o) {
     pasos: [...caps.flatMap(([, ...ps], c) => ps.map(p => ({ ...p, cap: c }))), { ...fin, cap: caps.length - 1, idea: o.cierre || fin.idea }] };
   XP_PASOS[id] = caps.length;
 }
-// xpFotoReal(id, foto, texto, momentos, idea): abre el primer capítulo de una explicación con una foto real (XLAB.real, de
-// js/explora-lab.js) que la cámara recorre: cada momento es [lo que dice, { z, cx, cy, m, mx, my, r }]. Va después de xpAmplia.
-const XP_FOTOS = {};   // lecciones con foto real (el empaquetador las reconoce por aquí)
-function xpFotoReal(id, foto, texto, momentos, idea, H = 220) {
-  const L = EXPLORA[id];
-  if (!L) throw new Error(`xpFotoReal: ${id} no tiene explicación`);
-  if (XP_FOTOS[id]) throw new Error(`xpFotoReal: ${id} ya tiene foto`);
-  const v = { z: 1, cx: 0.5, cy: 0.5, m: 0, mx: 0.5, my: 0.5 };
-  const paso = { ...xpMira('dibujo', texto, { dib: w => XLAB.real(foto, w, H), v, alto: H, foto }, momentos, idea), cap: 0 };
-  L.pasos.splice(L.pasos.findIndex(p => p.cap === 0), 0, paso);
-  XP_FOTOS[id] = foto;
-}
 // Explicación: momentos [lo que dice, lo que cambia en la escena, cuenta].
 const xpMira = (escena, texto, en, momentos, idea) => ({ tipo: 'muestra', escena, texto, en, idea,
   momentos: momentos.map(([dice, d = {}, cuenta]) => ({ dice, ...(escena === 'dibujo' ? { v: d } : d), ...(cuenta ? { cuenta } : {}) })) });
