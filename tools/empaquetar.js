@@ -70,7 +70,7 @@ function plan() {
     for (const id of corre(`COURSES[${i}].units.flatMap(u => u.lessons.map(l => l.id))`)) leccion[id] = c;
   });
   const explora = corre("typeof EXPLORA === 'undefined' ? [] : Object.keys(EXPLORA)").filter(id => leccion[id]);
-  for (const f of dif) for (const a of aporta[f] || []) { const m = a.match(/^(?:EXPLORA|XP_PASOS)\.(.+)$/); if (m && leccion[m[1]]) de[f].add(leccion[m[1]]); }
+  for (const f of dif) for (const a of aporta[f] || []) { const m = a.match(/^(?:EXPLORA|XP_PASOS|XP_FOTOS)\.(.+)$/); if (m && leccion[m[1]]) de[f].add(leccion[m[1]]); }
   for (const [after, juegos] of corre("typeof GYM_RETOS === 'undefined' ? [] : GYM_RETOS.map(r => [r.after, r.steps.map(s => s.ex && s.ex.game).filter(Boolean)])")) {
     for (const id of after) for (const g of juegos) if (leccion[id] && de[dueño[g]]) de[dueño[g]].add(leccion[id]);
   }
@@ -106,7 +106,7 @@ function plan() {
   const paraArranque = Object.keys(apo).filter(a => /^[\w$]+\.[A-Za-z_$][\w$]*$/.test(a) && !/^(GAMES|EXPLORA|GUIDES)\./.test(a) && arranque.includes(a));
   for (const a of paraArranque) cursos.forEach(c => de[apo[a]].add(c));
   for (const f of dif) {
-    if ((registra[f] || []).length || (aporta[f] || []).some(a => /^(EXPLORA|XP_PASOS)\./.test(a))) continue;
+    if ((registra[f] || []).length || (aporta[f] || []).some(a => /^(EXPLORA|XP_PASOS|XP_FOTOS)\./.test(a))) continue;
     for (const g of deps[f]) if ((registra[g] || []).length) for (const c of de[g]) de[f].add(c);
   }
   propaga();
