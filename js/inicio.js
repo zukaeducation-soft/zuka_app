@@ -100,7 +100,7 @@ function renderHome() {
         <button class="hm-racha" type="button" data-dk="streak">${ICON.flame}<span>${racha ? `<b>${racha} ${racha === 1 ? 'día' : 'días'}</b> de racha` : 'Empieza tu racha hoy'}</span>${ICON.right}</button></div>
       <button class="hm-aro" type="button" data-dk="streak" data-inclina aria-label="Meta de hoy: ${hoy} de ${S.goal} XP. Ver tu actividad">${aroHTML(goalP, goalP >= 1 ? mascotSVG('cheer', 'm-hello') : mascotSVG('think', 'm-hello'), goalP >= 1 ? 'lleno' : '')}<span class="hm-xp"><b>${hoy}</b> / ${S.goal} XP</span></button></section>
     ${installEvt && !S.hideInstall ? `<section class="install-banner">
-      <img src="icons/zuka-claro-192.png" alt="" width="44" height="44">
+      <img src="icons/zuka-color-192.png" alt="" width="44" height="44">
       <div><b>Instala Zuka</b><p>Ábrela como app, incluso sin conexión.</p></div>
       <button class="btn brand sm" data-install>Instalar</button>
       <button class="icon-btn" data-hide-install aria-label="Ocultar">${ICON.x}</button>

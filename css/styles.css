@@ -1627,3 +1627,20 @@ body:not([data-tab=learn]):not([data-tab=gym]) #view { padding-top: env(safe-are
 /* En la explicación (Explora) el botón va en su cabecera: en el celular la barra de la lección no se ve; en el computador sí, y allí basta el de la barra. */
 .xp-meta .tutor-xp { min-height: 32px; padding: 0 10px; font-size: 13px; gap: 5px; } .xp-meta .tutor-xp .i { width: 16px; height: 16px; }
 @media (min-width: 1000px) { .xp-meta .tutor-xp { display: none; } }
+
+/* Colores institucionales de Zuka (2026-11-28, spec 2026-11-28-logo-color): salen del logo (tools/marca.js, COLORES). El logo
+   los usa en su degradado (--zg0 … --zg5, uno por tema) y la palabra en --zuka-tinta. */
+:root {
+  --zuka-azul: #0066ff; --zuka-cian: #00b5fa; --zuka-turquesa: #00e0d0; --zuka-menta: #0aec82; --zuka-lima: #7afb1f;
+  --zuka-tinta: #ffffff; --zuka-noche: #000000;
+  --zg0: #0066ff; --zg1: #00b5fa; --zg2: #00e0d0; --zg3: #0aec82; --zg4: #50f81c; --zg5: #7afb1f;
+}
+:root[data-theme="light"] {
+  --zuka-azul: #0045fa; --zuka-cian: #0270d0; --zuka-turquesa: #00ae8d; --zuka-menta: #12c650; --zuka-lima: #5ee004;
+  --zuka-tinta: #002454;
+  --zg0: #0045fa; --zg1: #0270d0; --zg2: #00ae8d; --zg3: #12c650; --zg4: #58e106; --zg5: #5ee004;
+}
+.logo { color: var(--zuka-tinta); }
+/* La ficha del cerebro es como el icono de la app: negra y con el degradado del tema oscuro en los dos temas. */
+.brain-tile { background: var(--zuka-noche); border-color: #1d2333;
+  --zg0: #0066ff; --zg1: #00b5fa; --zg2: #00e0d0; --zg3: #0aec82; --zg4: #50f81c; --zg5: #7afb1f; }

@@ -80,10 +80,15 @@ test('js/marca.js sale de tools/marca.js y está registrado', () => {
   assert.ok(sw.includes("'js/marca.js'"));
 });
 
-test('la marca: un solo color, dentro del cuadro y con nombre accesible (spec 2026-11-24-logo-nuevo)', () => {
+test('la marca: degradado institucional, dentro del cuadro y con nombre accesible (specs 2026-11-24-logo-nuevo y 2026-11-28-logo-color)', () => {
   const ctx = loadScripts(['js/marca.js']);
   const brainSVG = get(ctx, 'brainSVG'), brainTile = get(ctx, 'brainTile'), logoHTML = get(ctx, 'logoHTML');
-  assert.match(brainSVG(), /^<svg class="brain" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"/);
+  assert.match(brainSVG(), /^<svg class="brain" viewBox="0 0 100 100" aria-hidden="true"/);
+  const a = brainSVG(), b = brainSVG(), id = s => s.match(/linearGradient id="([^"]+)"/)[1];
+  assert.notEqual(id(a), id(b), 'cada logo con su propio degradado (varios en la misma página)');
+  assert.match(a, new RegExp(`fill="url\\(#${id(a)}\\)"`));
+  for (let i = 0; i < 6; i++) assert.match(a, new RegExp(`stop-color:var\\(--zg${i}`), `--zg${i}: el degradado sigue al tema`);
+  for (const v of ['--zg0', '--zg5', '--zuka-tinta']) assert.ok((css.match(new RegExp(`${v}:`, 'g')) || []).length >= 2, `${v} en los dos temas`);
   assert.match(brainSVG(), /class="rays"/, 'los destellos van aparte: la entrada los enciende');
   const [, tx, ty, k] = brainSVG().match(/translate\(([-\d.]+) ([-\d.]+)\) scale\(([\d.]+)\)/).map(Number);
   for (const d of brainSVG().match(/ d="[^"]+"/g)) {
@@ -105,9 +110,11 @@ test('no hay animación de entrada: la portada va vacía y la app no espera nada
   }
 });
 
-test('el icono de la app es el cerebro azul noche sobre blanco', () => {
-  assert.match(read('tools/marca.js'), /brain\(\{ ink: NAVY \}\)/);
-  for (const f of ['icons/zuka-claro-192.png', 'icons/zuka-claro-512.png', 'icons/zuka-claro-maskable-512.png', 'icons/zuka-claro-apple-180.png', 'icons/zuka-claro-favicon-48.png'])
+test('el icono de la app es el cerebro en degradado sobre negro (2026-11-28)', () => {
+  assert.match(read('tools/marca.js'), /fill="\$\{NOCHE\}"/); assert.match(read('tools/marca.js'), /NOCHE = '#000000'/);
+  assert.match(read('icons/zuka-color-favicon.svg'), /linearGradient/);
+  for (const f of ['manifest.json', 'index.html', 'sw.js']) assert.doesNotMatch(read(f), /zuka-claro-/, `${f}: icono viejo`);
+  for (const f of ['icons/zuka-color-192.png', 'icons/zuka-color-512.png', 'icons/zuka-color-maskable-512.png', 'icons/zuka-color-apple-180.png', 'icons/zuka-color-favicon-48.png'])
     assert.ok(fs.statSync(path.join(ROOT, f)).size > 500, f);
 });
 

@@ -396,7 +396,7 @@ function renderLearn() {
     ${cur ? continueCardHTML(c, cur, ls) : ''}${accesoAvisoHTML(c)}</div>
     <div class="cv-main">
     ${installEvt && !S.hideInstall ? `<section class="install-banner">
-      <img src="icons/zuka-claro-192.png" alt="" width="44" height="44">
+      <img src="icons/zuka-color-192.png" alt="" width="44" height="44">
       <div><b>Instala Zuka</b><p>Ábrela como app, incluso sin conexión.</p></div>
       <button class="btn brand sm" data-install>Instalar</button>
       <button class="icon-btn" data-hide-install aria-label="Ocultar">${ICON.x}</button>
