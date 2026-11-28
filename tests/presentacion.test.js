@@ -30,9 +30,11 @@ test('la barra de arriba trae «Entrar» antes que todo lo demás', () => {
   assert.ok(top >= 0 && login > top && login < hero);
 });
 
-test('cuenta quiénes somos, cómo se aprende, los cursos con sus mundos y cierra con un llamado', () => {
-  for (const t of ['Quiénes somos', 'Pide tu código de prueba', 'Ya tengo código', 'Gimnasio cerebral', 'Tutorías',
-    'Álgebra', 'Trigonometría', 'Teoría de Conjuntos', 'Recta', 'Ondas', '3 lecciones']) assert.ok(html.includes(t), t);
+test('cuenta quiénes somos, cómo se aprende, los cursos y cierra con un llamado', () => {
+  for (const t of ['Quiénes somos', 'Pide tu código de prueba', 'Ya tengo código', 'Cómo se aprende', 'Asesorías',
+    'Álgebra', 'Trigonometría', '3 lecciones']) assert.ok(html.includes(t), t);
+  // 2026-11-28 (pedido del usuario): sin «Ahora prueba tú» (las demos) ni «Lo que vas a aprender» (los mapas de cursos).
+  for (const t of ['Ahora prueba tú', 'Lo que vas a aprender', 'pz-demos', 'id="pz-cursos"', 'data-pz-tab']) assert.ok(!html.includes(t), t);
   assert.doesNotMatch(html, /Brilliant|Koji/);
   assert.equal((html.match(/data-pz="prueba"/g) || []).length >= 2, true);
 });
@@ -76,9 +78,7 @@ test('el cuadrado suma siempre 100 y la palanca solo se equilibra a 2 pasos', ()
   assert.ok(pal(1).giro < 0 && pal(2).giro === 0 && pal(4).giro > 0);
 });
 
-test('lo que se arrastra también se mueve con el teclado y las pestañas están enlazadas con su panel', () => {
-  assert.equal((html.match(/role="slider" tabindex="0" aria-label=/g) || []).length, 3);
-  assert.ok(html.includes('aria-controls="pz-panel-1"') && html.includes('id="pz-panel-1"'));
+test('cada enlace interno lleva a algo que existe y los avisos se anuncian', () => {
   assert.match(html, /aria-live="polite"/);
   for (const id of html.match(/href="#[^"]+/g)) assert.ok(html.includes(`id="${id.slice(7)}"`), id);
 });

@@ -546,3 +546,155 @@
 #landing .pz-foot b { text-transform: uppercase; font-weight: 700; letter-spacing: .02em; font-size: 14px; }
 /* esquinas rectas también en las tarjetas de Quiénes somos, el camino y la sección de colegios (los celulares de muestra conservan las suyas) */
 #landing :is(.pz-tres > article, .pz-ruta, .pz-panel, .pz-inst-c, .pz-inst-v) { border-radius: 0; }
+
+/* ---- Capa encaje (2026-11-28, spec 2026-11-28-portada-encaja): cada sección del menú cabe en la pantalla al llegar a ella. Medidas
+   que siguen al alto de la ventana (--pz-alto: lo que queda bajo la barra), menos aire arriba de cada sección y carriles que se
+   deslizan donde hay muchas tarjetas. ---- */
+#landing { --pz-barra: 64px; --pz-alto: calc(100dvh - var(--pz-barra)); scroll-padding-top: var(--pz-barra); }
+@media (min-width: 1000px) { #landing { --pz-barra: 76px; } }
+#landing .pz-sec { padding-top: clamp(28px, 5.5vh, 60px); gap: clamp(14px, 2.8vh, 30px); }
+#landing h2, #landing .pz-head h2 { font-size: clamp(26px, min(3.4vw, 6.4vh), 46px); }
+#landing .pz-head { gap: 6px; }
+#landing .pz-head p { font-size: clamp(15px, 2.1vh, 17px); }
+#landing .pz-franja, #landing .pz-final { margin-top: clamp(36px, 7vh, 84px); }
+
+/* carrusel: cabe con sus pestañas */
+@media (min-width: 900px) {
+  #landing .pz-lam-in { min-height: min(600px, calc(var(--pz-alto) - 80px)); padding-block: clamp(20px, 3.5vh, 38px); }
+  #landing .pz-lamina:has(.pz-foto) .pz-lam-in { min-height: min(640px, calc(var(--pz-alto) - 80px)); }
+  #landing :is(.pz-hero h1, .pz-hero h2) { font-size: clamp(32px, min(4.4vw, 7.4vh), 64px); }
+}
+
+/* programas: una fila que se desliza, con flechas junto al título */
+#landing .pz-head:has(.pz-carril-ctl) { grid-template-columns: minmax(0, 1fr) auto; align-items: end; column-gap: 16px; }
+#landing .pz-head:has(.pz-carril-ctl) > :not(.pz-carril-ctl) { grid-column: 1; }
+.pz-carril-ctl { grid-column: 2; grid-row: 1 / span 2; display: flex; gap: 8px; }
+.pz-carril-ctl button { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--hz-borde, var(--line)); color: var(--hz-titulo, var(--ink)); }
+.pz-carril-ctl button:disabled { opacity: .3; cursor: default; }
+.pz-carril-ctl .pz-i { width: 18px; height: 18px; } .pz-carril-ctl .pz-ant .pz-i { rotate: 180deg; }
+section:not(.pz-carril-lleno) .pz-carril-ctl { visibility: hidden; }
+#landing .pz-progs { display: grid; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 86%; gap: 16px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; }
+#landing .pz-progs::-webkit-scrollbar { display: none; }
+#landing .pz-progs > * { grid-column: auto; scroll-snap-align: start; min-width: 0; }
+#landing .pz-prog { grid-template-rows: clamp(110px, 21vh, 200px) 1fr; }
+#landing .pz-prog-txt { padding: clamp(14px, 2.4vh, 26px) clamp(16px, 2vw, 26px); gap: clamp(6px, 1.1vh, 10px); }
+#landing .pz-prog h3 { font-size: clamp(20px, min(2vw, 3.4vh), 28px); }
+#landing .pz-prog-f { font-size: 15px; line-height: 1.4; }
+#landing .pz-prog-d span { padding: 4px 10px; font-size: 13.5px; }
+#landing .pz-prog-fund .pz-fcs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+#landing .pz-prog-inst { padding: clamp(18px, 3vh, 40px); align-content: center; }
+@media (min-width: 760px) {
+  #landing .pz-progs { grid-auto-columns: calc((100% - 22px) / 2); gap: 22px; }
+  #landing .pz-prog-fund, #landing .pz-prog-inst { grid-column: span 2; }
+}
+@media (min-width: 1100px) {
+  #landing .pz-progs { grid-auto-columns: calc((100% - 44px) / 3); }
+  #landing .pz-prog-fund .pz-fcs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* quiénes somos: más compacto; en el celular las tres tarjetas se deslizan */
+#landing .pz-franja .pz-in { padding-block: clamp(26px, 5vh, 60px); gap: clamp(14px, 2.6vh, 30px); }
+#landing .pz-somos-top { gap: clamp(14px, 2.4vh, 30px); }
+#landing .pz-somos-txt { gap: clamp(8px, 1.6vh, 16px); }
+#landing .pz-somos-txt p { font-size: clamp(15px, 2.1vh, 17px); line-height: 1.45; }
+#landing .pz-somos-m > span { width: clamp(90px, 18vh, 200px); }
+#landing .pz-tres article { padding: clamp(12px, 2vh, 20px) 18px; gap: 6px; }
+#landing .pz-tres svg { width: clamp(44px, 7vh, 84px); }
+#landing .pz-tres h3 { margin-top: 0; font-size: clamp(18px, 2.8vh, 24px); }
+#landing .pz-tres p { font-size: clamp(14px, 1.95vh, 15.5px); line-height: 1.4; }
+#landing .pz-somos-como { gap: 8px; } #landing .pz-somos-como h3 { font-size: clamp(17px, 2.6vh, 22px); }
+#landing .pz-somos-como li { padding: 7px 14px; font-size: 14.5px; }
+@media (max-width: 899px) {
+  #landing .pz-tres { grid-auto-flow: column; grid-auto-columns: 80%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; padding: 4px 2px; }
+  #landing .pz-tres::-webkit-scrollbar { display: none; }
+  #landing .pz-tres article { scroll-snap-align: start; }
+  #landing .pz-somos-m { display: none; }
+}
+
+/* tu camino: el mapa sigue al alto de la pantalla */
+#landing .pz-ruta-map { height: clamp(160px, 26vh, 300px); margin: 6px 0 clamp(14px, 3vh, 30px); }
+
+/* cómo se aprende: los celulares miden según el alto que queda */
+@media (min-width: 900px) {
+  #landing .pz-clips { gap: clamp(16px, 2vw, 30px); padding-top: 4px; }
+  #landing .pz-clips li { justify-items: center; }
+  #landing .pz-clip { width: min(100%, calc((var(--pz-alto) - 330px) * .5)); }
+  #landing .pz-clips h3 { font-size: clamp(17px, 2.6vh, 22px); } #landing .pz-clips p { font-size: 14.5px; }
+}
+
+/* instituciones: la calculadora y el portal, más compactos */
+#landing .pz-inst-c, #landing .pz-inst-v { padding: clamp(16px, 3vh, 36px); gap: clamp(8px, 1.6vh, 18px); }
+#landing .pz-inst-n output { font-size: clamp(40px, 8vh, 84px); }
+#landing .pz-inst-r { height: 32px; }
+#landing .pz-inst-cs { gap: 6px; } #landing .pz-inst-cs button { min-height: 38px; padding: 0 14px; font-size: 14.5px; }
+#landing .pz-inst-p { min-height: 0; }
+#landing .pz-inst-u b { font-size: clamp(26px, 4.6vh, 40px); }
+#landing .pz-inst-v ul { gap: 8px; } #landing .pz-inst-v li b { font-size: 16px; } #landing .pz-inst-v li span { font-size: 14px; }
+/* las reglas viejas que fijaban títulos gigantes (con !important) también siguen al alto de la pantalla */
+#landing .pz-programas h2 { font-size: clamp(26px, min(3.4vw, 6.4vh), 46px) !important; letter-spacing: 0 !important; line-height: 1.06 !important; }
+#landing .pz-franja h2 { font-size: clamp(30px, min(4.6vw, 8vh), 72px); }
+#landing .pz-final h2 { font-size: clamp(28px, min(4vw, 7vh), 60px); }
+/* tarjetas: lo que trae el curso va como texto, no como píldora larga; en Fundamentación, cada curso compacto */
+#landing .pz-prog-d span:nth-child(3) { flex-basis: 100%; padding: 0; background: none; border: 0; color: var(--mute); }
+#landing .pz-fcs :is(button, li.pronto) { gap: 8px; padding: 6px 8px; }
+#landing .pz-fcs .cart { width: 32px; height: 32px; }
+#landing .pz-fcs b { font-size: 14px; } #landing .pz-fcs small { font-size: 12px; } #landing .pz-fcs small[data-pz-precio] { display: none; }
+/* en pantallas bajas el carrusel de Fundamentación no muestra su mazo de cartas (los cursos están en su tarjeta de Programas) */
+@media (max-height: 880px) { #landing .pz-lam-fund .pz-mazo { display: none; } }
+/* la calculadora de colegios: los cursos en fichas más pequeñas */
+#landing .pz-inst-cs button { min-height: 32px; padding: 0 11px; font-size: 13.5px; }
+/* pantallas bajas (un portátil con las barras del navegador): un poco más compacto todavía */
+@media (min-width: 900px) and (max-height: 720px) {
+  #landing :is(.pz-hero h1, .pz-hero h2) { font-size: clamp(28px, min(4vw, 6.6vh), 48px); }
+  #landing .pz-hero .pz-lead { font-size: 16px; } #landing .pz-hero .pz-ctas .btn { padding: 12px 22px; }
+  #landing .pz-lam-txt { gap: 14px; }
+  #landing .pz-disp { width: min(100%, 66vh, 640px); }
+  #landing .pz-prog { grid-template-rows: clamp(84px, 15vh, 120px) 1fr; }
+  #landing .pz-prog-f { font-size: 14px; }
+  #landing .pz-prog-pie { padding-top: 2px; gap: 8px 12px; }
+  #landing .pz-inst-v li span { display: none; }
+  #landing .pz-inst-v ul { gap: 6px; }
+  #landing .pz-sec { padding-top: clamp(18px, 3.6vh, 30px); }
+  #landing .pz-inst-c { gap: 6px; } #landing .pz-inst-p { font-size: 14px; } #landing .pz-inst .pz-ctas .btn { padding: 10px 18px; }
+}
+/* celular: cada sección cabe en la pantalla; lo que no cabe a lo alto se desliza de lado */
+@media (max-width: 899px) {
+  #landing :is(.pz-hero h1, .pz-hero h2) { font-size: clamp(26px, 7.4vw, 40px); }
+  #landing .pz-hero .pz-lead { font-size: 15.5px; }
+  #landing .pz-hero .pz-ctas { flex-wrap: nowrap; } #landing .pz-hero .pz-ctas .btn { padding: 12px 10px; font-size: 15px; }
+  #landing .pz-lam-in { gap: 14px; padding-block: 16px; } #landing .pz-lam-txt { gap: 12px; }
+  #landing .pz-lamina:has(.pz-foto) .pz-mancha.pz-foto { height: clamp(150px, 21vh, 220px); }
+  #landing .pz-mancha { height: clamp(180px, 26vh, 270px); }
+  #landing .pz-progs { align-items: start; }
+  #landing .pz-prog { grid-template-rows: clamp(100px, 17vh, 150px) auto; }
+  #landing .pz-fcs small { display: none; } #landing .pz-fcs :is(button, li.pronto) { padding: 5px 8px; }
+  #landing .pz-somos-como ul { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } #landing .pz-somos-como li { flex: none; }
+  #landing .pz-ruta-map { height: clamp(140px, 20vh, 200px); }
+  #landing .pz-clips li { flex-basis: min(50vw, 200px, calc((var(--pz-alto) - 300px) * .5)); }
+  #landing .pz-inst-g { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 92%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; align-items: start; }
+  #landing .pz-inst-g > * { scroll-snap-align: start; }
+  #landing .pz-inst-cs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } #landing .pz-inst-cs button { flex: none; }
+  #landing .pz-prog { grid-template-rows: clamp(90px, 14vh, 130px) auto; }
+  #landing .pz-prog-fund .pz-prog-f, #landing .pz-prog-inst > .pz-ip, #landing .pz-prog-inst .pz-mini { display: none; }
+  #landing .pz-inst-v li span { display: none; } #landing .pz-inst-v ul { gap: 6px; }
+}
+/* celulares bajos (con las barras del navegador a la vista) */
+@media (max-width: 899px) and (max-height: 860px) {
+  #landing h2, #landing .pz-head h2, #landing .pz-programas h2 { font-size: clamp(22px, 6.4vw, 28px) !important; }
+  #landing .pz-franja h2 { font-size: clamp(26px, 7.6vw, 34px); }
+  #landing .pz-head p { font-size: 14.5px; line-height: 1.35; }
+  #landing .pz-sec { padding-top: clamp(16px, 3.4vh, 28px); gap: 12px; }
+  #landing .pz-prog { grid-template-rows: clamp(70px, 11vh, 110px) auto; }
+  #landing .pz-prog-txt { gap: 5px; } #landing .pz-prog-f { font-size: 14px; line-height: 1.35; }
+  #landing .pz-lamina:has(.pz-foto) .pz-mancha.pz-foto { height: clamp(120px, 18vh, 200px); }
+  #landing .pz-mancha { height: clamp(150px, 22vh, 240px); }
+  #landing .pz-hero .pz-lead { font-size: 14.5px; line-height: 1.4; }
+  #landing .pz-ruta-map { height: clamp(120px, 17vh, 170px); margin-bottom: 10px; }
+  #landing .pz-ruta-txt { font-size: 14.5px; }
+  #landing .pz-clips h3 { font-size: 16px; } #landing .pz-clips p { font-size: 13.5px; }
+  #landing .pz-inst-n output { font-size: clamp(34px, 7vh, 56px); } #landing .pz-inst-c, #landing .pz-inst-v { padding: 14px; gap: 8px; }
+  #landing .pz-tres p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  #landing .pz-disp { width: min(100%, 42vh); margin-inline: auto; }
+  #landing .pz-ruta-txt ul { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } #landing .pz-ruta-txt li { flex: none; }
+  #landing .pz-ep { padding: 14px 16px 16px; gap: 8px; } #landing .pz-ep h3 { font-size: 20px; } #landing .pz-ep p { font-size: 14.5px; line-height: 1.4; }
+}

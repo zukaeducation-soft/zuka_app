@@ -4383,25 +4383,25 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
   const libros = cls => `<div class="pz-estante ${cls}" data-inclina="9">${PZ_LIBROS.map(([t, n]) => `<span style="--i:${n - 2.5}"><img src="brand/libros/${n}.webp" alt="Libro ${n}: ${t}" loading="lazy" width="340" height="480"></span>`).join('')}</div>`;
   const orden = cursos;
   // Tarjeta de servicio: la foto manda; una frase, los datos en un renglón y el precio.
-  const tarjeta = ({ color, fig, cls = '', name, tag, frase, datos, pr, ir, tab }) => `<article class="pz-prog ${cls} pz-rev" style="--c:${color}"><div class="pz-prog-art" aria-hidden="true">${fig}</div>
+  const tarjeta = ({ color, fig, cls = '', name, tag, frase, datos, pr, ir }) => `<article class="pz-prog ${cls} pz-rev" style="--c:${color}"><div class="pz-prog-art" aria-hidden="true">${fig}</div>
       <div class="pz-prog-txt"><p class="pz-prog-k">${tag}</p><h3>${pzEsc(name)}</h3><p class="pz-prog-f">${frase}</p><p class="pz-prog-d">${datos.map(d => `<span>${d}</span>`).join('')}</p>
-        <div class="pz-prog-pie">${precio(pr)}<span class="pz-prog-b"><button class="btn sm" type="button" data-pz-ir="${ir}"${tab == null ? '' : ` data-tab="${tab}"`}>Ver más<span class="pz-sr"> sobre ${pzEsc(name)}</span></button>${info(name)}</span></div></div></article>`;
+        <div class="pz-prog-pie">${precio(pr)}<span class="pz-prog-b">${ir === 'prueba' ? `<button class="btn sm" type="button" data-pz="prueba">Probar gratis<span class="pz-sr"> ${pzEsc(name)}</span></button>` : ir ? `<button class="btn sm" type="button" data-pz-ir="${ir}">Ver más<span class="pz-sr"> sobre ${pzEsc(name)}</span></button>` : ''}${info(name)}</span></div></div></article>`;
   const fund = PZ_FUND.map(id => cursos.find(c => c.id === id) || todos.find(c => c.id === id)).filter(Boolean), hayFund = cursos.some(c => PZ_FUND.includes(c.id));
   const foto = '<img src="brand/ingenieros.webp" alt="Dos ingenieros resuelven las reacciones de una viga en un tablero" width="1300" height="732" loading="lazy">';
   // Mazo: una carta por curso, una sobre otra; pzMazoVivo las abre bajo el puntero.
   const deCurso = c => (cursos.includes(c) ? `${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}` : 'Muy pronto');
-  const mazo = hayFund ? `<div class="pz-mazo" style="--n:${fund.length}"><div class="pz-cartas">${fund.map((c, i) => `<button type="button" class="pz-carta${cursos.includes(c) ? '' : ' pronto'}" style="--i:${i};--k:${i - (fund.length - 1) / 2};--c:${c.color}" ${cursos.includes(c) ? `data-pz-ir="#pz-cursos" data-tab="${cursos.indexOf(c)}"` : 'data-pz-ir=".pz-prog-fund"'} data-n="${pzEsc(c.name)}" data-d="${deCurso(c)}" aria-label="${pzEsc(c.name)}: ${deCurso(c)}">${art(c)}<b>${PZ_CORTO[c.id] || pzEsc(c.name)}</b></button>`).join('')}</div><p class="pz-mazo-t" aria-hidden="true"><b>${pzEsc(fund[0].name)}</b><span>${deCurso(fund[0])}</span></p></div>` : '';
+  const mazo = hayFund ? `<div class="pz-mazo" style="--n:${fund.length}"><div class="pz-cartas">${fund.map((c, i) => `<button type="button" class="pz-carta${cursos.includes(c) ? '' : ' pronto'}" style="--i:${i};--k:${i - (fund.length - 1) / 2};--c:${c.color}" data-pz-ir=".pz-prog-fund" data-n="${pzEsc(c.name)}" data-d="${deCurso(c)}" aria-label="${pzEsc(c.name)}: ${deCurso(c)}">${art(c)}<b>${PZ_CORTO[c.id] || pzEsc(c.name)}</b></button>`).join('')}</div><p class="pz-mazo-t" aria-hidden="true"><b>${pzEsc(fund[0].name)}</b><span>${deCurso(fund[0])}</span></p></div>` : '';
   const tarjetaFund = hayFund ? `<article class="pz-prog pz-prog-fund pz-rev" style="--c:${PZ_FUND_C}"><div class="pz-prog-art" aria-hidden="true">${foto}</div>
       <div class="pz-prog-txt"><p class="pz-prog-k">Primeros semestres</p><h3>${PZ_FUND_N}</h3><p class="pz-prog-f">Cierra los vacíos del colegio y llega preparado a tus parciales.</p>
-        <ul class="pz-fcs">${fund.map(c => (cursos.includes(c) ? `<li><button type="button" data-pz-ir="#pz-cursos" data-tab="${cursos.indexOf(c)}" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}</small><small data-pz-precio="curso:${c.id}" hidden><span></span></small></span></button></li>` : `<li class="pronto" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>Muy pronto</small></span></li>`)).join('')}</ul>
-        <div class="pz-prog-pie"><span class="pz-prog-b"><button class="btn sm" type="button" data-pz-ir="#pz-cursos" data-tab="${cursos.findIndex(c => PZ_FUND.includes(c.id))}">Ver más<span class="pz-sr"> sobre ${PZ_FUND_N}</span></button>${info(`los cursos de ${PZ_FUND_N}`)}</span></div></div></article>` : '';
+        <ul class="pz-fcs">${fund.map(c => (cursos.includes(c) ? `<li><button type="button" data-pz="info" data-que="${pzEsc(c.name)}" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>${plural((c.units || []).length, 'mundo', 'mundos')} y ${plural(pzLessons(c), 'lección', 'lecciones')}</small><small data-pz-precio="curso:${c.id}" hidden><span></span></small></span></button></li>` : `<li class="pronto" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>Muy pronto</small></span></li>`)).join('')}</ul>
+        <div class="pz-prog-pie"><span class="pz-prog-b"><button class="btn sm" type="button" data-pz="prueba">Probar gratis<span class="pz-sr"> ${PZ_FUND_N}</span></button>${info(`los cursos de ${PZ_FUND_N}`)}</span></div></div></article>` : '';
   const progs = orden.filter(c => !PZ_FUND.includes(c.id)).map(c => {
     const p = PZ_PROG[c.id] || { tag: pzEsc(c.level || 'Curso'), meta: pzEsc(c.tagline || ''), trae: 'Explicaciones y ejercicios que se juegan' };
-    return tarjeta({ color: p.color || c.color, cls: `pz-prog-${c.id}`, fig: p.foto || (PZ_PROG[c.id] ? celu(c.id) : art(c)), name: c.name, tag: p.tag, frase: p.meta, pr: `curso:${c.id}`, ir: '#pz-cursos', tab: cursos.indexOf(c),
+    return tarjeta({ color: p.color || c.color, cls: `pz-prog-${c.id}`, fig: p.foto || (PZ_PROG[c.id] ? celu(c.id) : art(c)), name: c.name, tag: p.tag, frase: p.meta, pr: `curso:${c.id}`, ir: 'prueba',
       datos: [plural((c.units || []).length, 'mundo', 'mundos'), plural(pzLessons(c), 'lección', 'lecciones'), p.trae] });
   }).concat([
     tarjeta({ color: '#f5c451', cls: 'pz-prog-lib', fig: libros(''), name: 'Libros de admisión', tag: 'Paquete de 4, impresos o digitales', pr: 'art:libros', ir: '#pz-libros', frase: 'Estudia el examen de admisión tema por tema, en papel o en la app.', datos: ['Los cuatro libros juntos, a color', 'Ejemplos resueltos y talleres con clave'] }),
-    tarjeta({ color: '#ff8a7a', cls: 'pz-prog-ase', fig: PZ_TUTOR, name: 'Asesorías en vivo', tag: 'Por horas', pr: 'art:asesoria', ir: '#pz-d-tut', frase: 'Resuelve con una persona lo que se te puso difícil.', datos: ['Una hora virtual', 'Tú eliges los temas, el día y la hora'] }),
+    tarjeta({ color: '#ff8a7a', cls: 'pz-prog-ase', fig: PZ_TUTOR, name: 'Asesorías en vivo', tag: 'Por horas', pr: 'art:asesoria', ir: '', frase: 'Resuelve con una persona lo que se te puso difícil.', datos: ['Una hora virtual', 'Tú eliges los temas, el día y la hora'] }),
     tarjetaFund,
     `<article class="pz-prog-inst pz-rev"><div><p class="pz-prog-k">Colegios e instituciones</p><h3>Zuka para todo tu colegio</h3><p class="pz-prog-f">Cupos para tus estudiantes y un portal para registrarlos y ver cómo van.</p><span class="pz-prog-b"><a class="btn sm" href="instituciones/">Cotizar</a><button class="btn sm ghost" type="button" data-pz-ir="#pz-inst">Ver precios</button></span></div>${pzInstMini()}</article>`,
   ]).join('');
@@ -4429,16 +4429,6 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
     lamina('#bfe3ff', 'Zuka para instituciones', `<p class="pz-lam-k">Colegios e instituciones</p><h2>Zuka para todo tu colegio</h2><p class="pz-lead">Cupos para tus estudiantes y un portal donde registras, acompañas y ves cómo va cada uno.</p>
       <div class="pz-ctas"><a class="btn main brand" href="instituciones/">Cotizar</a><button class="btn ghost" type="button" data-pz-ir="#pz-inst">Ver precios</button></div>`, `<div class="pz-mini" data-inclina="8">${pzInstMini()}</div>`, 'pz-lam-inst'),
   ];
-  const mundo = u => {
-    const w = worlds[u.world] || {};
-    return `<li>${w.art ? `<span class="pz-lam world-art" aria-hidden="true">${w.art}</span>` : ''}<span>${pzEsc(w.name || u.title)}</span></li>`;
-  };
-  const gymC = cursos[0];
-  const gymArt = typeof GYM_3D === 'string' && gymC
-    ? `<span class="pz-gymart" data-inclina="14" style="${typeof gymFabColors === 'function' ? gymFabColors(gymC) : `--c:${gymC.color}`}">${GYM_3D}</span>` : '';
-  const plates = n => (typeof gymPlates === 'function' ? gymPlates(n) : '');
-  const demo = (cls, h, p, fig, pie = '') => `<article class="pz-demo ${cls} pz-rev" id="${cls}"><div class="pz-demo-txt"><h3>${h}</h3><p>${p}</p></div>
-      <div class="pz-demo-fig">${fig}</div>${pie}</article>`;
   const menu = [['#pz-programas', 'Programas'], ['#pz-somos', 'Quiénes somos'], ['#pz-ruta', 'Tu camino'], ['#pz-como', 'Cómo se aprende'], ['#pz-inst', 'Instituciones'], ['#pz-dudas', 'Preguntas']];
   return `<header class="pz-bar"><div class="pz-in"><span class="pz-logo">${logo}</span>
       <nav class="pz-nav" id="pz-nav" aria-label="Secciones">${menu.map(([h, t]) => `<a href="${h}">${t}</a>`).join('')}</nav>
@@ -4458,8 +4448,8 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       </div>
     </section>
     <section class="pz-sec pz-in pz-programas" id="pz-programas">
-      <header class="pz-head pz-rev"><h2>Elige por dónde <em>empiezas</em></h2><p>Cursos, libros, asesorías y un plan para colegios.</p></header>
-      <div class="pz-progs">${progs}</div>
+      <header class="pz-head pz-rev"><h2>Elige por dónde <em>empiezas</em></h2><p>Cursos, libros, asesorías y un plan para colegios.</p><div class="pz-carril-ctl" aria-label="Ver más programas"><button class="pz-fl pz-ant" type="button" data-carril="-1" aria-label="Programas anteriores">${pzI('fl')}</button><button class="pz-fl pz-sig" type="button" data-carril="1" aria-label="Más programas">${pzI('fl')}</button></div></header>
+      <div class="pz-progs" data-carril-de="programas">${progs}</div>
       ${prontos.length ? `<p class="pz-prontos"><b>Muy pronto</b>${prontos.map(c => `<span style="--c:${c.color}">${pzEsc(c.name)}</span>`).join('')}</p>` : ''}
     </section>
     <section class="pz-franja pz-azul" id="pz-somos"><div class="pz-in">
@@ -4484,26 +4474,6 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
         <p>Así se ve una lección por dentro: primero la idea, después la fórmula, y siempre con las manos.</p></header>
       <div class="pz-clips-caja pz-rev"><ul class="pz-clips">${PZ_CLIPS.map(([id, h, p, alt]) => `<li><span class="pz-clip"><picture><source media="(prefers-reduced-motion: reduce)" srcset="brand/clips/${id}-quieto.webp"><img src="brand/clips/${id}.webp" data-clip="${id}" alt="${alt}" width="320" height="622" loading="lazy"></picture></span><h3>${h}</h3><p>${p}</p></li>`).join('')}</ul>
         <button class="pz-clips-p" type="button" aria-pressed="false">Pausar los videos</button></div>
-      <p class="pz-prueba pz-rev">Ahora prueba tú: estos dibujos funcionan.</p>
-      <div class="pz-demos">
-        ${demo('pz-d-rueda', 'La rueda que dibuja la onda', 'La altura del punto es el seno del ángulo. Muévelo y mira cómo se dibuja.', pzRueda())}
-        ${demo('pz-d-area', 'La fórmula deja de ser un truco', 'Mueve el corte: el cuadrado siempre se arma con las mismas cuatro piezas.', PZ_AREA,
-    '<p class="pz-cuenta pz-cuenta-area"></p>')}
-        ${demo('pz-d-pal', 'Practicas jugando', 'Corre el peso hasta equilibrar la palanca. La cuenta se escribe sola.', PZ_PALANCA,
-    '<p class="pz-cuenta pz-cuenta-pal"></p>')}
-        ${demo('pz-d-gym', 'Gimnasio cerebral', 'Retos guiados de lo que ya aprendiste. Empiezas suave y subes cuando estés listo.', gymArt,
-    `<ul class="pz-levels"><li class="lv1">${plates(1)}Calentamiento</li><li class="lv2">${plates(2)}Fuerza</li><li class="lv3">${plates(3)}Élite</li></ul>`)}
-        ${demo('pz-d-tut', 'Tutorías en vivo', 'Separa una asesoría virtual: eliges la materia, los temas, el día y la hora. Se compran por horas.', PZ_TUTOR)}
-      </div>
-    </section>
-    <section class="pz-sec pz-in pz-topics" id="pz-cursos">
-      <header class="pz-head pz-rev"><h2>Lo que vas a aprender</h2><p>Cada curso es un mapa de mundos, en orden y desde cero.</p></header>
-      <div class="pz-cursos pz-rev">
-        <div class="pz-tabs" role="tablist" aria-label="Cursos">${cursos.map((c, i) => `<button type="button" role="tab" id="pz-tab-${i}" aria-controls="pz-panel-${i}" data-pz-tab="${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" style="--c:${c.color}">${art(c)}<span><b>${pzEsc(c.name)}</b><small>${plural(pzLessons(c), 'lección', 'lecciones')}</small></span></button>`).join('')}</div>
-        ${cursos.map((c, i) => `<div class="pz-panel" role="tabpanel" id="pz-panel-${i}" aria-labelledby="pz-tab-${i}" data-pz-panel="${i}" style="--c:${c.color}"${i ? ' hidden' : ''}>
-          <p>${pzEsc(c.tagline || '')}</p><ul class="pz-mundos">${(c.units || []).slice(0, PZ_MUNDOS).map(mundo).join('')}</ul>
-          ${(c.units || []).length > PZ_MUNDOS ? `<p class="pz-mas">y ${plural(c.units.length - PZ_MUNDOS, 'mundo más', 'mundos más')}</p>` : ''}</div>`).join('')}
-      </div>
     </section>
     ${pzInstHTML(cursos)}
     <section class="pz-sec pz-in pz-libros" id="pz-libros">
@@ -4525,7 +4495,7 @@ function presentacionHTML(lista, { worlds = {}, install = '', todos = lista } = 
       <div class="pz-ctas">${empieza()}<button class="btn ghost" type="button" data-pz="login">Ya tengo código</button></div></div></div></section>
     </main>
     <footer class="pz-foot"><div class="pz-in"><div class="pz-foot-m"><span class="pz-logo">${logo}</span><small>Potencia tu mente</small></div>
-      <nav aria-label="Programas"><b>Programas</b>${orden.map(c => `<a href="#pz-cursos" data-tab="${cursos.indexOf(c)}">${pzEsc(c.name)}</a>`).join('')}<a href="#pz-libros">Libros de admisión</a></nav>
+      <nav aria-label="Programas"><b>Programas</b>${orden.map(c => `<a href="#pz-programas">${pzEsc(c.name)}</a>`).join('')}<a href="#pz-libros">Libros de admisión</a></nav>
       <nav aria-label="Zuka"><b>Zuka</b>${menu.slice(1).map(([h, t]) => `<a href="${h}">${t}</a>`).join('')}</nav>
       <div class="pz-foot-c"><b>Escríbenos</b>${info('', 'con', 'WhatsApp')}<button type="button" data-pz="login">Entrar a la plataforma</button></div>
       <small class="pz-foot-c2">© 2026 Zuka</small></div></footer>
@@ -4587,69 +4557,6 @@ function pzArrastra(svg, knob, { mueve, tecla, suelta = () => {} }) {
     const d = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
     if (d) { e.preventDefault(); tecla(d); }
   });
-}
-function pzRuedaViva(el, quieto) {
-  const st = el.querySelector('.pz-stage'), svg = st.querySelector('svg'), $q = c => st.querySelector(c), knob = $q('.pz-knob');
-  const [lee, dice, go] = [$q('.pz-lee'), $q('.pz-reto-t'), $q('.pz-reto-go')];
-  let deg = 48, g, hecho = false, tocado = 0, visible = true, antes = 0, raf = 0;
-  const pinta = () => {
-    const t = deg * Math.PI / 180, x = g.cx + g.r * Math.cos(t), y = g.cy - g.r * Math.sin(t), n = Math.round(deg) % 360;
-    const set = (c, k, v) => $q(c).setAttribute(k, v);
-    set('.pz-onda', 'd', pzOnda(deg, g));
-    set('.pz-tri', 'd', `M${g.cx} ${g.cy}L${x} ${y}V${g.cy}Z`);
-    set('.pz-alto', 'd', `M${x} ${g.cy}V${y}`);
-    set('.pz-guia', 'd', `M${x} ${y}H${g.x0}`);
-    const q = g.r * .26;
-    set('.pz-arco', 'd', `M${g.cx + q} ${g.cy}A${q} ${q} 0 ${deg > 180 ? 1 : 0} 0 ${g.cx + q * Math.cos(t)} ${g.cy - q * Math.sin(t)}`);
-    set('.pz-fin', 'cx', g.x0); set('.pz-fin', 'cy', y);
-    knob.setAttribute('transform', `translate(${x} ${y})`);
-    knob.setAttribute('aria-valuenow', n);
-    const v = Math.sin(t);
-    knob.setAttribute('aria-valuetext', `${n} grados, altura ${v.toFixed(2)}`);
-    lee.innerHTML = `<i>sen</i> <b>${n}°</b> = <b>${(Math.abs(v) < .005 ? 0 : v).toFixed(2).replace('-', '−')}</b>`;
-  };
-  const mide = () => {
-    const W = st.clientWidth || 1440, H = svg.clientHeight || 380, ancho = W >= 760;
-    const r = ancho ? Math.min(H * .41, 165) : Math.min(W * .22, H * .4);
-    const gut = ancho ? 8 : 4, cx = gut + r + 14;
-    g = { r, cx, cy: H / 2, x0: cx + r + (ancho ? 90 : 34), x1: W + 8, largo: ancho ? 2.6 : 1.5 };
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    const aro = $q('.pz-aro');
-    aro.setAttribute('cx', cx); aro.setAttribute('cy', g.cy); aro.setAttribute('r', r);
-    $q('.pz-eje').setAttribute('d', `M0 ${g.cy}H${W}M${cx} ${g.cy - r - 22}V${g.cy + r + 22}`);
-    $q('.pz-meta').setAttribute('d', `M${cx - r - 14} ${g.cy - r / 2}H${W}`);
-    $q('.pz-meta-t').setAttribute('x', W - (ancho ? 32 : 14)); $q('.pz-meta-t').setAttribute('y', g.cy - r / 2 - 8);
-    pinta();
-  };
-  const revisa = () => {
-    const a = pzReto(deg);
-    if (a === null) return;
-    deg = a; pinta(); hecho = true; st.classList.add('ok');
-    dice.innerHTML = `<b>¡Eso es!</b> sen ${a}° = ½. Así se siente una lección.`;
-    go.hidden = false;
-  };
-  const toca = () => {   // se vuelve a mover después de acertar: el reto queda abierto otra vez
-    tocado = performance.now(); st.classList.add('tocado');
-    if (hecho) { hecho = false; st.classList.remove('ok'); dice.innerHTML = PZ_RETO; go.hidden = true; }
-  };
-  pzArrastra(svg, knob, {
-    mueve: p => { toca(); deg = pzAngulo(p.x - g.cx, p.y - g.cy); pinta(); },
-    tecla: d => { toca(); deg = (Math.round(deg / 5) * 5 + 5 * d + 360) % 360; pinta(); revisa(); },
-    suelta: () => { tocado = performance.now(); revisa(); },
-  });
-  mide();
-  const ro = new ResizeObserver(() => (st.isConnected ? mide() : ro.disconnect())); ro.observe(st);
-  if (quieto) return;
-  // Gira sola hasta que alguien la toca; después espera, y tras acertar se queda quieta.
-  const paso = t => {
-    raf = 0;
-    if (!st.isConnected || !visible) return;
-    const dt = Math.min(50, t - antes || 0); antes = t;
-    if (!knob.classList.contains('held') && !hecho && !knob.matches(':focus-visible') && t - tocado > 6000) { deg = (deg + dt * .022) % 360; pinta(); }
-    raf = requestAnimationFrame(paso);
-  };
-  tocado = -1e9; raf = requestAnimationFrame(paso);
-  new IntersectionObserver(es => { visible = es[es.length - 1].isIntersecting; if (visible && !raf) raf = requestAnimationFrame(paso); }, { root: el }).observe(st);
 }
 // ---- lo que responde al puntero (solo ratón; con «reducir movimiento», nada) ----
 function pzPuntero(el) {
@@ -4785,6 +4692,17 @@ function pzCarrusel(el, quieto) {
   }, PZ_PASA);
 }
 // Los clips se pueden detener: cada uno queda en su cuadro fijo.
+// Carril de tarjetas (spec 2026-11-28-portada-encaja): una fila que se desliza para que la sección quepa en la pantalla. Las flechas
+// corren lo que se ve y se apagan en los extremos; el dedo y la rueda del ratón también sirven.
+function pzCarriles(el, quieto) {
+  el.querySelectorAll('[data-carril-de]').forEach(fila => {
+    const sec = fila.closest('section'), bs = [...sec.querySelectorAll('[data-carril]')];
+    const marca = () => { const max = fila.scrollWidth - fila.clientWidth - 2; bs.forEach(b => { b.disabled = +b.dataset.carril < 0 ? fila.scrollLeft <= 2 : fila.scrollLeft >= max; }); sec.classList.toggle('pz-carril-lleno', max > 0); };
+    bs.forEach(b => { b.onclick = () => fila.scrollBy({ left: +b.dataset.carril * fila.clientWidth * .9, behavior: quieto ? 'auto' : 'smooth' }); });
+    fila.addEventListener('scroll', () => requestAnimationFrame(marca), { passive: true });
+    addEventListener('resize', marca); marca();
+  });
+}
 function pzClips(el, quieto) {
   const b = el.querySelector('.pz-clips-p');
   b.hidden = quieto;
@@ -4830,44 +4748,6 @@ function pzMazoVivo(el) {
   cs.forEach((c, i) => { c.addEventListener('focus', () => { if (c.matches(':focus-visible')) pon(i, true); }); });
   pon(0, false);
 }
-function pzAreaViva(el) {
-  const svg = el.querySelector('.pz-area'), knob = svg.querySelector('.pz-knob'), out = el.querySelector('.pz-cuenta-area');
-  const L = 232, X = 52, Y = 44;
-  let a = 7;
-  const pinta = () => {
-    const m = pzArea(a), k = L / PZ_LADO, w = a * k - 2, v = m.b * k - 2, x2 = X + a * k + 2, y2 = Y + a * k + 2;
-    const rect = (r, x, y, ww, h) => Object.entries({ x, y, width: ww, height: h, rx: 6 }).forEach(([n, z]) => r.setAttribute(n, z));
-    const txt = (c, x, y, t, vis = true) => { const e = svg.querySelector(c); e.setAttribute('x', x); e.setAttribute('y', y + 6); e.textContent = t; e.style.opacity = vis ? 1 : 0; };
-    rect(svg.querySelector('.pz-aa'), X, Y, w, w); rect(svg.querySelector('.pz-ab'), x2, Y, v, w);
-    rect(svg.querySelector('.pz-ba'), X, y2, w, v); rect(svg.querySelector('.pz-bb'), x2, y2, v, v);
-    txt('.pz-t-aa', X + w / 2, Y + w / 2, m.aa, a > 1); txt('.pz-t-ab', x2 + v / 2, Y + w / 2, m.ab, m.b > 1 && a > 1);
-    txt('.pz-t-ba', X + w / 2, y2 + v / 2, m.ab, m.b > 1 && a > 1); txt('.pz-t-bb', x2 + v / 2, y2 + v / 2, m.bb, m.b > 1);
-    txt('.pz-l-a', X + w / 2, 296 - 8, `a = ${a}`); txt('.pz-l-b', x2 + v / 2, 296 - 8, `b = ${m.b}`);
-    svg.querySelector('.pz-corte').setAttribute('d', `M${X + a * k} ${Y - 14}V${Y + L}M${X} ${Y + a * k}H${X + L}`);
-    knob.setAttribute('transform', `translate(${X + a * k} ${Y - 18})`);
-    knob.setAttribute('aria-valuenow', a); knob.setAttribute('aria-valuetext', `a vale ${a}, b vale ${m.b}`);
-    out.innerHTML = `(${a} + ${m.b})² = <b class="a">${m.aa}</b> + 2 · <b class="m">${m.ab}</b> + <b class="b">${m.bb}</b> = ${PZ_LADO ** 2}`;
-  };
-  const pon = v => { const n = Math.max(1, Math.min(PZ_LADO - 1, v)); if (n !== a) { a = n; pinta(); } };
-  pzArrastra(svg, knob, { mueve: p => pon(Math.round((p.x - X) / (L / PZ_LADO))), tecla: d => pon(a + d) });
-  pinta();
-}
-function pzPalancaViva(el) {
-  const svg = el.querySelector('.pz-pal'), knob = svg.querySelector('.pz-knob'), out = el.querySelector('.pz-cuenta-pal');
-  let d = 4;
-  const pinta = () => {
-    const m = pzPalanca(d);
-    svg.querySelector('.pz-viga').style.transform = `rotate(${m.giro}deg)`;
-    knob.style.transform = `translate(${180 + d * 36}px, 144px)`;
-    knob.setAttribute('aria-valuenow', d); knob.setAttribute('aria-valuetext', `${d} pasos${m.ok ? ', en equilibrio' : ''}`);
-    svg.classList.toggle('ok', m.ok);
-    out.innerHTML = `<b class="b">2 × 3</b> ${m.ok ? '=' : m.der > m.izq ? '&lt;' : '&gt;'} <b class="a">3 × ${d}</b><span>${m.ok ? 'En equilibrio' : m.der > m.izq ? 'Pesa más la derecha' : 'Pesa más la izquierda'}</span>`;
-  };
-  const pon = v => { const n = Math.max(1, Math.min(4, v)); if (n !== d) { d = n; pinta(); } };
-  pzArrastra(svg, knob, { mueve: p => pon(Math.round((p.x - 180) / 36)), tecla: k => pon(d + k) });
-  pinta();
-}
-
 // ---- en la página ----
 let pzDesde = false;   // la pantalla de entrada se abrió desde aquí: muestra «Volver» (js/cuenta.js)
 function presentacionPide() {
@@ -4962,9 +4842,10 @@ function presentacionAbrir() {
   bar.onkeydown = e => { if (e.key === 'Escape' && bar.classList.contains('abre')) { menu(false); boton.focus(); } };
   const ir = (sel, tab) => {
     menu(false);
-    if (tab != null) pick(+tab);
-    const sec = el.querySelector(sel);
-    sec.scrollIntoView({ behavior: quieto ? 'auto' : 'smooth' });
+    if (tab != null && tabs.length) pick(+tab);
+    const sec = el.querySelector(sel), fila = sec.closest('[data-carril-de]'), modo = quieto ? 'auto' : 'smooth';
+    if (fila) fila.scrollTo({ left: fila.scrollLeft + sec.getBoundingClientRect().left - fila.getBoundingClientRect().left, behavior: modo });   // una tarjeta del carril: se corre la fila y se ve su sección
+    (fila ? fila.closest('section') : sec).scrollIntoView({ behavior: modo });
     const h = sec.querySelector('h2, h3'); h.tabIndex = -1; h.focus({ preventScroll: true });
   };
   el.querySelectorAll('.pz-nav a, .pz-foot a').forEach(x => x.onclick = e => { e.preventDefault(); ir(x.getAttribute('href'), x.dataset.tab); });
@@ -4972,7 +4853,7 @@ function presentacionAbrir() {
   // Precios: primero los guardados; después, los de la base.
   pzPrecios(el, Cuenta.productos, Tienda.arts); pzInstVivo(el);
   if (Cuenta.sb) Promise.all([cuentaTienda(), tiendaCarga()]).then(() => { if (el.isConnected) { pzPrecios(el, Cuenta.productos, Tienda.arts); el.querySelector('.pz-inst')?.pinta?.(); } }, () => {});
-  pzCarrusel(el, quieto); pzMazoVivo(el); pzClips(el, quieto); pzRuedaViva(el, quieto); pzAreaViva(el); pzPalancaViva(el); pzCaminoVivo(el, quieto);
+  pzCarrusel(el, quieto); pzMazoVivo(el); pzClips(el, quieto); pzCaminoVivo(el, quieto); pzCarriles(el, quieto);
   const raton = matchMedia('(hover: hover) and (pointer: fine)').matches;
   pzQuejasVivas(el, raton);
   if (raton && !quieto) pzPuntero(el);
