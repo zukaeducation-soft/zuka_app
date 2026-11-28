@@ -460,3 +460,89 @@
 @media (prefers-reduced-motion: reduce) { .pz-lamina.va :is(h1, h2, .pz-lead, .pz-ctas) { animation: none !important; } }
 .pz-mini { width: min(100%, 520px); transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) rotate(-2deg); } .pz-mini .pz-ip { max-width: none; padding: clamp(20px, 2.4vw, 34px); border-radius: 32px; box-shadow: 0 40px 70px -30px rgb(7 8 15 / .55); }
 @media (min-width: 1000px) and (max-width: 1190px) { .pz-nav, .pz-bar.abre .pz-nav { gap: 15px; } .pz-nav a { font-size: 14.5px; } .pz-plat { padding: 0 20px; } }
+
+/* ---- Capa Holcim (2026-11-28, spec 2026-11-28-portada-holcim): el lenguaje de holcim.com.co con los colores del logo. Azul noche,
+   blanco y un acento; títulos en mayúsculas; esquinas rectas; botones en píldora. Va al final para mandar sobre lo anterior. ---- */
+#landing {
+  --hz-noche: #001634; --hz-tinta: #002454; --hz-titulo: #002454; --hz-acento: #0045fa; --hz-borde: #002454; --hz-suave: #eef2f7;
+  --hz-lima: #7afb1f;
+}
+:root[data-theme="dark"] #landing { --hz-titulo: #ffffff; --hz-acento: #4d9bff; --hz-borde: rgb(255 255 255 / .28); --hz-suave: #0b1830; }
+/* zonas azul noche: letra blanca y el logo con el degradado del tema oscuro */
+#landing :is(.pz-bar, .pz-hero, .pz-franja, .pz-prog-inst, .pz-foot) {
+  --ink: #ffffff; --mute: #c9d5ea; --line: rgb(255 255 255 / .22); --brand: #ffffff; --on-brand: #002454;
+  --zg0: #0066ff; --zg1: #00b5fa; --zg2: #00e0d0; --zg3: #0aec82; --zg4: #50f81c; --zg5: #7afb1f; --zuka-tinta: #ffffff;
+}
+
+/* barra de arriba */
+#landing .pz-bar { background: var(--hz-noche); border-bottom: 0; }
+#landing .pz-bar .logo { color: #ffffff; }
+#landing .pz-nav a { color: #ffffff; font-weight: 600; }
+@media (hover: hover) and (pointer: fine) { #landing .pz-nav a:hover { color: #ffffff; text-decoration: underline; text-decoration-color: var(--hz-lima); text-decoration-thickness: 2px; text-underline-offset: 8px; } }
+#landing .pz-bar.abre .pz-nav { background: var(--hz-noche); }
+#landing .pz-menu { color: #ffffff; }
+#landing .pz-plat { background: #0066ff; color: #ffffff; }
+
+/* carrusel: siempre azul noche (manda sobre el color de cada lámina) */
+#landing .pz-hero { background-color: var(--hz-noche) !important; }
+#landing :is(.pz-hero h1, .pz-hero h2) { color: #ffffff; font-weight: 700; text-transform: uppercase; letter-spacing: 0; line-height: 1.04; }
+#landing .pz-hero em { color: var(--hz-lima); text-decoration: none; }
+#landing .pz-hero .pz-lead { color: #dfe7f4; }
+#landing .pz-lam-k { background: none; padding: 0; color: var(--hz-lima); font-weight: 700; letter-spacing: .02em; }
+#landing .pz-hero .btn.brand, #landing .pz-hero .btn.main { background: #ffffff; color: var(--hz-tinta); box-shadow: none; }
+#landing .pz-hero .btn.ghost { background: transparent; color: #ffffff; border: 1.5px solid #ffffff; box-shadow: none; }
+#landing .pz-hero .pz-mancha { background: #0a2550; }
+/* láminas con foto: la foto a todo lo ancho y el texto en un panel azul noche translúcido */
+.pz-lamina:has(.pz-foto) { position: relative; }
+.pz-lamina:has(.pz-foto) .pz-lam-in { position: static; }
+#landing .pz-lamina:has(.pz-foto) .pz-mancha.pz-foto { width: 100%; max-width: none; height: 100%; aspect-ratio: auto; border-radius: 0; transform: none; }
+@media (min-width: 900px) {
+  .pz-lamina:has(.pz-foto) .pz-lam-fig { position: absolute; inset: 0; z-index: 0; display: block; }
+  .pz-lamina:has(.pz-foto) .pz-lam-in { grid-template-columns: minmax(0, 600px); min-height: clamp(480px, 70vh, 640px); }
+  .pz-lamina:has(.pz-foto) .pz-lam-txt { position: relative; z-index: 1; padding: clamp(32px, 3.4vw, 52px); background: rgb(0 22 52 / .9); }
+  #landing .pz-lamina:has(.pz-foto) :is(h1, h2) { font-size: clamp(34px, 3.6vw, 52px); }
+}
+@media (max-width: 899px) {
+  .pz-lamina:has(.pz-foto) .pz-lam-in { padding-top: 0; }
+  .pz-lamina:has(.pz-foto) .pz-lam-fig { order: -1; margin-inline: -16px; }
+  #landing .pz-lamina:has(.pz-foto) .pz-mancha.pz-foto { height: 240px; }
+}
+/* controles del carrusel: pestañas numeradas, la activa subrayada en lima */
+#landing .pz-controles::before { border-top-color: rgb(255 255 255 / .22); }
+#landing .pz-puntos { counter-reset: pz-pto; }
+#landing .pz-pto { color: #ffffff; }
+#landing .pz-pto::before { counter-increment: pz-pto; content: counter(pz-pto) '\00a0\00a0'; color: var(--hz-lima); font-weight: 700; }
+#landing .pz-pto[aria-current]::after { height: 3px; background: var(--hz-lima); }
+#landing .pz-selector { color: #ffffff; }
+#landing .pz-transporte button { color: #ffffff; }
+
+/* títulos de sección: mayúsculas, gruesos, azul noche */
+#landing h2, #landing .pz-head h2 { color: var(--hz-titulo); font-weight: 700; text-transform: uppercase; letter-spacing: 0; line-height: 1.06; font-size: clamp(28px, 3.4vw, 46px); }
+#landing h2 em { color: var(--hz-acento); }
+#landing .pz-franja h2, #landing .pz-foot h2, #landing .pz-prog-inst :is(h2, h3) { color: #ffffff; }
+#landing .pz-franja h2 em, #landing .pz-prog-inst em { color: var(--hz-lima); }
+
+/* botones en píldora: azul noche sobre claro */
+#landing .btn.brand, #landing .pz-sec .btn.main { background: var(--hz-tinta); color: #ffffff; box-shadow: none; }
+:root[data-theme="dark"] #landing .btn.brand, :root[data-theme="dark"] #landing .pz-sec .btn.main { background: #ffffff; color: var(--hz-tinta); }
+#landing :is(.pz-franja, .pz-prog-inst, .pz-foot) .btn:not(.ghost) { background: #ffffff; color: var(--hz-tinta); }
+#landing :is(.pz-franja, .pz-prog-inst, .pz-foot) .btn.ghost { color: #ffffff; border-color: #ffffff; }
+
+/* tarjetas de programas: rectas, borde azul noche y flecha */
+#landing .pz-prog { border-radius: 0; border: 2px solid var(--hz-borde); background: var(--bg); }
+#landing .pz-prog h3 { color: var(--hz-titulo); font-weight: 700; }
+#landing .pz-prog h3::after { content: ' →'; color: var(--hz-acento); }
+#landing .pz-prog-k { background: none; padding: 0; color: var(--hz-acento); font-weight: 700; }
+#landing .pz-prog-d span { border-radius: 2px; }
+#landing .pz-prog-inst { border-radius: 0; background: var(--hz-noche); }
+
+/* franjas y cierre */
+#landing .pz-franja { background: var(--hz-noche); border-radius: 0; }
+#landing .pz-final { background: var(--hz-suave); }
+#landing .pz-final h2 { color: var(--hz-titulo); }
+
+/* pie */
+#landing .pz-foot { background: var(--hz-noche); }
+#landing .pz-foot b { text-transform: uppercase; font-weight: 700; letter-spacing: .02em; font-size: 14px; }
+/* esquinas rectas también en las tarjetas de Quiénes somos, el camino y la sección de colegios (los celulares de muestra conservan las suyas) */
+#landing :is(.pz-tres > article, .pz-ruta, .pz-panel, .pz-inst-c, .pz-inst-v) { border-radius: 0; }

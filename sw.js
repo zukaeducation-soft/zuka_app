@@ -8,7 +8,7 @@
 // justo al instalar una versión nueva la app no se queda sin juegos ni fórmulas.
 // Spec: docs/superpowers/specs/2026-11-24-configuracion-rapida-segura.md
 
-const VERSION = 'zuka-v428';
+const VERSION = 'zuka-v429';
 // Los scripts van en paquetes (js/paquetes, los arma tools/empaquetar.js con la lista de index.html). El nombre de cada
 // uno lleva la huella de su contenido, así que nunca cambia: se guardan en su propia caché (PAQUETES), que no se borra
 // al cambiar de versión, y una versión nueva solo baja los que no estaban. ARRANQUE es lo que la página pide al abrir;
