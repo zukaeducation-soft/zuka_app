@@ -18,7 +18,7 @@ const html = lee('index.html');
 const plantilla = html.match(/<template id="fuentes">([\s\S]*?)<\/template>/);
 const { archivos, lista } = empaqueta();
 const P = plan();
-const DIFERIDOS = [lista.comun, ...Object.values(lista.cursos)];
+const DIFERIDOS = [lista.comun, ...Object.values(lista.cursos).flat()];
 const dentroDe = f => [...lee(f).matchAll(/^\/\/#archivo (\S+)/gm)].map(m => m[1]);
 
 test('los paquetes están al día con los archivos de js/ (si falla: node tools/empaquetar.js)', () => {

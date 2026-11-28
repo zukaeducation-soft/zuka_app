@@ -70,7 +70,7 @@ function plan() {
     for (const id of corre(`COURSES[${i}].units.flatMap(u => u.lessons.map(l => l.id))`)) leccion[id] = c;
   });
   const explora = corre("typeof EXPLORA === 'undefined' ? [] : Object.keys(EXPLORA)").filter(id => leccion[id]);
-  for (const f of dif) for (const a of aporta[f] || []) { const m = a.match(/^EXPLORA\.(.+)$/); if (m && leccion[m[1]]) de[f].add(leccion[m[1]]); }
+  for (const f of dif) for (const a of aporta[f] || []) { const m = a.match(/^(?:EXPLORA|XP_PASOS)\.(.+)$/); if (m && leccion[m[1]]) de[f].add(leccion[m[1]]); }
   for (const [after, juegos] of corre("typeof GYM_RETOS === 'undefined' ? [] : GYM_RETOS.map(r => [r.after, r.steps.map(s => s.ex && s.ex.game).filter(Boolean)])")) {
     for (const id of after) for (const g of juegos) if (leccion[id] && de[dueño[g]]) de[dueño[g]].add(leccion[id]);
   }
@@ -106,7 +106,7 @@ function plan() {
   const paraArranque = Object.keys(apo).filter(a => /^[\w$]+\.[A-Za-z_$][\w$]*$/.test(a) && !/^(GAMES|EXPLORA|GUIDES)\./.test(a) && arranque.includes(a));
   for (const a of paraArranque) cursos.forEach(c => de[apo[a]].add(c));
   for (const f of dif) {
-    if ((registra[f] || []).length || (aporta[f] || []).some(a => a.startsWith('EXPLORA.'))) continue;
+    if ((registra[f] || []).length || (aporta[f] || []).some(a => /^(EXPLORA|XP_PASOS)\./.test(a))) continue;
     for (const g of deps[f]) if ((registra[g] || []).length) for (const c of de[g]) de[f].add(c);
   }
   propaga();
@@ -126,6 +126,7 @@ const junta = archivos => `// Generado por tools/empaquetar.js: no editar a mano
 
 // { archivos: { 'js/paquetes/zuka-a1.<huella>.js': texto, … }, lista: { arranque: [nombres], comun, cursos: { id: nombre }, explora: [ids] } }
 // El arranque va en PARTES trozos seguidos de peso parecido.
+const TOPE = 900 * 1024;   // ningún paquete diferido pasa de 1 MB
 function empaqueta() {
   const p = plan(), archivos = {};
   const pon = (clave, lista) => { const txt = junta(lista), nombre = `${DIR}/zuka-${clave}.${huella(txt)}.js`; archivos[nombre] = txt; return nombre; };
@@ -138,7 +139,19 @@ function empaqueta() {
     suma += peso[f];
   }
   const lista = { arranque: partes.map((x, i) => pon(`a${i + 1}`, x)), comun: pon('comun', p.grupos.comun), cursos: {}, explora: p.explora };
-  for (const c of p.cursos) if (p.grupos[c]) lista.cursos[c] = pon(c, p.grupos[c]);
+  // Un curso que pasa de TOPE va en trozos seguidos (`curso`, `curso2`…): la lista lleva entonces un arreglo, en orden.
+  for (const c of p.cursos) {
+    if (!p.grupos[c]) continue;
+    const trozos = [[]];
+    let suma = 0;
+    for (const f of p.grupos[c]) {
+      const w = lee(f).length + f.length + 16;
+      if (suma + w > TOPE && trozos.at(-1).length) { trozos.push([]); suma = 0; }
+      trozos.at(-1).push(f); suma += w;
+    }
+    const nombres = trozos.map((t, i) => pon(i ? `${c}${i + 1}` : c, t));
+    lista.cursos[c] = nombres.length === 1 ? nombres[0] : nombres;
+  }
   return { archivos, lista };
 }
 
@@ -148,7 +161,7 @@ const textoLista = lista => `// Generado por tools/empaquetar.js: no editar a ma
 // La lista para el service worker, dentro de sw.js: así el propio sw.js cambia cuando cambia un paquete.
 const MARCAS = /\/\/ <paquetes>[\s\S]*?\/\/ <\/paquetes>/;
 function textoSW(sw, lista) {
-  const dif = [lista.comun, ...Object.values(lista.cursos)];
+  const dif = [lista.comun, ...Object.values(lista.cursos).flat()];
   return sw.replace(MARCAS, `// <paquetes> Generado por tools/empaquetar.js: no editar a mano.\nconst ARRANQUE = ${JSON.stringify(lista.arranque)};\nconst DIFERIDOS = ${JSON.stringify(dif)};\n// </paquetes>`);
 }
 
@@ -168,7 +181,7 @@ if (require.main === module) {
   escribe(LISTA, textoLista(lista));
   escribe('sw.js', textoSW(lee('sw.js'), lista));
   const kb = l => (l.reduce((n, f) => n + archivos[f].length, 0) / 1024).toFixed(0);
-  console.log(`arranque ${kb(lista.arranque)} KB; diferido ${kb([lista.comun, ...Object.values(lista.cursos)])} KB`);
+  console.log(`arranque ${kb(lista.arranque)} KB; diferido ${kb([lista.comun, ...Object.values(lista.cursos).flat()])} KB`);
 }
 
 module.exports = { fuentes, plan, empaqueta, textoLista, textoSW, esDiferido, EN_ARRANQUE, PARTES, DIR, LISTA, huella };

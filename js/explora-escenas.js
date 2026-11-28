@@ -14,6 +14,35 @@ function xpLec(id, caps, cierre, adios = 'Eso es todo lo que construiste. Con es
     texto: p.tipo === 'muestra' || c === ult ? p.texto : `**Tu turno.** ${p.texto}` })));
   EXPLORA[id] = { caps: caps.map(c => c[0]), pasos: [...pasos, { cap: ult, tipo: 'cierre', clave: id, real: '', texto: adios, idea: cierre }] };
 }
+// xpAmplia(id, { conecta, desde, entre, despues, examen, cierre }) alarga una explicación ya escrita con xpLec, de lo más básico a lo
+// más complejo (spec 2026-11-28-preicfes-paso-a-paso). `desde`: capítulos que van antes de las ideas de siempre (empezar desde cero y
+// recordar la lección `conecta`); `entre`: { k: [capítulos] } justo después del capítulo k de siempre; `despues`: lo más complejo, tras
+// las ideas de siempre; `examen`: el capítulo «Así lo pregunta el examen», antes del problema; `cierre`: la idea final nueva.
+// Cada capítulo se escribe como en xpLec: [título, paso, paso…].
+const XP_PASOS = {};   // lecciones ampliadas con xpAmplia (el empaquetador las reconoce por aquí)
+function xpAmplia(id, o) {
+  const L = EXPLORA[id];
+  if (!L) throw new Error(`xpAmplia: ${id} no tiene explicación`);
+  if (L.amplia) throw new Error(`xpAmplia: ${id} ya se amplió`);
+  const ult = L.caps.length - 1, fin = L.pasos.at(-1);
+  const viejo = L.caps.map((t, c) => [t, ...L.pasos.filter(p => p.cap === c && p.tipo !== 'cierre')]);
+  // En un dibujo que se anima, un valor que aparece en un momento arranca en 0 (así se puede interpolar).
+  const desde0 = p => {
+    if (p.escena !== 'dibujo' || !p.momentos) return p;
+    const v = { ...(p.en.v || {}) };
+    for (const m of p.momentos) for (const k in m.v) if (!(k in v) && typeof m.v[k] === 'number') v[k] = 0;
+    return { ...p, en: { ...p.en, v } };
+  };
+  const nuevo = ([t, ...ps]) => [t, ...ps.map(p => (p.tipo === 'muestra' ? desde0(p) : { ...p, texto: `**Tu turno.** ${p.texto}` }))];
+  const caps = (o.desde || []).map(nuevo);
+  viejo.slice(0, ult).forEach((c, k) => { caps.push(c); (o.entre?.[k] || []).forEach(x => caps.push(nuevo(x))); });
+  (o.despues || []).forEach(x => caps.push(nuevo(x)));
+  if (o.examen) caps.push(nuevo(o.examen));
+  caps.push(viejo[ult]);
+  EXPLORA[id] = { caps: caps.map(c => c[0]), amplia: { conecta: o.conecta || null },
+    pasos: [...caps.flatMap(([, ...ps], c) => ps.map(p => ({ ...p, cap: c }))), { ...fin, cap: caps.length - 1, idea: o.cierre || fin.idea }] };
+  XP_PASOS[id] = caps.length;
+}
 // Explicación: momentos [lo que dice, lo que cambia en la escena, cuenta].
 const xpMira = (escena, texto, en, momentos, idea) => ({ tipo: 'muestra', escena, texto, en, idea,
   momentos: momentos.map(([dice, d = {}, cuenta]) => ({ dice, ...(escena === 'dibujo' ? { v: d } : d), ...(cuenta ? { cuenta } : {}) })) });

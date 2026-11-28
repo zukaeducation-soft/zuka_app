@@ -7431,17 +7431,17 @@ const CARGA = (() => {
     s.src = src;
     document.head.appendChild(s);
   }));
-  const de = id => (P ? [P.comun, P.cursos[id]].filter(Boolean) : []);
+  const de = id => (P ? [P.comun, ...[P.cursos[id]].flat()].filter(Boolean) : []);   // un curso grande viene en varios trozos, en orden
   const faltan = id => de(id).filter(s => !listos.has(s));
   // De uno en uno: si el común no llega, el del curso no se pide (sin el común se ejecutaría a medias y, ya marcado como
   // cargado, dejaría el curso roto hasta recargar).
   const enFila = lista => lista.filter(s => !listos.has(s)).reduce((antes, s) => (antes ? antes.then(() => pide(s)) : pide(s)), null) || Promise.resolve();
   const curso = id => enFila(de(id));
-  const todo = () => (P ? enFila([P.comun, ...Object.values(P.cursos)]) : Promise.resolve());
+  const todo = () => (P ? enFila([P.comun, ...Object.values(P.cursos).flat()]) : Promise.resolve());
   // Un paquete que no llega puede ser de una versión que ya no está publicada (otra pestaña aceptó la actualización y el
   // service worker soltó los paquetes viejos): si la lista de ahora ya no lo nombra, lo que toca es recargar.
   const caduco = () => (typeof fetch !== 'function' ? Promise.resolve(false)
-    : fetch('js/paquetes/lista.js', { cache: 'no-store' }).then(r => (r.ok ? r.text() : '')).then(t => !!t && [P.comun, ...Object.values(P.cursos)].some(s => !t.includes(s.split('/').pop())), () => false));
+    : fetch('js/paquetes/lista.js', { cache: 'no-store' }).then(r => (r.ok ? r.text() : '')).then(t => !!t && [P.comun, ...Object.values(P.cursos).flat()].some(s => !t.includes(s.split('/').pop())), () => false));
 
   // ¿Está todo lo que esta lección necesita? Si el reparto por curso dejó algo fuera, se pide el resto (red de seguridad).
   const completo = n => (n.juegos || []).every(g => typeof GAMES === 'undefined' || GAMES[g]) &&
