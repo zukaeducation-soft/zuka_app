@@ -188,6 +188,7 @@ function hintBlock(ex) {
 function renderExercise(el, ex, ready) {
   const practice = ex.type === 'play' || ex.type === 'slider';
   const exam = ex.exam || !!el.closest('.exam');
+  if (typeof tutorEnfoca === 'function') tutorEnfoca({ tipo: 'ejercicio', q: ex.q, hint: ex.hint, exam });   // el tutor sabe qué se ve (nunca la solución)
   const kind = !practice || exam ? `<p class="ex-kind">${ex.kind || EX_KIND[ex.type]}</p>` : '';
   el.innerHTML = `<div class="ex${practice ? ' practice' : ''}"><header class="ex-head">${kind}<h2 class="ex-q">${tex(ex.q)}</h2></header>${hintBlock(ex)}<div class="ex-area"></div></div>`;
   const gb = el.querySelector('.guide-btn');

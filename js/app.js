@@ -604,7 +604,7 @@ function startLesson(c, l) {
       <div class="pbar"><i></i></div>
       ${S.unlockAll ? `<div class="rev-nav" title="Modo revisión: saltar entre ejercicios">
         <button type="button" data-jump="-1" aria-label="Ejercicio anterior">‹</button><b class="rev-pos"></b><button type="button" data-jump="1" aria-label="Ejercicio siguiente">›</button></div>` : ''}
-      <span class="tb-stat hearts">${ICON.heart}<b>${S.hearts}</b></span>
+      ${tutorBoton()}<span class="tb-stat hearts">${ICON.heart}<b>${S.hearts}</b></span>
     </div>
     <div class="lesson-body"></div>
     <div class="lesson-foot"><button class="btn main">Comprobar</button></div>
@@ -615,6 +615,7 @@ function startLesson(c, l) {
     <div class="ls-sides"></div>
   </div>`;
   ov.classList.add('open');
+  tutorLeccion(c, l); ov.querySelectorAll('.tutor-btn').forEach(b => { b.onclick = openTutor; });   // tutor de dudas (js/tutor.js)
   document.body.classList.add('in-lesson');   // sin menú inferior: la lección ocupa toda la pantalla
   const root = $('.lesson', ov), body = $('.lesson-body', ov), btn = $('.btn.main', ov), fb = $('.feedback', ov);
   const bar = $('.pbar i', ov), hearts = $('.lesson-top .hearts b', ov);
@@ -658,6 +659,7 @@ function startLesson(c, l) {
 
   // El clip se ve a pantalla completa, como en Clips; la barra y los corazones vuelven en los ejercicios.
   function showClip(n, forward) {
+    tutorEnfoca(null);   // un video no tiene duda que preguntar; la explicación (Explora) vuelve a enfocar su paso
     root.classList.add('clip-mode');
     body.classList.add('is-clip');
     body.innerHTML = '';
@@ -785,7 +787,7 @@ function startLesson(c, l) {
   }
 
   function finish() {
-    finished = true;
+    finished = true; tutorEnfoca(null);
     const first = !isDone(l), perfect = mistakes === 0;
     const xp = (first ? 10 : 5) + (perfect ? 5 : 0);
     S.done[l.id] = true; addXP(xp);

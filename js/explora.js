@@ -824,7 +824,7 @@ function exploraPlayer(host, lesson, course, opts) {
   host.innerHTML = `<div class="explora">
     <header class="xp-top">
       <div class="xp-segs">${def.caps.map(() => '<i><b></b></i>').join('')}</div>
-      <div class="xp-meta"><span class="xp-cap"></span><button type="button" class="xp-snd" aria-label="Sonido"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M17 9l5 6M22 9l-5 6"/></svg></button><button type="button" class="xp-ideas" aria-label="Ideas que llevas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18h16M6 13h12M8 8h8"/></svg><b>0</b></button></div>
+      <div class="xp-meta"><span class="xp-cap"></span>${typeof tutorBoton === 'function' ? tutorBoton('tutor-xp') : ''}<button type="button" class="xp-snd" aria-label="Sonido"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M17 9l5 6M22 9l-5 6"/></svg></button><button type="button" class="xp-ideas" aria-label="Ideas que llevas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18h16M6 13h12M8 8h8"/></svg><b>0</b></button></div>
     </header>
     <div class="xp-step"><p class="xp-text"></p><div class="xp-stage"></div><div class="xp-read"></div><p class="xp-nota" role="status"></p>
       <div class="xp-idea" aria-live="polite"><span>Idea</span><p></p></div></div>
@@ -837,6 +837,7 @@ function exploraPlayer(host, lesson, course, opts) {
   const idea = $x('.xp-idea'), next = $x('.xp-next'), back = $x('.xp-back'), sheet = $x('.xp-sheet');
   // La lección pasa de video a ejercicios deslizando: aquí el dedo es para la escena, así que el gesto no sale.
   root.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+  $x('.tutor-xp')?.addEventListener('click', () => openTutor());   // tutor de dudas en la cabecera (en el celular la barra de la lección no se ve)
 
   // El andamio: si la lección tiene explicaciones (`muestra`), guarda sus ideas (los conceptos); si no, las de cada paso.
   const conMuestra = def.pasos.some(p => p.tipo === 'muestra');
@@ -875,6 +876,7 @@ function exploraPlayer(host, lesson, course, opts) {
     const k = i, p = def.pasos[i], t = XP[p.tipo];   // k: este paso; una escena vieja no escribe en el paso que se ve ahora
     let s = estados[i] ?? t.ini(p);
     $x('.xp-text').innerHTML = xpPalabras(p.texto, 22);
+    if (typeof tutorEnfoca === 'function') tutorEnfoca({ tipo: 'explica', texto: p.texto, ideas: ideas() });   // el tutor de dudas sabe qué paso se ve
     XS.whoosh(dir);
     idea.lastElementChild.innerHTML = tex(p.idea); idea.classList.remove('gana');
     nota.textContent = '';

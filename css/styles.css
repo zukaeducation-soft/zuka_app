@@ -1607,3 +1607,23 @@ body:not([data-tab=learn]):not([data-tab=gym]) #view { padding-top: env(safe-are
 .auth-clave { display: grid; gap: 8px; } .auth-clave .link-btn { justify-self: start; }
 .auth-clave[hidden] { display: none; }
 .fld input[name="codigo"].es-correo { text-transform: none; letter-spacing: normal; font-family: inherit; }
+/* Tutor de dudas (2026-11-28): botón en la barra de la lección y hoja con la conversación. */
+.tutor-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-size: 14px; font-weight: 600; background: var(--card); }
+.tutor-btn[hidden] { display: none; } .tutor-btn .i { width: 18px; height: 18px; } .tutor-btn:hover { border-color: var(--brand); }
+.tutor-sobre { margin: 4px 0 12px; color: var(--mute); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.tutor-sobre b { color: var(--ink); font-weight: 600; }
+.tutor-hilo { display: grid; gap: 10px; max-height: calc(42 * var(--dvh)); overflow-y: auto; margin-bottom: 12px; } .tutor-hilo:empty { display: none; }
+.tutor-msg { padding: 10px 14px; border-radius: 16px; font-size: 15px; line-height: 1.5; } .tutor-msg p { margin: 0; } .tutor-msg p + p { margin-top: 8px; }
+.tutor-msg.estudiante { justify-self: end; max-width: 85%; background: color-mix(in srgb, var(--brand) 16%, transparent); }
+.tutor-msg.tutor { background: color-mix(in srgb, var(--ink) 5%, var(--card)); border: 1px solid var(--line); }
+.tutor-msg.mal { border-color: color-mix(in srgb, var(--bad) 45%, transparent); color: var(--bad-ink); }
+.tutor-espera { color: var(--mute); animation: tutor-late 1.2s ease-in-out infinite; } @keyframes tutor-late { 50% { opacity: .45; } }
+.tutor-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.tutor-chip { min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); font-size: 14px; }
+.tutor-chip:hover { border-color: var(--brand); }
+.tutor-form { display: grid; gap: 10px; } .tutor-form textarea { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-size: 16px; resize: vertical; }
+.tutor-pie { margin: 10px 0 0; font-size: 12.5px; }
+@media (prefers-reduced-motion: reduce) { .tutor-espera { animation: none; } }
+/* En la explicación (Explora) el botón va en su cabecera: en el celular la barra de la lección no se ve; en el computador sí, y allí basta el de la barra. */
+.xp-meta .tutor-xp { min-height: 32px; padding: 0 10px; font-size: 13px; gap: 5px; } .xp-meta .tutor-xp .i { width: 16px; height: 16px; }
+@media (min-width: 1000px) { .xp-meta .tutor-xp { display: none; } }
