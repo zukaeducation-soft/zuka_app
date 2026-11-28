@@ -39,7 +39,12 @@ dentro de un marco de foto con su propio fondo (`XLAB.foto(cuerpo, alto, fondo)`
 `hospital`), `persona` (con `cartel`), `moneda`, `billete`, `rio`. Inglés: `aviso` (`metal`, `verde`, `peligro`, `papel`, `rojo`,
 `azul`, con `poste`). Ciencias y Sociales llevan al menos una por lección.
 
-Fotografías de verdad (Wikimedia Commons, con licencia libre) quedan para cuando el usuario autorice descargarlas.
+**Fotos reales** (autorizadas por el usuario el 2026-11-28): cada lección de Ciencias y Sociales abre su primer capítulo con una foto de
+Wikimedia Commons (60 fotos, 4.8 MB en `media/fotos/<idLección>.webp`) que la cámara recorre (`XLAB.real`: acercamiento `z`, centro
+`cx`/`cy`, aro `m` en `mx`/`my`, rótulo `r`) con el crédito abajo. Se escriben con `xpFotoReal(id, foto, texto, momentos, idea)` en
+`js/explora-icf-cn-fotos.js` y `js/explora-icf-sc-fotos.js` (después de todos los `-pasos.js`). Solo dominio público, CC0, CC BY y
+CC BY-SA. `node tools/fotos-commons.js busca "consulta"`, `toma <id> "File:…"` (baja, comprime a < 130 KB y apunta autor, licencia
+y página en `media/fotos/creditos.json`; rehace `js/explora-fotos-datos.js`, que no se edita a mano) y `mira <id>`.
 
 ## Lo que pregunta el examen (análisis de los cuadernillos 2024-2 y 2025-2)
 
@@ -78,4 +83,4 @@ salvo la primera de cada componente). Ciencias y Sociales con fotos dibujadas en
 `explora-escenas` cargan las explicaciones en el orden de `index.html` (los `-pasos.js` van después de su original). Con esto el paquete
 del Preicfes pasó de 1 MB: `tools/empaquetar.js` parte un curso grande en trozos seguidos (`zuka-preicfes`, `zuka-preicfes2`, tope
 900 KB) y `ZUKA_PAQUETES.cursos[id]` puede ser un arreglo, que `js/carga.js` pide en orden.
-Pendiente: revisión docente de los datos (historia, Constitución, emisiones por kWh) y fotografías reales si el usuario las autoriza.
+Pendiente: revisión docente de los datos (historia, Constitución, emisiones por kWh).
